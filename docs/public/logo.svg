@@ -1,0 +1,29 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#42b883"/>
+      <stop offset="1" stop-color="#347474"/>
+    </linearGradient>
+  </defs>
+  <rect x="14" y="14" width="132" height="132" rx="30" fill="url(#g1)"/>
+  <!-- neural-net style nodes -->
+  <g stroke="#ffffff" stroke-width="3" opacity="0.85">
+    <line x1="46" y1="50" x2="80" y2="40"/>
+    <line x1="46" y1="50" x2="80" y2="80"/>
+    <line x1="46" y1="110" x2="80" y2="80"/>
+    <line x1="46" y1="110" x2="80" y2="120"/>
+    <line x1="80" y1="40" x2="116" y2="65"/>
+    <line x1="80" y1="80" x2="116" y2="65"/>
+    <line x1="80" y1="80" x2="116" y2="100"/>
+    <line x1="80" y1="120" x2="116" y2="100"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="46" cy="50" r="9"/>
+    <circle cx="46" cy="110" r="9"/>
+    <circle cx="80" cy="40" r="9"/>
+    <circle cx="80" cy="80" r="10"/>
+    <circle cx="80" cy="120" r="9"/>
+    <circle cx="116" cy="65" r="9"/>
+    <circle cx="116" cy="100" r="9"/>
+  </g>
+</svg>

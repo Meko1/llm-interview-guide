@@ -1,0 +1,26 @@
+{
+  "name": "llm-interview-guide",
+  "version": "1.0.0",
+  "description": "大模型面试指南 —— 系统整理 LLM / 大模型八股文与高频面试题，覆盖大模型基础、Transformer、预训练、微调、RLHF、Prompt、RAG、Agent、推理优化与部署、评估、多模态等。",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "keywords": [
+    "LLM",
+    "大模型",
+    "面试",
+    "interview",
+    "Transformer",
+    "RAG",
+    "Agent",
+    "微调"
+  ],
+  "author": "Meko1",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}
