@@ -1,8 +1,6 @@
 # LLMGuide · 大模型面试指南
 
-> 系统整理大模型 / LLM 方向的「八股文」与高频面试题，参考 [JavaGuide](https://javaguide.cn/) 的形式，覆盖大模型基础、Transformer、预训练、微调、RLHF、Prompt、RAG、Agent、推理优化与部署、评估、多模态等。
-
-基于 [VitePress](https://vitepress.dev/) 构建的纯静态文档网站，可一键部署到 GitHub Pages。
+> 系统整理大模型 / LLM 方向的「八股文」与高频面试题，覆盖大模型基础、Transformer、预训练、微调、RLHF、Prompt、RAG、Agent、推理优化与部署、评估、多模态等。
 
 ## 内容结构
 
