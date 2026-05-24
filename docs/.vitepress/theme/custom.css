@@ -83,6 +83,28 @@
   border-top-color: var(--vp-c-brand-2);
 }
 
+/* ===== 首页「覆盖一览」数据区 ===== */
+.stats-row table {
+  width: 100%;
+  text-align: center;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.stats-row th {
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: transparent;
+}
+.stats-row td {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--vp-c-brand-1);
+  padding: 12px 8px;
+}
+.stats-row tr:nth-child(2n) {
+  background-color: transparent;
+}
+
 /* 链接更醒目 */
 .vp-doc a {
   font-weight: 500;

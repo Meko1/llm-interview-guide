@@ -14,9 +14,27 @@ export default defineConfig({
   cleanUrls: true,
   ignoreDeadLinks: true,
 
+  // SEO：生成 sitemap.xml，便于搜索引擎收录
+  sitemap: {
+    hostname: 'https://meko1.github.io/llm-interview-guide/'
+  },
+
   head: [
     ['meta', { name: 'theme-color', content: '#3c8772' }],
-    ['meta', { name: 'keywords', content: '大模型,LLM,面试,八股文,Transformer,RAG,Agent,微调,RLHF' }]
+    ['meta', { name: 'keywords', content: '大模型,LLM,面试,八股文,Transformer,Attention,RAG,Agent,MCP,微调,LoRA,RLHF,DeepSeek,推理优化,多模态,大模型面试题' }],
+    ['meta', { name: 'author', content: 'Meko1' }],
+    // Open Graph（社交分享卡片）
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: 'LLMGuide · 大模型面试指南' }],
+    ['meta', { property: 'og:description', content: '系统整理大模型/LLM 方向的八股文与高频面试题，覆盖从底层原理到工程落地的完整知识体系。' }],
+    ['meta', { property: 'og:site_name', content: 'LLMGuide' }],
+    ['meta', { property: 'og:url', content: 'https://meko1.github.io/llm-interview-guide/' }],
+    ['meta', { property: 'og:image', content: 'https://meko1.github.io/llm-interview-guide/logo.svg' }],
+    ['meta', { property: 'og:locale', content: 'zh_CN' }],
+    // Twitter Card
+    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { name: 'twitter:title', content: 'LLMGuide · 大模型面试指南' }],
+    ['meta', { name: 'twitter:description', content: '系统整理大模型/LLM 八股文与高频面试题，覆盖原理到工程落地。' }]
   ],
 
   themeConfig: {
@@ -59,15 +77,18 @@ export default defineConfig({
             text: '前沿专题',
             items: [
               { text: '推理模型与慢思考', link: '/advanced/reasoning-models' },
-              { text: '大模型安全与对齐', link: '/advanced/safety' },
+              { text: 'Agentic RL（智能体强化学习）', link: '/advanced/agentic-rl' },
               { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' }
             ]
           },
           {
-            text: '深入原理',
+            text: '深入原理与安全',
             items: [
               { text: 'FlashAttention 深入', link: '/advanced/flash-attention' },
-              { text: '训练深入（优化器/混合精度）', link: '/advanced/training-internals' }
+              { text: '训练深入（优化器/混合精度）', link: '/advanced/training-internals' },
+              { text: '向量检索与 ANN 算法', link: '/advanced/vector-search' },
+              { text: '大模型安全与对齐', link: '/advanced/safety' },
+              { text: 'AI 安全合规与治理', link: '/advanced/governance' }
             ]
           },
           {
@@ -212,6 +233,7 @@ export default defineConfig({
           items: [
             { text: '多模态大模型', link: '/multimodal/multimodal' },
             { text: '扩散模型与图像生成', link: '/multimodal/diffusion' },
+            { text: '视频生成', link: '/multimodal/video-generation' },
             { text: '语音大模型', link: '/multimodal/speech' }
           ]
         }
@@ -231,7 +253,7 @@ export default defineConfig({
           text: '前沿专题',
           items: [
             { text: '推理模型与慢思考', link: '/advanced/reasoning-models' },
-            { text: '大模型安全与对齐', link: '/advanced/safety' },
+            { text: 'Agentic RL（智能体强化学习）', link: '/advanced/agentic-rl' },
             { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' }
           ]
         },
@@ -239,7 +261,15 @@ export default defineConfig({
           text: '深入原理',
           items: [
             { text: 'FlashAttention 深入', link: '/advanced/flash-attention' },
-            { text: '训练深入（优化器/混合精度）', link: '/advanced/training-internals' }
+            { text: '训练深入（优化器/混合精度）', link: '/advanced/training-internals' },
+            { text: '向量检索与 ANN 算法', link: '/advanced/vector-search' }
+          ]
+        },
+        {
+          text: '安全与治理',
+          items: [
+            { text: '大模型安全与对齐', link: '/advanced/safety' },
+            { text: 'AI 安全合规与治理', link: '/advanced/governance' }
           ]
         }
       ]
