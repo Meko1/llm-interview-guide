@@ -23,7 +23,7 @@
 - **C-Eval / CMMLU**：中文能力。
 - **BBH**：高难度推理。
 
-注意**数据污染（Data Contamination）**：测试集泄漏进训练数据会虚高分数，是评测可信度的大问题。
+注意**数据污染（Data Contamination）**：测试集泄漏进训练数据会虚高分数，是评测可信度的大问题。各类基准的详细分类、Pass@k、如何批判性看榜单见 [评测基准深入](/evaluation/benchmarks)。
 
 ### 3. 人类评估
 

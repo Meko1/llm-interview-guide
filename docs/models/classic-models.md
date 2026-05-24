@@ -42,7 +42,7 @@
 
 ## 推理模型（Reasoning Models）
 
-近期热点是「慢思考」推理模型（OpenAI o 系列、DeepSeek-R1 等），通过强化学习训练模型生成长链思维（long CoT），在数学、代码、逻辑等任务上大幅提升。核心是**用更多推理时计算（test-time compute）换取更强的推理能力**，并能展现自我反思、回溯等行为。
+近期热点是「慢思考」推理模型（OpenAI o 系列、DeepSeek-R1 等），通过强化学习训练模型生成长链思维（long CoT），在数学、代码、逻辑等任务上大幅提升。核心是**用更多推理时计算（test-time compute）换取更强的推理能力**，并能展现自我反思、回溯等行为。详见 [推理模型与慢思考](/advanced/reasoning-models)。
 
 ## 高频追问
 
