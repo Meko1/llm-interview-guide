@@ -62,12 +62,19 @@ LLMGuide 是一份开源的**大模型面试知识库**，把大模型方向零�
 - [RAG 进阶与优化](https://meko1.github.io/llm-interview-guide/rag/rag-advanced)
 - [Agent 基础与框架](https://meko1.github.io/llm-interview-guide/agent/agent-basics)
 - [Function Calling 与 MCP](https://meko1.github.io/llm-interview-guide/agent/function-calling-mcp)
+- [MCP 协议深入](https://meko1.github.io/llm-interview-guide/agent/mcp)（架构 / 原语 / 传输 / 安全）
+- [Agent 记忆系统](https://meko1.github.io/llm-interview-guide/agent/agent-memory)
+- [上下文工程](https://meko1.github.io/llm-interview-guide/agent/context-engineering)（Context Engineering）
+- [AI 工作流 vs Agent](https://meko1.github.io/llm-interview-guide/agent/workflow)
 - [多 Agent 与进阶范式](https://meko1.github.io/llm-interview-guide/agent/multi-agent)
 
 ### 推理 · 部署 · 工程实战
 - [推理优化与部署](https://meko1.github.io/llm-interview-guide/inference/inference-optimization)（KV Cache / 量化 / vLLM / 投机解码）
+- [GPU 与硬件基础](https://meko1.github.io/llm-interview-guide/inference/gpu-hardware)（显存估算 / 算力 / 通信 / 选型）
 - [LangChain 与应用框架](https://meko1.github.io/llm-interview-guide/engineering/langchain)
 - [LLM 应用开发实战](https://meko1.github.io/llm-interview-guide/engineering/llm-app-dev)（流式 / Function Calling / 服务化 / 成本控制）
+- [结构化输出详解](https://meko1.github.io/llm-interview-guide/engineering/structured-output)（JSON Mode / 约束解码）
+- [AI 系统设计专题](https://meko1.github.io/llm-interview-guide/engineering/system-design)（高并发 / 私有化 / RAG 系统）
 - [AI 项目实战案例](https://meko1.github.io/llm-interview-guide/engineering/projects)（企业 RAG / 代码助手 / Text2SQL / 多 Agent）
 
 ### 评估 · 多模态 · 经典模型

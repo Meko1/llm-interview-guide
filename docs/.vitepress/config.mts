@@ -29,12 +29,25 @@ export default defineConfig({
       { text: '训练与微调', link: '/pretraining/pretrain', activeMatch: '/(pretraining|finetuning)/' },
       { text: 'Prompt 工程', link: '/prompt/prompt-engineering', activeMatch: '/prompt/' },
       { text: 'RAG', link: '/rag/rag-basics', activeMatch: '/rag/' },
-      { text: 'Agent', link: '/agent/agent-basics', activeMatch: '/agent/' },
+      {
+        text: 'Agent',
+        activeMatch: '/agent/',
+        items: [
+          { text: 'Agent 基础与框架', link: '/agent/agent-basics' },
+          { text: 'Function Calling 与 MCP', link: '/agent/function-calling-mcp' },
+          { text: 'MCP 协议深入', link: '/agent/mcp' },
+          { text: 'Agent 记忆系统', link: '/agent/agent-memory' },
+          { text: '上下文工程', link: '/agent/context-engineering' },
+          { text: 'AI 工作流 vs Agent', link: '/agent/workflow' },
+          { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' }
+        ]
+      },
       {
         text: '推理与部署',
         activeMatch: '/inference/',
         items: [
-          { text: '推理优化与部署', link: '/inference/inference-optimization' }
+          { text: '推理优化与部署', link: '/inference/inference-optimization' },
+          { text: 'GPU 与硬件基础', link: '/inference/gpu-hardware' }
         ]
       },
       { text: '工程实战', link: '/engineering/langchain', activeMatch: '/engineering/' },
@@ -135,6 +148,10 @@ export default defineConfig({
           items: [
             { text: 'Agent 基础与框架', link: '/agent/agent-basics' },
             { text: 'Function Calling 与 MCP', link: '/agent/function-calling-mcp' },
+            { text: 'MCP 协议深入', link: '/agent/mcp' },
+            { text: 'Agent 记忆系统', link: '/agent/agent-memory' },
+            { text: '上下文工程', link: '/agent/context-engineering' },
+            { text: 'AI 工作流 vs Agent', link: '/agent/workflow' },
             { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' }
           ]
         }
@@ -143,7 +160,8 @@ export default defineConfig({
         {
           text: '推理优化与部署',
           items: [
-            { text: '推理优化与部署', link: '/inference/inference-optimization' }
+            { text: '推理优化与部署', link: '/inference/inference-optimization' },
+            { text: 'GPU 与硬件基础', link: '/inference/gpu-hardware' }
           ]
         }
       ],
@@ -153,6 +171,8 @@ export default defineConfig({
           items: [
             { text: 'LangChain 与应用框架', link: '/engineering/langchain' },
             { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
+            { text: '结构化输出详解', link: '/engineering/structured-output' },
+            { text: 'AI 系统设计专题', link: '/engineering/system-design' },
             { text: 'AI 项目实战案例', link: '/engineering/projects' }
           ]
         }

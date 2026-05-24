@@ -14,7 +14,10 @@
 | ⭐⭐ | Finetuning Large Language Models | DeepLearning.AI | 微调入门 |
 | ⭐⭐ | 动手学深度学习（李沐） | B站 | 中文、免费、理论+代码 |
 | ⭐⭐ | 跟李沐学 AI（论文精读） | B站 | Transformer 等经典论文精讲 |
+| ⭐⭐ | Neural Networks: Zero to Hero（Karpathy） | YouTube | 从零手写，含 "Let's build GPT"，理解底层神器 |
+| ⭐⭐ | Karpathy《Let's build the GPT Tokenizer》 | YouTube | 彻底搞懂分词器 |
 | ⭐ | Machine Learning Specialization（吴恩达） | Coursera | ML 基础，可旁听 |
+| ⭐ | Hugging Face LLM / NLP Course | huggingface.co/learn | 免费、实操，配套 Transformers |
 
 ## 必读书籍
 
@@ -71,6 +74,52 @@
 | 国内大模型 API（通义/智谱/文心） | 调用练手 | 价格约为 OpenAI 的 1/5~1/10 |
 
 > 提示：学习阶段优先用国内大模型 API 和免费额度，成本可控。微调实验可用 Colab 免费 GPU 或 AutoDL 低价租卡。
+
+## 🛠️ 工具与框架速览
+
+按用途整理常用开源工具，覆盖大模型工程全链路：
+
+| 方向 | 代表工具 |
+| --- | --- |
+| **应用开发框架** | LangChain、LlamaIndex、LangGraph、Haystack、Spring AI（Java） |
+| **微调** | LLaMA-Factory、Hugging Face PEFT、Unsloth、TRL、Axolotl |
+| **推理部署** | vLLM、SGLang、TGI、TensorRT-LLM、Ollama、llama.cpp、LMDeploy |
+| **向量数据库** | Milvus、Qdrant、Chroma、Weaviate、pgvector、Faiss |
+| **RAG / 知识库** | Dify、FastGPT、RAGFlow、QAnything、LangChain |
+| **Agent / 多 Agent** | LangGraph、AutoGen、CrewAI、MetaGPT、OpenAI Agents SDK |
+| **评估** | RAGAS、TruLens、OpenCompass、lm-evaluation-harness、EvalScope |
+| **可观测 / LLMOps** | LangSmith、Langfuse、Phoenix（Arize） |
+| **结构化输出 / 约束解码** | Outlines、XGrammar、Instructor、Guidance |
+| **本地 / 端侧** | Ollama、LM Studio、llama.cpp、MLX（Apple） |
+
+> 工具迭代极快，记住「每类的代表 + 它解决什么问题」即可，别死记版本。
+
+## 中文社区与专栏
+
+中文一手资讯和实战经验的高质量来源：
+
+| 渠道 | 内容 |
+| --- | --- |
+| 掘金（juejin.cn） | 大量大模型实战、面经、源码解析专栏 |
+| 知乎 | 算法原理深度讨论、论文解读、行业观察 |
+| CSDN | 教程、踩坑记录、环境配置实操 |
+| 公众号：机器之心 / 量子位 / 新智元 | 中文 AI 资讯与技术报道 |
+| 公众号：李rumor / 真中合欢 / 关于NLP那些你不知道的事 | NLP / 大模型技术干货 |
+| B 站 | 李沐、Karpathy 搬运、各类大模型实战课 |
+
+## 同类优秀开源指南（致敬 & 延伸阅读）
+
+本项目站在巨人的肩膀上，也推荐这些优秀的开源学习/面试资源：
+
+| 项目 | 特点 |
+| --- | --- |
+| [JavaGuide](https://javaguide.cn/) | 后端面试指南标杆，本项目的形式灵感来源 |
+| [JavaGuide - AI 应用开发面试指南](https://javaguide.cn/ai/) | JavaGuide 的 AI 面试专栏，质量很高 |
+| [LLMForEverybody](https://github.com/luhengshiwo/LLMForEverybody) | 体系化的大模型原理 + 面试系列文章 |
+| [awesome-LLM-resources](https://github.com/WangRongsheng/awesome-LLM-resources) | 极全的大模型资源/工具索引 |
+| [AgentGuide](https://adongwanai.github.io/AgentGuide/) | 聚焦 Agent 的学习与面试指南 |
+| [happy-llm](https://github.com/datawhalechina/happy-llm) | Datawhale 出品，从原理到实践 |
+| [llm-cookbook](https://github.com/datawhalechina/llm-cookbook) | 吴恩达 LLM 系列课程中文版 |
 
 ## 跟踪前沿的渠道
 
