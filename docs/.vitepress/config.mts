@@ -24,30 +24,75 @@ export default defineConfig({
     siteTitle: 'LLMGuide',
 
     nav: [
-      { text: '大模型基础', link: '/basics/transformer', activeMatch: '/basics/' },
+      { text: '新手入门', link: '/beginner/getting-started', activeMatch: '/beginner/' },
+      { text: '大模型基础', link: '/basics/overview', activeMatch: '/basics/' },
       { text: '训练与微调', link: '/pretraining/pretrain', activeMatch: '/(pretraining|finetuning)/' },
       { text: 'Prompt 工程', link: '/prompt/prompt-engineering', activeMatch: '/prompt/' },
       { text: 'RAG', link: '/rag/rag-basics', activeMatch: '/rag/' },
       { text: 'Agent', link: '/agent/agent-basics', activeMatch: '/agent/' },
       {
-        text: '工程与落地',
-        activeMatch: '/(inference|evaluation)/',
+        text: '推理与部署',
+        activeMatch: '/inference/',
         items: [
-          { text: '推理优化与部署', link: '/inference/inference-optimization' },
-          { text: '模型评估', link: '/evaluation/evaluation' }
+          { text: '推理优化与部署', link: '/inference/inference-optimization' }
+        ]
+      },
+      { text: '工程实战', link: '/engineering/langchain', activeMatch: '/engineering/' },
+      {
+        text: '进阶',
+        activeMatch: '/(evaluation|multimodal|models|advanced)/',
+        items: [
+          {
+            text: '前沿专题',
+            items: [
+              { text: '推理模型与慢思考', link: '/advanced/reasoning-models' },
+              { text: '大模型安全与对齐', link: '/advanced/safety' },
+              { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' }
+            ]
+          },
+          {
+            text: '深入原理',
+            items: [
+              { text: 'FlashAttention 深入', link: '/advanced/flash-attention' },
+              { text: '训练深入（优化器/混合精度）', link: '/advanced/training-internals' }
+            ]
+          },
+          {
+            text: '评估与模型',
+            items: [
+              { text: '模型评估与幻觉', link: '/evaluation/evaluation' },
+              { text: '评测基准深入', link: '/evaluation/benchmarks' },
+              { text: '多模态大模型', link: '/multimodal/multimodal' },
+              { text: '经典模型盘点', link: '/models/classic-models' },
+              { text: 'DeepSeek 专题', link: '/models/deepseek' }
+            ]
+          }
         ]
       },
       {
-        text: '进阶',
+        text: '面试专题',
+        activeMatch: '/interview/',
         items: [
-          { text: '多模态大模型', link: '/multimodal/multimodal' },
-          { text: '经典模型盘点', link: '/models/classic-models' }
+          { text: '高频面试题速记', link: '/interview/high-frequency' },
+          { text: '分岗位面试真题', link: '/interview/real-questions' },
+          { text: '大模型学习路线', link: '/interview/learning-path' },
+          { text: '学习资源汇总', link: '/interview/resources' }
         ]
       },
       { text: '关于', link: '/about' }
     ],
 
     sidebar: {
+      '/beginner/': [
+        {
+          text: '新手入门',
+          items: [
+            { text: '大模型零基础入门', link: '/beginner/getting-started' },
+            { text: '大模型术语速查表', link: '/beginner/glossary' },
+            { text: '大模型必备数学基础', link: '/beginner/math-basics' }
+          ]
+        }
+      ],
       '/basics/': [
         {
           text: '大模型基础',
@@ -56,7 +101,11 @@ export default defineConfig({
             { text: 'Transformer 架构详解', link: '/basics/transformer' },
             { text: 'Attention 与变体', link: '/basics/attention' },
             { text: '位置编码（RoPE / ALiBi）', link: '/basics/position-encoding' },
-            { text: 'Tokenizer 与分词', link: '/basics/tokenizer' }
+            { text: '归一化与激活函数', link: '/basics/normalization' },
+            { text: 'Tokenizer 与分词', link: '/basics/tokenizer' },
+            { text: '解码与采样策略', link: '/basics/decoding' },
+            { text: 'MoE 混合专家模型', link: '/basics/moe' },
+            { text: '长上下文专题', link: '/basics/long-context' }
           ]
         }
       ],
@@ -75,6 +124,7 @@ export default defineConfig({
           text: 'RAG 检索增强生成',
           items: [
             { text: 'RAG 基础与流程', link: '/rag/rag-basics' },
+            { text: 'Embedding 与向量数据库', link: '/rag/embedding-vectordb' },
             { text: 'RAG 进阶与优化', link: '/rag/rag-advanced' }
           ]
         }
@@ -84,7 +134,8 @@ export default defineConfig({
           text: 'Agent 智能体',
           items: [
             { text: 'Agent 基础与框架', link: '/agent/agent-basics' },
-            { text: 'Function Calling 与 MCP', link: '/agent/function-calling-mcp' }
+            { text: 'Function Calling 与 MCP', link: '/agent/function-calling-mcp' },
+            { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' }
           ]
         }
       ],
@@ -96,10 +147,34 @@ export default defineConfig({
           ]
         }
       ],
+      '/engineering/': [
+        {
+          text: '工程实战',
+          items: [
+            { text: 'LangChain 与应用框架', link: '/engineering/langchain' },
+            { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
+            { text: 'AI 项目实战案例', link: '/engineering/projects' }
+          ]
+        }
+      ],
+      '/interview/': [
+        {
+          text: '面试专题',
+          items: [
+            { text: '高频面试题速记', link: '/interview/high-frequency' },
+            { text: '分岗位面试真题', link: '/interview/real-questions' },
+            { text: '大模型学习路线', link: '/interview/learning-path' },
+            { text: '学习资源汇总', link: '/interview/resources' }
+          ]
+        }
+      ],
       '/evaluation/': [
         {
           text: '模型评估',
-          items: [{ text: '模型评估与幻觉', link: '/evaluation/evaluation' }]
+          items: [
+            { text: '模型评估与幻觉', link: '/evaluation/evaluation' },
+            { text: '评测基准深入', link: '/evaluation/benchmarks' }
+          ]
         }
       ],
       '/multimodal/': [
@@ -111,7 +186,27 @@ export default defineConfig({
       '/models/': [
         {
           text: '经典模型',
-          items: [{ text: '经典模型盘点', link: '/models/classic-models' }]
+          items: [
+            { text: '经典模型盘点', link: '/models/classic-models' },
+            { text: 'DeepSeek 专题', link: '/models/deepseek' }
+          ]
+        }
+      ],
+      '/advanced/': [
+        {
+          text: '前沿专题',
+          items: [
+            { text: '推理模型与慢思考', link: '/advanced/reasoning-models' },
+            { text: '大模型安全与对齐', link: '/advanced/safety' },
+            { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' }
+          ]
+        },
+        {
+          text: '深入原理',
+          items: [
+            { text: 'FlashAttention 深入', link: '/advanced/flash-attention' },
+            { text: '训练深入（优化器/混合精度）', link: '/advanced/training-internals' }
+          ]
         }
       ]
     },
@@ -163,7 +258,8 @@ function sidebarTraining() {
       text: '预训练',
       items: [
         { text: '预训练目标与数据', link: '/pretraining/pretrain' },
-        { text: '缩放定律与涌现能力', link: '/pretraining/scaling-law' }
+        { text: '缩放定律与涌现能力', link: '/pretraining/scaling-law' },
+        { text: '分布式训练与显存优化', link: '/pretraining/distributed-training' }
       ]
     },
     {

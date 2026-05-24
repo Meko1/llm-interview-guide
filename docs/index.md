@@ -13,10 +13,20 @@ hero:
       text: 开始阅读
       link: /basics/overview
     - theme: alt
+      text: 零基础入门
+      link: /beginner/getting-started
+    - theme: alt
+      text: 高频面试题速记
+      link: /interview/high-frequency
+    - theme: alt
       text: 在 GitHub 上查看
       link: https://github.com/Meko1/llm-interview-guide
 
 features:
+  - icon: 🌱
+    title: 新手入门
+    details: 零基础导引、术语速查表、必备数学基础。完全没接触过 AI 也能找到清晰起点，先上手再深入。
+    link: /beginner/getting-started
   - icon: 🧠
     title: 大模型基础
     details: Transformer 架构、Attention 及其变体、位置编码（RoPE/ALiBi）、Tokenizer 与分词，把底层原理一次讲透。
@@ -47,24 +57,43 @@ features:
     link: /evaluation/evaluation
   - icon: 🖼️
     title: 多模态与经典模型
-    details: CLIP、ViT、多模态对齐与 LLaVA 架构，以及 GPT/LLaMA/BERT/DeepSeek 等经典模型盘点。
+    details: CLIP、ViT、多模态对齐与 LLaVA 架构，以及 GPT/LLaMA/BERT/Qwen/DeepSeek（MLA/GRPO）等经典模型盘点。
     link: /multimodal/multimodal
+  - icon: 🛠️
+    title: 工程实战
+    details: LangChain/LlamaIndex、流式输出、Function Calling、结构化输出、服务化与成本控制，把模型做成可上线的服务。
+    link: /engineering/langchain
+  - icon: 🎯
+    title: 面试专题
+    details: 高频面试题速记、分岗位面试真题、系统化学习路线、精选学习资源，面试前快速过一遍。
+    link: /interview/high-frequency
+  - icon: 🔬
+    title: 资深深入 & 前沿
+    details: FlashAttention、Mamba/SSM、训练优化器与稳定性、推理模型与慢思考、大模型安全，给进阶开发者的深水区。
+    link: /advanced/flash-attention
 ---
 
 ## 🔥 必看
 
-- **大模型核心概念总览**（⭐网站核心）：用最短篇幅建立对大模型的整体认知，理清各知识模块之间的关系。
-- **Transformer 架构详解**：从 Self-Attention 到多头注意力、残差与 LayerNorm，面试必考底层原理。
-- **微调与对齐**：SFT、LoRA/QLoRA、RLHF/DPO 一文打通，区分清楚"训练范式"和"对齐方法"。
-- **RAG 与 Agent**：当下大模型应用开发最热门的两大方向，覆盖原理、流程与高频考点。
-- **推理优化与部署**：量化、KV Cache、vLLM、投机解码……让你应对中大厂工程化面试趋势。
+- **[大模型零基础入门](/beginner/getting-started)**（🌱新手必看）：完全没接触过 AI？从这里开始，配 [术语速查表](/beginner/glossary) 和 [必备数学基础](/beginner/math-basics)。
+- **[高频面试题速记](/interview/high-frequency)**（⭐网站核心）：全站核心考点浓缩成一问一答速查卡，面试前快速过一遍。
+- **[分岗位面试真题](/interview/real-questions)**：按算法/应用/工程岗 + 场景设计 + 手撕题分类的真题库。
+- **[大模型学习路线](/interview/learning-path)**：从理论地基到 RAG、Agent、微调部署，一条清晰的进阶路径。
+- **[Transformer 架构详解](/basics/transformer)**：从 Self-Attention 到 MHA/MQA/GQA/MLA、RMSNorm、SwiGLU，面试必考底层原理。
+- **[微调与对齐](/finetuning/finetuning)**：SFT、LoRA/QLoRA、RLHF/DPO 一文打通，区分清楚"训练范式"和"对齐方法"。
+- **[RAG 与 Agent](/rag/rag-basics)**：当下大模型应用开发最热门的两大方向，覆盖原理、流程与高频考点。
+- **[推理优化与部署](/inference/inference-optimization)**：量化、KV Cache、PagedAttention、投机解码……应对中大厂工程化面试趋势。
+- **[DeepSeek 专题](/models/deepseek)**：MLA、DeepSeekMoE、GRPO、R1 训练流程，当下最热门的前沿考点。
+- **[推理模型与慢思考](/advanced/reasoning-models)**：o1/R1、long CoT、test-time compute，理解「会慢慢想」的新范式。
 
 ## 🌟 学习路线建议
 
 1. 先看 [大模型核心概念总览](/basics/overview) 建立全局认知；
-2. 打牢 [Transformer](/basics/transformer)、[Attention](/basics/attention) 等基础原理；
-3. 理解 [预训练](/pretraining/pretrain) → [微调/对齐](/finetuning/finetuning) 的完整训练链路；
+2. 打牢 [Transformer](/basics/transformer)、[Attention](/basics/attention)、[归一化与激活](/basics/normalization) 等基础原理；
+3. 理解 [预训练](/pretraining/pretrain) → [分布式训练](/pretraining/distributed-training) → [微调/对齐](/finetuning/finetuning) 的完整训练链路；
 4. 掌握应用开发核心：[Prompt](/prompt/prompt-engineering)、[RAG](/rag/rag-basics)、[Agent](/agent/agent-basics)；
-5. 补齐工程能力：[推理优化与部署](/inference/inference-optimization)、[评估](/evaluation/evaluation)。
+5. 补齐工程能力：[推理优化与部署](/inference/inference-optimization)、[工程实战](/engineering/langchain)、[评估](/evaluation/evaluation)。
+
+> 完整路线见 [大模型学习路线](/interview/learning-path)，资源清单见 [学习资源汇总](/interview/resources)。
 
 > 本项目仅用于学习交流，内容持续更新维护。欢迎在 [GitHub](https://github.com/Meko1/llm-interview-guide) 提 Issue / PR 一起完善。

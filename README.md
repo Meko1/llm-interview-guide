@@ -1,52 +1,132 @@
-# LLMGuide · 大模型面试指南
+<div align="center">
 
-> 系统整理大模型 / LLM 方向的「八股文」与高频面试题，覆盖大模型基础、Transformer、预训练、微调、RLHF、Prompt、RAG、Agent、推理优化与部署、评估、多模态等。
+# 🧠 LLMGuide · 大模型面试指南
 
-## 内容结构
+**系统整理大模型 / LLM 方向的「八股文」与高频面试题，覆盖从底层原理到工程落地的完整知识体系。**
 
-- **大模型基础**：核心概念总览、Transformer、Attention 及变体、位置编码（RoPE/ALiBi）、Tokenizer
-- **训练与微调**：预训练目标与数据、缩放定律与涌现能力、SFT/PEFT、LoRA/QLoRA、RLHF/DPO
-- **Prompt 工程**：Few-shot、CoT、ReAct、Prompt 注入与防护
-- **RAG**：基础流程与组件、进阶优化与评估
-- **Agent**：核心组件与范式、Function Calling 与 MCP
-- **工程与落地**：推理优化与部署、模型评估与幻觉
-- **进阶**：多模态大模型、经典模型盘点
+[![Pages](https://img.shields.io/badge/在线阅读-meko1.github.io-3c8772?logo=github)](https://meko1.github.io/llm-interview-guide/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![VitePress](https://img.shields.io/badge/Built%20with-VitePress-646cff?logo=vite&logoColor=white)](https://vitepress.dev/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#-参与贡献)
+[![Stars](https://img.shields.io/github/stars/Meko1/llm-interview-guide?style=social)](https://github.com/Meko1/llm-interview-guide)
 
-## 本地运行
+🔗 **在线阅读 → [meko1.github.io/llm-interview-guide](https://meko1.github.io/llm-interview-guide/)**
+
+</div>
+
+---
+
+## 📖 这是什么？
+
+LLMGuide 是一份开源的**大模型面试知识库**，把大模型方向零散的知识点整理成体系化、问答式的文档，帮你在面试前快速建立全局认知、查漏补缺。
+
+- 🎯 **面试导向**：每篇文章末尾都附「高频追问」，模拟面试官的连环追问。
+- 🧩 **体系完整**：从 Transformer 原理到 RAG / Agent / 推理部署 / 工程落地，一站式覆盖。
+- 🆓 **完全免费 & 开源**：内容持续更新，欢迎一起完善。
+- 🌏 **中文友好**：面向中文读者，兼顾通用受众与后端工程师转型视角。
+
+> 适合：准备大模型 / AI 算法、AI 应用开发、AIGC 工程等岗位面试的同学，以及想系统入门大模型的开发者。
+
+## 🗂️ 内容导航
+
+> 点击直达在线文档对应章节。
+
+### 🌱 新手入门
+- [大模型零基础入门](https://meko1.github.io/llm-interview-guide/beginner/getting-started) — 完全没接触 AI 也能开始
+- [大模型术语速查表](https://meko1.github.io/llm-interview-guide/beginner/glossary)
+- [大模型必备数学基础](https://meko1.github.io/llm-interview-guide/beginner/math-basics)
+
+### 大模型基础
+- [核心概念总览](https://meko1.github.io/llm-interview-guide/basics/overview) — 一文建立全局认知
+- [Transformer 架构详解](https://meko1.github.io/llm-interview-guide/basics/transformer)
+- [Attention 与变体](https://meko1.github.io/llm-interview-guide/basics/attention)（MHA / MQA / GQA / MLA / FlashAttention）
+- [位置编码](https://meko1.github.io/llm-interview-guide/basics/position-encoding)（RoPE / ALiBi / 长上下文扩展）
+- [归一化与激活函数](https://meko1.github.io/llm-interview-guide/basics/normalization)（RMSNorm / Pre-Norm / SwiGLU）
+- [Tokenizer 与分词](https://meko1.github.io/llm-interview-guide/basics/tokenizer)（BPE / WordPiece / SentencePiece）
+- [解码与采样策略](https://meko1.github.io/llm-interview-guide/basics/decoding)（greedy / beam / temperature / top-p）
+- [MoE 混合专家模型](https://meko1.github.io/llm-interview-guide/basics/moe)
+- [长上下文专题](https://meko1.github.io/llm-interview-guide/basics/long-context)（位置外推 / 滑窗 / KV 压缩 / vs RAG）
+
+### 训练与微调
+- [预训练目标与数据](https://meko1.github.io/llm-interview-guide/pretraining/pretrain)
+- [缩放定律与涌现能力](https://meko1.github.io/llm-interview-guide/pretraining/scaling-law)
+- [分布式训练与显存优化](https://meko1.github.io/llm-interview-guide/pretraining/distributed-training)（DP / TP / PP / ZeRO）
+- [微调范式（SFT / PEFT）](https://meko1.github.io/llm-interview-guide/finetuning/finetuning)
+- [LoRA / QLoRA 详解](https://meko1.github.io/llm-interview-guide/finetuning/lora)
+- [RLHF / DPO 对齐](https://meko1.github.io/llm-interview-guide/finetuning/rlhf)
+
+### 应用开发
+- [Prompt 工程](https://meko1.github.io/llm-interview-guide/prompt/prompt-engineering)（Few-shot / CoT / ReAct / 注入防护）
+- [RAG 基础与流程](https://meko1.github.io/llm-interview-guide/rag/rag-basics)
+- [Embedding 与向量数据库](https://meko1.github.io/llm-interview-guide/rag/embedding-vectordb)（HNSW / IVF / 选型）
+- [RAG 进阶与优化](https://meko1.github.io/llm-interview-guide/rag/rag-advanced)
+- [Agent 基础与框架](https://meko1.github.io/llm-interview-guide/agent/agent-basics)
+- [Function Calling 与 MCP](https://meko1.github.io/llm-interview-guide/agent/function-calling-mcp)
+- [多 Agent 与进阶范式](https://meko1.github.io/llm-interview-guide/agent/multi-agent)
+
+### 推理 · 部署 · 工程实战
+- [推理优化与部署](https://meko1.github.io/llm-interview-guide/inference/inference-optimization)（KV Cache / 量化 / vLLM / 投机解码）
+- [LangChain 与应用框架](https://meko1.github.io/llm-interview-guide/engineering/langchain)
+- [LLM 应用开发实战](https://meko1.github.io/llm-interview-guide/engineering/llm-app-dev)（流式 / Function Calling / 服务化 / 成本控制）
+- [AI 项目实战案例](https://meko1.github.io/llm-interview-guide/engineering/projects)（企业 RAG / 代码助手 / Text2SQL / 多 Agent）
+
+### 评估 · 多模态 · 经典模型
+- [模型评估与幻觉](https://meko1.github.io/llm-interview-guide/evaluation/evaluation)
+- [评测基准深入](https://meko1.github.io/llm-interview-guide/evaluation/benchmarks)（MMLU / GPQA / Arena / Pass@k / 数据污染）
+- [多模态大模型](https://meko1.github.io/llm-interview-guide/multimodal/multimodal)（CLIP / ViT / LLaVA）
+- [经典模型盘点](https://meko1.github.io/llm-interview-guide/models/classic-models)
+- [DeepSeek 专题](https://meko1.github.io/llm-interview-guide/models/deepseek)（MLA / DeepSeekMoE / GRPO / R1）
+
+### 🔬 前沿专题 & 资深深入
+- [推理模型与慢思考](https://meko1.github.io/llm-interview-guide/advanced/reasoning-models)（o1 / R1 / test-time compute）
+- [大模型安全与对齐](https://meko1.github.io/llm-interview-guide/advanced/safety)（越狱 / Prompt 注入 / 红队 / 护栏）
+- [状态空间模型与 Mamba](https://meko1.github.io/llm-interview-guide/advanced/state-space-models)（SSM / 选择性扫描 / 混合架构）
+- [FlashAttention 深入](https://meko1.github.io/llm-interview-guide/advanced/flash-attention)（IO 感知 / online softmax / v1-v3）
+- [训练深入](https://meko1.github.io/llm-interview-guide/advanced/training-internals)（优化器 / 混合精度 / loss spike）
+
+### 🎯 面试专题
+- [**高频面试题速记**](https://meko1.github.io/llm-interview-guide/interview/high-frequency) — 全站考点浓缩速查卡
+- [分岗位面试真题](https://meko1.github.io/llm-interview-guide/interview/real-questions)（算法 / 应用 / 工程 / 场景 / 手撕）
+- [大模型学习路线](https://meko1.github.io/llm-interview-guide/interview/learning-path)
+- [学习资源汇总](https://meko1.github.io/llm-interview-guide/interview/resources)
+
+## 🚀 本地运行
 
 需要 Node.js 18+。
 
 ```bash
-# 安装依赖
-npm install
-
-# 本地开发（默认 http://localhost:5173）
-npm run dev
-
-# 构建静态站点（输出到 docs/.vitepress/dist）
-npm run build
-
-# 本地预览构建产物
-npm run preview
+npm install        # 安装依赖
+npm run dev        # 本地开发，默认 http://localhost:5173
+npm run build      # 构建静态站点，输出到 docs/.vitepress/dist
+npm run preview    # 预览构建产物
 ```
 
-## 部署到 GitHub Pages
+## ☁️ 部署到 GitHub Pages
 
-本仓库已内置 GitHub Actions 工作流（`.github/workflows/deploy.yml`），推送到 `main` 分支会自动构建并部署。
+本仓库已内置 GitHub Actions 工作流（`.github/workflows/`），推送到 `main` 分支会自动构建并部署。
 
-启用步骤：
+1. 仓库 **Settings → Pages**，把 **Source** 设为 **GitHub Actions**。
+2. 推送到 `main`，Actions 自动构建发布。
+3. 站点地址：`https://<用户名>.github.io/llm-interview-guide/`。
 
-1. 在 GitHub 仓库页面进入 **Settings → Pages**。
-2. 把 **Build and deployment → Source** 设置为 **GitHub Actions**。
-3. 推送代码到 `main` 分支，Actions 会自动构建并发布。
-4. 站点地址通常为 `https://<用户名>.github.io/llm-interview-guide/`。
+> `docs/.vitepress/config.mts` 的 `base` 已设为 `/llm-interview-guide/`，与仓库名一致。若改了仓库名或用自定义域名/根路径部署，请相应修改 `base`。
 
-> 注意：`docs/.vitepress/config.mts` 中的 `base` 已设为 `/llm-interview-guide/`，与仓库名一致。如果你改了仓库名，或使用自定义域名/部署到根路径，请相应修改 `base`。
+## 🤝 参与贡献
 
-## 贡献
+非常欢迎任何形式的贡献！
 
-欢迎提 Issue 指出错误，或提 PR 补充 / 完善内容。
+- 🐛 发现错误 / 表述不清 → 提 [Issue](https://github.com/Meko1/llm-interview-guide/issues)
+- ✍️ 补充内容 / 新增主题 / 修正错别字 → 提 [Pull Request](https://github.com/Meko1/llm-interview-guide/pulls)
+- 📚 推荐优质学习资源 → 直接 PR 到 [学习资源汇总](https://meko1.github.io/llm-interview-guide/interview/resources)
 
-## 许可
+贡献前请阅读 [贡献指南 CONTRIBUTING.md](./CONTRIBUTING.md)，了解写作规范与本地开发流程。
+
+如果这个项目对你有帮助，欢迎点一个 ⭐ **Star** 支持一下，这是对维护者最大的鼓励！
+
+## ⚠️ 免责声明
+
+本项目内容仅用于学习与交流，由社区整理，可能存在疏漏或随技术发展而过时之处，请结合权威资料与官方文档辩证参考。
+
+## 📄 许可
 
 [MIT](./LICENSE) © Meko1

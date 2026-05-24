@@ -7,7 +7,7 @@
   --vp-home-hero-name-color: transparent;
   --vp-home-hero-name-background: linear-gradient(120deg, #42b883 30%, #347474);
   --vp-home-hero-image-background-image: linear-gradient(45deg, #42b88333 50%, #34747433 50%);
-  --vp-home-hero-image-filter: blur(44px);
+  --vp-home-hero-image-filter: blur(48px);
 }
 
 .dark {
@@ -16,13 +16,76 @@
   --vp-c-brand-3: #2c8a6f;
 }
 
-/* 让首页特性卡片标题更突出 */
+/* ===== 首页 Hero ===== */
+.VPHero .name {
+  font-size: 3.6rem;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+@media (min-width: 960px) {
+  .VPHero .name {
+    font-size: 4.2rem;
+  }
+}
+.VPHero .text {
+  font-weight: 700;
+}
+.VPHero .tagline {
+  line-height: 1.7;
+}
+
+/* ===== 首页特性卡片 ===== */
+.VPFeature {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  border: 1px solid var(--vp-c-divider);
+}
+.VPFeature:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(44, 138, 111, 0.16);
+  border-color: var(--vp-c-brand-2);
+}
 .VPFeature .title {
   font-weight: 700;
 }
+.VPFeature .icon {
+  background-color: var(--vp-c-brand-soft) !important;
+}
 
-/* 文章内表格更紧凑易读 */
+/* ===== 文档区：引言块（每篇开头的 > 提要） ===== */
+.vp-doc h1 + blockquote {
+  border-left-width: 4px;
+  border-left-color: var(--vp-c-brand-2);
+  background: var(--vp-c-brand-soft);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+}
+.vp-doc h1 + blockquote p {
+  margin: 0;
+  color: var(--vp-c-text-1);
+}
+
+/* ===== 文章内表格 ===== */
 .vp-doc table {
   display: table;
   width: 100%;
+}
+.vp-doc tr:nth-child(2n) {
+  background-color: var(--vp-c-bg-soft);
+}
+.vp-doc th {
+  background-color: var(--vp-c-brand-soft);
+}
+
+/* ===== 「高频追问」小节强调（VitePress 默认已给 h2 实线上边框，这里改为虚线点缀） ===== */
+.vp-doc h2[id^="高频追问"] {
+  border-top-style: dashed;
+  border-top-color: var(--vp-c-brand-2);
+}
+
+/* 链接更醒目 */
+.vp-doc a {
+  font-weight: 500;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
