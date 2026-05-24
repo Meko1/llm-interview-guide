@@ -73,18 +73,6 @@ features:
     link: /advanced/flash-attention
 ---
 
-## 📊 覆盖一览
-
-<div class="stats-row">
-
-| 📚 内容 | 🧩 板块 | ⭐ 旗舰深度长文 | 🎯 面试追问 |
-| :---: | :---: | :---: | :---: |
-| **58+** 篇 | **14** 大板块 | **11** 篇 | **数百** 条 |
-
-</div>
-
-> 从「新手入门」到「资深前沿」，覆盖 大模型基础 · 训练微调 · Prompt/RAG/Agent · 推理部署 · 工程实战 · 评估 · 多模态 · 前沿专题 · 面试题库 全链路。
-
 ## 🔥 必看
 
 - **[大模型零基础入门](/beginner/getting-started)**（🌱新手必看）：完全没接触过 AI？从这里开始，配 [术语速查表](/beginner/glossary) 和 [必备数学基础](/beginner/math-basics)。
@@ -109,3 +97,9 @@ features:
 > 完整路线见 [大模型学习路线](/interview/learning-path)，资源清单见 [学习资源汇总](/interview/resources)。
 
 > 本项目仅用于学习交流，内容持续更新维护。欢迎在 [GitHub](https://github.com/Meko1/llm-interview-guide) 提 Issue / PR 一起完善。
+
+<div class="he-cta">
+  <h3>⭐ 觉得有用？给个 Star 支持一下</h3>
+  <p>本项目完全开源免费，持续更新维护。欢迎 Star、提 Issue 或 PR 一起完善。</p>
+  <a class="he-cta-btn" href="https://github.com/Meko1/llm-interview-guide" target="_blank" rel="noreferrer">前往 GitHub 仓库 →</a>
+</div>

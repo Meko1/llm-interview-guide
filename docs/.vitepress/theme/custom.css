@@ -1,62 +1,97 @@
+/* ============================================================
+   LLMGuide 自定义主题
+   ============================================================ */
+
+/* ---------- 品牌色 ---------- */
 :root {
   --vp-c-brand-1: #2c8a6f;
   --vp-c-brand-2: #34a085;
   --vp-c-brand-3: #42b883;
   --vp-c-brand-soft: rgba(66, 184, 131, 0.14);
 
+  /* 渐变与强调 */
+  --llm-gradient: linear-gradient(120deg, #42b883 10%, #2c8a6f 50%, #2f7e8c 100%);
+  --llm-gradient-soft: linear-gradient(120deg, rgba(66,184,131,.10), rgba(47,126,140,.10));
+
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: linear-gradient(120deg, #42b883 30%, #347474);
-  --vp-home-hero-image-background-image: linear-gradient(45deg, #42b88333 50%, #34747433 50%);
-  --vp-home-hero-image-filter: blur(48px);
+  --vp-home-hero-name-background: var(--llm-gradient);
+  --vp-home-hero-image-background-image: linear-gradient(45deg, #42b88333 40%, #2f7e8c33 100%);
+  --vp-home-hero-image-filter: blur(56px);
 }
 
 .dark {
-  --vp-c-brand-1: #4fc08d;
-  --vp-c-brand-2: #42b883;
+  --vp-c-brand-1: #5fd0a3;
+  --vp-c-brand-2: #4fc08d;
   --vp-c-brand-3: #2c8a6f;
+  --vp-c-brand-soft: rgba(79, 192, 141, 0.16);
 }
 
-/* ===== 首页 Hero ===== */
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ============================================================
+   首页 Hero
+   ============================================================ */
 .VPHero .name {
   font-size: 3.6rem;
-  line-height: 1.1;
+  line-height: 1.08;
   letter-spacing: -0.5px;
 }
 @media (min-width: 960px) {
   .VPHero .name {
-    font-size: 4.2rem;
+    font-size: 4.4rem;
   }
 }
 .VPHero .text {
   font-weight: 700;
+  letter-spacing: -0.3px;
 }
 .VPHero .tagline {
   line-height: 1.7;
+  font-size: 1.05rem;
+}
+/* 主按钮渐变 */
+.VPButton.brand {
+  border: none;
+  background: var(--llm-gradient);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.VPButton.brand:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(44, 138, 111, 0.35);
 }
 
-/* ===== 首页特性卡片 ===== */
+/* ============================================================
+   首页特性卡片
+   ============================================================ */
 .VPFeature {
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
   border: 1px solid var(--vp-c-divider);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 .VPFeature:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(44, 138, 111, 0.16);
+  transform: translateY(-5px);
+  box-shadow: 0 14px 30px rgba(44, 138, 111, 0.16);
   border-color: var(--vp-c-brand-2);
 }
 .VPFeature .title {
   font-weight: 700;
 }
 .VPFeature .icon {
-  background-color: var(--vp-c-brand-soft) !important;
+  background: var(--vp-c-brand-soft) !important;
+  border-radius: 10px;
 }
 
-/* ===== 文档区：引言块（每篇开头的 > 提要） ===== */
+/* ============================================================
+   文档内容区
+   ============================================================ */
+
+/* 每篇开头的 > 提要：绿色提示卡 */
 .vp-doc h1 + blockquote {
-  border-left-width: 4px;
-  border-left-color: var(--vp-c-brand-2);
-  background: var(--vp-c-brand-soft);
-  border-radius: 0 8px 8px 0;
+  border-left: 4px solid var(--vp-c-brand-2);
+  background: var(--llm-gradient-soft);
+  border-radius: 0 10px 10px 0;
   padding: 14px 18px;
   font-size: 0.95rem;
 }
@@ -65,49 +100,307 @@
   color: var(--vp-c-text-1);
 }
 
-/* ===== 文章内表格 ===== */
-.vp-doc table {
-  display: table;
-  width: 100%;
-}
-.vp-doc tr:nth-child(2n) {
-  background-color: var(--vp-c-bg-soft);
-}
-.vp-doc th {
-  background-color: var(--vp-c-brand-soft);
+/* 普通引用 */
+.vp-doc blockquote {
+  border-left-width: 3px;
+  border-left-color: var(--vp-c-brand-3);
 }
 
-/* ===== 「高频追问」小节强调（VitePress 默认已给 h2 实线上边框，这里改为虚线点缀） ===== */
+/* 标题：H1 渐变文字 */
+.vp-doc h1 {
+  background: var(--llm-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2.05rem;
+  line-height: 1.25;
+}
+/* H2 呼吸感 */
+.vp-doc h2 {
+  margin-top: 2.6rem;
+  padding-top: 1.4rem;
+}
+
+/* 「高频追问」小节：绿色虚线强调 */
 .vp-doc h2[id^="高频追问"] {
   border-top-style: dashed;
   border-top-color: var(--vp-c-brand-2);
 }
 
-/* ===== 首页「覆盖一览」数据区 ===== */
+/* 表格：圆角、表头底色、斑马纹、悬停 */
+.vp-doc table {
+  display: table;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  border-collapse: collapse;
+  box-shadow: 0 0 0 1px var(--vp-c-divider);
+}
+.vp-doc th {
+  background-color: var(--vp-c-brand-soft);
+  font-weight: 700;
+  border: none;
+}
+.vp-doc td {
+  border-color: var(--vp-c-divider);
+}
+.vp-doc tr {
+  transition: background-color 0.15s ease;
+}
+.vp-doc tbody tr:nth-child(2n) {
+  background-color: var(--vp-c-bg-soft);
+}
+.vp-doc tbody tr:hover {
+  background-color: var(--vp-c-brand-soft);
+}
+
+/* 行内代码 */
+.vp-doc :not(pre) > code {
+  background-color: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  border-radius: 5px;
+  font-weight: 500;
+  padding: 2px 6px;
+}
+
+/* 代码块圆角 + 阴影 */
+.vp-doc div[class*='language-'] {
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* 链接：醒目下划线 */
+.vp-doc a {
+  font-weight: 500;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--vp-c-brand-3);
+  transition: color 0.15s ease;
+}
+
+/* 列表项间距 */
+.vp-doc li + li {
+  margin-top: 0.4em;
+}
+
+/* ============================================================
+   自定义容器（::: tip / info / warning / danger / details）
+   ============================================================ */
+.vp-doc .custom-block {
+  border-radius: 10px;
+  border-width: 1px;
+  border-left-width: 4px;
+}
+.vp-doc .custom-block.tip {
+  border-left-color: var(--vp-c-brand-2);
+}
+
+/* ============================================================
+   侧边栏 / 导航
+   ============================================================ */
+.VPSidebarItem.is-active > .item > .link > .text {
+  font-weight: 700;
+}
+.VPSidebarItem.is-active.is-link > .item .link .text {
+  color: var(--vp-c-brand-1);
+}
+
+/* ============================================================
+   首页「覆盖一览」数据区
+   ============================================================ */
 .stats-row table {
   width: 100%;
   text-align: center;
   border-collapse: separate;
   border-spacing: 0;
+  box-shadow: none;
 }
 .stats-row th {
   font-size: 0.9rem;
   font-weight: 600;
   background: transparent;
+  border: none;
 }
 .stats-row td {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 800;
-  color: var(--vp-c-brand-1);
-  padding: 12px 8px;
+  background: transparent;
+  border: none;
+  padding: 10px 8px;
+  color: transparent;
+  background-image: var(--llm-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
-.stats-row tr:nth-child(2n) {
+.stats-row tbody tr:hover,
+.stats-row tbody tr:nth-child(2n) {
   background-color: transparent;
 }
 
-/* 链接更醒目 */
-.vp-doc a {
-  font-weight: 500;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+/* ============================================================
+   首页自定义扩展区（HomeExtras 组件）
+   ============================================================ */
+.home-extras {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 16px 24px 64px;
+}
+.home-extras .he-section-title {
+  text-align: center;
+  font-size: 1.9rem;
+  font-weight: 800;
+  margin: 56px 0 8px;
+  background: var(--llm-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.home-extras .he-section-sub {
+  text-align: center;
+  color: var(--vp-c-text-2);
+  margin-bottom: 32px;
+  font-size: 0.98rem;
+}
+
+/* 数据 band */
+.he-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 24px 0 8px;
+}
+@media (max-width: 640px) {
+  .he-stats { grid-template-columns: repeat(2, 1fr); }
+}
+.he-stat {
+  text-align: center;
+  padding: 20px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 14px;
+  background: var(--llm-gradient-soft);
+}
+.he-stat-num {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  background: var(--llm-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.he-stat-label {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: var(--vp-c-text-2);
+}
+
+/* 知识体系地图 */
+.he-map-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+.he-map-card {
+  display: block;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 14px;
+  padding: 20px 22px;
+  background: var(--vp-c-bg-soft);
+  text-decoration: none !important;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.he-map-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(44, 138, 111, 0.16);
+  border-color: var(--vp-c-brand-2);
+}
+.he-map-card .he-map-icon {
+  font-size: 1.7rem;
+  margin-bottom: 8px;
+}
+.he-map-card .he-map-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--vp-c-text-1);
+  margin-bottom: 8px;
+}
+.he-map-card .he-map-items {
+  color: var(--vp-c-text-2);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+/* 适合人群 */
+.he-persona-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.he-persona {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 14px;
+  padding: 22px;
+  background: var(--llm-gradient-soft);
+}
+.he-persona .he-persona-emoji {
+  font-size: 1.6rem;
+}
+.he-persona .he-persona-title {
+  font-weight: 700;
+  margin: 8px 0 6px;
+  color: var(--vp-c-text-1);
+}
+.he-persona .he-persona-desc {
+  color: var(--vp-c-text-2);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+/* CTA */
+.he-cta {
+  margin-top: 56px;
+  text-align: center;
+  padding: 40px 24px;
+  border-radius: 18px;
+  background: var(--llm-gradient);
+  color: #fff;
+}
+.he-cta h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+  color: #fff;
+  border: none;
+  padding: 0;
+}
+.he-cta p {
+  margin: 0 0 20px;
+  opacity: 0.95;
+}
+.he-cta .he-cta-btn {
+  display: inline-block;
+  background: #fff;
+  color: #2c8a6f !important;
+  font-weight: 700;
+  padding: 10px 26px;
+  border-radius: 24px;
+  text-decoration: none !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.he-cta .he-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--vp-c-brand-soft);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vp-c-brand-3);
 }
