@@ -75,9 +75,17 @@ export default defineConfig({
             items: [
               { text: '模型评估与幻觉', link: '/evaluation/evaluation' },
               { text: '评测基准深入', link: '/evaluation/benchmarks' },
-              { text: '多模态大模型', link: '/multimodal/multimodal' },
               { text: '经典模型盘点', link: '/models/classic-models' },
-              { text: 'DeepSeek 专题', link: '/models/deepseek' }
+              { text: 'DeepSeek 专题', link: '/models/deepseek' },
+              { text: '小语言模型与端侧（SLM）', link: '/models/slm' }
+            ]
+          },
+          {
+            text: '多模态',
+            items: [
+              { text: '多模态大模型', link: '/multimodal/multimodal' },
+              { text: '扩散模型与图像生成', link: '/multimodal/diffusion' },
+              { text: '语音大模型', link: '/multimodal/speech' }
             ]
           }
         ]
@@ -171,6 +179,7 @@ export default defineConfig({
           items: [
             { text: 'LangChain 与应用框架', link: '/engineering/langchain' },
             { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
+            { text: 'AI 编程与 Coding Agent', link: '/engineering/coding-agent' },
             { text: '结构化输出详解', link: '/engineering/structured-output' },
             { text: 'AI 系统设计专题', link: '/engineering/system-design' },
             { text: 'AI 项目实战案例', link: '/engineering/projects' }
@@ -200,7 +209,11 @@ export default defineConfig({
       '/multimodal/': [
         {
           text: '多模态',
-          items: [{ text: '多模态大模型', link: '/multimodal/multimodal' }]
+          items: [
+            { text: '多模态大模型', link: '/multimodal/multimodal' },
+            { text: '扩散模型与图像生成', link: '/multimodal/diffusion' },
+            { text: '语音大模型', link: '/multimodal/speech' }
+          ]
         }
       ],
       '/models/': [
@@ -208,7 +221,8 @@ export default defineConfig({
           text: '经典模型',
           items: [
             { text: '经典模型盘点', link: '/models/classic-models' },
-            { text: 'DeepSeek 专题', link: '/models/deepseek' }
+            { text: 'DeepSeek 专题', link: '/models/deepseek' },
+            { text: '小语言模型与端侧（SLM）', link: '/models/slm' }
           ]
         }
       ],
