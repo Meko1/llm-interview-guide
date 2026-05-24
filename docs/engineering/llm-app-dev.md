@@ -1,0 +1,68 @@
+# LLM 应用开发实战
+
+> 把大模型能力做成稳定、可控、可上线的服务，是应用/工程岗的核心。本文梳理流式输出、Function Calling、结构化输出、服务化与成本控制等高频实战考点。
+
+## 流式输出（Streaming）
+
+大模型逐 token 生成，等全部生成完再返回会让用户等很久。**流式输出**边生成边返回，显著改善体感。
+
+- **协议**：Web 端常用 **SSE（Server-Sent Events）**，也可用 WebSocket。OpenAI 风格 API 用 `stream=True` 返回增量 chunk。
+- **后端**：FastAPI 用 `StreamingResponse` 把模型的流式 chunk 转发给前端。
+- **注意**：流式下错误处理更复杂（已经开始返回了才出错）；统计 token、做内容审核要在流中或流末处理。
+
+> 后端视角：和返回大文件用分块传输、或消息推送用 SSE 是同一套思路。
+
+## Function Calling / Tool Use
+
+让模型在需要时**返回一个结构化的「函数调用请求」**（函数名 + 参数），由你的代码执行后把结果回传给模型。详见 [Function Calling 与 MCP](/agent/function-calling-mcp)。
+
+典型流程：
+
+1. 把可用工具的 **JSON Schema** 描述传给模型；
+2. 模型判断需要调用某工具，返回结构化的调用参数；
+3. **你的代码执行**真实函数（查数据库、调 API）；
+4. 把执行结果回传，模型据此生成最终回答。
+
+关键点：模型只是「决定调用什么」，**真正执行的是你的代码**；工具描述要清晰、参数要有 Schema 约束。
+
+## 结构化输出（Structured Output）
+
+让模型稳定输出可被程序解析的 JSON 是工程刚需。手段从弱到强：
+
+- **Prompt 约束**：在提示里要求输出 JSON 并给示例（最弱，可能不守规矩）。
+- **JSON Mode**：API 保证输出是合法 JSON。
+- **Schema 约束 / 约束解码**：传入 JSON Schema，在解码层强制每个 token 符合结构（最可靠），如 OpenAI Structured Outputs、Outlines、vLLM guided decoding。
+
+## 服务化与工程要点
+
+把 AI 能力包装成生产级服务（常用 Python FastAPI，对应 Java 的 Spring Boot）要考虑：
+
+- **鉴权与配额**：API Key、用户级限流，防滥用和超支。
+- **限流 / 排队**：LLM 推理慢且贵，需限流、并发控制、超时、降级。
+- **重试与容错**：上游 API 会超时/限流，需指数退避重试、多供应商容错。
+- **日志与可观测**：记录 prompt、输出、token、延迟，便于排查（详见 LangSmith）。
+- **内容安全**：输入输出审核，防 Prompt 注入和有害内容。
+- **异步**：用 async/await 处理高并发 IO 等待（对应 Java 的 CompletableFuture / 响应式）。
+
+## 成本控制
+
+大模型按 token 计费，成本优化是高频问题：
+
+- **模型路由 / 分级**：简单请求走小模型/便宜模型，复杂请求才上大模型。
+- **缓存**：完全相同的请求直接返回缓存；**语义缓存**对相似问题复用答案。
+- **Prompt 精简**：压缩冗长上下文、减少 few-shot 示例。
+- **Prompt 缓存（Prefix Caching）**：复用相同的 system prompt 前缀，省 prefill 成本（详见 [推理优化](/inference/inference-optimization)）。
+- **控制输出长度**：限制 max_tokens，输出比输入更贵。
+- **批处理**：离线任务用 Batch API 享折扣。
+
+## 高频追问
+
+**Q：流式输出怎么实现，用什么协议？** 后端开启上游模型的 stream 模式，逐 chunk 通过 SSE（或 WebSocket）推给前端。FastAPI 用 StreamingResponse。难点在流式下的错误处理、token 统计和内容审核。
+
+**Q：Function Calling 是模型自己执行函数吗？** 不是。模型只**返回**「该调用哪个函数、传什么参数」的结构化意图，**真正执行由你的应用代码完成**，再把结果回传给模型。模型不接触你的数据库或外部系统本身。
+
+**Q：怎么保证模型稳定输出 JSON？** 优先用 API 的 Schema 约束 / 约束解码（解码层强制合法），其次 JSON Mode，最后才是纯 prompt 要求 + 解析失败重试。约束解码最可靠。
+
+**Q：怎么降低大模型应用的成本？** 模型分级路由、缓存（含语义缓存）、Prompt 精简与前缀缓存、限制输出长度、离线用 Batch API。核心是「该用小模型的别用大模型，能复用的别重算」。
+
+**Q：高并发下大模型服务怎么扛？** 异步处理 IO 等待、限流与请求排队、连续批处理（服务端 vLLM）、多副本水平扩展、上游多供应商容错、设置超时与降级（如降级到小模型或缓存答案）。
