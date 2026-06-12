@@ -133,6 +133,7 @@ export default defineConfig({
           text: '新手入门',
           items: [
             { text: '大模型零基础入门', link: '/beginner/getting-started' },
+            { text: '大模型发展简史', link: '/beginner/llm-history' },
             { text: '大模型术语速查表', link: '/beginner/glossary' },
             { text: '大模型必备数学基础', link: '/beginner/math-basics' }
           ]
@@ -206,6 +207,7 @@ export default defineConfig({
             { text: 'AI 编程与 Coding Agent', link: '/engineering/coding-agent' },
             { text: '结构化输出详解', link: '/engineering/structured-output' },
             { text: 'AI 系统设计专题', link: '/engineering/system-design' },
+            { text: 'LLMOps 生产运营', link: '/engineering/llmops' },
             { text: 'AI 项目实战案例', link: '/engineering/projects' }
           ]
         }
@@ -338,7 +340,8 @@ function sidebarTraining() {
       items: [
         { text: '微调范式（SFT / PEFT）', link: '/finetuning/finetuning' },
         { text: 'LoRA / QLoRA 详解', link: '/finetuning/lora' },
-        { text: 'RLHF / DPO 对齐', link: '/finetuning/rlhf' }
+        { text: 'RLHF / DPO 对齐', link: '/finetuning/rlhf' },
+        { text: '微调训练工具链实战', link: '/finetuning/training-frameworks' }
       ]
     }
   ]
