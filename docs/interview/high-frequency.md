@@ -1,6 +1,6 @@
 # 大模型高频面试题速记
 
-> 把全站核心考点浓缩成「一问一答」速查卡，适合面试前快速过一遍。每题都链接到对应详解页，想深入就点进去。
+> 把全站核心考点浓缩成「一问一答」速查卡，适合面试前快速过一遍。每题都链接到对应详解页，想深入就点进去。手撕环节请配合 [手撕代码题解集](/interview/coding-problems) 一起准备。
 
 ## 一、Transformer 与基础
 
@@ -17,6 +17,12 @@
 **为什么用 RMSNorm + Pre-Norm？** RMSNorm 去掉减均值更省算力、效果相当；Pre-Norm 梯度可经残差直通、训练更稳能堆更深。详见 [归一化与激活](/basics/normalization)。
 
 **SwiGLU 是什么？** 带 Swish 门控的 GLU，现代 FFN 标配，同参数下效果更好（用 3 个矩阵，中间维度取 8/3 d）。
+
+**词表大小怎么权衡？** 大词表：压缩率高、等效上下文长、多语言友好，但 embedding 参数多、低频 token 训练不足；小词表反之。LLaMA 32K→128K、Qwen 152K 的演进见 [LLaMA 与 Qwen](/models/llama-qwen)。详见 [Tokenizer](/basics/tokenizer)。
+
+**长上下文怎么外推？** 训练短、推理长会让 RoPE 遇到没见过的角度。位置插值（PI）线性压缩位置；NTK/YaRN 按频率分层调整 base；配合长文本继续预训练。详见 [长上下文专题](/basics/long-context)。
+
+**涌现能力是真的吗？** 模型规模过阈值后某些能力「突然」出现。一种观点认为是度量不连续（用对数/连续指标看是平滑提升），但工程上「小模型做不了的任务大模型能做」的现象真实存在。详见 [缩放定律](/pretraining/scaling-law)。
 
 ## 二、训练与微调
 
@@ -40,6 +46,18 @@
 
 **MoE 为什么省成本？为什么费显存？** 每 token 只激活少数专家 → 省计算；但所有专家都要加载进显存 → 费显存。详见 [MoE](/basics/moe)。
 
+**QLoRA 和 LoRA 区别？** QLoRA = 4-bit NF4 量化冻结的基座 + 反量化计算 + LoRA 旁路（BF16），单卡即可微调大模型；代价是训练略慢、极小的量化误差。
+
+**DPO 和 PPO 怎么选？** DPO 离线、简单稳定、不用 RM 和采样，适合资源有限/偏好数据现成的场景；PPO/GRPO 在线探索上限更高，适合可验证奖励（数学/代码）或有强 RM 的场景。详见 [RLHF / DPO](/finetuning/rlhf)。
+
+**GRPO 一句话？** 同一 prompt 采一组回答，组内奖励标准化当优势，去掉 Critic 价值模型——省显存、稳定，专配可验证奖励。推导见 [强化学习基础](/advanced/rl-basics)。
+
+**灾难性遗忘怎么缓解？** 微调时混入通用数据回放、用 LoRA 限制改动幅度、降低学习率、训练后模型融合（merge）。
+
+**Chinchilla 结论？** 算力固定时参数量与数据量应同比例增长（约 20 tokens/参数最优）；LLaMA 之后业界故意「过量训练」小模型——训练亏一点，推理省大钱。详见 [缩放定律](/pretraining/scaling-law)。
+
+**预训练数据怎么清洗？** 抽取 → 语种过滤 → 规则过滤 → 质量分类器打分 → MinHash 去重 → 去毒/PII → 评测集去污染 → 配比退火。详见 [数据工程与合成数据](/pretraining/data-engineering)。
+
 ## 三、Prompt / RAG / Agent
 
 **CoT 为什么有效？** 分解问题、给模型更多「计算空间」（更多 token = 更多前向计算），降低一步出错概率。是涌现能力，只在大模型有效。详见 [Prompt 工程](/prompt/prompt-engineering)。
@@ -57,6 +75,14 @@
 **ReAct vs Plan-and-Execute？** ReAct 边想边做、灵活但短视；Plan-and-Execute 先规划再执行、全局但僵硬。详见 [多 Agent](/agent/multi-agent)。
 
 **Function Calling 是模型自己执行函数吗？** 不是，模型只返回结构化调用意图，执行由你的代码完成。
+
+**chunk 大小怎么定？** 太小语义碎、太大噪声多。一般 200~800 token 起步，按文档类型调；配重叠窗口、父子分块（小块检索、大块送 LLM）兜底。详见 [RAG 基础](/rag/rag-basics)。
+
+**GraphRAG 解决什么？** 普通 RAG 只能答「局部事实」，跨文档全局问题（总结、关系链）答不好；GraphRAG 先抽实体关系建图 + 社区摘要，检索时图遍历。代价是构建成本高。详见 [RAG 进阶](/rag/rag-advanced)。
+
+**MCP 的三大原语？** Tools（模型可调用的操作）、Resources（可读取的数据）、Prompts（可复用模板）。Host-Client-Server 架构 + JSON-RPC，解决「M 个应用 × N 个工具」的重复集成。详见 [MCP 协议深入](/agent/mcp)。
+
+**上下文工程四操作？** Write（持久化到外部）、Select（按需取回）、Compress（压缩历史）、Isolate（多 Agent 隔离上下文）。详见 [上下文工程](/agent/context-engineering)。
 
 ## 四、推理优化与评估
 
@@ -80,6 +106,14 @@
 
 **越狱 vs Prompt 注入？** 越狱绕过模型安全对齐让其说违禁内容；注入把「数据」伪装成「指令」劫持应用行为（RAG/Agent 中的间接注入最危险）。防护靠指令数据分离 + 最小权限 + 护栏 + 人工确认。详见 [大模型安全](/advanced/safety)。
 
+**TTFT 和 TPOT 分别由什么决定？** TTFT（首 token 延迟）主要由 Prefill 决定（prompt 长度、算力）；TPOT（每 token 时间）由 Decode 决定（显存带宽、KV Cache 大小、批大小）。优化方向完全不同。
+
+**连续批处理（Continuous Batching）解决什么？** 静态批要等最长请求结束，GPU 大量空转；连续批在**迭代级**调度——任一请求结束立即换入新请求，吞吐量提升数倍，是 vLLM 高吞吐的另一半（另一半是 PagedAttention）。
+
+**LLM-as-a-Judge 有什么坑？** 位置偏差（偏向先出现的回答）、长度偏差（偏向长回答）、自恋偏差（偏向同源模型风格）。对策：交换位置取平均、校准提示、混合人评抽检。详见 [模型评估](/evaluation/evaluation)。
+
+**榜单分数为什么可能虚高？** 评测集污染（训练数据混入测试题）。鉴别：对比公开题与全新私有题的成绩差、n-gram 重叠检测。详见 [评测基准深入](/evaluation/benchmarks)。
+
 ## 五、系统设计高频题
 
 > 这类题没有标准答案，重点是讲清思路与权衡。
@@ -87,6 +121,18 @@
 - **设计一个企业知识库问答系统（RAG）**：文档接入与解析 → 切分策略 → Embedding 选型 → 向量库选型 → 混合检索 + Rerank → Prompt 模板 + 引用溯源 → 评估（RAGAS）→ 增量更新 → 权限隔离 → 缓存与成本控制。
 - **设计高并发大模型服务**：vLLM（PagedAttention + 连续批处理）→ 多副本水平扩展 → 限流排队超时降级 → 模型分级路由 → 前缀/语义缓存 → 监控可观测 → 多供应商容错。详见 [应用开发实战](/engineering/llm-app-dev)。
 - **私有化部署方案**：模型选型与量化 → GPU 选型与成本 → 推理框架（vLLM/TGI）→ 负载均衡高可用 → 监控告警 → 数据安全与隔离。
+
+## 六、前沿趋势速答
+
+**test-time scaling 是什么？** 把算力从「训练更大的模型」转向「推理时多想一会」——长 CoT、多次采样取最优、搜索。o1/R1 证明这是新的能力增长轴。详见 [推理模型](/advanced/reasoning-models)。
+
+**R1-Zero 为什么重要？** 不做 SFT、纯 RL（可验证奖励）也能涌现反思回溯，说明推理能力可以「激发」而不必「示范」。详见 [DeepSeek 专题](/models/deepseek)。
+
+**数据墙怎么破？** 合成数据（配验证器）、多模态数据、提高数据利用效率、转向后训练与推理时计算。详见 [数据工程与合成数据](/pretraining/data-engineering)。
+
+**为什么大家又开始做小模型（SLM）？** 端侧隐私/离线/低延迟需求 + 蒸馏让小模型继承大模型能力 + Agent 系统里「小模型做简单步骤」更经济。详见 [SLM 专题](/models/slm)。
+
+**Agent 方向最新趋势？** 从「prompt 串流程」走向 Agentic RL（端到端训练 Agent 行为）、上下文工程、多 Agent 协作与 MCP 标准化生态。详见 [Agentic RL](/advanced/agentic-rl)。
 
 ## 速记口诀
 

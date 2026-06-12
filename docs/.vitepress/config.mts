@@ -77,6 +77,7 @@ export default defineConfig({
             text: '前沿专题',
             items: [
               { text: '推理模型与慢思考', link: '/advanced/reasoning-models' },
+              { text: '强化学习基础（面向 LLM）', link: '/advanced/rl-basics' },
               { text: 'Agentic RL（智能体强化学习）', link: '/advanced/agentic-rl' },
               { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' }
             ]
@@ -97,6 +98,7 @@ export default defineConfig({
               { text: '模型评估与幻觉', link: '/evaluation/evaluation' },
               { text: '评测基准深入', link: '/evaluation/benchmarks' },
               { text: '经典模型盘点', link: '/models/classic-models' },
+              { text: 'LLaMA 与 Qwen 架构演进', link: '/models/llama-qwen' },
               { text: 'DeepSeek 专题', link: '/models/deepseek' },
               { text: '小语言模型与端侧（SLM）', link: '/models/slm' }
             ]
@@ -116,6 +118,7 @@ export default defineConfig({
         activeMatch: '/interview/',
         items: [
           { text: '高频面试题速记', link: '/interview/high-frequency' },
+          { text: '手撕代码题解集', link: '/interview/coding-problems' },
           { text: '分岗位面试真题', link: '/interview/real-questions' },
           { text: '大模型学习路线', link: '/interview/learning-path' },
           { text: '学习资源汇总', link: '/interview/resources' }
@@ -212,6 +215,7 @@ export default defineConfig({
           text: '面试专题',
           items: [
             { text: '高频面试题速记', link: '/interview/high-frequency' },
+            { text: '手撕代码题解集', link: '/interview/coding-problems' },
             { text: '分岗位面试真题', link: '/interview/real-questions' },
             { text: '大模型学习路线', link: '/interview/learning-path' },
             { text: '学习资源汇总', link: '/interview/resources' }
@@ -243,6 +247,7 @@ export default defineConfig({
           text: '经典模型',
           items: [
             { text: '经典模型盘点', link: '/models/classic-models' },
+            { text: 'LLaMA 与 Qwen 架构演进', link: '/models/llama-qwen' },
             { text: 'DeepSeek 专题', link: '/models/deepseek' },
             { text: '小语言模型与端侧（SLM）', link: '/models/slm' }
           ]
@@ -253,6 +258,7 @@ export default defineConfig({
           text: '前沿专题',
           items: [
             { text: '推理模型与慢思考', link: '/advanced/reasoning-models' },
+            { text: '强化学习基础（面向 LLM）', link: '/advanced/rl-basics' },
             { text: 'Agentic RL（智能体强化学习）', link: '/advanced/agentic-rl' },
             { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' }
           ]
@@ -322,6 +328,7 @@ function sidebarTraining() {
       text: '预训练',
       items: [
         { text: '预训练目标与数据', link: '/pretraining/pretrain' },
+        { text: '数据工程与合成数据', link: '/pretraining/data-engineering' },
         { text: '缩放定律与涌现能力', link: '/pretraining/scaling-law' },
         { text: '分布式训练与显存优化', link: '/pretraining/distributed-training' }
       ]

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const stats = [
-  { num: '60+', label: '深度文章' },
+  { num: '65+', label: '深度文章' },
   { num: '11', label: '大板块' },
-  { num: '11', label: '万字旗舰长文' },
+  { num: '12', label: '万字旗舰长文' },
   { num: '数百', label: '高频面试追问' }
 ]
 

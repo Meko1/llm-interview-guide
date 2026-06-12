@@ -77,6 +77,7 @@ features:
 
 - **[大模型零基础入门](/beginner/getting-started)**（🌱新手必看）：完全没接触过 AI？从这里开始，配 [术语速查表](/beginner/glossary) 和 [必备数学基础](/beginner/math-basics)。
 - **[高频面试题速记](/interview/high-frequency)**（⭐网站核心）：全站核心考点浓缩成一问一答速查卡，面试前快速过一遍。
+- **[手撕代码题解集](/interview/coding-problems)**（🔥新上线）：MHA、RoPE、RMSNorm、LoRA、DPO Loss、采样……10 道最高频手撕题，可运行实现 + 考点解析。
 - **[分岗位面试真题](/interview/real-questions)**：按算法/应用/工程岗 + 场景设计 + 手撕题分类的真题库。
 - **[大模型学习路线](/interview/learning-path)**：从理论地基到 RAG、Agent、微调部署，一条清晰的进阶路径。
 - **[Transformer 架构详解](/basics/transformer)**：从 Self-Attention 到 MHA/MQA/GQA/MLA、RMSNorm、SwiGLU，面试必考底层原理。
