@@ -190,7 +190,9 @@ export default defineConfig({
             { text: 'Embedding 与向量数据库', link: '/rag/embedding-vectordb' },
             { text: 'RAG 进阶与优化', link: '/rag/rag-advanced' },
             { text: 'Agentic RAG 智能体检索', link: '/rag/agentic-rag' },
-            { text: 'GraphRAG 与知识图谱', link: '/rag/graphrag' }
+            { text: 'GraphRAG 与知识图谱', link: '/rag/graphrag' },
+            { text: 'RAG 评估（RAGAS）', link: '/rag/rag-evaluation' },
+            { text: '多模态 RAG（ColPali）', link: '/rag/multimodal-rag' }
           ]
         }
       ],
