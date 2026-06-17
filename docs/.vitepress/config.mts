@@ -161,9 +161,11 @@ export default defineConfig({
             { text: '总览：大模型核心概念', link: '/basics/overview' },
             { text: 'Transformer 架构详解', link: '/basics/transformer' },
             { text: 'Attention 与变体', link: '/basics/attention' },
+            { text: '线性注意力与混合架构', link: '/basics/linear-attention' },
             { text: '位置编码（RoPE / ALiBi）', link: '/basics/position-encoding' },
             { text: '归一化与激活函数', link: '/basics/normalization' },
             { text: 'Tokenizer 与分词', link: '/basics/tokenizer' },
+            { text: '嵌入层与表示学习', link: '/basics/embeddings' },
             { text: '解码与采样策略', link: '/basics/decoding' },
             { text: 'MoE 混合专家模型', link: '/basics/moe' },
             { text: '长上下文专题', link: '/basics/long-context' }
