@@ -186,6 +186,7 @@ export default defineConfig({
           text: 'RAG 检索增强生成',
           items: [
             { text: 'RAG 基础与流程', link: '/rag/rag-basics' },
+            { text: '切分与检索策略深挖', link: '/rag/chunking-retrieval' },
             { text: 'Embedding 与向量数据库', link: '/rag/embedding-vectordb' },
             { text: 'RAG 进阶与优化', link: '/rag/rag-advanced' }
           ]
