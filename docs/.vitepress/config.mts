@@ -368,6 +368,8 @@ function sidebarTraining() {
         { text: '微调范式（SFT / PEFT）', link: '/finetuning/finetuning' },
         { text: 'LoRA / QLoRA 详解', link: '/finetuning/lora' },
         { text: 'RLHF / DPO 对齐', link: '/finetuning/rlhf' },
+        { text: '偏好优化方法全景（DPO 变体）', link: '/finetuning/preference-optimization' },
+        { text: '模型融合与合并', link: '/finetuning/model-merging' },
         { text: '微调训练工具链实战', link: '/finetuning/training-frameworks' }
       ]
     }
