@@ -68,7 +68,9 @@ export default defineConfig({
           { text: 'Agent 记忆系统', link: '/agent/agent-memory' },
           { text: '上下文工程', link: '/agent/context-engineering' },
           { text: 'AI 工作流 vs Agent', link: '/agent/workflow' },
-          { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' }
+          { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' },
+          { text: 'Computer Use 与浏览器 Agent', link: '/agent/computer-use' },
+          { text: '深度研究 Agent', link: '/agent/deep-research' }
         ]
       },
       {
@@ -208,7 +210,9 @@ export default defineConfig({
             { text: 'Agent 记忆系统', link: '/agent/agent-memory' },
             { text: '上下文工程', link: '/agent/context-engineering' },
             { text: 'AI 工作流 vs Agent', link: '/agent/workflow' },
-            { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' }
+            { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' },
+            { text: 'Computer Use 与浏览器 Agent', link: '/agent/computer-use' },
+            { text: '深度研究 Agent', link: '/agent/deep-research' }
           ]
         }
       ],
