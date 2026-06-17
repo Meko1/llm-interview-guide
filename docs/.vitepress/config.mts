@@ -144,6 +144,8 @@ export default defineConfig({
           text: '新手入门',
           items: [
             { text: '大模型零基础入门', link: '/beginner/getting-started' },
+            { text: '大模型是怎么工作的（直觉版）', link: '/beginner/how-llm-works' },
+            { text: '能做什么·不能做什么', link: '/beginner/llm-capabilities' },
             { text: '大模型发展简史', link: '/beginner/llm-history' },
             { text: '大模型术语速查表', link: '/beginner/glossary' },
             { text: '大模型必备数学基础', link: '/beginner/math-basics' }
