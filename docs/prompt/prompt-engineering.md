@@ -1,6 +1,18 @@
-# Prompt 工程
+# Prompt 工程（总览）
 
-> Prompt 工程是「不改参数、靠提示词激发模型能力」的技术——性价比最高的大模型应用技能。本文系统覆盖基本要素、核心技巧、推理增强、安全防护与实战原则。更进阶的「管理整个上下文」见 [上下文工程](/agent/context-engineering)。
+> Prompt 工程是「不改参数、靠提示词激发模型能力」的技术——性价比最高的大模型应用技能。本页是板块总览与基础；按主题深入请看下面的专题页。更进阶的「管理整个上下文」见 [上下文工程](/agent/context-engineering)。
+
+## 📚 本板块专题导航
+
+| 专题 | 内容 |
+| --- | --- |
+| [推理类提示（CoT 全家桶）](/prompt/cot-reasoning) | CoT / Self-Consistency / ToT / Least-to-Most / Step-Back / Self-Refine + 推理模型范式转变 |
+| [高级提示模式与工程技巧](/prompt/advanced-patterns) | 结构化骨架、few-shot 陷阱、元提示、防幻觉、长文档、提示「祛魅」 |
+| [自动化提示优化与 Prompt Ops](/prompt/prompt-optimization) | APE / OPRO / **DSPy** / TextGrad + 版本化/评估/回归运维 |
+| [提示注入与越狱攻防](/prompt/prompt-injection) | 直接/间接注入、越狱手法、为什么难防、纵深防御 |
+| [从提示到上下文/循环工程](/prompt/agentic-prompting) | Context Engineering、**ACE**、loop engineering、Hermes 式自改进（最新范式） |
+
+> 下面是**基础速览**；每个主题的深挖见上表对应页面。
 
 ## 一、基本要素
 

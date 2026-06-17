@@ -45,7 +45,18 @@ export default defineConfig({
       { text: '新手入门', link: '/beginner/getting-started', activeMatch: '/beginner/' },
       { text: '大模型基础', link: '/basics/overview', activeMatch: '/basics/' },
       { text: '训练与微调', link: '/pretraining/pretrain', activeMatch: '/(pretraining|finetuning)/' },
-      { text: 'Prompt 工程', link: '/prompt/prompt-engineering', activeMatch: '/prompt/' },
+      {
+        text: 'Prompt 工程',
+        activeMatch: '/prompt/',
+        items: [
+          { text: 'Prompt 工程总览', link: '/prompt/prompt-engineering' },
+          { text: '推理类提示（CoT 全家桶）', link: '/prompt/cot-reasoning' },
+          { text: '高级提示模式与技巧', link: '/prompt/advanced-patterns' },
+          { text: '自动化优化与 Prompt Ops', link: '/prompt/prompt-optimization' },
+          { text: '提示注入与越狱攻防', link: '/prompt/prompt-injection' },
+          { text: '上下文/循环工程（最新）', link: '/prompt/agentic-prompting' }
+        ]
+      },
       { text: 'RAG', link: '/rag/rag-basics', activeMatch: '/rag/' },
       {
         text: 'Agent',
@@ -161,7 +172,12 @@ export default defineConfig({
         {
           text: 'Prompt 工程',
           items: [
-            { text: 'Prompt Engineering 基础', link: '/prompt/prompt-engineering' }
+            { text: 'Prompt 工程总览', link: '/prompt/prompt-engineering' },
+            { text: '推理类提示（CoT 全家桶）', link: '/prompt/cot-reasoning' },
+            { text: '高级提示模式与工程技巧', link: '/prompt/advanced-patterns' },
+            { text: '自动化优化与 Prompt Ops', link: '/prompt/prompt-optimization' },
+            { text: '提示注入与越狱攻防', link: '/prompt/prompt-injection' },
+            { text: '上下文/循环工程（最新范式）', link: '/prompt/agentic-prompting' }
           ]
         }
       ],
