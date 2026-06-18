@@ -114,6 +114,7 @@ LLMGuide 是一份开源的**大模型面试知识库**，把大模型方向零�
 - [**手撕代码题解集**](https://meko1.github.io/llm-interview-guide/interview/coding-problems) — MHA / RoPE / LoRA / DPO 等 10 道高频手撕题可运行题解
 - [分岗位面试真题](https://meko1.github.io/llm-interview-guide/interview/real-questions)（算法 / 应用 / 工程 / 场景 / 手撕）
 - [大模型学习路线](https://meko1.github.io/llm-interview-guide/interview/learning-path)
+- [LLM Course 中文路线图](https://meko1.github.io/llm-interview-guide/interview/llm-course-roadmap)（Maxime Labonne 经典路线图译本）
 - [学习资源汇总](https://meko1.github.io/llm-interview-guide/interview/resources)
 
 ## 🚀 本地运行

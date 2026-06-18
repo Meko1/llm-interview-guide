@@ -134,6 +134,7 @@ export default defineConfig({
           { text: '手撕代码题解集', link: '/interview/coding-problems' },
           { text: '分岗位面试真题', link: '/interview/real-questions' },
           { text: '大模型学习路线', link: '/interview/learning-path' },
+          { text: 'LLM Course 中文路线图', link: '/interview/llm-course-roadmap' },
           { text: '学习资源汇总', link: '/interview/resources' }
         ]
       },
@@ -249,6 +250,7 @@ export default defineConfig({
             { text: '手撕代码题解集', link: '/interview/coding-problems' },
             { text: '分岗位面试真题', link: '/interview/real-questions' },
             { text: '大模型学习路线', link: '/interview/learning-path' },
+            { text: 'LLM Course 中文路线图', link: '/interview/llm-course-roadmap' },
             { text: '学习资源汇总', link: '/interview/resources' }
           ]
         }
