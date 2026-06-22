@@ -92,7 +92,8 @@ export default defineConfig({
               { text: '推理模型与慢思考', link: '/advanced/reasoning-models' },
               { text: '强化学习基础（面向 LLM）', link: '/advanced/rl-basics' },
               { text: 'Agentic RL（智能体强化学习）', link: '/advanced/agentic-rl' },
-              { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' }
+              { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' },
+              { text: '具身智能与 VLA', link: '/advanced/embodied-ai' }
             ]
           },
           {
@@ -269,6 +270,7 @@ export default defineConfig({
           text: '多模态',
           items: [
             { text: '多模态大模型', link: '/multimodal/multimodal' },
+            { text: '多模态架构深挖（VLM）', link: '/multimodal/vlm-architecture' },
             { text: '扩散模型与图像生成', link: '/multimodal/diffusion' },
             { text: '视频生成', link: '/multimodal/video-generation' },
             { text: '语音大模型', link: '/multimodal/speech' }
@@ -293,7 +295,8 @@ export default defineConfig({
             { text: '推理模型与慢思考', link: '/advanced/reasoning-models' },
             { text: '强化学习基础（面向 LLM）', link: '/advanced/rl-basics' },
             { text: 'Agentic RL（智能体强化学习）', link: '/advanced/agentic-rl' },
-            { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' }
+            { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' },
+            { text: '具身智能与 VLA', link: '/advanced/embodied-ai' }
           ]
         },
         {
