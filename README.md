@@ -81,6 +81,7 @@ LLMGuide 是一份开源的**大模型面试知识库**，把大模型方向零�
 - [LangChain 与应用框架](https://meko1.github.io/llm-interview-guide/engineering/langchain)
 - [LLM 应用开发实战](https://meko1.github.io/llm-interview-guide/engineering/llm-app-dev)（流式 / Function Calling / 服务化 / 成本控制）
 - [AI 编程与 Coding Agent](https://meko1.github.io/llm-interview-guide/engineering/coding-agent)（补全 / SWE-bench / 代码 RAG）
+- [编程 Agent 底层架构与机制](https://meko1.github.io/llm-interview-guide/engineering/coding-agent-internals)（Claude Code / Codex：agentic loop / agentic search / 权限）
 - [结构化输出详解](https://meko1.github.io/llm-interview-guide/engineering/structured-output)（JSON Mode / 约束解码）
 - [AI 系统设计专题](https://meko1.github.io/llm-interview-guide/engineering/system-design)（高并发 / 私有化 / RAG 系统）
 - [LLMOps 生产运营](https://meko1.github.io/llm-interview-guide/engineering/llmops)（监控 / 成本治理 / 数据飞轮）

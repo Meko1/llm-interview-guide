@@ -236,6 +236,7 @@ export default defineConfig({
             { text: 'LangChain 与应用框架', link: '/engineering/langchain' },
             { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
             { text: 'AI 编程与 Coding Agent', link: '/engineering/coding-agent' },
+            { text: '编程 Agent 底层架构与机制', link: '/engineering/coding-agent-internals' },
             { text: '结构化输出详解', link: '/engineering/structured-output' },
             { text: 'AI 系统设计专题', link: '/engineering/system-design' },
             { text: 'LLMOps 生产运营', link: '/engineering/llmops' },
