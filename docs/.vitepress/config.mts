@@ -88,7 +88,11 @@ export default defineConfig({
         items: [
           { text: '功能总览', link: '/claude-code/overview' },
           { text: '代码架构', link: '/claude-code/architecture' },
-          { text: '核心机制与扩展', link: '/claude-code/mechanisms' }
+          { text: '核心机制与扩展', link: '/claude-code/mechanisms' },
+          { text: '工具系统详解', link: '/claude-code/tools' },
+          { text: '扩展机制（Hooks/MCP/Skills）', link: '/claude-code/extensibility' },
+          { text: '子 Agent 与多 Agent 编排', link: '/claude-code/subagents' },
+          { text: '最佳实践与高效用法', link: '/claude-code/best-practices' }
         ]
       },
       {
@@ -244,7 +248,11 @@ export default defineConfig({
           items: [
             { text: '功能总览', link: '/claude-code/overview' },
             { text: '代码架构', link: '/claude-code/architecture' },
-            { text: '核心机制与扩展', link: '/claude-code/mechanisms' }
+            { text: '核心机制与扩展', link: '/claude-code/mechanisms' },
+            { text: '工具系统详解', link: '/claude-code/tools' },
+            { text: '扩展机制（Hooks/MCP/Skills）', link: '/claude-code/extensibility' },
+            { text: '子 Agent 与多 Agent 编排', link: '/claude-code/subagents' },
+            { text: '最佳实践与高效用法', link: '/claude-code/best-practices' }
           ]
         }
       ],
