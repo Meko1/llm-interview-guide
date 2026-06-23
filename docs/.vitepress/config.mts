@@ -83,6 +83,15 @@ export default defineConfig({
       },
       { text: '工程实战', link: '/engineering/langchain', activeMatch: '/engineering/' },
       {
+        text: 'Claude Code',
+        activeMatch: '/claude-code/',
+        items: [
+          { text: '功能总览', link: '/claude-code/overview' },
+          { text: '代码架构', link: '/claude-code/architecture' },
+          { text: '核心机制与扩展', link: '/claude-code/mechanisms' }
+        ]
+      },
+      {
         text: '进阶',
         activeMatch: '/(evaluation|multimodal|models|advanced)/',
         items: [
@@ -226,6 +235,16 @@ export default defineConfig({
           items: [
             { text: '推理优化与部署', link: '/inference/inference-optimization' },
             { text: 'GPU 与硬件基础', link: '/inference/gpu-hardware' }
+          ]
+        }
+      ],
+      '/claude-code/': [
+        {
+          text: 'Claude Code 深入',
+          items: [
+            { text: '功能总览', link: '/claude-code/overview' },
+            { text: '代码架构', link: '/claude-code/architecture' },
+            { text: '核心机制与扩展', link: '/claude-code/mechanisms' }
           ]
         }
       ],
