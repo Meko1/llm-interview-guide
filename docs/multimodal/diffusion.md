@@ -47,14 +47,26 @@
 
 - 早期用 **U-Net**（卷积为主）做去噪骨干。
 - 新一代用 **DiT（Diffusion Transformer）**——把去噪网络换成 Transformer，可扩展性更好，**Sora、Stable Diffusion 3、Flux** 都采用，是当前趋势。
+- **SD3（Stable Diffusion 3）** 使用 **MMDiT（Multimodal Diffusion Transformer）**——在 DiT 基础上做多模态融合，文本和图像 token 在同一 Transformer 里双流交互，对齐更深。
 
-### 3.5 采样加速
+### 3.5 Flow Matching / Rectified Flow（2024-2025 新范式）
+
+**Flow Matching** 是扩散模型的推广，正在成为新的主流训练框架：
+
+- 传统扩散用随机微分方程（SDE）定义前向加噪过程；Flow Matching 用**确定性常微分方程（ODE）**，从噪声到数据的路径是一条更直的线。
+- **Rectified Flow** 是 Flow Matching 的代表实现：直接学习从噪声到数据的"直线路径"，采样步数更少、训练更高效。
+- **Flux**（Black Forest Labs，2024）采用 Rectified Flow + DiT 架构（12B 参数），在图像质量、prompt 跟随和文字渲染上达到或超越 Midjourney v6 / DALL·E 3，是目前最强开源文生图模型之一。
+- **SD3** 也采用 Rectified Flow 替代传统 epsilon-prediction。
+
+> 一句话区分：**扩散是"逐步加噪/去噪"，Flow Matching 是"沿直线从噪声流向数据"**——后者路径更短、采样更高效，正在成为统一框架。
+
+### 3.6 采样加速
 
 原始 DDPM 要上千步，慢。**DDIM、DPM-Solver、LCM、一致性模型（Consistency Models）** 等把采样压缩到几十步甚至 1~4 步，大幅提速。
 
 ## 四、应用与代表
 
-- **文生图**：Stable Diffusion、DALL·E 3、Midjourney、Flux。
+- **文生图**：Stable Diffusion 3（MMDiT + Rectified Flow）、Flux（12B，Rectified Flow + DiT）、DALL·E 3、Midjourney v6。
 - **文生视频**：Sora、可灵、Runway——在时空上做扩散（DiT + 时序）。
 - **图像编辑/可控生成**：ControlNet（用边缘/姿态/深度等控制）、Inpainting（局部重绘）、LoRA（轻量定制画风，原理同 [LoRA](/finetuning/lora)）。
 
@@ -75,3 +87,5 @@
 **Q：U-Net 和 DiT 的区别？** U-Net 是卷积为主的去噪骨干（早期 SD）；DiT 用 Transformer 替代，可扩展性更好，Sora/SD3/Flux 等新模型采用，是当前趋势。
 
 **Q：扩散模型和大语言模型是一回事吗？** 不是。LLM 是自回归、逐 token 生成文本；扩散模型是多步去噪、并行生成图像/视频。它们是不同的生成范式，但都可用 Transformer 作骨干，且在多模态系统里常配合使用。
+
+**Q：Flow Matching 和传统扩散有什么区别？** 传统扩散用随机加噪/去噪（SDE），路径弯曲、步数多；Flow Matching 用确定性 ODE，从噪声到数据的路径更直，采样步数更少、训练更高效。Flux 和 SD3 都采用了 Rectified Flow（Flow Matching 的代表）。Flow Matching 正在成为扩散的统一推广框架。

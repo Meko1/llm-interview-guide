@@ -72,7 +72,9 @@
 
 **为什么不掉精度？** 大模型对草稿 token 做并行验证，只接受与自己分布一致的 token，最终输出分布与大模型单独解码**完全一致**——是「加速」而非「近似」。草稿越准、接受率越高、收益越大。
 
-变体：**Medusa**（加多个预测头）、**EAGLE**（在特征层做草稿，接受率更高）、**Lookahead**。本质都是「用并行验证换 Decode 的串行步数」。
+变体：**Medusa**（加多个预测头）、**EAGLE / EAGLE-2**（在特征层做草稿，接受率更高）、**Lookahead Decoding**（无需训练，基于 Jacobi 迭代）、**Self-Speculative**（用自身跳层做草稿，免维护小模型）。
+
+> 2025 趋势：投机解码已集成进 vLLM、TensorRT-LLM 等主流框架的标配功能。更前沿的方向是**多 token 预测（Multi-Token Prediction）**——在训练时就让模型学会一次预测多个 token，把"投机"变成原生能力。
 
 ## 七、算子与并行
 
@@ -99,6 +101,36 @@
 
 选型看：吞吐/延迟需求、是否需量化、硬件、易用性，详见 [AI 系统设计](/engineering/system-design)。
 
+## 九-一、Prefill/Decode 分离（Disaggregated Serving）
+
+2025 年的重要趋势：把 **Prefill 和 Decode 分到不同 GPU 池**。
+
+- **动机**：Prefill 是计算密集（吃算力），Decode 是访存密集（吃带宽），混跑在同一 GPU 上会互相干扰——Prefill 抢算力时 Decode 延迟飙升，Decode 占满 KV Cache 时 Prefill 没空间。
+- **做法**：Prefill 节点算完 KV 后，把 KV Cache 传给 Decode 节点继续生成。两个池子各自独立扩缩容、独立优化。
+- **挑战**：KV Cache 跨节点传输的开销（需高速互联如 NVLink/InfiniBand）。
+
+## 九-二、MLA：从架构上压缩 KV Cache
+
+**MLA（Multi-head Latent Attention）** 是 DeepSeek-V2/V3 的标志性创新。传统 GQA/MQA 通过减少 KV 头数来压缩，MLA 走了不同路线：把 K、V 投影到一个**低维潜空间向量**，只缓存这个压缩向量，推理时再解压还原。
+
+- **效果**：KV Cache 显存大幅减少（DeepSeek-V3 的 671B 模型推理显存远小于同等规模模型），支持更长上下文和更高并发。
+- **与 GQA 对比**：GQA 是"减少头数"做粗粒度压缩，MLA 是"潜空间投影"做细粒度压缩，压缩率更高但实现更复杂。
+- 详见 [DeepSeek 专题](/models/deepseek)。
+
+## 九-三、2025 推理框架格局
+
+| 框架 | 定位 | 2025 进展 |
+| --- | --- | --- |
+| **vLLM** | 开源推理首选 | PagedAttention + 连续批处理 + 前缀缓存 + 投机解码，社区最活跃 |
+| **SGLang** | 复杂调用优化 | RadixAttention（前缀树 KV 复用），结构化输出性能强 |
+| **TensorRT-LLM** | NVIDIA 官方 | 极致 GPU 性能，支持 FP4/FP8，部署较重 |
+| **TGI** | HuggingFace 出品 | 模型支持广、易用 |
+| **LMDeploy** | 商汤出品 | 量化与推理性能强 |
+| **llama.cpp / Ollama** | 端侧本地 | GGUF 量化，CPU/消费级 GPU |
+| **DeepSpeed-FastGen** | 微软出品 | Dynamic Splitfuse 长上下文优化 |
+
+> 选型趋势：vLLM 仍是大多数场景的默认选择；SGLang 在 Agentic/多轮调用场景（大量前缀复用）有优势；追求极致性能且用 NVIDIA 硬件选 TensorRT-LLM。
+
 ## 十、高频追问
 
 **Q：Prefill 和 Decode 的区别？** Prefill 并行处理输入 prompt、计算密集、定 TTFT；Decode 逐 token 生成、访存密集、定 TPOT 和吞吐。
@@ -122,3 +154,9 @@
 **Q：output token 为什么比 input token 贵？** input（prefill）可并行处理、一次算完；output（decode）必须逐个串行生成、每个都要读一遍全部权重和 KV，单位成本更高，所以 API 对输出计费更贵。
 
 **Q：延迟和吞吐怎么权衡？** 二者常此消彼长：增大 batch 提升吞吐但单请求延迟上升。实时对话优先低延迟（小 batch、低 TTFT/TPOT），离线批量优先高吞吐（大 batch、连续批处理）。
+
+**Q：Prefill/Decode 分离是什么？为什么要分离？** 把 Prefill 和 Decode 分到不同 GPU 池——前者计算密集、后者访存密集，混跑会互相干扰。分离后各自独立优化和扩缩容，代价是 KV Cache 跨节点传输开销。2025 年的趋势方向。
+
+**Q：MLA 和 GQA 有什么区别？** GQA 通过"多个 Q 头共享一组 KV 头"做粗粒度压缩；MLA（DeepSeek-V2/V3）把 KV 投影到低维潜空间，只缓存压缩向量，推理时解压还原。MLA 压缩率更高，但实现更复杂。详见 [DeepSeek 专题](/models/deepseek)。
+
+**Q：vLLM 和 SGLang 怎么选？** vLLM 通用性最强、社区最大，是默认选择。SGLang 的 RadixAttention 在大量前缀复用场景（多轮对话、Agent 多次调用相同 system prompt）更有优势，且结构化输出性能好。

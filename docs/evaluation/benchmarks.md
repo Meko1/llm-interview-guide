@@ -42,9 +42,19 @@
 ### 长上下文 / Agent / 多模态 / 安全
 
 - **长上下文**：Needle-in-a-Haystack（大海捞针）、RULER、LongBench。
-- **Agent**：GAIA、AgentBench、τ-bench（工具调用）。
+- **Agent**：GAIA、AgentBench、τ-bench（工具调用）、**BrowseComp**（浏览能力，2025 新增）、**H2B**（Agent 在真实环境中完成复杂任务）。
 - **多模态**：MMMU、MathVista、MMBench。
 - **安全**：ToxiGen、TruthfulQA（诚实性/抗误导）、各类越狱评测。
+
+### 2025 新增前沿评测
+
+- **HLE（Humanity's Last Exam）**：被称为"人类最后的考试"，由各学科专家出题，难度极高，是区分顶尖推理模型的新标尺。
+- **SWE-bench（升级）**：真实 GitHub issue 修复评测，2025 成为 Agent 编码能力的核心赛道，多家厂商以此标榜。
+- **METR**：衡量 AI Agent 自主完成长时程任务的能力，关注"能独立工作多久不犯致命错误"。
+- **LiveCodeBench（升级）**：持续更新的编程评测，防数据污染。
+- **AIME 2025**：最新数学竞赛题，推理模型的标配评测点。
+
+> ⚠️ 以上 2025 新增评测的具体分数请以官方榜单为准，此处仅介绍评测本身。
 
 ## Pass@k 是什么？
 

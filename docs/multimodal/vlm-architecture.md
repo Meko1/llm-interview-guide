@@ -29,6 +29,7 @@ LLM 只懂 token（文本嵌入向量）。图片是像素，不是 token。VLM 
 | --- | --- | --- |
 | **MLP / 线性投影** | 简单几层全连接做映射 | LLaVA（简单有效，主流） |
 | **Q-Former / Resampler** | 用少量可学习 query 通过注意力「压缩」视觉特征 | BLIP-2、Flamingo |
+| **像素 Shuffle / 像素重排** | 把空间 patch 重排成更少 token | Qwen2-VL、InternVL 2.5 |
 | **Cross-Attention 注入** | 在 LLM 层间插交叉注意力读图像 | Flamingo |
 
 - LLaVA 证明了**简单 MLP 投影 + 好数据**就能做出强 VLM，是性价比最高的路线，被广泛沿用。
@@ -43,7 +44,7 @@ LLM 只懂 token（文本嵌入向量）。图片是像素，不是 token。VLM 
 | | 早期融合 / 适配器（主流） | 原生多模态 |
 | --- | --- | --- |
 | 做法 | 预训练 LLM + 视觉编码器，用连接器拼起来再微调 | 从头在文本+图像+音频上联合预训练 |
-| 代表 | LLaVA、Qwen-VL、多数开源 VLM | GPT-4o、Gemini 等 |
+| 代表 | LLaVA、Qwen2-VL、InternVL 2.5 | GPT-4o/GPT-5、Gemini 2.5 |
 | 优点 | 复用现成 LLM，便宜、快 | 模态融合更深、能力上限更高 |
 | 缺点 | 视觉是「外挂」，融合较浅 | 训练成本极高 |
 
@@ -66,7 +67,7 @@ LLM 只懂 token（文本嵌入向量）。图片是像素，不是 token。VLM 
 
 patch 化的硬伤：分辨率越高 patch 越多，视觉 token 数量爆炸（成本和上下文压力）。
 
-- **高分辨率**：切分成子图分别编码（AnyRes/动态分辨率），或用 Resampler 压缩 token 数。文档/图表理解尤其依赖高分辨率（否则小字看不清）。
+- **高分辨率**：切分成子图分别编码（AnyRes/动态分辨率），或用 Resampler 压缩 token 数。Qwen2-VL 用动态分辨率 + 像素 shuffle，能处理任意分辨率和长宽比。InternVL 2.5 采用类似策略并在文档/图表理解上表现出色。文档/图表理解尤其依赖高分辨率（否则小字看不清）。
 - **视频**：帧数 × 每帧 patch 数 = token 海啸。要抽帧、时序压缩、或用专门的时空编码（见 [视频生成](/multimodal/video-generation) 的时空 patch 思想）。
 - 这也是 ColPali 等「直接编码文档截图」方案要解决的成本核心（见 [多模态 RAG](/rag/multimodal-rag)）。
 

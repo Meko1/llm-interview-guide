@@ -42,10 +42,12 @@
 
 | 阵营 | 代表 | 备注 |
 | --- | --- | --- |
-| 闭源旗舰 | Sora（OpenAI）、Veo（Google） | 质量标杆，物理一致性最强梯队 |
-| 国产 | 可灵（快手）、即梦/Seedance(字节)、Vidu | 商业化激进，与闭源差距快速收窄 |
-| 创意工具 | Runway、Pika、Luma | 面向创作者工作流 |
-| 开源 | Wan(阿里)、HunyuanVideo(腾讯)、Mochi | 开源权重，研究与私有化基础 |
+| 闭源旗舰 | Sora（OpenAI）、Veo 2/3（Google） | 质量标杆，物理一致性最强梯队。Veo 2 支持 4K、电影级运镜 |
+| 国产 | 可灵 2.0（快手）、即梦/Seedance（字节）、Vidu（生数） | 商业化激进，可灵 2.0 在运动一致性上接近 Sora |
+| 创意工具 | Runway Gen-3、Pika 2.0、Luma | 面向创作者工作流 |
+| 开源 | Wan 2.1（阿里）、HunyuanVideo（腾讯）、Mochi、CogVideoX | 开源权重，研究与私有化基础。HunyuanVideo 是目前最强开源之一 |
+
+> 2025 趋势：闭源与开源的差距在缩小。开源模型（HunyuanVideo、Wan）已能生成 5~10 秒高质量视频。商业产品的发力点从"能生成"转向"可控生成"（精确运动控制、角色一致性、音视频同步）。
 
 ## 五、评估怎么做？
 

@@ -127,6 +127,7 @@ export default defineConfig({
               { text: '模型评估与幻觉', link: '/evaluation/evaluation' },
               { text: '评测基准深入', link: '/evaluation/benchmarks' },
               { text: '经典模型盘点', link: '/models/classic-models' },
+              { text: '2025-2026 前沿模型盘点', link: '/models/frontier-models-2025' },
               { text: 'LLaMA 与 Qwen 架构演进', link: '/models/llama-qwen' },
               { text: 'DeepSeek 专题', link: '/models/deepseek' },
               { text: '小语言模型与端侧（SLM）', link: '/models/slm' }
