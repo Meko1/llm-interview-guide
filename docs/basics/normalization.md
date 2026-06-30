@@ -62,7 +62,7 @@ x ──► Sublayer ──► (+x) ──► Norm       x ──► Norm ──
 
 大规模训练中常见崩溃源：**注意力 logits 爆炸**——Q·K 点积数值随训练增大，softmax 饱和成 one-hot，梯度归零甚至 loss spike。
 
-**QK-Norm** 在计算注意力前对 Q、K 各做一次 RMSNorm/LayerNorm，把点积量级锁死在可控范围。Qwen3、Gemma 等新一代模型采用，取代了 Qwen 早期「QKV 加 bias」的经验性做法——体现了「训练稳定性手段从补丁走向原理化」的趋势（关联演进见 [LLaMA 与 Qwen](/models/llama-qwen)，loss spike 全景见 [训练深入](/advanced/training-internals)）。
+**QK-Norm** 在计算注意力前对 Q、K 各做一次 RMSNorm/LayerNorm，把点积量级锁死在可控范围。Qwen3、Gemma 等新一代模型采用，取代了 Qwen 早期「QKV 加 bias」的经验性做法（关联演进见 [LLaMA 与 Qwen](/models/llama-qwen)，loss spike 全景见 [训练深入](/advanced/training-internals)）。
 
 ## 激活函数：从 ReLU 到 SwiGLU
 
@@ -83,7 +83,7 @@ $$\text{GLU 家族}(x) = \text{Act}(xW_g) \otimes xW_u$$
 $$\text{FFN}(x) = (\text{SiLU}(xW_g) \otimes xW_u)W_d$$
 
 - 三个矩阵而非两个，为保持参数量不变，中间维度取 **8/3·d** 而非 4d（LLaMA、Qwen 均如此）。
-- 门控让网络能**逐元素动态控制信息通过**，表达能力强于固定非线性；SwiGLU 论文作者 Shazeer 戏称效果好得「无法解释，归功于神之眷顾」——面试可以引用这个梗，但要补上「门控+平滑」的正经解释。
+- 门控让网络能**逐元素动态控制信息通过**，表达能力强于固定非线性；SwiGLU 论文作者 Shazeer 戏称效果好得「无法解释，归功于神之眷顾」，面试可以引用这个梗，但要补上「门控+平滑」的正经解释。
 
 ## 一张表串起训练稳定性暗线
 

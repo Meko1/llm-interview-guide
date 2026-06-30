@@ -33,7 +33,7 @@ $$\text{Attention}(Q,K,V)=\text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
 **为什么要 Q、K、V 三个不同矩阵？** 解耦三种角色——「用什么去查（Q）、拿什么被查（K）、查到取什么（V）」，可分别学习、表达力更强。若直接用输入向量两两点积，会强制对称且表达受限。
 
-**Attention 复杂度为什么是 O(n²)？** 要算每对 token 的分数，n 个 token 两两组合即 n² 量级（再乘维度 d 是 O(n²d)）。这是长序列昂贵的根源，催生了稀疏注意力、FlashAttention、长上下文优化等。
+**Attention 复杂度为什么是 O(n²)？** 要算每对 token 的分数，n 个 token 两两组合即 n² 量级（再乘维度 d 是 O(n²d)）。这是长序列昂贵的根源，催生了稀疏注意力、FlashAttention 等优化。
 
 ## 二、多头注意力（Multi-Head Attention, MHA）
 

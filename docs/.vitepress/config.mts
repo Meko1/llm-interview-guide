@@ -65,12 +65,14 @@ export default defineConfig({
           { text: 'Agent 基础与框架', link: '/agent/agent-basics' },
           { text: 'Function Calling 与 MCP', link: '/agent/function-calling-mcp' },
           { text: 'MCP 协议深入', link: '/agent/mcp' },
+          { text: 'A2A 协议与 Agent 互操作', link: '/agent/a2a-protocol' },
           { text: 'Agent 记忆系统', link: '/agent/agent-memory' },
           { text: '上下文工程', link: '/agent/context-engineering' },
           { text: 'AI 工作流 vs Agent', link: '/agent/workflow' },
           { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' },
           { text: 'Computer Use 与浏览器 Agent', link: '/agent/computer-use' },
-          { text: '深度研究 Agent', link: '/agent/deep-research' }
+          { text: '深度研究 Agent', link: '/agent/deep-research' },
+          { text: 'Agent 评估与可靠性工程', link: '/agent/agent-evaluation' }
         ]
       },
       {
@@ -210,10 +212,12 @@ export default defineConfig({
             { text: '切分与检索策略深挖', link: '/rag/chunking-retrieval' },
             { text: 'Embedding 与向量数据库', link: '/rag/embedding-vectordb' },
             { text: 'RAG 进阶与优化', link: '/rag/rag-advanced' },
+            { text: 'RAG 生产化与系统设计', link: '/rag/rag-production' },
             { text: 'Agentic RAG 智能体检索', link: '/rag/agentic-rag' },
             { text: 'GraphRAG 与知识图谱', link: '/rag/graphrag' },
             { text: 'RAG 评估（RAGAS）', link: '/rag/rag-evaluation' },
-            { text: '多模态 RAG（ColPali）', link: '/rag/multimodal-rag' }
+            { text: '多模态 RAG（ColPali）', link: '/rag/multimodal-rag' },
+            { text: 'RAG vs 长上下文 vs 微调', link: '/rag/rag-vs-long-context' }
           ]
         }
       ],
@@ -224,12 +228,14 @@ export default defineConfig({
             { text: 'Agent 基础与框架', link: '/agent/agent-basics' },
             { text: 'Function Calling 与 MCP', link: '/agent/function-calling-mcp' },
             { text: 'MCP 协议深入', link: '/agent/mcp' },
+            { text: 'A2A 协议与 Agent 互操作', link: '/agent/a2a-protocol' },
             { text: 'Agent 记忆系统', link: '/agent/agent-memory' },
             { text: '上下文工程', link: '/agent/context-engineering' },
             { text: 'AI 工作流 vs Agent', link: '/agent/workflow' },
             { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' },
             { text: 'Computer Use 与浏览器 Agent', link: '/agent/computer-use' },
-            { text: '深度研究 Agent', link: '/agent/deep-research' }
+            { text: '深度研究 Agent', link: '/agent/deep-research' },
+            { text: 'Agent 评估与可靠性工程', link: '/agent/agent-evaluation' }
           ]
         }
       ],

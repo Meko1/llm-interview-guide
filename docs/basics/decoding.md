@@ -17,7 +17,7 @@
 每步保留整体对数概率最高的 B 条候选序列，最后输出整体最优。
 
 - 适合**翻译、摘要、ASR** 等有「接近唯一正确答案」的任务；通常配**长度惩罚**（不然偏好短句，因为概率连乘越长越小）。
-- 开放式生成中表现反而差——这是经典的**文本退化（text degeneration）**发现：人类语言并不总走高概率路径，而 beam search 强行最大化概率，产出枯燥、重复、套话化的文本。**「高概率 ≠ 高质量」是解码部分最重要的认知**。
+- 开放式生成中表现反而差，这是经典的文本退化（text degeneration）现象：人类语言并不总走高概率路径，而 beam search 强行最大化概率，产出枯燥、重复、套话化的文本。「高概率 ≠ 高质量」这点容易被忽略。
 
 ## 随机采样
 
@@ -53,9 +53,9 @@ $$p_i = \frac{\exp(z_i / T)}{\sum_j \exp(z_j / T)}$$
 ## 进阶解码
 
 - **对比解码（Contrastive Decoding）**：用「大模型 logits − 小模型 logits」选词，把小模型也会犯的低级倾向（重复、套话）减掉。
-- **投机解码（Speculative Decoding）**：小模型起草、大模型并行验证，**输出分布与大模型完全一致**——是加速手段而非质量手段，详见 [推理优化与部署](/inference/inference-optimization)。
-- **约束解码（Constrained Decoding）**：用 FSM/语法（Outlines、XGrammar 等）在每步把非法 token 的概率置零，强制输出符合 JSON Schema/正则——结构化输出与 Function Calling 的底层保障，见 [结构化输出详解](/engineering/structured-output)。
-- **采样级 scaling**：Best-of-N（采 N 个答案用 RM 选最优）、Self-Consistency（多条 CoT 投票）——把解码采样变成「推理时计算换质量」的手段，与推理模型一脉相承，见 [推理模型与慢思考](/advanced/reasoning-models)。
+- **投机解码（Speculative Decoding）**：小模型起草、大模型并行验证，输出分布与大模型完全一致。是加速手段而非质量手段，详见 [推理优化与部署](/inference/inference-optimization)。
+- **约束解码（Constrained Decoding）**：用 FSM/语法（Outlines、XGrammar 等）在每步把非法 token 的概率置零，强制输出符合 JSON Schema/正则，是结构化输出与 Function Calling 的底层保障，见 [结构化输出详解](/engineering/structured-output)。
+- **采样级 scaling**：Best-of-N（采 N 个答案用 RM 选最优）、Self-Consistency（多条 CoT 投票），把解码采样变成「推理时计算换质量」的手段，与推理模型一脉相承，见 [推理模型与慢思考](/advanced/reasoning-models)。
 
 ## 推理模型的解码设置（新考点）
 

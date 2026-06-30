@@ -2,6 +2,8 @@
 
 > RAG 是当下大模型落地最核心、面试最高频的方向之一。本文系统讲清它解决什么问题、完整流程的每个环节、核心组件、范式演进、评估与生产化考量，是 RAG 的总纲。Embedding/向量库选型见 [Embedding 与向量数据库](/rag/embedding-vectordb)，进阶优化见 [RAG 进阶与优化](/rag/rag-advanced)。
 
+![RAG 完整流程：离线建库 + 在线检索增强生成](/diagrams/rag.svg)
+
 ## 一、什么是 RAG？为什么需要它？
 
 RAG（Retrieval-Augmented Generation，检索增强生成）= **检索外部知识 + 让模型基于检索结果生成回答**。一句话：**先从知识库找到相关资料，再把资料连同问题一起喂给模型，让它「开卷答题」。**

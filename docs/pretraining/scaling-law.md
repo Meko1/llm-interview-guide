@@ -37,7 +37,7 @@ DeepMind 的 Chinchilla（2022）修正了早期结论：**在固定算力下，
 缩放定律本身也在演进，了解这些能体现你跟进前沿：
 
 - **数据墙（Data Wall）**：高质量人类文本接近用尽，单纯堆数据遇瓶颈。应对：合成数据、提质量、多模态数据、推理时计算。
-- **推理时缩放（Inference / Test-time Scaling）**：不再只在训练时堆，而是让模型**推理时多想一会儿**换更强表现——这是 [推理模型](/advanced/reasoning-models)（o1/R1）开辟的第二条 scaling 曲线。
+- **推理时缩放（Inference / Test-time Scaling）**：不再只在训练时堆，而是让模型**推理时多想一会儿**换更强表现——这是 [推理模型](/advanced/reasoning-models)（o1/R1）的另一条 scaling 曲线。
 - **数据受限下的缩放**：数据不够时，适度重复数据（几个 epoch）仍有效，但收益递减。
 - **下游能力 vs loss**：loss 平滑下降，但下游任务表现可能非平滑（涌现），二者并非简单对应。
 

@@ -1,0 +1,281 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "type": "text", "id": "rag_title",
+      "x": 320, "y": 20, "width": 520, "height": 32,
+      "text": "RAG 检索增强生成：检索 → 拼接 → 生成",
+      "originalText": "RAG 检索增强生成：检索 → 拼接 → 生成",
+      "fontSize": 24, "fontFamily": 3, "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#1e40af", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300001, "version": 1, "versionNonce": 300002, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "rag_subtitle",
+      "x": 320, "y": 56, "width": 520, "height": 22,
+      "text": "知识外置在向量库，按需检索，避免把全部知识塞进参数",
+      "originalText": "知识外置在向量库，按需检索，避免把全部知识塞进参数",
+      "fontSize": 14, "fontFamily": 3, "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#64748b", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300003, "version": 1, "versionNonce": 300004, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "rag_query",
+      "x": 60, "y": 260, "width": 140, "height": 60,
+      "text": "用户问题 q", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e1e1e", "backgroundColor": "#a5d8ff", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300101, "version": 1, "versionNonce": 300102, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "rag_embed",
+      "x": 260, "y": 260, "width": 150, "height": 60,
+      "text": "Embedding 模型\n(句向量)", "fontSize": 15, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e1e1e", "backgroundColor": "#b2f2bb", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300111, "version": 1, "versionNonce": 300112, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "rag_vectordb",
+      "x": 470, "y": 180, "width": 170, "height": 100,
+      "text": "向量数据库\n(HNSW/IVF 索引)", "fontSize": 15, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e40af", "backgroundColor": "#ffd43b", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300121, "version": 1, "versionNonce": 300122, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "rag_vectordb_note",
+      "x": 470, "y": 285, "width": 170, "height": 40,
+      "text": "库内：文档切块后的\n句向量 + 原文", "fontSize": 12, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#64748b", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300123, "version": 1, "versionNonce": 300124, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "rag_retrieve",
+      "x": 700, "y": 260, "width": 140, "height": 60,
+      "text": "Top-K 检索\n+ Rerank", "fontSize": 15, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e1e1e", "backgroundColor": "#b2f2bb", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300131, "version": 1, "versionNonce": 300132, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "rag_prompt",
+      "x": 900, "y": 240, "width": 180, "height": 100,
+      "text": "构造 Prompt\n[检索片段 + 问题]\n+ 系统指令", "fontSize": 14, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#92400e", "backgroundColor": "#fed7aa", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300141, "version": 1, "versionNonce": 300142, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "rag_llm",
+      "x": 1140, "y": 260, "width": 130, "height": 60,
+      "text": "LLM 生成", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e1e1e", "backgroundColor": "#a5d8ff", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300151, "version": 1, "versionNonce": 300152, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "rag_answer",
+      "x": 1320, "y": 260, "width": 140, "height": 60,
+      "text": "答案 + 出处", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#166534", "backgroundColor": "#b2f2bb", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300161, "version": 1, "versionNonce": 300162, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "rag_offline_title",
+      "x": 470, "y": 110, "width": 170, "height": 22,
+      "text": "离线建库阶段", "fontSize": 14, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#94a3b8", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "dashed", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300171, "version": 1, "versionNonce": 300172, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "rag_docs",
+      "x": 250, "y": 130, "width": 140, "height": 50,
+      "text": "原始文档/知识库", "fontSize": 14, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#94a3b8", "backgroundColor": "#f1f5f9", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "dashed", "roughness": 0, "opacity": 80, "angle": 0,
+      "seed": 300181, "version": 1, "versionNonce": 300182, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "rag_chunk",
+      "x": 250, "y": 60, "width": 140, "height": 50,
+      "text": "切块 (Chunking)", "fontSize": 14, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#94a3b8", "backgroundColor": "#f1f5f9", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "dashed", "roughness": 0, "opacity": 80, "angle": 0,
+      "seed": 300183, "version": 1, "versionNonce": 300184, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "arrow", "id": "rag_arr_docs_chunk",
+      "x": 320, "y": 130, "width": 0, "height": -20,
+      "points": [[0,0],[0,-20]], "roundness": {"type": 2},
+      "strokeColor": "#94a3b8", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "dashed", "roughness": 0, "opacity": 80, "angle": 0,
+      "seed": 300191, "version": 1, "versionNonce": 300192, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "rag_arr_chunk_db",
+      "x": 390, "y": 85, "width": 80, "height": 95,
+      "points": [[0,0],[80,95]], "roundness": {"type": 2},
+      "strokeColor": "#94a3b8", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "dashed", "roughness": 0, "opacity": 80, "angle": 0,
+      "seed": 300193, "version": 1, "versionNonce": 300194, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "rag_arr_q_emb",
+      "x": 200, "y": 290, "width": 60, "height": 0,
+      "points": [[0,0],[60,0]], "roundness": {"type": 2},
+      "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300195, "version": 1, "versionNonce": 300196, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "rag_arr_emb_db",
+      "x": 410, "y": 290, "width": 60, "height": -50,
+      "points": [[0,0],[60,-50]], "roundness": {"type": 2},
+      "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300197, "version": 1, "versionNonce": 300198, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "rag_arr_db_ret",
+      "x": 640, "y": 240, "width": 60, "height": 20,
+      "points": [[0,0],[60,20]], "roundness": {"type": 2},
+      "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300199, "version": 1, "versionNonce": 300200, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "text", "id": "rag_arr_db_ret_label",
+      "x": 640, "y": 220, "width": 60, "height": 18,
+      "text": "相似 Top-K", "fontSize": 11, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#64748b", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300201, "version": 1, "versionNonce": 300202, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "arrow", "id": "rag_arr_ret_prompt",
+      "x": 840, "y": 290, "width": 60, "height": 0,
+      "points": [[0,0],[60,0]], "roundness": {"type": 2},
+      "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300203, "version": 1, "versionNonce": 300204, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "rag_arr_q_prompt",
+      "x": 130, "y": 320, "width": 770, "height": 30,
+      "points": [[0,0],[770,30]], "roundness": {"type": 2},
+      "strokeColor": "#92400e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "dashed", "roughness": 0, "opacity": 90, "angle": 0,
+      "seed": 300205, "version": 1, "versionNonce": 300206, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "text", "id": "rag_arr_q_prompt_label",
+      "x": 480, "y": 350, "width": 120, "height": 18,
+      "text": "原始问题 q 也进 prompt", "fontSize": 11, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#92400e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300207, "version": 1, "versionNonce": 300208, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "arrow", "id": "rag_arr_prompt_llm",
+      "x": 1080, "y": 290, "width": 60, "height": 0,
+      "points": [[0,0],[60,0]], "roundness": {"type": 2},
+      "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300209, "version": 1, "versionNonce": 300210, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "rag_arr_llm_ans",
+      "x": 1270, "y": 290, "width": 50, "height": 0,
+      "points": [[0,0],[50,0]], "roundness": {"type": 2},
+      "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300211, "version": 1, "versionNonce": 300212, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "text", "id": "rag_phase_online",
+      "x": 60, "y": 380, "width": 1400, "height": 20,
+      "text": "在线检索阶段 ──────────────────────────────────────",
+      "fontSize": 13, "fontFamily": 3,
+      "textAlign": "left", "verticalAlign": "top",
+      "strokeColor": "#cbd5e1", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 300221, "version": 1, "versionNonce": 300222, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "gridSize": 20
+  },
+  "files": {}
+}

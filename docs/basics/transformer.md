@@ -2,6 +2,8 @@
 
 > Transformer 是几乎所有大模型的基石，也是面试出现频率最高的考点。本文从历史动机讲到每个组件的原理，再到完整的前向走查、参数量与计算复杂度的实算、现代改进与高频追问，力求一篇讲透。Attention、位置编码、归一化等子主题有独立深入页，本文负责把它们串成完整图景。
 
+![Transformer Decoder-Only 块结构：残差直通 + Pre-Norm](/diagrams/transformer.svg)
+
 ## 一、为什么会有 Transformer？
 
 ### 1.1 RNN/LSTM 时代的瓶颈

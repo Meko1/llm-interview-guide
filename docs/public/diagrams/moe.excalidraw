@@ -1,0 +1,283 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {
+      "type": "text", "id": "moe_title",
+      "x": 280, "y": 20, "width": 520, "height": 32,
+      "text": "MoE 层：路由器选 Top-K 专家，稀疏激活",
+      "originalText": "MoE 层：路由器选 Top-K 专家，稀疏激活",
+      "fontSize": 24, "fontFamily": 3, "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#1e40af", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200001, "version": 1, "versionNonce": 200002, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "moe_subtitle",
+      "x": 280, "y": 56, "width": 520, "height": 22,
+      "text": "总参数大（全部专家加载进显存），单次激活参数小（只算 Top-K）",
+      "originalText": "总参数大（全部专家加载进显存），单次激活参数小（只算 Top-K）",
+      "fontSize": 14, "fontFamily": 3, "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#64748b", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200003, "version": 1, "versionNonce": 200004, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "moe_input",
+      "x": 60, "y": 240, "width": 140, "height": 70,
+      "text": "token x\n(d 维向量)", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e1e1e", "backgroundColor": "#a5d8ff", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200101, "version": 1, "versionNonce": 200102, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "moe_router",
+      "x": 280, "y": 240, "width": 160, "height": 70,
+      "text": "Router / Gate\nW_g · x → softmax", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e1e1e", "backgroundColor": "#ffd43b", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200111, "version": 1, "versionNonce": 200112, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "moe_topk",
+      "x": 520, "y": 240, "width": 140, "height": 70,
+      "text": "Top-K 选择\n(K=2)", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e1e1e", "backgroundColor": "#ffd43b", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200121, "version": 1, "versionNonce": 200122, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "moe_scores_label",
+      "x": 520, "y": 320, "width": 140, "height": 20,
+      "text": "得分 g = [0.05, 0.6, 0.3, 0.05]", "fontSize": 12, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#64748b", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200123, "version": 1, "versionNonce": 200124, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "moe_e1",
+      "x": 740, "y": 100, "width": 160, "height": 60,
+      "text": "Expert 1 (FFN)", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#94a3b8", "backgroundColor": "#f1f5f9", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "dashed", "roughness": 0, "opacity": 60, "angle": 0,
+      "seed": 200131, "version": 1, "versionNonce": 200132, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "moe_e1_tag",
+      "x": 905, "y": 118, "width": 80, "height": 20,
+      "text": "g=0.05 不激活", "fontSize": 12, "fontFamily": 3,
+      "textAlign": "left", "verticalAlign": "middle",
+      "strokeColor": "#94a3b8", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 70, "angle": 0,
+      "seed": 200133, "version": 1, "versionNonce": 200134, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "moe_e2",
+      "x": 740, "y": 180, "width": 160, "height": 60,
+      "text": "Expert 2 (FFN)", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e40af", "backgroundColor": "#b2f2bb", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200141, "version": 1, "versionNonce": 200142, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "moe_e2_tag",
+      "x": 905, "y": 198, "width": 80, "height": 20,
+      "text": "g=0.6 ✓ 激活", "fontSize": 12, "fontFamily": 3,
+      "textAlign": "left", "verticalAlign": "middle",
+      "strokeColor": "#166534", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200143, "version": 1, "versionNonce": 200144, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "moe_e3",
+      "x": 740, "y": 260, "width": 160, "height": 60,
+      "text": "Expert 3 (FFN)", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e40af", "backgroundColor": "#b2f2bb", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200151, "version": 1, "versionNonce": 200152, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "moe_e3_tag",
+      "x": 905, "y": 278, "width": 80, "height": 20,
+      "text": "g=0.3 ✓ 激活", "fontSize": 12, "fontFamily": 3,
+      "textAlign": "left", "verticalAlign": "middle",
+      "strokeColor": "#166534", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200153, "version": 1, "versionNonce": 200154, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "moe_e4",
+      "x": 740, "y": 340, "width": 160, "height": 60,
+      "text": "Expert 4 (FFN)", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#94a3b8", "backgroundColor": "#f1f5f9", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "dashed", "roughness": 0, "opacity": 60, "angle": 0,
+      "seed": 200161, "version": 1, "versionNonce": 200162, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "moe_e4_tag",
+      "x": 905, "y": 358, "width": 80, "height": 20,
+      "text": "g=0.05 不激活", "fontSize": 12, "fontFamily": 3,
+      "textAlign": "left", "verticalAlign": "middle",
+      "strokeColor": "#94a3b8", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 70, "angle": 0,
+      "seed": 200163, "version": 1, "versionNonce": 200164, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "ellipse", "id": "moe_sum",
+      "x": 1020, "y": 240, "width": 120, "height": 70,
+      "text": "加权求和\nΣ gᵢ·Eᵢ(x)", "fontSize": 15, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e1e1e", "backgroundColor": "#ffd43b", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200171, "version": 1, "versionNonce": 200172, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": null, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "moe_output",
+      "x": 1200, "y": 240, "width": 120, "height": 70,
+      "text": "MoE 层输出 y", "fontSize": 16, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#1e1e1e", "backgroundColor": "#a5d8ff", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200181, "version": 1, "versionNonce": 200182, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "roundness": {"type": 3}, "lineHeight": 1.25
+    },
+    {
+      "type": "arrow", "id": "moe_arr_1",
+      "x": 200, "y": 275, "width": 80, "height": 0,
+      "points": [[0,0],[80,0]], "roundness": {"type": 2},
+      "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200191, "version": 1, "versionNonce": 200192, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "moe_arr_2",
+      "x": 440, "y": 275, "width": 80, "height": 0,
+      "points": [[0,0],[80,0]], "roundness": {"type": 2},
+      "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200193, "version": 1, "versionNonce": 200194, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "moe_arr_e2",
+      "x": 660, "y": 275, "width": 80, "height": -65,
+      "points": [[0,0],[80,-65]], "roundness": {"type": 2},
+      "strokeColor": "#166534", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200195, "version": 1, "versionNonce": 200196, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "moe_arr_e3",
+      "x": 660, "y": 275, "width": 80, "height": 15,
+      "points": [[0,0],[80,15]], "roundness": {"type": 2},
+      "strokeColor": "#166534", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200197, "version": 1, "versionNonce": 200198, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "moe_arr_out2",
+      "x": 900, "y": 210, "width": 120, "height": 65,
+      "points": [[0,0],[120,65]], "roundness": {"type": 2},
+      "strokeColor": "#166534", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200199, "version": 1, "versionNonce": 200200, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "moe_arr_out3",
+      "x": 900, "y": 290, "width": 120, "height": -15,
+      "points": [[0,0],[120,-15]], "roundness": {"type": 2},
+      "strokeColor": "#166534", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200201, "version": 1, "versionNonce": 200202, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "arrow", "id": "moe_arr_final",
+      "x": 1140, "y": 275, "width": 60, "height": 0,
+      "points": [[0,0],[60,0]], "roundness": {"type": 2},
+      "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200203, "version": 1, "versionNonce": 200204, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "startBinding": null, "endBinding": null
+    },
+    {
+      "type": "text", "id": "moe_legend_active",
+      "x": 740, "y": 430, "width": 160, "height": 20,
+      "text": "绿色=激活  灰色虚线=未激活", "fontSize": 13, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#64748b", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200211, "version": 1, "versionNonce": 200212, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "moe_note_balance",
+      "x": 280, "y": 430, "width": 440, "height": 20,
+      "text": "负载均衡：辅助损失 / 容量因子 / DeepSeek 无 aux-loss 偏置调节",
+      "fontSize": 13, "fontFamily": 3,
+      "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#92400e", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 200213, "version": 1, "versionNonce": 200214, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "containerId": null, "lineHeight": 1.25
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "gridSize": 20
+  },
+  "files": {}
+}

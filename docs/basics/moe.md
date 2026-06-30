@@ -2,6 +2,8 @@
 
 > MoE（Mixture of Experts）是当前大模型「以稀疏激活换取大容量」的主流路线，Mixtral、DeepSeek-V3、Qwen-MoE、GPT-4（传闻）都采用了它。也是近两年面试的高频新考点。
 
+![MoE 层结构：路由器选 Top-K 专家，稀疏激活](/diagrams/moe.svg)
+
 ## 什么是 MoE？
 
 MoE 的核心思想是：**用很多个「专家」（Expert）替换 Transformer 里的 FFN（前馈网络），但每个 token 只激活其中少数几个专家。**
@@ -9,7 +11,7 @@ MoE 的核心思想是：**用很多个「专家」（Expert）替换 Transforme
 - **总参数量（容量）很大**：例如 64 个专家。
 - **单次激活的参数（计算量）很小**：例如每个 token 只走 2 个专家。
 
-这样就实现了「**大容量、低单次计算成本**」——模型记得多，但每次推理/训练只算一小部分。这是 Dense（稠密）模型做不到的：Dense 模型每个 token 都要过全部参数。
+这样就实现了「**大容量、低单次计算成本**」：模型容量大，但每次推理/训练只算一小部分。Dense（稠密）模型做不到这一点——Dense 模型每个 token 都要过全部参数。
 
 一个 MoE 层由两部分组成：
 
@@ -49,7 +51,7 @@ $$y = \sum_{i \in \text{TopK}} g_i \cdot E_i(x)，\quad g = \text{softmax}(\text
 
 - **Switch Transformer（Google）**：Top-1 路由（每个 token 只走 1 个专家），简化设计、降低通信。
 - **Mixtral（Mistral）**：8 个专家、Top-2 路由，开源 MoE 的代表作。
-- **DeepSeekMoE**：**细粒度专家 + 共享专家**——把专家切得更细（更多但更小的专家）以增强专业化，同时设置始终激活的「共享专家」捕捉通用知识。
+- **DeepSeekMoE**：**细粒度专家 + 共享专家**，把专家切得更细（更多但更小的专家）以增强专业化，同时设置始终激活的「共享专家」捕捉通用知识。
 - **Qwen-MoE / GLM-MoE**：国产开源 MoE 代表。
 
 ## 高频追问
