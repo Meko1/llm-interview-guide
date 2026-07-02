@@ -114,12 +114,23 @@
 | 项目 | 特点 |
 | --- | --- |
 | [JavaGuide](https://javaguide.cn/) | 后端面试指南标杆，本项目的形式灵感来源 |
-| [JavaGuide - AI 应用开发面试指南](https://javaguide.cn/ai/) | JavaGuide 的 AI 面试专栏，质量很高 |
+| [JavaGuide - AI 应用开发面试指南](https://javaguide.cn/ai/) | JavaGuide 的 AI 面试专栏，覆盖 LLM/Agent/RAG/MCP/系统设计 |
+| [JavaGuide - AI 编程实战](https://javaguide.cn/ai-coding/) | Claude Code/Cursor/Codex/Trae 使用技巧与面试题 |
+| [AIGuide（Snailclimb）](https://github.com/Snailclimb/AIGuide) | 对标 JavaGuide 的 AI 应用开发与编程实战指南 |
+| [鱼皮 AI 知识库](https://ai.codefather.cn/) | 免费 AI 工具测评、Vibe Coding 教程、编程实战 |
+| [Datawhale self-llm](https://github.com/datawhalechina/self-llm) | 开源大模型食用指南，微调/部署教程（31k+ stars） |
+| [Datawhale so-large-lm](https://github.com/datawhalechina/so-large-lm) | 大模型理论基础，基于 CS324 + 李宏毅课程 |
+| [Datawhale llm-universe](https://github.com/datawhalechina/llm-universe) | 面向小白的大模型应用开发教程（13k+ stars） |
+| [Datawhale llm-cookbook](https://github.com/datawhalechina/llm-cookbook) | 吴恩达 LLM 系列课程中文版（24k+ stars） |
+| [Datawhale hello-agents](https://github.com/datawhalechina/hello-agents) | Agent 入门实战 + 面试总结 |
+| [Awesome-LLM-Interview](https://github.com/laoshan-song/Awesome-LLM-Interview) | 系统化 LLM 面试笔记，按模块分文件，持续更新 |
+| [LLM-Interview-Guidebook](https://github.com/chensi-cs/LLM-Interview-Guidebook) | 面向算法工程师的面试宝典，从基础到推理部署 |
+| [llm_interview_note](https://github.com/wdndev/llm_interview_note) | LLM 算法/应用工程师知识及面试题 |
+| [小林面试笔记 - 大模型专题](https://xiaolinnote.com/ai/) | 600+ 张图解大模型面试题，Agent/RAG/工具调用 |
 | [LLMForEverybody](https://github.com/luhengshiwo/LLMForEverybody) | 体系化的大模型原理 + 面试系列文章 |
 | [awesome-LLM-resources](https://github.com/WangRongsheng/awesome-LLM-resources) | 极全的大模型资源/工具索引 |
-| [AgentGuide](https://adongwanai.github.io/AgentGuide/) | 聚焦 Agent 的学习与面试指南 |
+| [AgentGuide](https://adongwanai.github.io/AgentGuide/) | 聚焦 Agent 的学习与面试指南，LangGraph 实战 |
 | [happy-llm](https://github.com/datawhalechina/happy-llm) | Datawhale 出品，从原理到实践 |
-| [llm-cookbook](https://github.com/datawhalechina/llm-cookbook) | 吴恩达 LLM 系列课程中文版 |
 
 ## 跟踪前沿的渠道
 

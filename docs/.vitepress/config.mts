@@ -80,6 +80,9 @@ export default defineConfig({
         activeMatch: '/inference/',
         items: [
           { text: '推理优化与部署', link: '/inference/inference-optimization' },
+          { text: '推理框架对比（vLLM/SGLang）', link: '/inference/serving-frameworks' },
+          { text: '投机解码详解', link: '/inference/speculative-decoding' },
+          { text: '知识蒸馏与模型压缩', link: '/inference/model-compression' },
           { text: 'GPU 与硬件基础', link: '/inference/gpu-hardware' }
         ]
       },
@@ -246,6 +249,9 @@ export default defineConfig({
           text: '推理优化与部署',
           items: [
             { text: '推理优化与部署', link: '/inference/inference-optimization' },
+            { text: '推理框架对比（vLLM/SGLang）', link: '/inference/serving-frameworks' },
+            { text: '投机解码详解', link: '/inference/speculative-decoding' },
+            { text: '知识蒸馏与模型压缩', link: '/inference/model-compression' },
             { text: 'GPU 与硬件基础', link: '/inference/gpu-hardware' }
           ]
         }
@@ -270,6 +276,7 @@ export default defineConfig({
           items: [
             { text: 'LangChain 与应用框架', link: '/engineering/langchain' },
             { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
+            { text: 'AI 编程工具实战', link: '/engineering/ai-coding-tools' },
             { text: 'AI 编程与 Coding Agent', link: '/engineering/coding-agent' },
             { text: '编程 Agent 底层架构与机制', link: '/engineering/coding-agent-internals' },
             { text: '结构化输出详解', link: '/engineering/structured-output' },
@@ -413,6 +420,7 @@ function sidebarTraining() {
         { text: 'LoRA / QLoRA 详解', link: '/finetuning/lora' },
         { text: 'RLHF / DPO 对齐', link: '/finetuning/rlhf' },
         { text: '偏好优化方法全景（DPO 变体）', link: '/finetuning/preference-optimization' },
+        { text: '前沿对齐技术（GRPO/DAPO/RLVR）', link: '/finetuning/frontier-alignment' },
         { text: '模型融合与合并', link: '/finetuning/model-merging' },
         { text: '微调训练工具链实战', link: '/finetuning/training-frameworks' }
       ]
