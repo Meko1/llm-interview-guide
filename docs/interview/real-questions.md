@@ -99,6 +99,43 @@
 
 > 准备建议：手撕题重在「能写出核心逻辑 + 讲清每步在干嘛」，先吃透 [Attention](/basics/attention) 和 [解码采样](/basics/decoding) 的公式。
 
+## 2026 岗位驱动追问
+
+> 这组题来自 2026 年 LLM 应用、Agent、RAG/Memory、Java AI、AI Infra 类 JD 的共性要求。完整能力地图见 [2026 大模型岗位能力地图](./job-market-2026)。
+
+### LLM 应用开发 / Java AI
+
+1. 你如何设计一个可上线的 LLM 应用后端？请覆盖模型接入、流式输出、结构化输出、限流、重试、日志和成本控制。→ [LLM 应用开发实战](../engineering/llm-app-dev)
+2. 如果模型返回的 JSON 偶发不合法，你会用 prompt 修复、解析重试、JSON Mode 还是 Schema 约束？怎么取舍？→ [结构化输出详解](../engineering/structured-output)
+3. Spring Boot 服务如何实现 SSE 流式返回？客户端断开、上游超时、内容审核分别怎么处理？→ [LLM 应用开发实战](../engineering/llm-app-dev)
+4. 企业 Java 系统接入大模型时，为什么不能让业务代码直接散落调用各家模型 API？模型网关应封装哪些能力？
+5. 大模型调用很慢且价格高，如何在 Java 微服务里做异步、限流、排队、降级和缓存？
+
+### Agent 工程
+
+1. 什么时候用固定 Workflow，什么时候用 Agent？请给出一个你会拒绝使用 Agent 的业务场景。→ [AI 工作流 vs Agent](../agent/workflow)
+2. 设计一个投研/客服/运营 Agent：任务规划、工具调用、状态管理、失败重试、人工确认分别怎么做？→ [Agent 基础](../agent/agent-basics)
+3. Tool Calling 失败有哪些类型？参数错、权限错、网络错、业务返回错、模型误调用分别如何恢复？→ [Function Calling 与 MCP](../agent/function-calling-mcp)
+4. MCP 解决了什么问题？和你自己定义一组 HTTP 工具接口相比，优势和代价是什么？→ [MCP 协议深入](../agent/mcp)
+5. Agent Memory 该写什么、不该写什么？新旧记忆冲突时怎么处理？→ [Agent 记忆系统](../agent/agent-memory)
+6. 如何评估一个 Agent 是否可上线？除了任务成功率，还要看哪些过程指标？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
+
+### RAG & Memory / AI Search
+
+1. RAG 回答错了，你怎么判断问题出在检索、重排、上下文拼接、Prompt 还是模型生成？→ [RAG 评估](../rag/rag-evaluation)
+2. chunk size、overlap、父子分块、标题层级切分怎么选？如果文档里有表格和图片怎么办？→ [切分与检索策略深挖](../rag/chunking-retrieval)
+3. 向量检索、BM25、混合检索、Rerank 各自解决什么问题？怎么做融合？→ [RAG 进阶](../rag/rag-advanced)
+4. 金融/客服知识库如何做引用溯源、拒答、权限隔离和增量更新？→ [RAG 生产化与系统设计](../rag/rag-production)
+5. Agent Memory 和 RAG 知识库有什么区别？为什么 Memory 的写入策略比检索更难？→ [Agent 记忆系统](../agent/agent-memory)
+
+### AI Infra / 推理部署
+
+1. Prefill 和 Decode 的瓶颈分别是什么？为什么 TTFT 和 TPOT 要分开优化？→ [推理优化与部署](../inference/inference-optimization)
+2. KV Cache 显存如何估算？长上下文 + 高并发为什么容易 OOM？→ [长上下文专题](../basics/long-context)
+3. vLLM 的 PagedAttention 和连续批处理分别解决什么问题？为什么能提升吞吐？→ [推理优化与部署](../inference/inference-optimization)
+4. GPTQ、AWQ、GGUF、INT8/INT4 怎么选？量化后如何证明效果没有明显下降？
+5. 设计一个私有化大模型部署方案：模型选型、显卡、量化、推理框架、高可用、监控和成本怎么讲？
+
 ## 软性 / 项目题
 
 1. 介绍一个你做过的大模型项目，重点讲难点和你的决策。→ [AI 项目实战](/engineering/projects)

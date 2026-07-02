@@ -147,6 +147,7 @@ export default defineConfig({
         text: '面试专题',
         activeMatch: '/interview/',
         items: [
+          { text: '2026 岗位能力地图', link: '/interview/job-market-2026' },
           { text: '高频面试题速记', link: '/interview/high-frequency' },
           { text: '手撕代码题解集', link: '/interview/coding-problems' },
           { text: '分岗位面试真题', link: '/interview/real-questions' },
@@ -282,6 +283,7 @@ export default defineConfig({
         {
           text: '面试专题',
           items: [
+            { text: '2026 岗位能力地图', link: '/interview/job-market-2026' },
             { text: '高频面试题速记', link: '/interview/high-frequency' },
             { text: '手撕代码题解集', link: '/interview/coding-problems' },
             { text: '分岗位面试真题', link: '/interview/real-questions' },

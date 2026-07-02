@@ -76,6 +76,7 @@ features:
 ## 🔥 必看
 
 - **[大模型零基础入门](/beginner/getting-started)**（🌱新手必看）：完全没接触过 AI？从这里开始，配 [术语速查表](/beginner/glossary) 和 [必备数学基础](/beginner/math-basics)。
+- **[2026 岗位能力地图](/interview/job-market-2026)**（🎯求职必看）：把 Boss JD 拆成 LLM 应用、Agent、RAG & Memory、Java AI、AI Infra 五条准备路线。
 - **[高频面试题速记](/interview/high-frequency)**（⭐网站核心）：全站核心考点浓缩成一问一答速查卡，面试前快速过一遍。
 - **[手撕代码题解集](/interview/coding-problems)**（🔥新上线）：MHA、RoPE、RMSNorm、LoRA、DPO Loss、采样……10 道最高频手撕题，可运行实现 + 考点解析。
 - **[分岗位面试真题](/interview/real-questions)**：按算法/应用/工程岗 + 场景设计 + 手撕题分类的真题库。

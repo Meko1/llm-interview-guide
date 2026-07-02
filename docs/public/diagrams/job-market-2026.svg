@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+  <title id="title">2026 大模型岗位能力地图</title>
+  <desc id="desc">把 2026 大模型招聘要求拆成 LLM 应用开发、Agent 工程、RAG 与 Memory、Java AI 工程、AI Infra 五类能力，并连接到面试准备闭环。</desc>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1e3a5f"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6d28d9"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#047857"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b45309"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c2410c"/>
+    </marker>
+    <style>
+      .title { font: 700 30px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #1e40af; }
+      .subtitle { font: 18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #64748b; }
+      .box-title { font: 700 20px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #374151; }
+      .box-line { font: 16px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #374151; }
+      .small-title { font: 700 20px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #1e40af; }
+      .timeline { font: 20px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #374151; }
+    </style>
+  </defs>
+  <rect width="1200" height="820" fill="#ffffff"/>
+
+  <text x="600" y="52" text-anchor="middle" class="title">2026 大模型岗位能力地图</text>
+  <text x="600" y="84" text-anchor="middle" class="subtitle">招聘 JD 的共同要求：把 LLM 接进业务、跑稳、评估、降本、可维护</text>
+
+  <ellipse cx="600" cy="315" rx="132" ry="68" fill="#ddd6fe" stroke="#6d28d9" stroke-width="2"/>
+  <text x="600" y="304" text-anchor="middle" class="box-title">可上线的</text>
+  <text x="600" y="334" text-anchor="middle" class="box-title">LLM 应用能力</text>
+
+  <rect x="60" y="130" width="320" height="120" rx="12" fill="#dbeafe" stroke="#1e3a5f" stroke-width="2"/>
+  <text x="220" y="164" text-anchor="middle" class="box-title">LLM 应用开发</text>
+  <text x="220" y="194" text-anchor="middle" class="box-line">Prompt / 结构化输出 / SSE</text>
+  <text x="220" y="222" text-anchor="middle" class="box-line">Function Calling / 成本控制</text>
+
+  <rect x="820" y="130" width="320" height="120" rx="12" fill="#ddd6fe" stroke="#6d28d9" stroke-width="2"/>
+  <text x="980" y="164" text-anchor="middle" class="box-title">Agent 工程</text>
+  <text x="980" y="194" text-anchor="middle" class="box-line">Tool Calling / Workflow / Memory</text>
+  <text x="980" y="222" text-anchor="middle" class="box-line">MCP / 可观测 / 失败恢复</text>
+
+  <rect x="60" y="390" width="320" height="130" rx="12" fill="#a7f3d0" stroke="#047857" stroke-width="2"/>
+  <text x="220" y="426" text-anchor="middle" class="box-title">RAG &amp; Memory</text>
+  <text x="220" y="456" text-anchor="middle" class="box-line">Chunk / Hybrid Search / Rerank</text>
+  <text x="220" y="484" text-anchor="middle" class="box-line">引用溯源 / 权限 / 记忆写入</text>
+
+  <rect x="820" y="390" width="320" height="130" rx="12" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="980" y="426" text-anchor="middle" class="box-title">Java AI 工程</text>
+  <text x="980" y="456" text-anchor="middle" class="box-line">Spring AI / SSE / 微服务</text>
+  <text x="980" y="484" text-anchor="middle" class="box-line">审计 / 权限 / 限流降级</text>
+
+  <rect x="420" y="542" width="360" height="120" rx="12" fill="#fed7aa" stroke="#c2410c" stroke-width="2"/>
+  <text x="600" y="576" text-anchor="middle" class="box-title">AI Infra</text>
+  <text x="600" y="606" text-anchor="middle" class="box-line">vLLM / SGLang / KV Cache</text>
+  <text x="600" y="634" text-anchor="middle" class="box-line">量化 / K8s / 成本压测</text>
+
+  <path d="M 382 226 L 488 281" fill="none" stroke="#1e3a5f" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <path d="M 814 226 L 710 281" fill="none" stroke="#6d28d9" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+  <path d="M 382 412 L 489 354" fill="none" stroke="#047857" stroke-width="2.5" marker-end="url(#arrow-green)"/>
+  <path d="M 814 412 L 711 354" fill="none" stroke="#b45309" stroke-width="2.5" marker-end="url(#arrow-amber)"/>
+  <path d="M 600 384 L 600 538" fill="none" stroke="#c2410c" stroke-width="2.5" marker-end="url(#arrow-orange)"/>
+
+  <text x="600" y="718" text-anchor="middle" class="small-title">面试准备闭环</text>
+  <line x1="210" y1="750" x2="990" y2="750" stroke="#64748b" stroke-width="2"/>
+  <circle cx="210" cy="750" r="8" fill="#3b82f6"/>
+  <circle cx="470" cy="750" r="8" fill="#3b82f6"/>
+  <circle cx="730" cy="750" r="8" fill="#3b82f6"/>
+  <circle cx="990" cy="750" r="8" fill="#3b82f6"/>
+  <text x="600" y="790" text-anchor="middle" class="timeline">JD 技能词 → 岗位能力矩阵 → 项目证据 → 系统设计追问</text>
+</svg>
