@@ -118,11 +118,15 @@
 | [JavaGuide - AI 编程实战](https://javaguide.cn/ai-coding/) | Claude Code/Cursor/Codex/Trae 使用技巧与面试题 |
 | [AIGuide（Snailclimb）](https://github.com/Snailclimb/AIGuide) | 对标 JavaGuide 的 AI 应用开发与编程实战指南 |
 | [鱼皮 AI 知识库](https://ai.codefather.cn/) | 免费 AI 工具测评、Vibe Coding 教程、编程实战 |
+| [鱼皮 AI 知识库专题页](https://ai.codefather.cn/library/1936010874183520257) | 适合补 AI 编程工具、项目实战和效率工作流 |
+| [掘金 AI Coding](https://aicoding.juejin.cn/) | AI 编程专题入口，适合跟进中文社区的工具实践和项目案例 |
 | [Datawhale self-llm](https://github.com/datawhalechina/self-llm) | 开源大模型食用指南，微调/部署教程（31k+ stars） |
 | [Datawhale so-large-lm](https://github.com/datawhalechina/so-large-lm) | 大模型理论基础，基于 CS324 + 李宏毅课程 |
 | [Datawhale llm-universe](https://github.com/datawhalechina/llm-universe) | 面向小白的大模型应用开发教程（13k+ stars） |
 | [Datawhale llm-cookbook](https://github.com/datawhalechina/llm-cookbook) | 吴恩达 LLM 系列课程中文版（24k+ stars） |
 | [Datawhale hello-agents](https://github.com/datawhalechina/hello-agents) | Agent 入门实战 + 面试总结 |
+| [Datawhale 组织主页](https://github.com/datawhalechina) | 系统查找大模型、Agent、RAG、数据科学相关开源教程 |
+| [ProcessOn 复习图谱 1](https://www.processon.com/view/link/6818579ca71fd53a76b8ae51) / [复习图谱 2](https://www.processon.com/view/link/68f8f47505b3f06eb45494c1) | 用思维导图复盘知识树和系统设计链路；面试前适合查漏补缺 |
 | [Awesome-LLM-Interview](https://github.com/laoshan-song/Awesome-LLM-Interview) | 系统化 LLM 面试笔记，按模块分文件，持续更新 |
 | [LLM-Interview-Guidebook](https://github.com/chensi-cs/LLM-Interview-Guidebook) | 面向算法工程师的面试宝典，从基础到推理部署 |
 | [llm_interview_note](https://github.com/wdndev/llm_interview_note) | LLM 算法/应用工程师知识及面试题 |

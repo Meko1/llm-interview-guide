@@ -17,6 +17,7 @@
 | vLLM、Ollama、SGLang、TensorRT-LLM、KV Cache、CUDA | 你是否理解推理服务的延迟、吞吐、显存、并发调度 | [推理优化](../inference/inference-optimization)、[GPU 与硬件基础](../inference/gpu-hardware) |
 | LoRA/QLoRA、SFT、DPO/RLHF、数据清洗 | 你是否能判断什么时候微调、怎么构造数据、如何评估收益 | [微调范式](../finetuning/finetuning)、[LoRA](../finetuning/lora)、[RLHF/DPO](../finetuning/rlhf) |
 | LangChain、LlamaIndex、LangGraph、AutoGen、CrewAI | 你是否理解框架背后的抽象，而不是只会复制模板 | [LangChain 与应用框架](../engineering/langchain)、[多 Agent](../agent/multi-agent) |
+| Claude Code、Cursor、Codex、Trae、AI Coding | 你是否能用 AI 工具稳定交付代码，而不是只会生成 demo | [AI 编程工具实战](../engineering/ai-coding-tools)、[AI 编程与 Coding Agent](../engineering/coding-agent) |
 | 评估、可观测、成本、安全合规 | 你能否让系统上线后可诊断、可迭代、可控风险 | [模型评估](../evaluation/evaluation)、[Agent 评估](../agent/agent-evaluation)、[大模型安全](../advanced/safety) |
 
 ## 五类岗位能力矩阵
@@ -258,6 +259,7 @@ Infra 项目讲指标和压测：
 | 算法/研究 | 微调、推理优化、评估 | 工程服务化、RAG、Agent | 只讲论文不讲上线 |
 | 数据/搜索 | RAG、AI Search、Memory | Text-to-SQL、GraphRAG、多模态索引 | 只讲向量库 API |
 | 前端/全栈 | LLM 应用体验、流式、Agent UI | 结构化输出、工具调用、可观测 | 只做页面不讲模型链路 |
+| AI Coding 转型 | AI 编程工具、Spec Coding、测试与 review | 代码 Agent、工程规范、项目交付证据 | 只展示一键生成 demo |
 
 ## 简历项目检查清单
 

@@ -136,6 +136,15 @@
 4. GPTQ、AWQ、GGUF、INT8/INT4 怎么选？量化后如何证明效果没有明显下降？
 5. 设计一个私有化大模型部署方案：模型选型、显卡、量化、推理框架、高可用、监控和成本怎么讲？
 
+### AI Coding / 工具提效
+
+1. Vibe Coding 和 Spec Coding 的区别是什么？为什么生产项目更推荐先写验收标准？→ [AI 编程工具实战](../engineering/ai-coding-tools)
+2. 你如何给 Claude Code / Cursor / Codex 准备上下文？哪些上下文不该给？→ [AI 编程工具实战](../engineering/ai-coding-tools)
+3. 如果 AI 一次修改了 20 个文件，你如何审查、拆分、回滚和重新约束任务？→ [AI 编程工具实战](../engineering/ai-coding-tools)
+4. CLI 型 AI Agent 和 IDE 型 AI 编程工具分别适合什么任务？团队里如何组合使用？→ [AI 编程工具实战](../engineering/ai-coding-tools)
+5. 如何证明 AI Coding 真的提升了工程效率，而不是制造更多 review 成本？
+6. 面试官问“AI 会不会削弱程序员能力”，你如何回答才能体现判断力和工程基本功？
+
 ## 软性 / 项目题
 
 1. 介绍一个你做过的大模型项目，重点讲难点和你的决策。→ [AI 项目实战](/engineering/projects)
