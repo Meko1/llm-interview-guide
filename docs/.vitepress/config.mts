@@ -81,9 +81,13 @@ export default defineConfig({
         items: [
           { text: '推理优化与部署', link: '/inference/inference-optimization' },
           { text: '推理框架对比（vLLM/SGLang）', link: '/inference/serving-frameworks' },
+          { text: '推理性能压测与指标', link: '/inference/inference-benchmark' },
           { text: '投机解码详解', link: '/inference/speculative-decoding' },
+          { text: '量化实战深入', link: '/inference/quantization' },
           { text: '知识蒸馏与模型压缩', link: '/inference/model-compression' },
-          { text: 'GPU 与硬件基础', link: '/inference/gpu-hardware' }
+          { text: 'AI 编译器与图优化', link: '/inference/ai-compiler' },
+          { text: 'GPU 与硬件基础', link: '/inference/gpu-hardware' },
+          { text: '国产算力与国产化适配', link: '/inference/domestic-ai-stack' }
         ]
       },
       { text: '工程实战', link: '/engineering/langchain', activeMatch: '/engineering/' },
@@ -133,7 +137,8 @@ export default defineConfig({
               { text: '2025-2026 前沿模型盘点', link: '/models/frontier-models-2025' },
               { text: 'LLaMA 与 Qwen 架构演进', link: '/models/llama-qwen' },
               { text: 'DeepSeek 专题', link: '/models/deepseek' },
-              { text: '小语言模型与端侧（SLM）', link: '/models/slm' }
+              { text: '小语言模型与端侧（SLM）', link: '/models/slm' },
+              { text: '中文大模型生态全景', link: '/models/chinese-llm-landscape' }
             ]
           },
           {
@@ -250,9 +255,13 @@ export default defineConfig({
           items: [
             { text: '推理优化与部署', link: '/inference/inference-optimization' },
             { text: '推理框架对比（vLLM/SGLang）', link: '/inference/serving-frameworks' },
+            { text: '推理性能压测与指标', link: '/inference/inference-benchmark' },
             { text: '投机解码详解', link: '/inference/speculative-decoding' },
+            { text: '量化实战深入', link: '/inference/quantization' },
             { text: '知识蒸馏与模型压缩', link: '/inference/model-compression' },
-            { text: 'GPU 与硬件基础', link: '/inference/gpu-hardware' }
+            { text: 'AI 编译器与图优化', link: '/inference/ai-compiler' },
+            { text: 'GPU 与硬件基础', link: '/inference/gpu-hardware' },
+            { text: '国产算力与国产化适配', link: '/inference/domestic-ai-stack' }
           ]
         }
       ],
@@ -328,7 +337,8 @@ export default defineConfig({
             { text: '经典模型盘点', link: '/models/classic-models' },
             { text: 'LLaMA 与 Qwen 架构演进', link: '/models/llama-qwen' },
             { text: 'DeepSeek 专题', link: '/models/deepseek' },
-            { text: '小语言模型与端侧（SLM）', link: '/models/slm' }
+            { text: '小语言模型与端侧（SLM）', link: '/models/slm' },
+            { text: '中文大模型生态全景', link: '/models/chinese-llm-landscape' }
           ]
         }
       ],
@@ -410,7 +420,8 @@ function sidebarTraining() {
         { text: '预训练目标与数据', link: '/pretraining/pretrain' },
         { text: '数据工程与合成数据', link: '/pretraining/data-engineering' },
         { text: '缩放定律与涌现能力', link: '/pretraining/scaling-law' },
-        { text: '分布式训练与显存优化', link: '/pretraining/distributed-training' }
+        { text: '分布式训练与显存优化', link: '/pretraining/distributed-training' },
+        { text: 'AI 训练集群与网络通信', link: '/pretraining/ai-infra-networking' }
       ]
     },
     {

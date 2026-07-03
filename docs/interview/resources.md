@@ -133,6 +133,8 @@
 | [小林面试笔记 - 大模型专题](https://xiaolinnote.com/ai/) | 600+ 张图解大模型面试题，Agent/RAG/工具调用 |
 | [LLMForEverybody](https://github.com/luhengshiwo/LLMForEverybody) | 体系化的大模型原理 + 面试系列文章 |
 | [awesome-LLM-resources](https://github.com/WangRongsheng/awesome-LLM-resources) | 极全的大模型资源/工具索引 |
+| [llm-action](https://github.com/liguodongiot/llm-action) | 大模型训练/推理/压缩/国产化系统实战教程（本站国产化、量化、AI 编译器、压测等页参考） |
+| [Awesome-Chinese-LLM](https://github.com/HqWu-HITCS/Awesome-Chinese-LLM) | 中文大模型全景资料集：国产模型/垂直领域/数据集/评测（本站[中文大模型生态全景](/models/chinese-llm-landscape)参考） |
 | [AgentGuide](https://adongwanai.github.io/AgentGuide/) | 聚焦 Agent 的学习与面试指南，LangGraph 实战 |
 | [happy-llm](https://github.com/datawhalechina/happy-llm) | Datawhale 出品，从原理到实践 |
 
