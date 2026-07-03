@@ -221,6 +221,7 @@ export default defineConfig({
             { text: 'RAG 基础与流程', link: '/rag/rag-basics' },
             { text: '切分与检索策略深挖', link: '/rag/chunking-retrieval' },
             { text: 'Embedding 与向量数据库', link: '/rag/embedding-vectordb' },
+            { text: 'Embedding 与 Reranker 训练', link: '/rag/embedding-training' },
             { text: 'RAG 进阶与优化', link: '/rag/rag-advanced' },
             { text: 'RAG 生产化与系统设计', link: '/rag/rag-production' },
             { text: 'Agentic RAG 智能体检索', link: '/rag/agentic-rag' },
@@ -421,7 +422,9 @@ function sidebarTraining() {
         { text: '数据工程与合成数据', link: '/pretraining/data-engineering' },
         { text: '缩放定律与涌现能力', link: '/pretraining/scaling-law' },
         { text: '分布式训练与显存优化', link: '/pretraining/distributed-training' },
-        { text: 'AI 训练集群与网络通信', link: '/pretraining/ai-infra-networking' }
+        { text: 'AI 训练集群与网络通信', link: '/pretraining/ai-infra-networking' },
+        { text: 'MoE 训练与专家并行', link: '/pretraining/moe-training' },
+        { text: '大模型训练全流程（从0到1）', link: '/pretraining/llm-training-pipeline' }
       ]
     },
     {
