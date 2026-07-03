@@ -286,6 +286,7 @@ export default defineConfig({
           items: [
             { text: 'LangChain 与应用框架', link: '/engineering/langchain' },
             { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
+            { text: '模型网关与多模型路由', link: '/engineering/llm-gateway' },
             { text: 'AI 编程工具实战', link: '/engineering/ai-coding-tools' },
             { text: 'AI 编程与 Coding Agent', link: '/engineering/coding-agent' },
             { text: '编程 Agent 底层架构与机制', link: '/engineering/coding-agent-internals' },

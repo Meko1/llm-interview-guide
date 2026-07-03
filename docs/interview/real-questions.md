@@ -82,6 +82,17 @@
 5. **如何评估和监控一个上线的 RAG 系统？** 检索与生成分开评（RAGAS）、线上反馈、bad case 分析、持续迭代。
 6. **客服场景下怎么降低幻觉、保证可信？** RAG 溯源 + Prompt 约束 + 拒答机制 + 人工兜底。→ [模型评估与幻觉](/evaluation/evaluation)
 
+### 系统设计专题追问
+
+> 系统设计题不要背架构图，要能按「需求澄清 → 指标 → 主链路 → 数据流 → 可靠性 → 评估 → 成本 → 演进」讲完整。模板见 [AI 系统设计专题](../engineering/system-design)。
+
+1. **设计一个统一模型网关**：如何做虚拟 Key、RPM/TPM 限流、多模型路由、failover、计费和审计？→ [模型网关与多模型路由](../engineering/llm-gateway)
+2. **设计一个 Agent 任务执行平台**：如何做工具注册、权限、状态管理、记忆、限步数、人工确认和轨迹回放？→ [Agent 评估](../agent/agent-evaluation)
+3. **设计一个高并发推理平台**：如何拆 TTFT/TPOT、排队、连续批处理、量化、KV Cache、GPU 调度和降级？→ [推理性能压测](../inference/inference-benchmark)
+4. **设计一个企业级 RAG 平台**：如何支持多租户、多数据源、权限过滤、增量索引、引用溯源和 RAG 评估？→ [RAG 生产化](../rag/rag-production)
+5. **设计一个 AI Coding 平台**：如何管理项目规则、上下文索引、Agent 执行权限、代码审查、测试门禁和回滚？→ [AI 编程工具实战](../engineering/ai-coding-tools)
+6. **设计一个模型评估与回归平台**：如何管理评测集、prompt 版本、模型版本、LLM-as-Judge、人工标注和上线门禁？→ [模型评估](../evaluation/evaluation)
+
 ---
 
 ## 手撕 / 编码题

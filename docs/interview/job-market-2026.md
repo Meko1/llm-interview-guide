@@ -242,6 +242,20 @@ Infra 项目讲指标和压测：
 4. 指标：优化前后有什么变化。
 5. 反思：还有什么限制，下一步怎么做。
 
+## 系统设计必会清单
+
+系统设计是 2026 大模型岗位的分水岭：能把知识点讲成生产系统，才像真正做过。至少准备这 5 类题：
+
+| 题型 | 必须讲清 | 对应补课 |
+| --- | --- | --- |
+| 企业知识库 RAG | 离线索引、在线检索、权限过滤、引用溯源、评估闭环 | [AI 系统设计专题](../engineering/system-design) / [RAG 生产化](../rag/rag-production) |
+| Agent 任务平台 | 工具注册、状态管理、失败恢复、人工确认、轨迹评估 | [Agent 评估](../agent/agent-evaluation) |
+| 模型网关 | 虚拟 Key、RPM/TPM、模型路由、failover、计费审计 | [模型网关与多模型路由](../engineering/llm-gateway) |
+| 推理服务平台 | TTFT/TPOT、连续批处理、KV Cache、量化、GPU 调度 | [推理性能压测](../inference/inference-benchmark) |
+| AI Coding 平台 | 上下文索引、权限边界、review gate、测试门禁、回滚 | [AI 编程工具实战](../engineering/ai-coding-tools) |
+
+准备每类题时都按八段式回答：需求、规模、指标、主链路、数据流、可靠性、评估、演进。不要只画组件，要讲权衡和失败预案。
+
 ## 4 周冲刺路线
 
 | 周次 | 目标 | 每天要做什么 | 产出物 |
