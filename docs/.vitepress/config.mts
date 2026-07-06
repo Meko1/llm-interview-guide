@@ -115,6 +115,7 @@ export default defineConfig({
               { text: '强化学习基础（面向 LLM）', link: '/advanced/rl-basics' },
               { text: 'Agentic RL（智能体强化学习）', link: '/advanced/agentic-rl' },
               { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' },
+              { text: '扩散语言模型（Diffusion LLM）', link: '/advanced/diffusion-llm' },
               { text: '具身智能与 VLA', link: '/advanced/embodied-ai' }
             ]
           },
@@ -352,6 +353,7 @@ export default defineConfig({
             { text: '强化学习基础（面向 LLM）', link: '/advanced/rl-basics' },
             { text: 'Agentic RL（智能体强化学习）', link: '/advanced/agentic-rl' },
             { text: '状态空间模型与 Mamba', link: '/advanced/state-space-models' },
+            { text: '扩散语言模型（Diffusion LLM）', link: '/advanced/diffusion-llm' },
             { text: '具身智能与 VLA', link: '/advanced/embodied-ai' }
           ]
         },
