@@ -234,6 +234,18 @@ Infra 项目讲指标和压测：
 | “负责模型推理性能优化，包括 KV Cache、显存优化、并发调度” | 推理框架、显存估算、调度 | 长上下文 + 高并发下怎么避免 OOM？ |
 | “熟悉 Java、Spring AI、LLM 框架、SSE” | 企业后端 AI 集成 | 大模型调用慢，Java 接口怎么设计不阻塞？ |
 
+## 基础篇技能怎么补
+
+如果 JD 同时出现 Spring AI、LangChain、LangGraph、Dify、RAG、Function Calling、LoRA、DPO、MaaS、Agent 评测这些词，不要按词孤立背。先走一遍 [大模型基础篇岗位要求总纲](./foundation-requirements)，把它们归到 12 类能力里：
+
+- **应用接入**：Spring AI、LangChain、结构化输出、SSE。
+- **任务编排**：Workflow、LangGraph、Agent、Function Calling、MCP。
+- **知识增强**：RAG、Memory、Dify Knowledge、权限过滤。
+- **模型适配**：SFT、PEFT、LoRA、QLoRA、RLHF、DPO。
+- **平台治理**：MaaS、模型网关、评估、成本、安全合规。
+
+准备顺序建议是：先补基础篇词表，再准备系统设计。基础篇让你能答“这是什么、怎么用、和谁对比”；系统设计让你能答“如何上线、如何治理、如何评估”。
+
 准备时不要只背定义。每个能力点都准备一段“真实排障”：
 
 1. 现象：线上出现了什么问题。

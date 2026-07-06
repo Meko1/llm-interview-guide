@@ -87,6 +87,8 @@ Anthropic 给出的经典区分：
 
 经验路径：低代码做 PoC 验证价值 → 跑通后核心链路用代码重写保证可控性。
 
+低代码平台本身也会成为面试题：Dify 的 Chatflow、Workflow、Knowledge、Tool 如何分工，PoC 到生产要补哪些治理能力，详见 [Dify 与低代码智能工作流](/engineering/dify-workflow)。
+
 ## 高频追问
 
 **Q：Workflow 和 Agent 的本质区别？**

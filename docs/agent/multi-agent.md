@@ -48,6 +48,8 @@
 - **LangGraph**：用**图（State/Node/Edge）**显式编排有状态、可循环、带条件分支的工作流，可控性强，是构建可靠 Agent 工作流的主流选择。
 - **MetaGPT**：模拟软件公司角色（产品/架构/工程师），用 SOP 把流程标准化。
 
+如果面试官继续追问 LangGraph 的 State、Node、Edge、Checkpoint、人审和失败回放，不要只用“图编排”四个字带过，建议直接按 [LangGraph 与状态图 Agent](/engineering/langgraph) 的状态图模板回答。
+
 ## 工程难点
 
 - **误差累积**：多步/多 Agent 链路上，每步的小错会逐级放大。对策：加校验节点、人类介入（human-in-the-loop）、限制自由度。

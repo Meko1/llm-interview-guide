@@ -110,6 +110,23 @@
 
 > 准备建议：手撕题重在「能写出核心逻辑 + 讲清每步在干嘛」，先吃透 [Attention](/basics/attention) 和 [解码采样](/basics/decoding) 的公式。
 
+## 基础篇 12 类高频追问
+
+> 这组题覆盖 Boss/JD 里最常出现的基础篇技能词。完整准备路径见 [大模型基础篇岗位要求总纲](./foundation-requirements)。
+
+1. **Spring AI / Java AI**：Spring AI 相比自己封装 HTTP 有什么收益？Java 服务如何做 SSE、超时、限流、审计和权限隔离？→ [Spring AI 基础与面试题](../engineering/spring-ai)
+2. **LangChain**：Model、Prompt Template、Output Parser、Retriever、Tool、Runnable 分别解决什么问题？什么时候不用框架更好？→ [LangChain 与应用框架](../engineering/langchain)
+3. **LangGraph**：为什么复杂 Agent 要从 Chain 走向 Graph？State、Node、Edge、Checkpoint、人审分别怎么讲？→ [LangGraph 与状态图 Agent](../engineering/langgraph)
+4. **Agent 基础**：ReAct、Plan-and-Execute、Reflexion 分别适合什么场景？Agent 如何防死循环和跑偏？→ [Agent 基础](../agent/agent-basics)
+5. **RAG / 知识库**：RAG 离线索引和在线问答怎么拆？切分、混合检索、Rerank、引用溯源、权限过滤怎么做？→ [RAG 基础](../rag/rag-basics)
+6. **Dify / 低代码**：Dify 的 Chatflow、Workflow、Knowledge、Tool 怎么分工？PoC 到生产要补哪些治理能力？→ [Dify 与低代码智能工作流](../engineering/dify-workflow)
+7. **智能工作流**：Workflow 和 Agent 的本质区别是什么？五种工作流模式如何组合？为什么能用 Workflow 就别上 Agent？→ [AI 工作流 vs Agent](../agent/workflow)
+8. **Function Calling / MCP**：模型会自己执行函数吗？工具 schema 怎么设计？MCP 比普通 HTTP 工具有何价值？→ [Function Calling 与 MCP](../agent/function-calling-mcp)
+9. **SFT / PEFT / LoRA / QLoRA**：LoRA 为什么低成本有效？QLoRA 省显存在哪里？微调后如何评估灾难遗忘？→ [微调范式](../finetuning/finetuning)
+10. **RLHF / DPO**：RLHF 为什么需要 Reward Model？DPO 如何简化偏好优化？安全对齐和过度拒绝如何平衡？→ [RLHF / DPO 对齐](../finetuning/rlhf)
+11. **MaaS 平台**：如何设计模型目录、虚拟 Key、租户配额、计费账单、多模型路由和评测门禁？→ [MaaS 平台与模型服务治理](../engineering/maas-platform)
+12. **Agent 评测与安全合规**：为什么不能只看最终答案？工具越权、Prompt Injection、敏感数据泄露和高危动作怎么防？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
+
 ## 2026 岗位驱动追问
 
 > 这组题来自 2026 年 LLM 应用、Agent、RAG/Memory、Java AI、AI Infra 类 JD 的共性要求。完整能力地图见 [2026 大模型岗位能力地图](./job-market-2026)。

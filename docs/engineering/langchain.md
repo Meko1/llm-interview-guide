@@ -57,6 +57,8 @@ result = chain.invoke({"question": "什么是 RAG?"})
 
 LangChain vs LlamaIndex 一句话：**前者以「流程编排」为中心，后者以「数据/索引」为中心**；可组合——LlamaIndex 做检索层、LangGraph 做编排层。
 
+如果目标是 Java/Spring 存量系统，优先看 [Spring AI 基础与面试题](/engineering/spring-ai)：它更贴近 Spring Boot、权限、审计、SSE 和微服务治理。如果目标是复杂有状态 Agent，继续看 [LangGraph 与状态图 Agent](/engineering/langgraph)：它把 Agent 的循环、分支、人审和 checkpoint 显式化。如果目标是业务 PoC 或低代码流程，先看 [Dify 与低代码智能工作流](/engineering/dify-workflow)，再决定是否迁移到代码框架。
+
 ## 可观测性：LangSmith 与同类
 
 LLM 应用是非确定性黑盒，生产必须能追踪每步的输入输出、token、延迟、错误。LangSmith（官方）、Langfuse（开源自部署）、Helicone 等提供链路追踪 + 评估 + 监控。没有 trace 的 Agent 故障排查 = 盲人摸象；评估闭环方法见 [模型评估](/evaluation/evaluation)。

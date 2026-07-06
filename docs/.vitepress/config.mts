@@ -158,6 +158,7 @@ export default defineConfig({
         activeMatch: '/interview/',
         items: [
           { text: '2026 岗位能力地图', link: '/interview/job-market-2026' },
+          { text: '基础篇岗位要求总纲', link: '/interview/foundation-requirements' },
           { text: '高频面试题速记', link: '/interview/high-frequency' },
           { text: '手撕代码题解集', link: '/interview/coding-problems' },
           { text: '分岗位面试真题', link: '/interview/real-questions' },
@@ -288,8 +289,12 @@ export default defineConfig({
           text: '工程实战',
           items: [
             { text: 'LangChain 与应用框架', link: '/engineering/langchain' },
+            { text: 'Spring AI 基础与面试题', link: '/engineering/spring-ai' },
+            { text: 'LangGraph 与状态图 Agent', link: '/engineering/langgraph' },
             { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
+            { text: 'Dify 与低代码工作流', link: '/engineering/dify-workflow' },
             { text: '模型网关与多模型路由', link: '/engineering/llm-gateway' },
+            { text: 'MaaS 平台与模型服务治理', link: '/engineering/maas-platform' },
             { text: 'AI 编程工具实战', link: '/engineering/ai-coding-tools' },
             { text: 'AI 编程与 Coding Agent', link: '/engineering/coding-agent' },
             { text: '编程 Agent 底层架构与机制', link: '/engineering/coding-agent-internals' },
@@ -305,6 +310,7 @@ export default defineConfig({
           text: '面试专题',
           items: [
             { text: '2026 岗位能力地图', link: '/interview/job-market-2026' },
+            { text: '基础篇岗位要求总纲', link: '/interview/foundation-requirements' },
             { text: '高频面试题速记', link: '/interview/high-frequency' },
             { text: '手撕代码题解集', link: '/interview/coding-problems' },
             { text: '分岗位面试真题', link: '/interview/real-questions' },
