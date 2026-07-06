@@ -104,3 +104,24 @@ LlamaIndex 围绕「数据 → 索引 → 查询引擎」：Document/Node 切分
 
 **Q：框架版本升级踩过什么坑？（经验题）**
 可答：LangChain 0.x→0.1/0.2 的大规模 API 迁移、隐式 prompt 包装变化导致行为漂移、依赖冲突。应对：锁版本、薄封装隔离框架 API、关键行为回归测试兜底。
+
+## 面试专项：LangChain 生产风险控制
+
+LangChain 的强项是生态和速度，风险是抽象和变化。面试里要能说出“怎么用它，但不被它绑架”。
+
+| 风险 | 表现 | 控制手段 |
+| --- | --- | --- |
+| 抽象泄漏 | 出错栈很深，不知道真实 prompt、retriever、tool 输入 | 全链路 callback/trace；关键步骤显式打日志；保留 request_id |
+| 版本升级 | Runnable、Agent、Retriever API 或默认行为变化 | 锁依赖版本；框架 API 外包一层 adapter；升级先跑评估集 |
+| 隐式 prompt 改动 | 框架默认模板变化导致输出风格漂移 | 核心 prompt 显式管理和版本化；不要依赖默认 prompt |
+| 工具调用黑盒 | Agent 为什么选某个工具不可解释 | 限制工具集合；记录 tool selection；为工具选择单独做评估 |
+| RAG 组件堆叠 | loader、splitter、retriever、reranker 混用后难定位 | 检索和生成分开评估；固定数据集做 Recall@K 和忠实度回归 |
+| 性能和成本 | 链路多跳、callback 重、上下文拼接过长 | 拆 token 账单；缓存中间结果；把稳定链路迁成薄封装 |
+
+### 什么时候“毕业”出框架
+
+当链路已经稳定、逻辑简单、性能敏感、团队需要强测试和强审计时，可以从 LangChain 毕业为直接 SDK + 自研薄封装。保留框架思想和评估资产，但不让核心业务依赖深层框架对象。
+
+面试可以这样说：
+
+> 我会用 LangChain 快速验证 RAG/工具编排，但生产核心链路会有边界：prompt、retriever、tool schema、output parser 都由我们自己版本化；框架外包一层 adapter；每次升级跑 golden set、bad case 和成本延迟回归。如果链路足够稳定，就把它收敛成直接 SDK 调用，降低长期维护风险。

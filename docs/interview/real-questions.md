@@ -139,6 +139,19 @@
 4. 企业 Java 系统接入大模型时，为什么不能让业务代码直接散落调用各家模型 API？模型网关应封装哪些能力？
 5. 大模型调用很慢且价格高，如何在 Java 微服务里做异步、限流、排队、降级和缓存？
 
+### 框架与智能工作流追问
+
+1. Spring AI、LangChain、LangGraph、Dify、直接 SDK 怎么选？请按团队栈、流程复杂度和治理要求回答。→ [框架与智能工作流高频问答](./framework-workflow-qna)
+2. Spring AI 服务里 SSE 输出到一半模型超时或内容审核失败，前端事件和后端日志怎么设计？→ [Spring AI 基础与面试题](../engineering/spring-ai)
+3. Java 同步 Servlet、异步线程池、WebFlux 三种方式接大模型流式输出，分别适合什么并发场景？→ [Spring AI 基础与面试题](../engineering/spring-ai)
+4. LangChain 版本升级导致 prompt 或链路行为漂移，如何用薄封装、锁版本、trace 和 golden set 控风险？→ [LangChain 与应用框架](../engineering/langchain)
+5. 一个 LangChain PoC 什么时候应该迁到 LangGraph，什么时候应该毕业为直接 SDK + 薄封装？→ [LangChain 与应用框架](../engineering/langchain)
+6. LangGraph 的 State 里哪些字段应该持久化，哪些只应该作为临时运行态？→ [LangGraph 与状态图 Agent](../engineering/langgraph)
+7. Checkpoint 恢复时，如果工具已经真实执行过，如何防止重复扣款、重复发邮件或重复建单？→ [LangGraph 与状态图 Agent](../engineering/langgraph)
+8. Dify PoC 跑通后，哪些配置可以迁移，哪些能力必须在后端服务里重做？→ [Dify 与低代码智能工作流](../engineering/dify-workflow)
+9. 工作流里的 gate/validator 应该检查什么？哪些检查不能交给 LLM 判断？→ [AI 工作流 vs Agent](../agent/workflow)
+10. 写操作工具如何设计幂等键、审批、审计日志和回滚策略？→ [Function Calling 与 MCP](../agent/function-calling-mcp)
+
 ### Agent 工程
 
 1. 什么时候用固定 Workflow，什么时候用 Agent？请给出一个你会拒绝使用 Agent 的业务场景。→ [AI 工作流 vs Agent](../agent/workflow)

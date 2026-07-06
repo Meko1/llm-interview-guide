@@ -95,6 +95,24 @@ Web / App / 客服台
 **Q：Spring AI 项目怎么讲成本控制？**  
 按租户、应用、模型记录输入/输出 token；简单意图用小模型或规则分类；高频问题做缓存；RAG 控制 Top-K 和上下文长度；模型超时或预算超限时降级到 FAQ、短回答或人工。
 
+## 面试专项：Spring AI 生产排障
+
+Spring AI 面试最容易从“你会用 ChatClient 吗”转向“线上出问题怎么排”。可以按 **入口、模型、RAG、工具、输出、观测** 六层回答。
+
+| 线上现象 | 常见原因 | 排查与修复 |
+| --- | --- | --- |
+| SSE 流到一半中断 | 客户端断开、上游超时、代理缓冲、连接数耗尽 | 监听断开事件取消上游请求；设置心跳和超时；Nginx 关闭缓冲；记录 partial response |
+| Java 线程池被拖满 | 同步阻塞等待慢模型，缺少超时和并发隔离 | AI 调用使用独立线程池/异步/WebFlux；设置 bulkhead、timeout、熔断 |
+| RAG 偶发越权 | 只在 prompt 里写权限，检索层未过滤 | tenant/role/doc ACL 前置到 VectorStore 和 BM25；生成前二次校验引用文档 |
+| Tool Calling 调错业务 API | 工具描述模糊、参数太自由、读写工具混放 | schema 变窄；只读/写操作分开；写操作加确认；工具输出结构化错误码 |
+| JSON 输出不稳定 | 只靠自然语言约束，解析失败无恢复 | 使用结构化输出/Output Converter；失败时解析重试；关键字段服务端校验 |
+| 成本突然升高 | Top-K 过大、长上下文、循环调用、缓存失效 | token 计量按 app/tenant/prompt_version 拆账；预算熔断；模型路由和缓存 |
+| 换模型后效果漂移 | prompt、工具 schema、拒答风格不兼容 | 通过模型网关灰度；跑 golden set 和 bad case；保留旧模型回滚 |
+
+### 面试可复述版本
+
+> 我不会把 Spring AI 项目只讲成调用 ChatClient。生产排障会先看入口层的 SSE 和线程池，再看模型调用的超时、限流、重试和 fallback；RAG 问题拆检索、权限和上下文；Tool Calling 问题拆 schema、授权、幂等和错误码；最后用 trace 把 prompt、模型、token、工具调用和引用文档串起来。这样才能定位是模型问题、业务 API 问题，还是工程治理问题。
+
 ## 项目讲法
 
 银行客服 Agent 可以这样讲：
