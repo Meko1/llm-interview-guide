@@ -154,6 +154,25 @@ MCP 让模型能连接真实系统，安全边界至关重要：
 - **凭证管理**：Server 持有的 API key/token 要妥善保管，避免泄露。
 - **工具影子/混淆**：恶意 Server 可能伪装成可信工具或篡改其他工具行为 → 校验来源、隔离。
 
+## MCP 生产落地检查清单
+
+面试问“公司要做内部 MCP Server，你怎么保证能上线”，可以按这张清单答：
+
+| 检查项 | 要求 | 为什么 |
+| --- | --- | --- |
+| Server Owner | 每个 Server 有 owner、仓库、版本、SLA 和下线流程 | 防止无人维护的工具进入生产 |
+| Auth | Host/Client 传递用户身份，Server 侧做权限校验 | Server 不能信任模型生成的参数 |
+| Tool Schema Version | 工具 schema 版本化，破坏性变更换版本或工具名 | 防止旧 prompt/旧客户端行为漂移 |
+| Resource Permission | resources/read 必须按租户、角色、路径做 ACL | 防跨租户数据泄露 |
+| Audit Log | 记录 tool、参数摘要、用户、trace_id、耗时、错误码 | 出问题可追溯 |
+| Secret 管理 | API Key 不出现在工具描述和模型上下文里 | 防凭证泄露 |
+| Result Minimization | 返回最小必要字段，长结果分页或句柄化 | 降 token 成本，也降低泄密面 |
+| Fallback | Server 不可用时返回结构化错误或备用能力 | Agent 能恢复，而不是死循环 |
+
+一句话总结：
+
+> MCP Server 是生产系统边界，不是给模型开的万能后门。工具执行前后都要有鉴权、校验、审计和降级。
+
 ## 十一、高频追问
 
 **Q：MCP 和 Function Calling 是一回事吗？** 不是。Function Calling 是模型层能力（输出调用意图）；MCP 是应用集成层协议（统一工具的提供、发现、调用）。MCP 内部仍借助模型的 FC 来发起调用，二者不同层次、互补。

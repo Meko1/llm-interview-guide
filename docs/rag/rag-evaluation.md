@@ -35,6 +35,18 @@ RAG 答错可能来自两个完全不同的环节：
 
 面试口诀：**先看检索，再看生成；检索没召回，prompt 救不了**。
 
+### 检索评估和生成评估怎么拆
+
+面试里可以用“同一个问题，两份输入”来解释：
+
+| 评估对象 | 输入 | 输出 | 代表指标 | 能定位什么 |
+| --- | --- | --- | --- | --- |
+| 检索评估 | question + relevant_chunks 标注 | 检索 Top-K | Recall@K、MRR、NDCG、Context Precision | 切分、召回、过滤、排序问题 |
+| 生成评估 | question + retrieved_context + answer | 答案质量判断 | Faithfulness、Answer Relevancy、Correctness、Citation Accuracy | 幻觉、跑题、引用错误、拒答问题 |
+| 端到端评估 | question -> final answer | 用户侧结果 | 任务成功率、采纳率、转人工率 | 业务价值 |
+
+如果没有标注相关 chunk，也要至少保存每次 query 的 Top-K、rerank 分数、最终上下文和答案。否则线上 bad case 没法判断是检索错还是生成错。
+
 ## 二、检索质量指标
 
 | 指标 | 含义 | 关注 |

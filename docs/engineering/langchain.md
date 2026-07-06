@@ -59,6 +59,20 @@ LangChain vs LlamaIndex 一句话：**前者以「流程编排」为中心，后
 
 如果目标是 Java/Spring 存量系统，优先看 [Spring AI 基础与面试题](/engineering/spring-ai)：它更贴近 Spring Boot、权限、审计、SSE 和微服务治理。如果目标是复杂有状态 Agent，继续看 [LangGraph 与状态图 Agent](/engineering/langgraph)：它把 Agent 的循环、分支、人审和 checkpoint 显式化。如果目标是业务 PoC 或低代码流程，先看 [Dify 与低代码智能工作流](/engineering/dify-workflow)，再决定是否迁移到代码框架。
 
+### 面试专项：框架选型表
+
+| 方案 | 选它的理由 | 不选它的理由 |
+| --- | --- | --- |
+| Spring AI | Java/Spring 存量系统、权限审计、SSE、微服务治理自然接入 | Python Agent/RAG 生态更丰富，复杂状态图要另配 |
+| LangChain | 生态广、PoC 快、模型/向量库/工具适配多 | 抽象层多、版本变化快，核心链路要薄封装隔离 |
+| LangGraph | 有状态、多分支、可回放、需要 checkpoint 和人审 | 简单线性流程会显得重 |
+| Dify | 低代码 PoC、业务人员可维护、内置知识库和发布 | 复杂生产逻辑、严格测试和灰度能力有限 |
+| 直接 SDK | 简单稳定、性能敏感、完全可控 | RAG/Agent/观测/工具治理要自建 |
+
+一句话回答：
+
+> 我按团队栈和流程复杂度选。Java 企业系统优先 Spring AI，Python 快速编排用 LangChain，复杂 Agent 用 LangGraph，业务 PoC 用 Dify，简单核心链路用直接 SDK 加薄封装。
+
 ## 可观测性：LangSmith 与同类
 
 LLM 应用是非确定性黑盒，生产必须能追踪每步的输入输出、token、延迟、错误。LangSmith（官方）、Langfuse（开源自部署）、Helicone 等提供链路追踪 + 评估 + 监控。没有 trace 的 Agent 故障排查 = 盲人摸象；评估闭环方法见 [模型评估](/evaluation/evaluation)。

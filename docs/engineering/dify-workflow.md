@@ -2,6 +2,8 @@
 
 > Dify、Coze、n8n 这类平台把大模型应用从“写代码”变成“搭流程”。面试里问 Dify，不是只问你会不会拖节点，而是看你是否理解低代码 PoC、RAG、Agent、Workflow、工具集成和生产治理的边界。工作流理论见 [AI 工作流 vs Agent](/agent/workflow)，代码化编排见 [LangGraph 与状态图 Agent](/engineering/langgraph)。
 
+面试前如果要快速对比 Dify、Spring AI、LangChain、LangGraph 和直接 SDK，先看 [基础篇高频问答加厚版](/interview/foundation-qna)。
+
 ## 面试先背这几句话
 
 - Dify 是开源 LLM 应用平台，核心能力包括 Chatflow、Workflow、Knowledge、Tool、Agent 和应用发布。

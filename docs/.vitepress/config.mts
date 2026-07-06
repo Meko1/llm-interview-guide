@@ -159,6 +159,7 @@ export default defineConfig({
         items: [
           { text: '2026 岗位能力地图', link: '/interview/job-market-2026' },
           { text: '基础篇岗位要求总纲', link: '/interview/foundation-requirements' },
+          { text: '基础篇高频问答加厚版', link: '/interview/foundation-qna' },
           { text: '高频面试题速记', link: '/interview/high-frequency' },
           { text: '手撕代码题解集', link: '/interview/coding-problems' },
           { text: '分岗位面试真题', link: '/interview/real-questions' },
@@ -311,6 +312,7 @@ export default defineConfig({
           items: [
             { text: '2026 岗位能力地图', link: '/interview/job-market-2026' },
             { text: '基础篇岗位要求总纲', link: '/interview/foundation-requirements' },
+            { text: '基础篇高频问答加厚版', link: '/interview/foundation-qna' },
             { text: '高频面试题速记', link: '/interview/high-frequency' },
             { text: '手撕代码题解集', link: '/interview/coding-problems' },
             { text: '分岗位面试真题', link: '/interview/real-questions' },

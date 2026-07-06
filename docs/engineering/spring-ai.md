@@ -2,6 +2,8 @@
 
 > Spring AI 是 Java/Spring 生态里的大模型应用抽象层。面试里出现 Spring AI，通常不是在考你背 API，而是在考你能不能把 LLM 能力接入已有 Java 后端、权限体系、日志审计、配置中心和微服务治理。应用全链路见 [LLM 应用开发实战](/engineering/llm-app-dev)，框架对比见 [LangChain 与应用框架](/engineering/langchain)。
 
+面试前需要速刷 Spring AI、LangChain、Dify、Agent、RAG 的横向追问，可配合 [基础篇高频问答加厚版](/interview/foundation-qna)。
+
 ## 面试先背这几句话
 
 - Spring AI 的定位是：在 Spring Boot 里统一模型调用、Prompt 模板、Embedding、VectorStore、Tool Calling 和 RAG 组件。

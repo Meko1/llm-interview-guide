@@ -2,6 +2,8 @@
 
 > 把全站核心考点浓缩成「一问一答」速查卡，适合面试前快速过一遍。每题都链接到对应详解页，想深入就点进去。手撕环节请配合 [手撕代码题解集](/interview/coding-problems) 一起准备。
 
+如果你的目标岗位 JD 里出现 Spring AI、LangChain、LangGraph、Dify、MaaS、Agent 评测等工程词，先看 [基础篇高频问答加厚版](/interview/foundation-qna)，它更偏岗位追问和项目复述。
+
 ## 一、Transformer 与基础
 
 **Transformer 为什么能取代 RNN？** 并行训练（不必按时间步串行）、长距离依赖建模（任意位置 O(1) 路径）、易扩展。代价是 Attention O(n²)。详见 [Transformer](/basics/transformer)。

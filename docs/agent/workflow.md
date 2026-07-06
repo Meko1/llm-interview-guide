@@ -89,6 +89,21 @@ Anthropic 给出的经典区分：
 
 低代码平台本身也会成为面试题：Dify 的 Chatflow、Workflow、Knowledge、Tool 如何分工，PoC 到生产要补哪些治理能力，详见 [Dify 与低代码智能工作流](/engineering/dify-workflow)。
 
+## 面试专项：场景怎么选型
+
+| 场景 | 推荐方案 | 为什么 |
+| --- | --- | --- |
+| FAQ 问答、制度咨询 | RAG + 固定 Workflow | 流程稳定，重点是检索和引用 |
+| 退款/报销审批 | Workflow + 少量 LLM 节点 | 强规则、强审计，不适合自由 Agent |
+| 复杂代码修复 | Agent / LangGraph | 要动态读文件、跑测试、根据反馈调整 |
+| 多数据源调研报告 | Orchestrator-Workers / LangGraph | 子任务数量和资料来源运行时决定 |
+| 业务快速 PoC | Dify / Coze | 业务人员能快速改流程和知识库 |
+| 核心生产链路 | 代码化 Workflow / LangGraph / Spring AI | 需要测试、版本控制、权限和可观测 |
+
+面试答法：
+
+> 我不会一上来就说用 Agent。先看流程是否能预先确定、是否有副作用、是否强合规、是否需要动态探索。确定性强的用 Workflow，业务 PoC 用 Dify，动态多步任务才用 Agent 或 LangGraph。
+
 ## 高频追问
 
 **Q：Workflow 和 Agent 的本质区别？**
