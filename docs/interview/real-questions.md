@@ -164,6 +164,19 @@
 4. GPTQ、AWQ、GGUF、INT8/INT4 怎么选？量化后如何证明效果没有明显下降？
 5. 设计一个私有化大模型部署方案：模型选型、显卡、量化、推理框架、高可用、监控和成本怎么讲？
 
+### 微调与模型平台追问
+
+1. SFT 和 PEFT 是一回事吗？为什么 SFT 通常只对 assistant 回答算 loss？→ [微调范式](../finetuning/finetuning)
+2. 微调后线上效果变差，你如何按数据、模板、训练、评估、上线五层排障？→ [微调范式](../finetuning/finetuning)
+3. LoRA 的低秩假设是什么？`r`、`alpha`、`target_modules` 怎么定？为什么 r 不一定越大越好？→ [LoRA / QLoRA](../finetuning/lora)
+4. QLoRA 量化的是哪部分？NF4、双重量化、分页优化器分别解决什么？→ [LoRA / QLoRA](../finetuning/lora)
+5. LoRA 能不能注入新知识？为什么企业知识库通常还是要 RAG？→ [微调与模型平台高频问答](./finetuning-platform-qna)
+6. RLHF 的三阶段是什么？PPO 为什么要维护多个模型？DPO 如何简化这条链路？→ [RLHF / DPO 对齐](../finetuning/rlhf)
+7. DPO、KTO、ORPO、SimPO、GRPO 分别适合什么数据形态和任务？→ [偏好优化方法全景](../finetuning/preference-optimization)
+8. 如何构造偏好数据？如何防止 reward hacking、谄媚和过度拒答？→ [RLHF / DPO 对齐](../finetuning/rlhf)
+9. 设计一个企业 MaaS 平台：模型目录、虚拟 Key、配额、计费、路由、审计、评测门禁怎么做？→ [MaaS 平台与模型服务治理](../engineering/maas-platform)
+10. 新模型或新 LoRA 上线前要跑哪些评估？如何把 golden set、bad case、安全集、成本延迟接到 CI/CD？→ [模型评估与幻觉](../evaluation/evaluation)
+
 ### AI Coding / 工具提效
 
 1. Vibe Coding 和 Spec Coding 的区别是什么？为什么生产项目更推荐先写验收标准？→ [AI 编程工具实战](../engineering/ai-coding-tools)
