@@ -452,6 +452,7 @@ function sidebarTraining() {
         { text: 'RLHF / DPO 对齐', link: '/finetuning/rlhf' },
         { text: '偏好优化方法全景（DPO 变体）', link: '/finetuning/preference-optimization' },
         { text: '前沿对齐技术（GRPO/DAPO/RLVR）', link: '/finetuning/frontier-alignment' },
+        { text: '合成数据与自我改进', link: '/finetuning/synthetic-data' },
         { text: '模型融合与合并', link: '/finetuning/model-merging' },
         { text: '微调训练工具链实战', link: '/finetuning/training-frameworks' }
       ]
