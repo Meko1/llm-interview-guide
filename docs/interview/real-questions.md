@@ -109,6 +109,7 @@
 6. 实现 **交叉熵损失** 或一个简化的 **beam search**。
 7. 给定 logits，实现带 **重复惩罚** 的采样。
 8. 实现 **RoPE** 的旋转操作（进阶）。
+9. 实现 **Self-Consistency wrapper**：并发采样、答案归一化、多数投票、置信度提前停止。→ [手撕代码题解集](/interview/coding-problems)
 
 > 准备建议：手撕题重在「能写出核心逻辑 + 讲清每步在干嘛」，先吃透 [Attention](/basics/attention) 和 [解码采样](/basics/decoding) 的公式。
 

@@ -108,6 +108,8 @@
 
 **Test-time scaling 有哪些工程做法？** 垂直深化（long CoT / budget forcing）、水平并行（Self-Consistency / Best-of-N）、树/图搜索（ToT / MCTS / PRM-guided beam）。关键看有没有 verifier，以及 SLA/成本能否承受。详见 [推理时算力扩展](/inference/test-time-scaling)。
 
+**Self-Consistency 手撕怎么写？** 把模型调用抽象成 `generate_fn`，循环采样多条回答，先用 `parse_answer` 抽取可投票答案，再用 `Counter` 多数投票；提前停止要判断第二名即使拿满剩余票也追不上第一名。详见 [手撕代码题解集](/interview/coding-problems)。
+
 **Snell 2024 的 compute-optimal test-time scaling 怎么理解？** 不是“推理时算力永远划算”，而是在给定 FLOPs 预算下，不同难度题适合不同策略：简单题少想或修正，中等题用 PRM/Beam，难题可能需要 BoN 或更大模型。核心是先判断难度，再动态分配推理预算。
 
 **推理模型内建 long CoT 后，还要服务侧 BoN/SC 吗？** 高价值、可验证、可离线并行的任务仍有意义；实时聊天和低价值请求通常不值得。面试回答要把收益、延迟、token 成本、verifier 可靠性一起讲。

@@ -1,6 +1,6 @@
 # 大模型手撕代码题解集
 
-> 大模型岗位的手撕环节与传统算法题不同：考的不是 LeetCode 技巧，而是**你是否真的理解模型内部发生了什么**。本文收录最高频的 10 道手撕题，每道题给出可直接运行的 PyTorch 参考实现 + 考点解析 + 面试官常见追问，建议动手默写一遍而不是只看。
+> 大模型岗位的手撕环节与传统算法题不同：考的不是 LeetCode 技巧，而是**你是否真的理解模型内部发生了什么**。本文收录最高频的 11 道手撕题，每道题给出可直接运行的参考实现 + 考点解析 + 面试官常见追问，建议动手默写一遍而不是只看。
 
 ## 手撕题考察什么
 
@@ -10,6 +10,7 @@
 | RMSNorm / LayerNorm | ⭐⭐⭐⭐ | 归一化公式、数值稳定性 |
 | RoPE 旋转位置编码 | ⭐⭐⭐⭐ | 复数旋转、相对位置性质 |
 | Top-k / Top-p 采样 | ⭐⭐⭐⭐ | 解码策略、概率截断 |
+| Self-Consistency 投票 | ⭐⭐ | 多采样、答案归一化、置信度提前停止 |
 | 带 KV Cache 的解码 | ⭐⭐⭐ | Prefill/Decode 两阶段 |
 | LoRA 线性层 | ⭐⭐⭐ | 低秩分解、初始化策略 |
 | DPO Loss | ⭐⭐⭐ | 偏好对齐目标函数 |
@@ -168,7 +169,107 @@ def sample(logits, temperature=1.0, top_k=0, top_p=1.0):
 - **temperature** 改变分布形状（→0 趋近贪心，→∞ 趋近均匀）；**top-k** 固定候选数量；**top-p** 按累积概率自适应候选数量——分布尖锐时候选少、平坦时候选多，这是 top-p 优于 top-k 的原因。
 - 边界细节：top-p 的判断用"右移一位"的写法（`cum_probs - probs`），保证概率最高的 token 永远保留，否则 `top_p` 很小时会出现空候选集。
 
-## 六、手撕带 KV Cache 的解码循环
+## 六、手撕 Self-Consistency 投票
+
+这题考的是推理时算力扩展的工程落地：同一个问题采样多条推理链，抽取最终答案，做多数投票；当领先答案已经不可能被反超时提前停止。详见 [推理时算力扩展](/inference/test-time-scaling)。
+
+```python
+import re
+from collections import Counter
+from typing import Callable
+
+def parse_answer(text: str) -> str | None:
+    """把 CoT 输出解析成可投票的最终答案。
+    面试时先写数字/选项版本，复杂 parser 留作可替换模块。
+    """
+    text = text.strip().lower()
+
+    numbers = re.findall(r"-?\d+(?:\.\d+)?", text)
+    if numbers:
+        return numbers[-1]
+
+    choices = re.findall(r"\b[a-d]\b", text)
+    if choices:
+        return choices[-1].upper()
+
+    return None
+
+def self_consistency(
+    prompt: str,
+    generate_fn: Callable[..., str],
+    k: int = 16,
+    min_samples: int = 3,
+    temperature: float = 0.7,
+    top_p: float = 0.95,
+    max_new_tokens: int = 512,
+) -> tuple[str | None, Counter, list[str]]:
+    """采样 k 条回答，对解析出的最终答案做多数投票。
+
+    generate_fn 是可注入模型调用，便于测试；返回 winner、票数和原始样本。
+    """
+    votes = Counter()
+    samples = []
+
+    for i in range(k):
+        response = generate_fn(
+            prompt,
+            temperature=temperature,
+            top_p=top_p,
+            max_new_tokens=max_new_tokens,
+        )
+        samples.append(response)
+
+        answer = parse_answer(response)
+        if answer is None:
+            continue
+        votes[answer] += 1
+
+        if i + 1 < min_samples:
+            continue
+
+        winner, win_count = votes.most_common(1)[0]
+        runner_up = votes.most_common(2)[1][1] if len(votes) > 1 else 0
+        remaining = k - (i + 1)
+
+        # 第二名即使拿到剩余所有票也追不上，才可以提前停止
+        if win_count > runner_up + remaining:
+            return winner, votes, samples
+
+    if not votes:
+        return None, votes, samples
+    return votes.most_common(1)[0][0], votes, samples
+
+# 简单测试：4 票对 1 票，最终答案为 42
+answers = iter([
+    "我们一步步算，答案是 42",
+    "final answer: 41",
+    "答案：42",
+    "42",
+    "所以最终是 42",
+])
+
+winner, votes, samples = self_consistency(
+    "6 * 7 = ?",
+    generate_fn=lambda prompt, **kw: next(answers),
+    k=5,
+    min_samples=3,
+)
+assert winner == "42"
+assert votes["42"] == 4
+assert len(samples) == 5
+```
+
+**考点解析**：
+
+- **必须采样而不是 greedy**：Self-Consistency 依赖不同推理路径的多样性；如果每次贪心解码都一样，K 次调用没有意义。
+- **答案解析是核心边界**：数学题取最后一个数字，选择题取 A/B/C/D；解析失败的样本不要硬投票，应跳过或交给 verifier。
+- **提前停止不能只看当前领先**：要判断第二名在剩余票数全部拿满时也追不上第一名，否则会过早锁错答案。
+- **返回 samples 方便排查**：线上 bad case 要能看到每条 CoT 为什么投到某个答案，而不是只留下一个 winner。
+- **开放域任务不适合简单众数**：写作、摘要、RAG 问答没有唯一标准答案，通常要换 Best-of-N、LLM-as-Judge 或 reward model。
+
+**常见追问**：如果两个答案平票怎么办？——可以继续采样直到预算耗尽；预算耗尽仍平票时，用 verifier / reward model 打分，或者选择平均 logprob 更高的答案。不要随机返回，因为随机会让线上回归很难复现。
+
+## 七、手撕带 KV Cache 的解码循环
 
 ```python
 @torch.no_grad()
@@ -191,7 +292,7 @@ def generate(model, input_ids, max_new_tokens: int, eos_id: int):
 - **Prefill 是计算密集型**（大矩阵乘），**Decode 是访存密集型**（每步搬运整个 KV Cache 和权重），这是 vLLM/PagedAttention、投机解码等优化的出发点，详见 [推理优化](/inference/inference-optimization)。
 - Cache 显存公式：$2 \times L \times T \times n_{kv} \times d_{head} \times \text{字节数}$（2 = K 和 V），会被追问估算具体模型的数值。
 
-## 七、手撕 LoRA 线性层
+## 八、手撕 LoRA 线性层
 
 ```python
 class LoRALinear(nn.Module):
@@ -218,7 +319,7 @@ class LoRALinear(nn.Module):
 
 更多原理（r/α 选择、QLoRA、DoRA）见 [LoRA 详解](/finetuning/lora)。
 
-## 八、手撕 DPO Loss
+## 九、手撕 DPO Loss
 
 ```python
 def dpo_loss(pi_chosen, pi_rejected, ref_chosen, ref_rejected, beta=0.1):
@@ -239,7 +340,7 @@ def dpo_loss(pi_chosen, pi_rejected, ref_chosen, ref_rejected, beta=0.1):
 - $\beta$ 控制偏离参考模型的程度，作用类似 RLHF 中的 KL 系数；参考模型的存在防止模型为了拉开偏好差而崩坏。
 - 为什么 DPO 不需要奖励模型？——它利用 Bradley-Terry 模型把"最优策略与奖励的解析关系"代回偏好概率，把 RL 问题化成了监督学习，推导见 [RLHF / DPO 对齐](/finetuning/rlhf)。
 
-## 九、手撕简化版 BPE 训练
+## 十、手撕简化版 BPE 训练
 
 ```python
 from collections import Counter
@@ -279,7 +380,7 @@ def train_bpe(words: list[str], num_merges: int):
 - 实际工业实现（GPT 系列的 byte-level BPE）在**字节**而非字符上做 BPE，256 个初始字节保证任何字符串都能编码、无 UNK。
 - 常见追问：词表大小怎么选？——太小则序列变长、推理变慢；太大则 embedding 占参数多、低频 token 训练不充分。多语言模型（如 Qwen 152K）通常比英文模型（LLaMA 1/2 的 32K）大。
 
-## 十、手撕因果语言模型损失与困惑度
+## 十一、手撕因果语言模型损失与困惑度
 
 ```python
 def causal_lm_loss(logits, labels, ignore_index=-100):
