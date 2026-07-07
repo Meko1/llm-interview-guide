@@ -90,6 +90,8 @@
 
 **LangGraph 生产化最容易被追问什么？** State 四分法、checkpoint 恢复语义、HITL resume、写操作幂等、图版本升级、并行 State 合并、trace 和上线门禁。核心是把 Agent 当可恢复状态机，而不是黑盒 ReAct 循环。详见 [LangGraph 状态图 Agent 生产化高频问答](/interview/langgraph-production-qna)。
 
+**Spring AI 生产化怎么讲？** 重点不是少写 HTTP，而是把 ChatClient、RAG、Tool Calling、SSE 接入 Spring Security、限流、审计、模型网关和成本治理；SSE 要处理断开、超时、审核失败，RAG 权限要检索前过滤。详见 [Spring AI / Java AI 生产化高频问答](/interview/spring-ai-production-qna)。
+
 **Dify PoC 到生产要补什么？** 不只看 demo 能跑，要补版本、权限、评估、观测、成本、灰度、审计和迁移路径；知识库权限要检索前过滤，工具执行要后端鉴权，复杂状态和高危写操作应迁到代码服务。详见 [Dify 低代码工作流生产化高频问答](/interview/dify-production-qna)。
 
 **上下文工程四操作？** Write（持久化到外部）、Select（按需取回）、Compress（压缩历史）、Isolate（多 Agent 隔离上下文）。详见 [上下文工程](/agent/context-engineering)。

@@ -118,7 +118,7 @@
 
 > 这组题覆盖 Boss/JD 里最常出现的基础篇技能词。完整准备路径见 [大模型基础篇岗位要求总纲](./foundation-requirements)。
 
-1. **Spring AI / Java AI**：Spring AI 相比自己封装 HTTP 有什么收益？Java 服务如何做 SSE、超时、限流、审计和权限隔离？→ [Spring AI 基础与面试题](../engineering/spring-ai)
+1. **Spring AI / Java AI**：Spring AI 相比自己封装 HTTP 有什么收益？Java 服务如何做 SSE、超时、限流、审计和权限隔离？→ [Spring AI / Java AI 生产化高频问答](./spring-ai-production-qna)
 2. **LangChain**：Model、Prompt Template、Output Parser、Retriever、Tool、Runnable 分别解决什么问题？什么时候不用框架更好？→ [LangChain 与应用框架](../engineering/langchain)
 3. **LangGraph**：为什么复杂 Agent 要从 Chain 走向 Graph？State、Node、Edge、Checkpoint、人审分别怎么讲？→ [LangGraph 与状态图 Agent](../engineering/langgraph)
 4. **Agent 基础**：ReAct、Plan-and-Execute、Reflexion 分别适合什么场景？Agent 如何防死循环和跑偏？→ [Agent 基础](../agent/agent-basics)
@@ -139,7 +139,7 @@
 
 1. 你如何设计一个可上线的 LLM 应用后端？请覆盖模型接入、流式输出、结构化输出、限流、重试、日志和成本控制。→ [LLM 应用开发实战](../engineering/llm-app-dev)
 2. 如果模型返回的 JSON 偶发不合法，你会用 prompt 修复、解析重试、JSON Mode 还是 Schema 约束？怎么取舍？→ [结构化输出详解](../engineering/structured-output)
-3. Spring Boot 服务如何实现 SSE 流式返回？客户端断开、上游超时、内容审核分别怎么处理？→ [LLM 应用开发实战](../engineering/llm-app-dev)
+3. Spring Boot 服务如何实现 SSE 流式返回？客户端断开、上游超时、内容审核分别怎么处理？→ [Spring AI / Java AI 生产化高频问答](./spring-ai-production-qna)
 4. 企业 Java 系统接入大模型时，为什么不能让业务代码直接散落调用各家模型 API？模型网关应封装哪些能力？
 5. 大模型调用很慢且价格高，如何在 Java 微服务里做异步、限流、排队、降级和缓存？
 6. 高准确率问答服务什么时候启用 Self-Consistency / Best-of-N，什么时候直接单次生成？如何把 SLA 和预算接进路由？→ [推理时算力扩展](../inference/test-time-scaling)
@@ -147,8 +147,8 @@
 ### 框架与智能工作流追问
 
 1. Spring AI、LangChain、LangGraph、Dify、直接 SDK 怎么选？请按团队栈、流程复杂度和治理要求回答。→ [框架与智能工作流高频问答](./framework-workflow-qna)
-2. Spring AI 服务里 SSE 输出到一半模型超时或内容审核失败，前端事件和后端日志怎么设计？→ [Spring AI 基础与面试题](../engineering/spring-ai)
-3. Java 同步 Servlet、异步线程池、WebFlux 三种方式接大模型流式输出，分别适合什么并发场景？→ [Spring AI 基础与面试题](../engineering/spring-ai)
+2. Spring AI 服务里 SSE 输出到一半模型超时或内容审核失败，前端事件和后端日志怎么设计？→ [Spring AI / Java AI 生产化高频问答](./spring-ai-production-qna)
+3. Java 同步 Servlet、异步线程池、WebFlux 三种方式接大模型流式输出，分别适合什么并发场景？→ [Spring AI / Java AI 生产化高频问答](./spring-ai-production-qna)
 4. LangChain 版本升级导致 prompt 或链路行为漂移，如何用薄封装、锁版本、trace 和 golden set 控风险？→ [LangChain 与应用框架](../engineering/langchain)
 5. 一个 LangChain PoC 什么时候应该迁到 LangGraph，什么时候应该毕业为直接 SDK + 薄封装？→ [LangChain 与应用框架](../engineering/langchain)
 6. LangGraph 的 State 里哪些字段应该持久化，哪些只应该作为临时运行态？→ [LangGraph 生产化与系统设计](../engineering/langgraph-production)
