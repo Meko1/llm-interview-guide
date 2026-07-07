@@ -84,6 +84,8 @@
 
 **MCP 的三大原语？** Tools（模型可调用的操作）、Resources（可读取的数据）、Prompts（可复用模板）。Host-Client-Server 架构 + JSON-RPC，解决「M 个应用 × N 个工具」的重复集成。详见 [MCP 协议深入](/agent/mcp)。
 
+**MCP Server 生产化怎么讲？** 把 Server 当生产 API 治理：Registry 管 owner/版本/风险，Policy/Gateway 管鉴权/限流/灰度，Server 侧二次鉴权和审计，第三方 Server 做供应链评审，Resources 只读也要 ACL 和脱敏。详见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。
+
 **Agent 工具安全怎么做？** Prompt 不是安全边界，模型只提出调用意图；服务端按用户/租户/角色过滤工具集，执行前做 ACL 和策略校验，高危写操作走 prepare/commit + HITL + 幂等键，所有工具调用写 trace 和审计。详见 [Agent 工具安全与权限边界](/agent/tool-safety)。
 
 **LangGraph 生产化最容易被追问什么？** State 四分法、checkpoint 恢复语义、HITL resume、写操作幂等、图版本升级、并行 State 合并、trace 和上线门禁。核心是把 Agent 当可恢复状态机，而不是黑盒 ReAct 循环。详见 [LangGraph 状态图 Agent 生产化高频问答](/interview/langgraph-production-qna)。

@@ -179,7 +179,7 @@ MCP 是 Anthropic 于 2024 年提出的**开放标准协议**，规范「LLM 应
 | 定义方 | 各模型厂商 API | 开放标准（跨厂商） |
 | 关系 | MCP Client 拿到工具清单后，仍通过 FC 让模型发起调用 | MCP 在 FC 之上解决集成与复用 |
 
-> 一句话：**FC 是「模型会点菜」，MCP 是「统一的菜单格式和上菜通道」**。MCP 的传输方式（stdio/Streamable HTTP）、生命周期、鉴权与安全风险见 [MCP 协议深入](/agent/mcp)。
+> 一句话：**FC 是「模型会点菜」，MCP 是「统一的菜单格式和上菜通道」**。MCP 的传输方式（stdio/Streamable HTTP）、生命周期、鉴权与安全风险见 [MCP 协议深入](/agent/mcp)；企业内部 Server 平台、Registry、Gateway、审计和上线门禁见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。
 
 ### MCP 与普通插件/SDK 的区别
 
