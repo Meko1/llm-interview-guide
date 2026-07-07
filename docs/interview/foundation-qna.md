@@ -1,6 +1,6 @@
 # 大模型基础篇高频问答加厚版
 
-> 这页是 [基础篇岗位要求总纲](./foundation-requirements) 的面试问答版。它不追求长篇解释，而是把面试官最容易连续追问的问题，整理成可直接复述的答法。临场时先用这里组织答案，再点到专题页补细节。框架选型、智能工作流和 Function Calling 追问，继续看 [框架与智能工作流高频问答](./framework-workflow-qna)；微调、DPO、MaaS 和模型平台相关追问，继续看 [微调与模型平台高频问答](./finetuning-platform-qna)。
+> 这页是 [基础篇岗位要求总纲](./foundation-requirements) 的面试问答版。它不追求长篇解释，而是把面试官最容易连续追问的问题，整理成可直接复述的答法。临场时先用这里组织答案，再点到专题页补细节。框架选型、智能工作流和 Function Calling 追问，继续看 [框架与智能工作流高频问答](./framework-workflow-qna)；RAG、Memory、Agent 评测和安全合规追问，继续看 [RAG、Memory 与评测安全高频问答](./rag-memory-eval-qna)；微调、DPO、MaaS 和模型平台相关追问，继续看 [微调与模型平台高频问答](./finetuning-platform-qna)。
 
 ## 怎么用这页
 

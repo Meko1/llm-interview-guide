@@ -2,7 +2,7 @@
 
 > 这页把 Boss/JD 里反复出现的技术词，翻译成面试准备清单。目标不是把每个框架都学成源码专家，而是能回答：它解决什么问题、生产里怎么用、和相邻技术怎么取舍、项目里怎么讲。
 
-面试前需要一问一答速刷时，配合 [大模型基础篇高频问答加厚版](./foundation-qna) 使用；如果目标岗位写了 Spring AI、LangChain、LangGraph、Dify、智能工作流或 Function Calling，继续刷 [框架与智能工作流高频问答](./framework-workflow-qna)；如果写了 SFT、LoRA、QLoRA、RLHF、DPO、MaaS 或模型网关，继续刷 [微调与模型平台高频问答](./finetuning-platform-qna)。
+面试前需要一问一答速刷时，配合 [大模型基础篇高频问答加厚版](./foundation-qna) 使用；如果目标岗位写了 Spring AI、LangChain、LangGraph、Dify、智能工作流或 Function Calling，继续刷 [框架与智能工作流高频问答](./framework-workflow-qna)；如果写了 RAG、Memory、Agent 评测、安全合规或企业知识库，继续刷 [RAG、Memory 与评测安全高频问答](./rag-memory-eval-qna)；如果写了 SFT、LoRA、QLoRA、RLHF、DPO、MaaS 或模型网关，继续刷 [微调与模型平台高频问答](./finetuning-platform-qna)。
 
 ## 面试先背这几句话
 

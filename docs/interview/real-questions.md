@@ -169,6 +169,19 @@
 4. 金融/客服知识库如何做引用溯源、拒答、权限隔离和增量更新？→ [RAG 生产化与系统设计](../rag/rag-production)
 5. Agent Memory 和 RAG 知识库有什么区别？为什么 Memory 的写入策略比检索更难？→ [Agent 记忆系统](../agent/agent-memory)
 
+### RAG、Memory 与评测安全追问
+
+1. 设计企业级 RAG 时，如何从需求澄清推导出数据量、QPS、P95、成本和权限指标？→ [RAG、Memory 与评测安全高频问答](./rag-memory-eval-qna)
+2. 多租户 RAG 如何保证向量召回、BM25 召回、rerank、上下文组装和缓存都不越权？→ [RAG 生产化与系统设计](../rag/rag-production)
+3. 文档删除后，如何证明向量库、倒排索引、对象存储、缓存和引用页都已经失效？→ [RAG 生产化与系统设计](../rag/rag-production)
+4. RAGAS / LLM-as-Judge 分数和人工判断冲突时怎么办？如何校准裁判？→ [RAG 评估](../rag/rag-evaluation)
+5. 长期助理里，哪些信息应该写入 Memory，哪些只应该留在上下文或日志？→ [Agent 记忆系统](../agent/agent-memory)
+6. 用户今天说“我换工作了”，旧记忆里还有原公司信息，你怎么更新？→ [Agent 记忆系统](../agent/agent-memory)
+7. Memory 误写了敏感信息，怎么发现、删除、审计和防复发？→ [Agent 记忆系统](../agent/agent-memory)
+8. 如何设计一个 Agent 评测集？每条样本除了用户问题还要存什么？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
+9. Agent 最终答案正确，但调用了禁止工具，这算通过吗？为什么？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
+10. 企业 RAG / Agent 合规评审时，面试官最关心哪些证据？→ [AI 安全合规与治理](../advanced/governance)
+
 ### AI Infra / 推理部署
 
 1. Prefill 和 Decode 的瓶颈分别是什么？为什么 TTFT 和 TPOT 要分开优化？→ [推理优化与部署](../inference/inference-optimization)

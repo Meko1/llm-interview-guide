@@ -226,6 +226,45 @@ candidate: chunk=800, top_k=50, rerank_top_n=6, model=A
 
 LangSmith、Langfuse、Arize Phoenix 等可观测平台的价值就在这里：把单次问答拆成可回放链路，并把线上样本沉淀成 dataset/evaluation。
 
+## 八、面试专项：RAG 上线评估门禁
+
+RAG 评估不要停在“跑了 RAGAS 分数”。上线门禁要同时覆盖质量、权限、安全、成本和回归。
+
+| 门禁 | 评什么 | 不通过时 |
+| --- | --- | --- |
+| Golden Set | 高频问题的 Recall@K、Faithfulness、引用准确性 | 不允许发布，先定位检索或生成瓶颈 |
+| Bad Case Set | 历史线上失败是否复发 | 失败 case 必须修复或说明接受风险 |
+| 权限测试集 | 不同 tenant/role 是否只能召回授权文档 | 越权返回为硬失败 |
+| 无答案集 | 无依据时是否拒答、是否转人工 | 幻觉硬答为失败 |
+| 冲突/过期集 | 新旧制度、不同权威来源如何处理 | 缺时效和权威排序则回退 |
+| 引用校验 | 每个关键论断是否被引用 chunk 支持 | “假引用”不能过门禁 |
+| 成本延迟 | P95 延迟、rerank 超时率、单问 token 成本 | 超预算要降级、缓存或调参数 |
+| Judge 校准 | LLM-as-Judge 与人工抽检一致率 | 一致率低时不能信自动分 |
+
+### CI/CD 怎么接
+
+每次改这些配置都要跑回归：
+
+- chunk size、overlap、parent-child 策略。
+- embedding 模型、向量索引、BM25 参数。
+- query rewrite、Top-K、rerank_top_n。
+- prompt、模型、引用模板、拒答阈值。
+- ACL 过滤逻辑、索引版本、缓存策略。
+
+门禁输出最好是结构化报告：
+
+```text
+retrieval: Recall@5 / MRR / Context Precision
+generation: Faithfulness / Answer Relevancy / Citation Support
+safety: ACL pass rate / injection pass rate / refusal quality
+ops: P95 latency / cost per query / cache hit rate
+regression: failed_cases / newly_failed_cases / fixed_cases
+```
+
+面试可复述：
+
+> 我会把 RAG 评估接进发布流程。不是只看最终答案，而是检索、生成、引用、权限、无答案拒答、成本延迟都设门禁。LLM-as-Judge 负责规模化，人工抽检负责校准。线上 bad case 回流后进入回归集，防止同类问题复发。
+
 ## 高频追问
 
 **Q：RAG 评估为什么要分检索和生成两段？**
