@@ -123,7 +123,7 @@
 3. **LangGraph**：为什么复杂 Agent 要从 Chain 走向 Graph？State、Node、Edge、Checkpoint、人审分别怎么讲？→ [LangGraph 与状态图 Agent](../engineering/langgraph)
 4. **Agent 基础**：ReAct、Plan-and-Execute、Reflexion 分别适合什么场景？Agent 如何防死循环和跑偏？→ [Agent 基础](../agent/agent-basics)
 5. **RAG / 知识库**：RAG 离线索引和在线问答怎么拆？切分、混合检索、Rerank、引用溯源、权限过滤怎么做？→ [RAG 基础](../rag/rag-basics)
-6. **Dify / 低代码**：Dify 的 Chatflow、Workflow、Knowledge、Tool 怎么分工？PoC 到生产要补哪些治理能力？→ [Dify 与低代码智能工作流](../engineering/dify-workflow)
+6. **Dify / 低代码**：Dify 的 Chatflow、Workflow、Knowledge、Tool 怎么分工？PoC 到生产要补哪些治理能力？→ [Dify 低代码工作流生产化高频问答](./dify-production-qna)
 7. **智能工作流**：Workflow 和 Agent 的本质区别是什么？五种工作流模式如何组合？为什么能用 Workflow 就别上 Agent？→ [AI 工作流 vs Agent](../agent/workflow)
 8. **Function Calling / MCP / 工具安全**：模型会自己执行函数吗？工具 schema、权限边界、高危写操作确认和审计怎么设计？→ [Agent 工具安全与权限边界](../agent/tool-safety)
 9. **SFT / PEFT / LoRA / QLoRA**：LoRA 为什么低成本有效？QLoRA 省显存在哪里？微调后如何评估灾难遗忘？→ [微调范式](../finetuning/finetuning)
@@ -153,7 +153,7 @@
 5. 一个 LangChain PoC 什么时候应该迁到 LangGraph，什么时候应该毕业为直接 SDK + 薄封装？→ [LangChain 与应用框架](../engineering/langchain)
 6. LangGraph 的 State 里哪些字段应该持久化，哪些只应该作为临时运行态？→ [LangGraph 生产化与系统设计](../engineering/langgraph-production)
 7. Checkpoint 恢复时，如果工具已经真实执行过，如何防止重复扣款、重复发邮件或重复建单？→ [LangGraph 生产化与系统设计](../engineering/langgraph-production)
-8. Dify PoC 跑通后，哪些配置可以迁移，哪些能力必须在后端服务里重做？→ [Dify 与低代码智能工作流](../engineering/dify-workflow)
+8. Dify PoC 跑通后，哪些配置可以迁移，哪些能力必须在后端服务里重做？→ [Dify 低代码工作流生产化高频问答](./dify-production-qna)
 9. 工作流里的 gate/validator 应该检查什么？哪些检查不能交给 LLM 判断？→ [AI 工作流 vs Agent](../agent/workflow)
 10. 写操作工具如何设计幂等键、审批、审计日志和回滚策略？→ [Agent 工具安全与权限边界](../agent/tool-safety)
 
