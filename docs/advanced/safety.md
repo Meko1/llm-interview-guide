@@ -38,7 +38,7 @@
 - **护栏模型（Guardrail）**：用专门的安全模型做二次审查（如 Llama Guard、各家 Moderation API）。
 - **沙箱隔离**：代码执行、外部调用放进受限环境。
 
-Agent 场景还要额外评估工具越权、高危动作未确认、记忆污染和跨租户数据泄露，具体门禁和指标见 [Agent 评估与可靠性工程](/agent/agent-evaluation)。
+Agent 场景还要额外评估工具越权、高危动作未确认、记忆污染和跨租户数据泄露，具体门禁和指标见 [Agent 评估与可靠性工程](/agent/agent-evaluation)，工具权限边界、prepare/commit 和审计设计见 [Agent 工具安全与权限边界](/agent/tool-safety)。
 
 ## 红队测试（Red Teaming）
 

@@ -45,13 +45,14 @@
 7. Agent 由哪些部分组成？ReAct 范式是什么？→ [Agent 基础](/agent/agent-basics)
 8. Function Calling 的流程？模型会自己执行函数吗？→ [Function Calling 与 MCP](/agent/function-calling-mcp)
 9. MCP 是什么？解决了什么问题？→ [Function Calling 与 MCP](/agent/function-calling-mcp)
-10. 怎么防止 Agent 陷入死循环 / 跑偏？→ [多 Agent](/agent/multi-agent)
-11. 什么时候用单 Agent，什么时候用多 Agent？→ [多 Agent](/agent/multi-agent)
-12. 怎么让模型稳定输出 JSON？→ [LLM 应用开发实战](/engineering/llm-app-dev)
-13. 流式输出怎么实现？用什么协议？→ [LLM 应用开发实战](/engineering/llm-app-dev)
-14. CoT、Few-shot 一定更好吗？什么时候用？→ [Prompt 工程](/prompt/prompt-engineering)
-15. 微调、RAG、Prompt 三者怎么选？→ [微调范式](/finetuning/finetuning)
-16. 设计一个高准确率数学/代码问答服务：如何做多采样、verifier、投票、early stopping 和预算控制？→ [推理时算力扩展](/inference/test-time-scaling)
+10. 工具权限边界怎么设计？模型能不能自己判断是否有权执行？→ [Agent 工具安全与权限边界](/agent/tool-safety)
+11. 怎么防止 Agent 陷入死循环 / 跑偏？→ [多 Agent](/agent/multi-agent)
+12. 什么时候用单 Agent，什么时候用多 Agent？→ [多 Agent](/agent/multi-agent)
+13. 怎么让模型稳定输出 JSON？→ [LLM 应用开发实战](/engineering/llm-app-dev)
+14. 流式输出怎么实现？用什么协议？→ [LLM 应用开发实战](/engineering/llm-app-dev)
+15. CoT、Few-shot 一定更好吗？什么时候用？→ [Prompt 工程](/prompt/prompt-engineering)
+16. 微调、RAG、Prompt 三者怎么选？→ [微调范式](/finetuning/finetuning)
+17. 设计一个高准确率数学/代码问答服务：如何做多采样、verifier、投票、early stopping 和预算控制？→ [推理时算力扩展](/inference/test-time-scaling)
 
 ---
 
@@ -89,7 +90,7 @@
 > 系统设计题不要背架构图，要能按「需求澄清 → 指标 → 主链路 → 数据流 → 可靠性 → 评估 → 成本 → 演进」讲完整。模板见 [AI 系统设计专题](../engineering/system-design)。
 
 1. **设计一个统一模型网关**：如何做虚拟 Key、RPM/TPM 限流、多模型路由、failover、计费和审计？→ [模型网关与多模型路由](../engineering/llm-gateway)
-2. **设计一个 Agent 任务执行平台**：如何做工具注册、权限、状态管理、记忆、限步数、人工确认和轨迹回放？→ [Agent 评估](../agent/agent-evaluation)
+2. **设计一个 Agent 任务执行平台**：如何做工具注册、权限、状态管理、记忆、限步数、人工确认和轨迹回放？→ [Agent 工具安全与权限边界](../agent/tool-safety)
 3. **设计一个高并发推理平台**：如何拆 TTFT/TPOT、排队、连续批处理、量化、KV Cache、GPU 调度和降级？→ [推理性能压测](../inference/inference-benchmark)
 4. **设计一个企业级 RAG 平台**：如何支持多租户、多数据源、权限过滤、增量索引、引用溯源和 RAG 评估？→ [RAG 生产化](../rag/rag-production)
 5. **设计一个 AI Coding 平台**：如何管理项目规则、上下文索引、Agent 执行权限、代码审查、测试门禁和回滚？→ [AI 编程工具实战](../engineering/ai-coding-tools)
@@ -124,7 +125,7 @@
 5. **RAG / 知识库**：RAG 离线索引和在线问答怎么拆？切分、混合检索、Rerank、引用溯源、权限过滤怎么做？→ [RAG 基础](../rag/rag-basics)
 6. **Dify / 低代码**：Dify 的 Chatflow、Workflow、Knowledge、Tool 怎么分工？PoC 到生产要补哪些治理能力？→ [Dify 与低代码智能工作流](../engineering/dify-workflow)
 7. **智能工作流**：Workflow 和 Agent 的本质区别是什么？五种工作流模式如何组合？为什么能用 Workflow 就别上 Agent？→ [AI 工作流 vs Agent](../agent/workflow)
-8. **Function Calling / MCP**：模型会自己执行函数吗？工具 schema 怎么设计？MCP 比普通 HTTP 工具有何价值？→ [Function Calling 与 MCP](../agent/function-calling-mcp)
+8. **Function Calling / MCP / 工具安全**：模型会自己执行函数吗？工具 schema、权限边界、高危写操作确认和审计怎么设计？→ [Agent 工具安全与权限边界](../agent/tool-safety)
 9. **SFT / PEFT / LoRA / QLoRA**：LoRA 为什么低成本有效？QLoRA 省显存在哪里？微调后如何评估灾难遗忘？→ [微调范式](../finetuning/finetuning)
 10. **RLHF / DPO**：RLHF 为什么需要 Reward Model？DPO 如何简化偏好优化？安全对齐和过度拒绝如何平衡？→ [RLHF / DPO 对齐](../finetuning/rlhf)
 11. **MaaS 平台**：如何设计模型目录、虚拟 Key、租户配额、计费账单、多模型路由和评测门禁？→ [MaaS 平台与模型服务治理](../engineering/maas-platform)
@@ -154,17 +155,18 @@
 7. Checkpoint 恢复时，如果工具已经真实执行过，如何防止重复扣款、重复发邮件或重复建单？→ [LangGraph 与状态图 Agent](../engineering/langgraph)
 8. Dify PoC 跑通后，哪些配置可以迁移，哪些能力必须在后端服务里重做？→ [Dify 与低代码智能工作流](../engineering/dify-workflow)
 9. 工作流里的 gate/validator 应该检查什么？哪些检查不能交给 LLM 判断？→ [AI 工作流 vs Agent](../agent/workflow)
-10. 写操作工具如何设计幂等键、审批、审计日志和回滚策略？→ [Function Calling 与 MCP](../agent/function-calling-mcp)
+10. 写操作工具如何设计幂等键、审批、审计日志和回滚策略？→ [Agent 工具安全与权限边界](../agent/tool-safety)
 
 ### Agent 工程
 
 1. 什么时候用固定 Workflow，什么时候用 Agent？请给出一个你会拒绝使用 Agent 的业务场景。→ [AI 工作流 vs Agent](../agent/workflow)
 2. 设计一个投研/客服/运营 Agent：任务规划、工具调用、状态管理、失败重试、人工确认分别怎么做？→ [Agent 基础](../agent/agent-basics)
 3. Tool Calling 失败有哪些类型？参数错、权限错、网络错、业务返回错、模型误调用分别如何恢复？→ [Function Calling 与 MCP](../agent/function-calling-mcp)
-4. MCP 解决了什么问题？和你自己定义一组 HTTP 工具接口相比，优势和代价是什么？→ [MCP 协议深入](../agent/mcp)
-5. Agent Memory 该写什么、不该写什么？新旧记忆冲突时怎么处理？→ [Agent 记忆系统](../agent/agent-memory)
-6. 如何评估一个 Agent 是否可上线？除了任务成功率，还要看哪些过程指标？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
-7. Deep Research 为什么可以看作 long-horizon test-time compute？如何控制搜索次数、停止条件、引用可信度和成本？→ [深度研究 Agent](../agent/deep-research)
+4. 工具返回 `403 permission_denied` 后，Agent 应该重试、换工具、追问用户、申请审批还是直接拒绝？→ [Agent 工具安全与权限边界](../agent/tool-safety)
+5. MCP 解决了什么问题？和你自己定义一组 HTTP 工具接口相比，优势和代价是什么？→ [MCP 协议深入](../agent/mcp)
+6. Agent Memory 该写什么、不该写什么？新旧记忆冲突时怎么处理？→ [Agent 记忆系统](../agent/agent-memory)
+7. 如何评估一个 Agent 是否可上线？除了任务成功率，还要看哪些过程指标？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
+8. Deep Research 为什么可以看作 long-horizon test-time compute？如何控制搜索次数、停止条件、引用可信度和成本？→ [深度研究 Agent](../agent/deep-research)
 
 ### RAG & Memory / AI Search
 

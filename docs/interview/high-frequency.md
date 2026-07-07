@@ -84,6 +84,8 @@
 
 **MCP 的三大原语？** Tools（模型可调用的操作）、Resources（可读取的数据）、Prompts（可复用模板）。Host-Client-Server 架构 + JSON-RPC，解决「M 个应用 × N 个工具」的重复集成。详见 [MCP 协议深入](/agent/mcp)。
 
+**Agent 工具安全怎么做？** Prompt 不是安全边界，模型只提出调用意图；服务端按用户/租户/角色过滤工具集，执行前做 ACL 和策略校验，高危写操作走 prepare/commit + HITL + 幂等键，所有工具调用写 trace 和审计。详见 [Agent 工具安全与权限边界](/agent/tool-safety)。
+
 **上下文工程四操作？** Write（持久化到外部）、Select（按需取回）、Compress（压缩历史）、Isolate（多 Agent 隔离上下文）。详见 [上下文工程](/agent/context-engineering)。
 
 ## 四、推理优化与评估
@@ -130,6 +132,7 @@
 
 - **设计一个企业知识库问答系统（RAG）**：文档接入与解析 → 切分策略 → Embedding 选型 → 向量库选型 → 混合检索 + Rerank → Prompt 模板 + 引用溯源 → 评估（RAGAS）→ 增量更新 → 权限隔离 → 缓存与成本控制。
 - **设计高并发大模型服务**：vLLM（PagedAttention + 连续批处理）→ 多副本水平扩展 → 限流排队超时降级 → 模型分级路由 → 前缀/语义缓存 → 监控可观测 → 多供应商容错。详见 [应用开发实战](/engineering/llm-app-dev)。
+- **设计 Agent 工具执行平台**：Tool Registry → Router → Policy Engine → Approval Service → Executor Sandbox → Audit/Trace，重点讲权限边界、高危动作确认、幂等和注入防护。详见 [Agent 工具安全与权限边界](/agent/tool-safety)。
 - **私有化部署方案**：模型选型与量化 → GPU 选型与成本 → 推理框架（vLLM/TGI）→ 负载均衡高可用 → 监控告警 → 数据安全与隔离。
 
 ## 六、前沿趋势速答
