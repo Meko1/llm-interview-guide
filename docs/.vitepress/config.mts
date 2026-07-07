@@ -80,6 +80,7 @@ export default defineConfig({
         activeMatch: '/inference/',
         items: [
           { text: '推理优化与部署', link: '/inference/inference-optimization' },
+          { text: '推理时算力扩展', link: '/inference/test-time-scaling' },
           { text: '推理框架对比（vLLM/SGLang）', link: '/inference/serving-frameworks' },
           { text: '推理性能压测与指标', link: '/inference/inference-benchmark' },
           { text: 'KV Cache 深度专题', link: '/inference/kv-cache' },
@@ -263,6 +264,7 @@ export default defineConfig({
           text: '推理优化与部署',
           items: [
             { text: '推理优化与部署', link: '/inference/inference-optimization' },
+            { text: '推理时算力扩展', link: '/inference/test-time-scaling' },
             { text: '推理框架对比（vLLM/SGLang）', link: '/inference/serving-frameworks' },
             { text: '推理性能压测与指标', link: '/inference/inference-benchmark' },
             { text: 'KV Cache 深度专题', link: '/inference/kv-cache' },

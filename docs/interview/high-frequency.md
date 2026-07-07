@@ -106,6 +106,12 @@
 
 **推理模型为什么强？怎么训的？** 推理前先生成长思维链（慢思考），用「推理时计算（test-time compute）」换强推理；靠在可验证奖励任务（数学/代码）上做 RL 训出，纯 RL 也能涌现反思/回溯。详见 [推理模型与慢思考](/advanced/reasoning-models)。
 
+**Test-time scaling 有哪些工程做法？** 垂直深化（long CoT / budget forcing）、水平并行（Self-Consistency / Best-of-N）、树/图搜索（ToT / MCTS / PRM-guided beam）。关键看有没有 verifier，以及 SLA/成本能否承受。详见 [推理时算力扩展](/inference/test-time-scaling)。
+
+**Snell 2024 的 compute-optimal test-time scaling 怎么理解？** 不是“推理时算力永远划算”，而是在给定 FLOPs 预算下，不同难度题适合不同策略：简单题少想或修正，中等题用 PRM/Beam，难题可能需要 BoN 或更大模型。核心是先判断难度，再动态分配推理预算。
+
+**推理模型内建 long CoT 后，还要服务侧 BoN/SC 吗？** 高价值、可验证、可离线并行的任务仍有意义；实时聊天和低价值请求通常不值得。面试回答要把收益、延迟、token 成本、verifier 可靠性一起讲。
+
 **越狱 vs Prompt 注入？** 越狱绕过模型安全对齐让其说违禁内容；注入把「数据」伪装成「指令」劫持应用行为（RAG/Agent 中的间接注入最危险）。防护靠指令数据分离 + 最小权限 + 护栏 + 人工确认。详见 [大模型安全](/advanced/safety)。
 
 **TTFT 和 TPOT 分别由什么决定？** TTFT（首 token 延迟）主要由 Prefill 决定（prompt 长度、算力）；TPOT（每 token 时间）由 Decode 决定（显存带宽、KV Cache 大小、批大小）。优化方向完全不同。
@@ -126,7 +132,7 @@
 
 ## 六、前沿趋势速答
 
-**test-time scaling 是什么？** 把算力从「训练更大的模型」转向「推理时多想一会」——长 CoT、多次采样取最优、搜索。o1/R1 证明这是新的能力增长轴。详见 [推理模型](/advanced/reasoning-models)。
+**test-time scaling 是什么？** 把算力从「训练更大的模型」转向「推理时多想一会」——长 CoT、多次采样取最优、搜索。o1/R1 证明这是新的能力增长轴；服务侧做法见 [推理时算力扩展](/inference/test-time-scaling)，模型侧原理见 [推理模型](/advanced/reasoning-models)。
 
 **R1-Zero 为什么重要？** 不做 SFT、纯 RL（可验证奖励）也能涌现反思回溯，说明推理能力可以「激发」而不必「示范」。详见 [DeepSeek 专题](/models/deepseek)。
 

@@ -26,8 +26,9 @@
 10. FlashAttention 是近似算法吗？为什么又快又省显存？→ [FlashAttention 深入](/advanced/flash-attention)
 11. Scaling Law 是什么？Chinchilla 的「20:1」怎么来的？→ [缩放定律](/pretraining/scaling-law)
 12. 推理模型为什么强？纯 RL（R1-Zero）说明了什么？→ [推理模型](/advanced/reasoning-models)
-13. Mamba/SSM 相比 Transformer 的优劣？为什么用混合架构？→ [状态空间模型](/advanced/state-space-models)
-14. 灾难性遗忘是什么？怎么缓解？→ [微调范式](/finetuning/finetuning)
+13. PRM vs ORM 在训练推理模型和推理时搜索中的角色有什么不同？→ [推理时算力扩展](/inference/test-time-scaling)
+14. Mamba/SSM 相比 Transformer 的优劣？为什么用混合架构？→ [状态空间模型](/advanced/state-space-models)
+15. 灾难性遗忘是什么？怎么缓解？→ [微调范式](/finetuning/finetuning)
 
 ---
 
@@ -50,6 +51,7 @@
 13. 流式输出怎么实现？用什么协议？→ [LLM 应用开发实战](/engineering/llm-app-dev)
 14. CoT、Few-shot 一定更好吗？什么时候用？→ [Prompt 工程](/prompt/prompt-engineering)
 15. 微调、RAG、Prompt 三者怎么选？→ [微调范式](/finetuning/finetuning)
+16. 设计一个高准确率数学/代码问答服务：如何做多采样、verifier、投票、early stopping 和预算控制？→ [推理时算力扩展](/inference/test-time-scaling)
 
 ---
 
@@ -138,6 +140,7 @@
 3. Spring Boot 服务如何实现 SSE 流式返回？客户端断开、上游超时、内容审核分别怎么处理？→ [LLM 应用开发实战](../engineering/llm-app-dev)
 4. 企业 Java 系统接入大模型时，为什么不能让业务代码直接散落调用各家模型 API？模型网关应封装哪些能力？
 5. 大模型调用很慢且价格高，如何在 Java 微服务里做异步、限流、排队、降级和缓存？
+6. 高准确率问答服务什么时候启用 Self-Consistency / Best-of-N，什么时候直接单次生成？如何把 SLA 和预算接进路由？→ [推理时算力扩展](../inference/test-time-scaling)
 
 ### 框架与智能工作流追问
 
@@ -160,6 +163,7 @@
 4. MCP 解决了什么问题？和你自己定义一组 HTTP 工具接口相比，优势和代价是什么？→ [MCP 协议深入](../agent/mcp)
 5. Agent Memory 该写什么、不该写什么？新旧记忆冲突时怎么处理？→ [Agent 记忆系统](../agent/agent-memory)
 6. 如何评估一个 Agent 是否可上线？除了任务成功率，还要看哪些过程指标？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
+7. Deep Research 为什么可以看作 long-horizon test-time compute？如何控制搜索次数、停止条件、引用可信度和成本？→ [深度研究 Agent](../agent/deep-research)
 
 ### RAG & Memory / AI Search
 
@@ -202,6 +206,8 @@
 8. 模型网关如何做 RPM/TPM、预算熔断、异常成本定位和输出 token 预估？→ [模型网关](../engineering/llm-gateway)
 9. 语义缓存能省钱，但如何避免跨租户泄漏、旧知识复用和错误答案放大？→ [推理部署与成本治理高频问答](./inference-cost-qna)
 10. 私有化部署如何讲高可用、灰度、回滚、镜像/模型制品管理和监控告警？→ [MaaS 平台与模型服务治理](../engineering/maas-platform)
+11. Self-Consistency、Best-of-N、ToT、MCTS 分别适合什么任务？为什么 verifier 是胜负手？→ [推理时算力扩展](../inference/test-time-scaling)
+12. Test-time scaling 会让成本暴涨，如何用动态 K、early stopping、prefix cache 和模型路由控制预算？→ [推理时算力扩展](../inference/test-time-scaling)
 
 ### 微调与模型平台追问
 
