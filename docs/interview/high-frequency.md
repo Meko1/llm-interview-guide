@@ -86,6 +86,8 @@
 
 **Agent 工具安全怎么做？** Prompt 不是安全边界，模型只提出调用意图；服务端按用户/租户/角色过滤工具集，执行前做 ACL 和策略校验，高危写操作走 prepare/commit + HITL + 幂等键，所有工具调用写 trace 和审计。详见 [Agent 工具安全与权限边界](/agent/tool-safety)。
 
+**LangGraph 生产化最容易被追问什么？** State 四分法、checkpoint 恢复语义、HITL resume、写操作幂等、图版本升级、并行 State 合并、trace 和上线门禁。核心是把 Agent 当可恢复状态机，而不是黑盒 ReAct 循环。详见 [LangGraph 状态图 Agent 生产化高频问答](/interview/langgraph-production-qna)。
+
 **上下文工程四操作？** Write（持久化到外部）、Select（按需取回）、Compress（压缩历史）、Isolate（多 Agent 隔离上下文）。详见 [上下文工程](/agent/context-engineering)。
 
 ## 四、推理优化与评估
