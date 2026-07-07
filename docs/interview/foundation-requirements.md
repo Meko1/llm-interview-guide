@@ -2,7 +2,7 @@
 
 > 这页把 Boss/JD 里反复出现的技术词，翻译成面试准备清单。目标不是把每个框架都学成源码专家，而是能回答：它解决什么问题、生产里怎么用、和相邻技术怎么取舍、项目里怎么讲。
 
-面试前需要一问一答速刷时，配合 [大模型基础篇高频问答加厚版](./foundation-qna) 使用；如果目标岗位写了 Spring AI、LangChain、LangGraph、Dify、智能工作流或 Function Calling，继续刷 [框架与智能工作流高频问答](./framework-workflow-qna)；如果写了 RAG、Memory、Agent 评测、安全合规或企业知识库，继续刷 [RAG、Memory 与评测安全高频问答](./rag-memory-eval-qna)；如果写了 SFT、LoRA、QLoRA、RLHF、DPO、MaaS 或模型网关，继续刷 [微调与模型平台高频问答](./finetuning-platform-qna)。
+面试前需要一问一答速刷时，配合 [大模型基础篇高频问答加厚版](./foundation-qna) 使用；如果目标岗位写了 Spring AI、LangChain、LangGraph、Dify、智能工作流或 Function Calling，继续刷 [框架与智能工作流高频问答](./framework-workflow-qna)；如果写了 RAG、Memory、Agent 评测、安全合规或企业知识库，继续刷 [RAG、Memory 与评测安全高频问答](./rag-memory-eval-qna)；如果写了推理部署、vLLM、SGLang、量化、压测、GPU 或成本治理，继续刷 [推理部署与成本治理高频问答](./inference-cost-qna)；如果写了 SFT、LoRA、QLoRA、RLHF、DPO、MaaS 或模型网关，继续刷 [微调与模型平台高频问答](./finetuning-platform-qna)。
 
 ## 面试先背这几句话
 
@@ -12,7 +12,7 @@
 - 微调、RAG、Prompt、长上下文要会选型：知识更新和权限优先 RAG，风格/格式/领域行为优先 SFT/LoRA，偏好和安全行为优先 RLHF/DPO。
 - 可上线的大模型系统必须能解释效果、成本、延迟、安全和失败恢复；只会做 demo 很容易被追问打穿。
 
-## 12 类 Boss/JD 高频技能矩阵
+## Boss/JD 高频技能矩阵
 
 | 技能词 | 岗位真正想考 | 面试常问 | 站内补课 |
 | --- | --- | --- | --- |
@@ -26,6 +26,8 @@
 | Function Calling / MCP | 工具生态与业务系统连接 | 模型会不会自己执行函数？MCP 比 HTTP 工具有何价值？ | [Function Calling 与 MCP](/agent/function-calling-mcp) |
 | SFT / PEFT / LoRA / QLoRA | 低成本模型适配 | LoRA 为什么有效？QLoRA 省什么？PEFT 和全参微调怎么选？ | [微调范式](/finetuning/finetuning) |
 | RLHF / DPO | 偏好对齐与安全行为 | DPO 如何简化 RLHF？Reward Model 为什么难？ | [RLHF / DPO 对齐](/finetuning/rlhf) |
+| 推理部署 / vLLM / SGLang | 在线模型服务性能与稳定性 | TTFT/TPOT/goodput 怎么压测？vLLM 和 SGLang 怎么选？ | [推理部署与成本治理高频问答](./inference-cost-qna) |
+| 量化 / GPU 成本 | 私有化部署与成本优化 | W4A16、W8A8、FP8 怎么选？如何估 GPU 和 $/百万 token？ | [量化实战](/inference/quantization) |
 | MaaS 平台 | 模型服务治理 | 多模型、Key、配额、计费、路由、审计怎么设计？ | [MaaS 平台与模型服务治理](/engineering/maas-platform) |
 | Agent 评测与安全合规 | 上线门禁 | 如何证明 Agent 可靠？工具越权、注入、审计怎么防？ | [Agent 评估与可靠性工程](/agent/agent-evaluation) |
 
@@ -38,9 +40,10 @@
 | Agent 工程 | LangGraph、Workflow、Function Calling、Memory、评测 | 投研 Agent、运营 Agent、Coding Agent | 死循环、工具失败、高危动作、轨迹回放 |
 | RAG / Memory | 切分、混合检索、Rerank、引用、权限、评估 | 多租户知识库、客服问答、金融制度检索 | 删除一致性、ACL 过滤、表格/图片、增量索引 |
 | AI 平台 / MaaS | 模型网关、配额、计费、观测、评测、推理服务 | 企业统一模型平台、模型网关、评测平台 | RPM/TPM、成本账单、灰度、fallback、合规 |
+| AI Infra / 推理部署 | vLLM、SGLang、量化、压测、GPU、成本 | 私有化推理服务、模型服务容量规划 | TTFT/TPOT、KV Cache、goodput、$/百万 token、P99 排障 |
 | 算法微调 | SFT、LoRA、QLoRA、DPO、评估集 | 领域问答模型、风格对齐、分类/抽取小模型 | 数据质量、过拟合、灾难遗忘、RAG vs 微调 |
 
-## 12 类技能高频追问
+## 13 类技能高频追问
 
 ### 1. Spring AI 与 Java AI 工程
 
@@ -130,7 +133,15 @@
 4. 模型升级如何做灰度、回滚和评测门禁？
 5. 如何按业务线拆 token 成本和质量报表？
 
-### 12. Agent 评测、安全与合规
+### 12. 推理部署、压测与成本
+
+1. Prefill 和 Decode 的瓶颈分别是什么？为什么 TTFT 和 TPOT 要分开优化？
+2. vLLM、SGLang、TensorRT-LLM、llama.cpp 分别适合什么场景？
+3. 为什么 goodput 比裸吞吐更适合作为上线指标？
+4. 给定 QPS、输入输出长度和 SLA，如何估算 GPU 数量？
+5. W4A16、W8A8、FP8、KV Cache 量化分别解决什么成本问题？
+
+### 13. Agent 评测、安全与合规
 
 1. Agent 评估为什么不能只看最终答案？
 2. 工具调用准确率怎么拆指标？
@@ -169,5 +180,6 @@
 - Agent 工程：[Agent 基础](/agent/agent-basics) -> [LangGraph 与状态图 Agent](/engineering/langgraph) -> [Agent 评估与可靠性工程](/agent/agent-evaluation)
 - RAG 与知识库：[RAG 基础](/rag/rag-basics) -> [RAG 生产化](/rag/rag-production) -> [RAG 评估](/rag/rag-evaluation)
 - 低代码到工程化：[Dify 与低代码智能工作流](/engineering/dify-workflow) -> [AI 工作流 vs Agent](/agent/workflow) -> [LangGraph 与状态图 Agent](/engineering/langgraph)
+- 推理部署与成本：[推理优化与部署](/inference/inference-optimization) -> [推理框架对比](/inference/serving-frameworks) -> [推理性能压测](/inference/inference-benchmark) -> [推理部署与成本治理高频问答](./inference-cost-qna)
 - 微调与对齐：[微调范式](/finetuning/finetuning) -> [LoRA / QLoRA](/finetuning/lora) -> [RLHF / DPO](/finetuning/rlhf)
 - 平台治理：[MaaS 平台与模型服务治理](/engineering/maas-platform) -> [模型网关](/engineering/llm-gateway) -> [LLMOps](/engineering/llmops)

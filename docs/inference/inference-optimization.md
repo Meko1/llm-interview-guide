@@ -131,6 +131,25 @@
 
 > 选型趋势：vLLM 仍是大多数场景的默认选择；SGLang 在 Agentic/多轮调用场景（大量前缀复用）有优势；追求极致性能且用 NVIDIA 硬件选 TensorRT-LLM。
 
+## 面试专项：推理系统设计与容量规划
+
+面试官让你设计一个私有化推理服务时，不要只列「模型 + GPU + vLLM」。更完整的答法是从业务 SLA 倒推系统：
+
+1. **业务目标**：峰值 QPS、平均输入/输出 token、最长上下文、是否流式、P95/P99 TTFT 和 TPOT。
+2. **模型与精度**：模型大小、上下文窗口、FP16/BF16、W4A16、W8A8、FP8、是否需要 LoRA 热加载。
+3. **推理引擎**：vLLM 做默认生产基线，SGLang 用于多轮前缀复用和结构化输出，TensorRT-LLM 用于 NVIDIA 极致性能。
+4. **调度策略**：continuous batching、prefix cache、chunked prefill、长短请求隔离、优先级队列、admission control。
+5. **容量估算**：用压测得到单 GPU 在 SLA 下的 goodput，再用 `峰值有效 token/s / 单 GPU goodput * 冗余系数` 估卡数。
+6. **观测与止血**：TTFT、TPOT、排队时间、KV Cache 占用、GPU 利用率、错误率、每租户成本都要能看见。
+
+常见追问是「P99 突然升高怎么定位」。答题时先拆阶段：
+
+- **TTFT 高**：看排队、长 prompt、Prefill 池、prefix cache 命中率、网络和新版本 prompt。
+- **TPOT 高**：看 Decode batch、显存带宽、KV Cache 压力、量化 kernel 是否退化、输出长度是否异常。
+- **OOM 或并发下降**：先查 KV Cache，因为它随上下文和并发线性增长；再查碎片、长会话、超长输出和副本不均衡。
+
+面试里最加分的一句是：**推理优化不是单点调参，而是在 SLA 内最大化 goodput，并把 $/百万有效 token 降下来**。完整问答见 [推理部署与成本治理高频问答](/interview/inference-cost-qna)。
+
 ## 十、高频追问
 
 **Q：Prefill 和 Decode 的区别？** Prefill 并行处理输入 prompt、计算密集、定 TTFT；Decode 逐 token 生成、访存密集、定 TPOT 和吞吐。

@@ -190,6 +190,19 @@
 4. GPTQ、AWQ、GGUF、INT8/INT4 怎么选？量化后如何证明效果没有明显下降？
 5. 设计一个私有化大模型部署方案：模型选型、显卡、量化、推理框架、高可用、监控和成本怎么讲？
 
+### 推理部署与成本治理追问
+
+1. P99 TTFT 突然升高，你如何区分是排队、Prefill、网络、模型版本还是 prefix cache 命中率下降？→ [推理部署与成本治理高频问答](./inference-cost-qna)
+2. P99 TPOT 突然升高，你如何排查 batch、KV Cache、显存带宽、量化 kernel 和输出长度？→ [推理性能压测](../inference/inference-benchmark)
+3. 给定 70B 模型、32K 上下文和 8 张 H100，如何粗估最大并发？哪些假设必须说清？→ [KV Cache 深度解析](../inference/kv-cache)
+4. vLLM、SGLang、TensorRT-LLM、TGI、llama.cpp/Ollama 怎么按生产场景选型？→ [推理框架对比](../inference/serving-frameworks)
+5. 固定并发压测和泊松到达压测有什么差异？为什么在线聊天更关注到达模式？→ [推理性能压测](../inference/inference-benchmark)
+6. 为什么 goodput 比 throughput 更适合做上线门禁？SLA 应该包含哪些指标？→ [推理部署与成本治理高频问答](./inference-cost-qna)
+7. W4A16、W8A8、FP8、KV Cache 量化分别适合什么瓶颈？上线前怎么验收？→ [量化实战](../inference/quantization)
+8. 模型网关如何做 RPM/TPM、预算熔断、异常成本定位和输出 token 预估？→ [模型网关](../engineering/llm-gateway)
+9. 语义缓存能省钱，但如何避免跨租户泄漏、旧知识复用和错误答案放大？→ [推理部署与成本治理高频问答](./inference-cost-qna)
+10. 私有化部署如何讲高可用、灰度、回滚、镜像/模型制品管理和监控告警？→ [MaaS 平台与模型服务治理](../engineering/maas-platform)
+
 ### 微调与模型平台追问
 
 1. SFT 和 PEFT 是一回事吗？为什么 SFT 通常只对 assistant 回答算 loss？→ [微调范式](../finetuning/finetuning)
