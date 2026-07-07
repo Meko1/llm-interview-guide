@@ -128,7 +128,7 @@
 8. **Function Calling / MCP / 工具安全**：模型会自己执行函数吗？MCP Server、工具 schema、权限边界、高危写操作确认和审计怎么设计？→ [MCP Server 生产化与企业治理高频问答](./mcp-production-qna)
 9. **SFT / PEFT / LoRA / QLoRA**：LoRA 为什么低成本有效？QLoRA 省显存在哪里？微调后如何评估灾难遗忘？→ [微调范式](../finetuning/finetuning)
 10. **RLHF / DPO**：RLHF 为什么需要 Reward Model？DPO 如何简化偏好优化？安全对齐和过度拒绝如何平衡？→ [RLHF / DPO 对齐](../finetuning/rlhf)
-11. **MaaS 平台**：如何设计模型目录、虚拟 Key、租户配额、计费账单、多模型路由和评测门禁？→ [MaaS 平台与模型服务治理](../engineering/maas-platform)
+11. **MaaS 平台**：如何设计模型目录、虚拟 Key、租户配额、计费账单、多模型路由和评测门禁？→ [MaaS 平台生产化高频问答](./maas-production-qna)
 12. **Agent 评测与安全合规**：为什么不能只看最终答案？工具越权、Prompt Injection、敏感数据泄露和高危动作怎么防？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
 
 ## 2026 岗位驱动追问
@@ -208,7 +208,7 @@
 7. W4A16、W8A8、FP8、KV Cache 量化分别适合什么瓶颈？上线前怎么验收？→ [量化实战](../inference/quantization)
 8. 模型网关如何做 RPM/TPM、预算熔断、异常成本定位和输出 token 预估？→ [模型网关](../engineering/llm-gateway)
 9. 语义缓存能省钱，但如何避免跨租户泄漏、旧知识复用和错误答案放大？→ [推理部署与成本治理高频问答](./inference-cost-qna)
-10. 私有化部署如何讲高可用、灰度、回滚、镜像/模型制品管理和监控告警？→ [MaaS 平台与模型服务治理](../engineering/maas-platform)
+10. 私有化部署如何讲高可用、灰度、回滚、镜像/模型制品管理和监控告警？→ [MaaS 平台生产化高频问答](./maas-production-qna)
 11. Self-Consistency、Best-of-N、ToT、MCTS 分别适合什么任务？为什么 verifier 是胜负手？→ [推理时算力扩展](../inference/test-time-scaling)
 12. Test-time scaling 会让成本暴涨，如何用动态 K、early stopping、prefix cache 和模型路由控制预算？→ [推理时算力扩展](../inference/test-time-scaling)
 
@@ -222,8 +222,9 @@
 6. RLHF 的三阶段是什么？PPO 为什么要维护多个模型？DPO 如何简化这条链路？→ [RLHF / DPO 对齐](../finetuning/rlhf)
 7. DPO、KTO、ORPO、SimPO、GRPO 分别适合什么数据形态和任务？→ [偏好优化方法全景](../finetuning/preference-optimization)
 8. 如何构造偏好数据？如何防止 reward hacking、谄媚和过度拒答？→ [RLHF / DPO 对齐](../finetuning/rlhf)
-9. 设计一个企业 MaaS 平台：模型目录、虚拟 Key、配额、计费、路由、审计、评测门禁怎么做？→ [MaaS 平台与模型服务治理](../engineering/maas-platform)
-10. 新模型或新 LoRA 上线前要跑哪些评估？如何把 golden set、bad case、安全集、成本延迟接到 CI/CD？→ [模型评估与幻觉](../evaluation/evaluation)
+9. 设计一个企业 MaaS 平台：模型目录、虚拟 Key、配额、计费、路由、审计、评测门禁怎么做？→ [MaaS 平台生产化高频问答](./maas-production-qna)
+10. 模型升级后用户投诉质量变差，但离线评测通过了，你如何排查和止血？→ [MaaS 平台生产化高频问答](./maas-production-qna)
+11. 新模型或新 LoRA 上线前要跑哪些评估？如何把 golden set、bad case、安全集、成本延迟接到 CI/CD？→ [模型评估与幻觉](../evaluation/evaluation)
 
 ### AI Coding / 工具提效
 

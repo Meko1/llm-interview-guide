@@ -1,6 +1,6 @@
 # MaaS 平台与模型服务治理
 
-> MaaS（Model as a Service）平台把多个模型变成企业内部可申请、可调用、可计费、可观测、可评估的公共能力。它比“模型网关”更像平台，比“推理服务”更面向业务治理。网关细节见 [模型网关与多模型路由](/engineering/llm-gateway)，生产运营见 [LLMOps](/engineering/llmops)。
+> MaaS（Model as a Service）平台把多个模型变成企业内部可申请、可调用、可计费、可观测、可评估的公共能力。它比“模型网关”更像平台，比“推理服务”更面向业务治理。网关细节见 [模型网关与多模型路由](/engineering/llm-gateway)，生产化追问见 [MaaS 平台生产化高频问答](/interview/maas-production-qna)，生产运营见 [LLMOps](/engineering/llmops)。
 
 ## 面试先背这几句话
 
@@ -172,6 +172,7 @@ MaaS 平台项目可以这样讲：
 ## 延伸阅读
 
 - [模型网关与多模型路由](/engineering/llm-gateway)
+- [MaaS 平台生产化高频问答](/interview/maas-production-qna)
 - [LLMOps 生产运营](/engineering/llmops)
 - [推理优化与部署](/inference/inference-optimization)
 - [推理性能压测与指标](/inference/inference-benchmark)
