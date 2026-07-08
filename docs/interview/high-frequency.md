@@ -88,6 +88,8 @@
 
 **Agent 工具安全怎么做？** Prompt 不是安全边界，模型只提出调用意图；服务端按用户/租户/角色过滤工具集，执行前做 ACL 和策略校验，高危写操作走 prepare/commit + HITL + 幂等键，所有工具调用写 trace 和审计。详见 [Agent 工具安全与权限边界](/agent/tool-safety)。
 
+**Agent 怎么证明可上线？** 不只看最终答案，要看 Outcome、Trajectory、Cost、Safety、Audit；上线硬红线是越权执行 0、高危未确认 0、敏感泄露 0、审计缺失 0，并把 bad case 回流评测集。详见 [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)。
+
 **LangGraph 生产化最容易被追问什么？** State 四分法、checkpoint 恢复语义、HITL resume、写操作幂等、图版本升级、并行 State 合并、trace 和上线门禁。核心是把 Agent 当可恢复状态机，而不是黑盒 ReAct 循环。详见 [LangGraph 状态图 Agent 生产化高频问答](/interview/langgraph-production-qna)。
 
 **Spring AI 生产化怎么讲？** 重点不是少写 HTTP，而是把 ChatClient、RAG、Tool Calling、SSE 接入 Spring Security、限流、审计、模型网关和成本治理；SSE 要处理断开、超时、审核失败，RAG 权限要检索前过滤。详见 [Spring AI / Java AI 生产化高频问答](/interview/spring-ai-production-qna)。

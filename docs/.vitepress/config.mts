@@ -167,6 +167,7 @@ export default defineConfig({
           { text: 'Dify 低代码工作流生产化高频问答', link: '/interview/dify-production-qna' },
           { text: 'LangGraph 状态图 Agent 生产化高频问答', link: '/interview/langgraph-production-qna' },
           { text: 'MCP Server 生产化与企业治理高频问答', link: '/interview/mcp-production-qna' },
+          { text: 'Agent 评测与安全合规高频问答', link: '/interview/agent-evaluation-safety-qna' },
           { text: 'RAG、Memory 与评测安全高频问答', link: '/interview/rag-memory-eval-qna' },
           { text: '推理部署与成本治理高频问答', link: '/interview/inference-cost-qna' },
           { text: 'MaaS 平台生产化高频问答', link: '/interview/maas-production-qna' },
@@ -209,6 +210,8 @@ export default defineConfig({
             { text: 'Tokenizer 与分词', link: '/basics/tokenizer' },
             { text: '嵌入层与表示学习', link: '/basics/embeddings' },
             { text: '解码与采样策略', link: '/basics/decoding' },
+            { text: '从 Logits 到损失（Softmax/PPL）', link: '/basics/logits-loss' },
+            { text: 'Mask 与 Padding（掩码/打包）', link: '/basics/masks-padding' },
             { text: 'MoE 混合专家模型', link: '/basics/moe' },
             { text: '长上下文专题', link: '/basics/long-context' }
           ]
@@ -332,6 +335,7 @@ export default defineConfig({
             { text: 'Dify 低代码工作流生产化高频问答', link: '/interview/dify-production-qna' },
             { text: 'LangGraph 状态图 Agent 生产化高频问答', link: '/interview/langgraph-production-qna' },
             { text: 'MCP Server 生产化与企业治理高频问答', link: '/interview/mcp-production-qna' },
+            { text: 'Agent 评测与安全合规高频问答', link: '/interview/agent-evaluation-safety-qna' },
             { text: 'RAG、Memory 与评测安全高频问答', link: '/interview/rag-memory-eval-qna' },
             { text: '推理部署与成本治理高频问答', link: '/interview/inference-cost-qna' },
             { text: 'MaaS 平台生产化高频问答', link: '/interview/maas-production-qna' },

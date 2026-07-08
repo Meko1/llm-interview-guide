@@ -252,6 +252,7 @@ owner、版本、风险级别、权限域、资源类型、是否可写、是否
 
 - 工具调用机制：[Function Calling 与 MCP](/agent/function-calling-mcp)
 - Agent 上线评估：[Agent 评估与可靠性工程](/agent/agent-evaluation)
+- 生产化面试追问：[Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)
 - 注入攻防基础：[提示注入与越狱攻防](/prompt/prompt-injection)
 - 大模型安全全景：[大模型安全与对齐](/advanced/safety)
 - 工作流边界：[AI 工作流 vs Agent](/agent/workflow)
