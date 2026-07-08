@@ -129,7 +129,7 @@
 9. **SFT / PEFT / LoRA / QLoRA**：LoRA 为什么低成本有效？QLoRA 省显存在哪里？微调后如何评估灾难遗忘？→ [微调范式](../finetuning/finetuning)
 10. **RLHF / DPO**：RLHF 为什么需要 Reward Model？DPO 如何简化偏好优化？安全对齐和过度拒绝如何平衡？→ [RLHF / DPO 对齐](../finetuning/rlhf)
 11. **MaaS 平台**：如何设计模型目录、虚拟 Key、租户配额、计费账单、多模型路由和评测门禁？→ [MaaS 平台生产化高频问答](./maas-production-qna)
-12. **Agent 评测与安全合规**：为什么不能只看最终答案？工具越权、Prompt Injection、敏感数据泄露和高危动作怎么防？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
+12. **Agent 评测与安全合规**：为什么不能只看最终答案？工具越权、Prompt Injection、敏感数据泄露和高危动作怎么防？→ [Agent 评测与安全合规高频问答](./agent-evaluation-safety-qna)
 
 ## 2026 岗位驱动追问
 
@@ -165,7 +165,7 @@
 4. 工具返回 `403 permission_denied` 后，Agent 应该重试、换工具、追问用户、申请审批还是直接拒绝？→ [Agent 工具安全与权限边界](../agent/tool-safety)
 5. MCP 解决了什么问题？和你自己定义一组 HTTP 工具接口相比，优势和代价是什么？企业内部 MCP Server 怎么治理？→ [MCP Server 生产化与企业治理高频问答](./mcp-production-qna)
 6. Agent Memory 该写什么、不该写什么？新旧记忆冲突时怎么处理？→ [Agent 记忆系统](../agent/agent-memory)
-7. 如何评估一个 Agent 是否可上线？除了任务成功率，还要看哪些过程指标？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
+7. 如何评估一个 Agent 是否可上线？除了任务成功率，还要看哪些过程指标？→ [Agent 评测与安全合规高频问答](./agent-evaluation-safety-qna)
 8. Deep Research 为什么可以看作 long-horizon test-time compute？如何控制搜索次数、停止条件、引用可信度和成本？→ [深度研究 Agent](../agent/deep-research)
 
 ### RAG & Memory / AI Search
@@ -185,9 +185,10 @@
 5. 长期助理里，哪些信息应该写入 Memory，哪些只应该留在上下文或日志？→ [Agent 记忆系统](../agent/agent-memory)
 6. 用户今天说“我换工作了”，旧记忆里还有原公司信息，你怎么更新？→ [Agent 记忆系统](../agent/agent-memory)
 7. Memory 误写了敏感信息，怎么发现、删除、审计和防复发？→ [Agent 记忆系统](../agent/agent-memory)
-8. 如何设计一个 Agent 评测集？每条样本除了用户问题还要存什么？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
-9. Agent 最终答案正确，但调用了禁止工具，这算通过吗？为什么？→ [Agent 评估与可靠性工程](../agent/agent-evaluation)
-10. 企业 RAG / Agent 合规评审时，面试官最关心哪些证据？→ [AI 安全合规与治理](../advanced/governance)
+8. 如何设计一个 Agent 评测集？每条样本除了用户问题还要存什么？→ [Agent 评测与安全合规高频问答](./agent-evaluation-safety-qna)
+9. Agent 最终答案正确，但调用了禁止工具，这算通过吗？为什么？→ [Agent 评测与安全合规高频问答](./agent-evaluation-safety-qna)
+10. 企业 RAG / Agent 合规评审时，面试官最关心哪些证据？→ [Agent 评测与安全合规高频问答](./agent-evaluation-safety-qna)
+11. Prompt、模型或工具 schema 改动后，Agent 如何做回归与灰度发布？→ [Agent 评测与安全合规高频问答](./agent-evaluation-safety-qna)
 
 ### AI Infra / 推理部署
 
