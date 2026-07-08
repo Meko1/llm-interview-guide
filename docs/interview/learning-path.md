@@ -90,4 +90,18 @@
 | 高级 | 设计 Agent 系统、微调模型、私有化部署 |
 | 资深 | 承担 AI 基础设施建设、技术选型与架构决策 |
 
+## 企业级知识体系对照（L1-L4 + 商业实战）
+
+市面上的企业级大模型实战培训（如智泊AI 等机构的知识体系）普遍采用「L1 基础认知 → L2 RAG → L3 Agent → L4 精调部署 → 商业实战」五阶段结构。本站内容对这套体系全覆盖，按阶段索引如下，可作为对照自查表：
+
+| 企业体系阶段 | 核心标签 | 本站对应章节 |
+| --- | --- | --- |
+| **L1 基础认知破局**：核心原理与提示工程 | 破除技术黑箱、提示词工程、商业全景 | [大模型基础](/basics/overview)（11+ 页）、[Prompt 工程](/prompt/prompt-engineering)（6 页）、[大模型商业落地与价值评估](/engineering/llm-business) |
+| **L2 RAG 引擎构建**：企业级私有知识库 | 端到端搭建、性能诊断调优、私有数据 | [RAG 基础](/rag/rag-basics) → [生产化与系统设计](/rag/rag-production) → [评估（RAGAS）](/rag/rag-evaluation) 全链路 10+ 页 |
+| **L3 Agent 架构设计**：自主决策 AI 助手 | LangGraph 图状智能体、多智能体（MAS）、通信协议、复杂工作流 | [Agent 基础](/agent/agent-basics)、[LangGraph 深入](/engineering/langgraph)、[多 Agent](/agent/multi-agent)、[MCP](/agent/mcp) / [A2A 协议](/agent/a2a-protocol)、[工作流 vs Agent](/agent/workflow)、[评估与可靠性](/agent/agent-evaluation) |
+| **L4 模型精调与部署**：专属化模型服务 | 全流程微调、量化压缩、分布式推理、运维监控、垂直领域专家模型 | [微调范式](/finetuning/finetuning)、[LoRA](/finetuning/lora)、[量化实战](/inference/quantization)、[推理框架](/inference/serving-frameworks)、[LLMOps](/engineering/llmops)、[垂直领域专家模型实战](/finetuning/domain-expert-model) |
+| **商业实战**：综合项目精研 | 商业价值驱动、打通技术与业务、架构选型权衡 | [商业落地与价值评估](/engineering/llm-business)、[AI 系统设计](/engineering/system-design)、[项目实战案例](/engineering/projects)、[2026 岗位能力地图](/interview/job-market-2026) |
+
+> 用法：面试前按此表逐阶段自查——每个阶段能不能脱稿讲出「核心问题、技术方案、生产化要点、业务价值」四层，即达到企业培训体系的出师标准。
+
 > 学习资源清单见 [学习资源汇总](/interview/resources)。

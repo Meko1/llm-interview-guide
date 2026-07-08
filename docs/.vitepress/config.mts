@@ -322,7 +322,8 @@ export default defineConfig({
             { text: '结构化输出详解', link: '/engineering/structured-output' },
             { text: 'AI 系统设计专题', link: '/engineering/system-design' },
             { text: 'LLMOps 生产运营', link: '/engineering/llmops' },
-            { text: 'AI 项目实战案例', link: '/engineering/projects' }
+            { text: 'AI 项目实战案例', link: '/engineering/projects' },
+            { text: '商业落地与价值评估', link: '/engineering/llm-business' }
           ]
         }
       ],
@@ -483,7 +484,8 @@ function sidebarTraining() {
         { text: '前沿对齐技术（GRPO/DAPO/RLVR）', link: '/finetuning/frontier-alignment' },
         { text: '合成数据与自我改进', link: '/finetuning/synthetic-data' },
         { text: '模型融合与合并', link: '/finetuning/model-merging' },
-        { text: '微调训练工具链实战', link: '/finetuning/training-frameworks' }
+        { text: '微调训练工具链实战', link: '/finetuning/training-frameworks' },
+        { text: '垂直领域专家模型实战', link: '/finetuning/domain-expert-model' }
       ]
     }
   ]
