@@ -55,6 +55,8 @@
 | 评估 | 困惑度、BLEU/ROUGE、LLM-as-Judge、幻觉 | 怎么衡量好坏 |
 | 多模态 | CLIP、ViT、LLaVA | 看懂图像、音频 |
 
+**基础部分建议的刷题顺序**：先用 [Transformer 架构详解](/basics/transformer) 建立整体骨架 → [Attention 与变体](/basics/attention)、[位置编码](/basics/position-encoding)、[归一化与激活](/basics/normalization) 逐个吃透组件 → [Tokenizer](/basics/tokenizer)、[嵌入层](/basics/embeddings) 补输入侧 → [从 Logits 到损失](/basics/logits-loss)（softmax 数值稳定/交叉熵/PPL）、[Mask 与 Padding](/basics/masks-padding)（因果掩码/左 padding/packing）补输出侧与实现细节——这两页覆盖的微观机制正是手撕题和「简历深挖」最爱考的盲区 → 最后用 [解码与采样](/basics/decoding)、[MoE](/basics/moe)、[长上下文](/basics/long-context) 收尾。
+
 ## 高频基础名词速查
 
 - **Token**：模型处理文本的最小单位，介于「字」和「词」之间，由 Tokenizer 切分。一般 1 个汉字约 1～2 个 token，1 个英文单词约 1～1.3 个 token。
@@ -65,6 +67,8 @@
 - **涌现能力（Emergent Ability）**：模型规模超过某个阈值后突然出现的能力，如多步推理。
 - **幻觉（Hallucination）**：模型一本正经地编造不存在或错误的事实。
 - **对齐（Alignment）**：让模型行为符合人类价值与意图的过程。
+- **困惑度（Perplexity, PPL）**：exp(平均每 token 损失)，直觉是「模型平均在几个候选里犹豫」，预训练核心监控指标（详见 [从 Logits 到损失](/basics/logits-loss)）。
+- **因果掩码（Causal Mask）**：下三角注意力掩码，保证每个位置只能看到前文——decoder-only 模型「不作弊」的关键（详见 [Mask 与 Padding](/basics/masks-padding)）。
 
 ## 面试中如何组织回答？
 

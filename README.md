@@ -47,6 +47,8 @@ LLMGuide 是一份开源的**大模型面试知识库**，把大模型方向零�
 - [归一化与激活函数](https://meko1.github.io/llm-interview-guide/basics/normalization)（RMSNorm / Pre-Norm / SwiGLU）
 - [Tokenizer 与分词](https://meko1.github.io/llm-interview-guide/basics/tokenizer)（BPE / WordPiece / SentencePiece）
 - [解码与采样策略](https://meko1.github.io/llm-interview-guide/basics/decoding)（greedy / beam / temperature / top-p）
+- [从 Logits 到损失](https://meko1.github.io/llm-interview-guide/basics/logits-loss)（Softmax 数值稳定 / 交叉熵 / 困惑度 PPL）
+- [Mask 与 Padding](https://meko1.github.io/llm-interview-guide/basics/masks-padding)（因果掩码 / 左右 padding / 序列打包）
 - [MoE 混合专家模型](https://meko1.github.io/llm-interview-guide/basics/moe)
 - [长上下文专题](https://meko1.github.io/llm-interview-guide/basics/long-context)（位置外推 / 滑窗 / KV 压缩 / vs RAG）
 
