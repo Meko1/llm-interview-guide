@@ -4,6 +4,8 @@
 
 参考 2026 年大模型应用、Agent、RAG/Memory、Java AI、AI Infra 相关 JD，可以看到一个明显变化：企业不只要会调 API 的人，而是要能把 **LLM 能力接进业务、跑稳、评估、降本、可维护** 的工程师。
 
+如果你想按“从课程知识到项目实战”的顺序准备，可以先看 [大模型应用实战知识体系](/interview/application-practice-roadmap)，再回到本页按岗位方向查漏补缺。
+
 ![2026 大模型岗位能力地图：LLM 应用开发、Agent 工程、RAG & Memory、Java AI 工程、AI Infra](/diagrams/job-market-2026.svg)
 
 ## 招聘信号速读

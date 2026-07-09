@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="560" viewBox="0 0 1180 560" role="img" aria-labelledby="title desc">
+  <title id="title">大模型应用实战面试路线图</title>
+  <desc id="desc">从基础认知、RAG 引擎、Agent 架构、模型服务到商业实战的五阶段学习路线。</desc>
+  <defs>
+    <style>
+      .title{font:700 30px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#1e40af}
+      .sub{font:16px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#64748b}
+      .phase{font:700 18px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#374151}
+      .body{font:14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#475569}
+      .tag{font:12px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#334155}
+      .line{stroke:#94a3b8;stroke-width:2;fill:none}
+    </style>
+  </defs>
+  <rect width="1180" height="560" fill="#ffffff"/>
+  <text x="590" y="46" text-anchor="middle" class="title">大模型应用实战面试路线图</text>
+  <text x="590" y="76" text-anchor="middle" class="sub">把脑图里的课程知识，转换成面试官能追问的系统、项目和指标</text>
+  <line x1="120" y1="150" x2="1060" y2="150" class="line"/>
+  <circle cx="120" cy="150" r="10" fill="#fed7aa" stroke="#c2410c" stroke-width="2"/>
+  <circle cx="355" cy="150" r="10" fill="#ddd6fe" stroke="#6d28d9" stroke-width="2"/>
+  <circle cx="590" cy="150" r="10" fill="#a7f3d0" stroke="#047857" stroke-width="2"/>
+  <circle cx="825" cy="150" r="10" fill="#dbeafe" stroke="#1e40af" stroke-width="2"/>
+  <circle cx="1060" cy="150" r="10" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+
+  <g transform="translate(35 190)">
+    <rect width="170" height="210" rx="10" fill="#fff7ed" stroke="#c2410c" stroke-width="2"/>
+    <text x="85" y="32" text-anchor="middle" class="phase">L1 基础认知</text>
+    <text x="20" y="66" class="body">Transformer / Token</text>
+    <text x="20" y="92" class="body">Prompt 工程</text>
+    <text x="20" y="118" class="body">结构化输出</text>
+    <text x="20" y="144" class="body">模型能力边界</text>
+    <text x="20" y="176" class="tag">面试产出：能解释原理</text>
+  </g>
+  <g transform="translate(270 190)">
+    <rect width="170" height="210" rx="10" fill="#f5f3ff" stroke="#6d28d9" stroke-width="2"/>
+    <text x="85" y="32" text-anchor="middle" class="phase">L2 RAG 引擎</text>
+    <text x="20" y="66" class="body">文档解析 / Chunk</text>
+    <text x="20" y="92" class="body">Hybrid Search</text>
+    <text x="20" y="118" class="body">Rerank / 评测</text>
+    <text x="20" y="144" class="body">权限与多租户</text>
+    <text x="20" y="176" class="tag">面试产出：知识库系统</text>
+  </g>
+  <g transform="translate(505 190)">
+    <rect width="170" height="210" rx="10" fill="#ecfdf5" stroke="#047857" stroke-width="2"/>
+    <text x="85" y="32" text-anchor="middle" class="phase">L3 Agent 架构</text>
+    <text x="20" y="66" class="body">Function Calling</text>
+    <text x="20" y="92" class="body">LangGraph / State</text>
+    <text x="20" y="118" class="body">MCP / A2A</text>
+    <text x="20" y="144" class="body">Memory / HITL</text>
+    <text x="20" y="176" class="tag">面试产出：可控 Agent</text>
+  </g>
+  <g transform="translate(740 190)">
+    <rect width="170" height="210" rx="10" fill="#eff6ff" stroke="#1e40af" stroke-width="2"/>
+    <text x="85" y="32" text-anchor="middle" class="phase">L4 模型服务</text>
+    <text x="20" y="66" class="body">SFT / LoRA / QLoRA</text>
+    <text x="20" y="92" class="body">vLLM / SGLang</text>
+    <text x="20" y="118" class="body">TTFT / TPOT</text>
+    <text x="20" y="144" class="body">成本与监控</text>
+    <text x="20" y="176" class="tag">面试产出：可部署服务</text>
+  </g>
+  <g transform="translate(975 190)">
+    <rect width="170" height="210" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+    <text x="85" y="32" text-anchor="middle" class="phase">商业实战</text>
+    <text x="20" y="66" class="body">DeepResearch</text>
+    <text x="20" y="92" class="body">订单 Copilot</text>
+    <text x="20" y="118" class="body">HR 知识库</text>
+    <text x="20" y="144" class="body">AI Search 底座</text>
+    <text x="20" y="176" class="tag">面试产出：项目故事</text>
+  </g>
+
+  <text x="590" y="460" text-anchor="middle" class="sub">回答方式：业务目标 -> 系统链路 -> 技术取舍 -> 事故排查 -> 指标收益 -> 安全合规</text>
+  <rect x="330" y="486" width="520" height="42" rx="21" fill="#1e293b"/>
+  <text x="590" y="513" text-anchor="middle" style="font:700 16px system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;fill:#ffffff">从“会调 API”升级为“能负责可上线的大模型应用”</text>
+</svg>
