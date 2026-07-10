@@ -162,6 +162,7 @@ export default defineConfig({
         items: [
           { text: '2026 岗位能力地图', link: '/interview/job-market-2026' },
           { text: '大模型应用实战知识体系', link: '/interview/application-practice-roadmap' },
+          { text: '大模型应用实战高频追问', link: '/interview/application-practice-qna' },
           { text: '基础篇岗位要求总纲', link: '/interview/foundation-requirements' },
           { text: '基础篇高频问答加厚版', link: '/interview/foundation-qna' },
           { text: '框架与智能工作流高频问答', link: '/interview/framework-workflow-qna' },
@@ -334,6 +335,7 @@ export default defineConfig({
           items: [
             { text: '2026 岗位能力地图', link: '/interview/job-market-2026' },
             { text: '大模型应用实战知识体系', link: '/interview/application-practice-roadmap' },
+            { text: '大模型应用实战高频追问', link: '/interview/application-practice-qna' },
             { text: '基础篇岗位要求总纲', link: '/interview/foundation-requirements' },
             { text: '基础篇高频问答加厚版', link: '/interview/foundation-qna' },
             { text: '框架与智能工作流高频问答', link: '/interview/framework-workflow-qna' },
