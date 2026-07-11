@@ -667,6 +667,7 @@ Prompt 层明确 retrieved_evidence 只供引用；数据结构层用 typed mess
 
 - [大模型应用实战知识体系](/interview/application-practice-roadmap)
 - [大模型应用实战场景题库](/interview/application-practice-scenarios)
+- [大模型应用系统设计面试题](/interview/application-system-design)
 - [RAG 基础与流程](/rag/rag-basics)
 - [Agent 基础与框架](/agent/agent-basics)
 - [Dify 低代码工作流生产化高频问答](/interview/dify-production-qna)
