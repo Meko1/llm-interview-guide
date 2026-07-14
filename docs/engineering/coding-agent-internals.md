@@ -1,5 +1,7 @@
 # 编程 Agent 底层架构与内部机制（Claude Code / Codex / Cursor）
 
+> 需要从面试视角比较 Claude Code、Codex、OpenClaw 与 Hermes 的控制面、执行面、上下文隔离、持久记忆和安全边界时，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。
+
 > Claude Code、Codex CLI、Cursor、Gemini CLI 这类「编程 Agent」是 2024–2025 落地最成功的 Agent 形态。它们看起来像「会写代码的聊天框」，内部却是一套精密的 **agentic loop + 工具系统 + 上下文工程 + 权限模型**。本文拆解它们的底层架构与内部机制——这是资深岗位面试的高区分度话题。Agent 通用原理见 [Agent 基础](/agent/agent-basics)，使用层面见 [AI 编程与 Coding Agent](/engineering/coding-agent)。
 
 ## 一、核心：一个自主的 Agentic Loop

@@ -1,5 +1,7 @@
 # Claude Code 核心机制与扩展
 
+> 对 Hooks、上下文压缩、子 Agent 与权限机制的运行时取舍做系统设计回答，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。
+
 > 这一页深入 Claude Code 的运行时机制：agentic loop 怎么转、上下文怎么压缩、token 预算怎么管、权限怎么把关，以及 MCP/Hooks/Skills/子 Agent 四大扩展。功能见 [功能总览](/claude-code/overview)，架构见 [代码架构](/claude-code/architecture)。
 
 ## 一、Agentic Loop：自主循环的核心

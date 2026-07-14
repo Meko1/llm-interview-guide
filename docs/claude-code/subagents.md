@@ -1,5 +1,7 @@
 # Claude Code 子 Agent 与多 Agent 编排
 
+> 若要把子 Agent 放进企业级控制面，系统回答上下文隔离、worktree、任务所有权、验证门禁和合并仲裁，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。
+
 > 单个 Agent 的上下文有限、单线程串行。Claude Code 用**子 Agent（subagent）** 和**多 Agent 协作**突破这两个限制：上下文隔离 + 并行执行。这一页讲清子 Agent 机制、协调者/蜂群模式、以及 Git worktree 隔离。多 Agent 通用范式见 [多 Agent 与进阶范式](/agent/multi-agent)。
 
 ## 一、为什么需要子 Agent？

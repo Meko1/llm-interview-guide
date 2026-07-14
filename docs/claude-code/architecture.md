@@ -1,5 +1,7 @@
 # Claude Code 代码架构
 
+> 这页专注 Claude Code 的分层；横向比较 Claude Code、Codex、OpenClaw、Hermes 的任务运行时与可迁移设计原则，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。
+
 > 这一页拆解 Claude Code 的代码架构：分层设计、各模块职责、关键组件如何协作。内容综合官方行为与社区逆向白皮书，重在帮你建立「一个生产级编程 Agent 是怎么搭起来的」整体认知。功能总览见 [功能总览](/claude-code/overview)，运行机制见 [核心机制](/claude-code/mechanisms)。
 
 > 提示：具体文件名/类名来自社区逆向分析，可能随版本变化；这里用它们来说明职责划分，不必当作官方 API。
