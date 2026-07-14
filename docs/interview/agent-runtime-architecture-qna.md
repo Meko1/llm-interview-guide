@@ -4,6 +4,8 @@
 
 > 需要把这些架构概念落到团队选型、最小权限、Skill 供应链、远程 Gateway、记忆发布与值班运行手册时，继续阅读 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)。
 
+> 题目涉及云端任务、本地执行器、Gateway/Node、设备配对、网络出口、会话恢复或远程 kill switch 时，继续阅读 [远程与云端 Agent 生产运行手册](/interview/remote-agent-operations-playbook)。
+
 ## 怎么用这页
 
 本页不声称掌握任何闭源产品的内部实现细节。它基于公开文档与开源仓库，把可观察能力抽象为工程设计模式。回答时先讲**共同运行时骨架**，再说某一产品选择强调了哪条边界，最后落到自己会如何实现和验证。
