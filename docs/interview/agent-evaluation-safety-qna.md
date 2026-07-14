@@ -122,6 +122,8 @@
 
 ## 追问链四：Prompt Injection 与越权怎么评
 
+> 需要继续回答上下文来源、污点传播、危险 sink、URL egress、RAG/MCP/Browser/Coding Agent 攻击面和端到端红队时，见 [Agent Prompt Injection 与不可信上下文隔离](/interview/agent-prompt-injection-provenance-playbook)。
+
 **面试官：如何证明 Agent 能抵御 Prompt Injection 和工具越权？**
 
 标准答法：
