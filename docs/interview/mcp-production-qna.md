@@ -149,6 +149,8 @@ AI Host / Agent Platform
 
 > 工具 schema 是 Agent 的 API 合约，不是 prompt 文案。API 怎么做版本治理，MCP 工具也要怎么做。
 
+当追问升级的兼容性判定、canonical contract、provider adapter、consumer-driven test、trace replay、shadow/canary 和弃用流程时，见 [Agent Tool Contract 工程：Schema 演进、兼容性与验证](/interview/agent-tool-contract-evolution-playbook)。
+
 ## 追问链六：第三方 MCP Server 怎么接入
 
 **面试官：团队想直接接一个社区 MCP Server，你怎么评审？**
