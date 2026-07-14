@@ -1,6 +1,6 @@
 # MCP Server 生产化与企业治理高频问答
 
-> MCP 面试不要只背 Host / Client / Server 和 tools/resources/prompts。真正能拉开差距的是：公司内部要开放一批 MCP Server，如何做权限、版本、审计、资源边界、工具注册、灰度、下线和安全评估。协议细节见 [MCP 协议深入](/agent/mcp)，工具执行边界见 [Agent 工具安全与权限边界](/agent/tool-safety)。
+> MCP 面试不要只背 Host / Client / Server 和 tools/resources/prompts。真正能拉开差距的是：公司内部要开放一批 MCP Server，如何做权限、版本、审计、资源边界、工具注册、灰度、下线和安全评估。协议细节见 [MCP 协议深入](/agent/mcp)，工具执行边界见 [Agent 工具安全与权限边界](/agent/tool-safety)，跨模型外发、凭据和审计证据见 [LLM 数据分级、外发治理与审计证据面试题](/interview/data-governance-egress-audit-qna)。
 
 ## 怎么用这页
 
