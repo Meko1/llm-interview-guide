@@ -1,5 +1,7 @@
 # Computer Use 与浏览器 Agent（GUI 智能体）
 
+> 本页讲视觉-动作循环与 DOM/截图混合路线；面试如果进入浏览器会话隔离、网页注入、页面状态验证、高危动作确认、可恢复任务和评测，应转到 [Computer Use / 浏览器 Agent 生产系统设计面试题](/interview/computer-use-browser-agent-system-design)。
+
 > 让 Agent 不再局限于「调 API」，而是像人一样**看屏幕、点鼠标、敲键盘**操作电脑和浏览器——这是 2024 年底以来最受关注的 Agent 方向。Anthropic 的 Computer Use、各类浏览器 Agent 把「数字世界的体力活」自动化。基础概念见 [Agent 基础](/agent/agent-basics)、工具调用见 [Function Calling 与 MCP](/agent/function-calling-mcp)。
 
 ## 一、为什么需要 GUI Agent？
