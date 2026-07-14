@@ -4,6 +4,8 @@
 
 > 需要深入设计跨 Claude Code、Codex、OpenClaw 与 Hermes 的 `SKILL.md` 作用域、自动触发、供应链、密钥、Plugin、MCP 与 Hook 撤销机制时，见 [跨运行时 Agent 扩展生产治理](/interview/agent-skills-production-governance)。
 
+> 涉及子 Agent、后台任务、定时自动化、会话继承、并发额度、可靠投递与取消语义时，见 [Agent 自动化与后台编排生产设计](/interview/agent-automation-orchestration-playbook)。
+
 ## 怎么用这页
 
 面试时按“任务性质 -> 运行时边界 -> 产品能力 -> 治理措施 -> 验收证据”作答。落地时先完成最小闭环，再逐步开放写入、网络、外部系统和自动发布；不要从“给 Agent 一个管理员 shell”开始。
