@@ -2,6 +2,8 @@
 
 > 需要把 scoped token、身份委托、确认令牌、凭证撤销和后端二次鉴权连成完整回答时，见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
 
+> 如果问题从“用户怎样把 Slack、GitHub、CRM 或 Google Workspace 连接给 Agent”开始，需要解释 OAuth 同意、刷新、断连与审计控制面，见 [Agent 外部连接与 OAuth 凭证生命周期](/interview/agent-connector-identity-lifecycle-playbook)。
+
 > MCP 面试不要只背 Host / Client / Server 和 tools/resources/prompts。真正能拉开差距的是：公司内部要开放一批 MCP Server，如何做权限、版本、审计、资源边界、工具注册、灰度、下线和安全评估。协议细节见 [MCP 协议深入](/agent/mcp)，工具执行边界见 [Agent 工具安全与权限边界](/agent/tool-safety)，跨模型外发、凭据和审计证据见 [LLM 数据分级、外发治理与审计证据面试题](/interview/data-governance-egress-audit-qna)，资产台账、组件签名、策略即代码和紧急冻结见 [企业 AI 安全、合规与审计控制面系统设计面试题](/interview/enterprise-ai-governance-audit-system-design)。
 
 ## 怎么用这页
