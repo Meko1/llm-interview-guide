@@ -1,6 +1,8 @@
 # 大模型应用系统设计面试题
 
 > 设计完成后，面试官通常会继续问“改模型、改 Prompt、改知识库如何保证不把问题带到线上”。这部分请接着使用 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates) 回答版本化、离线门禁、灰度中止和回滚闭环。
+>
+> 若岗位偏 Java/Spring 后端，还应进一步说明 AI Orchestrator、SSE/WebFlux、领域事务、Tool Gateway 与异步 Job 的边界，见 [Java / Spring AI 生产架构系统设计面试题](/interview/java-ai-production-architecture-system-design)。
 
 > 本页面向大模型应用岗、Agent 工程岗、Java AI 工程岗和 AI Infra 岗的系统设计面试。它不重复“RAG 是什么、Agent 是什么”，而是训练你在白板上从业务目标、架构模块、数据流、权限、评测、成本和降级几个维度讲清一个可上线系统。
 

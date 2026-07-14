@@ -1,6 +1,6 @@
 # Spring AI / Java AI 生产化高频问答
 
-> Spring AI 面试的重点不是“会不会调用 ChatClient”，而是 Java/Spring 生产系统如何把 LLM 接入已有权限、审计、SSE、限流、配置、微服务和运维体系。工程总览见 [Spring AI 基础与面试题](/engineering/spring-ai)，应用全链路见 [LLM 应用开发实战](/engineering/llm-app-dev)。
+> Spring AI 面试的重点不是“会不会调用 ChatClient”，而是 Java/Spring 生产系统如何把 LLM 接入已有权限、审计、SSE、限流、配置、微服务和运维体系。工程总览见 [Spring AI 基础与面试题](/engineering/spring-ai)，应用全链路见 [LLM 应用开发实战](/engineering/llm-app-dev)，完整系统设计回答见 [Java / Spring AI 生产架构系统设计面试题](/interview/java-ai-production-architecture-system-design)。
 
 ## 怎么用这页
 

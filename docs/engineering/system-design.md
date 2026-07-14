@@ -80,7 +80,7 @@
 
 ## 高频场景四：实时/流式对话系统
 
-要点：流式输出（SSE）降低体感延迟、多轮对话的上下文管理（见 [记忆系统](/agent/agent-memory)）、会话隔离、并发连接管理、内容审核在流中处理。
+要点：流式输出（SSE）降低体感延迟、多轮对话的上下文管理（见 [记忆系统](/agent/agent-memory)）、会话隔离、并发连接管理、内容审核在流中处理。Java/Spring 岗位还要说明慢客户端背压、断开取消、`done/error/cancel` 终态和长任务异步化，见 [Java / Spring AI 生产架构系统设计面试题](/interview/java-ai-production-architecture-system-design)。
 
 ## 五类高频系统设计模板
 

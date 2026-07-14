@@ -1,5 +1,7 @@
 # 结构化输出与 Schema 约束高频问答
 
+> 如果面试官把问题从“Schema 如何约束模型”推进到“流式 partial JSON、Java DTO、业务事务和写工具怎样衔接”，可继续使用 [Java / Spring AI 生产架构系统设计面试题](/interview/java-ai-production-architecture-system-design) 的三层校验与提交边界回答。
+
 > 结构化输出不是“让模型返回 JSON”这么简单，而是把大模型输出变成后端、工作流、Agent 工具、审批系统可以稳定消费的工程合约。面试里它常和 Function Calling、MCP、RAG 抽取、表单填充、Agent 工具调用、Java/Spring AI、LangChain/LangGraph、Dify 工作流一起出现。原理细节可继续看 [结构化输出详解](/engineering/structured-output)，工具调用部分可看 [Function Calling 与 MCP](/agent/function-calling-mcp)。
 
 ## 先给面试官的总览回答
