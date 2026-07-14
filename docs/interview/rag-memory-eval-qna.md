@@ -1,5 +1,7 @@
 # RAG、Memory 与评测安全高频问答
 
+> 本页回答 RAG 和 Memory 本身如何评；当面试官继续问“索引、Prompt、模型改动怎样通过发布审批”，可使用 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates) 中的版本、门禁和灰度闭环。
+
 > 这页面向 RAG / AI Search、Agent 工程、LLM 应用开发和 AI 平台岗位。目标是把“企业知识库怎么上线、Agent 记忆怎么管、如何证明系统可靠、安全合规怎么过审”整理成面试可直接复述的答案。
 
 ## 怎么用这页
