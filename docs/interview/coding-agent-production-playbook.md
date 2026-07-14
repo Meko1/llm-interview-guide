@@ -14,6 +14,8 @@
 
 > 我会把 Claude Code、Codex、OpenClaw 和 Hermes 放到统一的企业 Agent 平台里管理，而不是分别配置。Claude Code 适合用项目规则、Hooks、子 Agent 和 worktree 把开发动作事件化；Codex 适合把 `AGENTS.md`、权限模式、沙箱和任务证据做成可重复的交付闭环；OpenClaw 用于把多渠道和远程节点收敛到 Gateway，但必须按操作者边界拆 Gateway；Hermes 用于长期运行、可检索记忆、技能沉淀和定时自动化，但记忆与技能都要经过版本、评测和审批。共同底座是统一身份、任务契约、受限执行器、审计轨迹、预算和发布门禁。
 
+> 如果面试官继续追问“沙箱能管什么、什么时候会逃逸、网络和密钥如何不被带出去”，可直接转到 [Agent 沙箱、执行准入与逃逸处置](/interview/agent-sandbox-execution-boundaries-playbook)。
+
 ## 一、先做能力盘点，而不是产品盘点
 
 | 能力面 | Claude Code | Codex | OpenClaw | Hermes | 企业要补的控制 |
