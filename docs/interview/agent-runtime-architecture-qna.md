@@ -2,6 +2,8 @@
 
 > 面试问 Claude Code、Codex、OpenClaw 或 Hermes 时，最差的回答是复述产品功能。更有区分度的回答是：把它们视为不同取向的 **Agent Runtime**，比较任务循环、上下文、工具执行、隔离、记忆、调度和评测如何协作。编程 Agent 的通用机制见 [编程 Agent 底层架构与内部机制](/engineering/coding-agent-internals)，Claude Code 的分层见 [Claude Code 代码架构](/claude-code/architecture)，工具执行安全见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
 
+> 需要把这些架构概念落到团队选型、最小权限、Skill 供应链、远程 Gateway、记忆发布与值班运行手册时，继续阅读 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)。
+
 ## 怎么用这页
 
 本页不声称掌握任何闭源产品的内部实现细节。它基于公开文档与开源仓库，把可观察能力抽象为工程设计模式。回答时先讲**共同运行时骨架**，再说某一产品选择强调了哪条边界，最后落到自己会如何实现和验证。
