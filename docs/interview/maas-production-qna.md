@@ -1,6 +1,6 @@
 # MaaS 平台生产化高频问答
 
-> MaaS 面试不是问“能不能转发模型 API”，而是问你能不能把模型能力做成企业内部可申请、可计费、可评估、可审计、可回滚的平台服务。工程总览见 [MaaS 平台与模型服务治理](/engineering/maas-platform)，请求层治理见 [模型网关与多模型路由](/engineering/llm-gateway)，推理容量与成本见 [推理部署与成本治理高频问答](/interview/inference-cost-qna)，按租户灰度、模型路由实验和线上质量运营见 [LLM 线上评测、灰度实验与质量运营面试题](/interview/online-evaluation-rollout-operations)。
+> MaaS 面试不是问“能不能转发模型 API”，而是问你能不能把模型能力做成企业内部可申请、可计费、可评估、可审计、可回滚的平台服务。工程总览见 [MaaS 平台与模型服务治理](/engineering/maas-platform)，请求层治理见 [模型网关与多模型路由](/engineering/llm-gateway)，推理容量与成本见 [推理部署与成本治理高频问答](/interview/inference-cost-qna)，按租户灰度、模型路由实验和线上质量运营见 [LLM 线上评测、灰度实验与质量运营面试题](/interview/online-evaluation-rollout-operations)，跨模型、跨区域的资产、策略和审计控制见 [企业 AI 安全、合规与审计控制面系统设计面试题](/interview/enterprise-ai-governance-audit-system-design)。
 
 ## 怎么用这页
 

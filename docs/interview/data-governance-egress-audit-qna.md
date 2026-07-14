@@ -203,6 +203,8 @@ RAG 权限校验的正确位置是**检索之前**，不是模型生成之后。
 
 ## 继续阅读
 
+- [企业 AI 安全、合规与审计控制面系统设计面试题](/interview/enterprise-ai-governance-audit-system-design)：从数据治理扩展到资产图谱、策略即代码、供应链和持续控制验证。
+
 - [AI 安全合规与治理](/advanced/governance)：法规、治理与风险分级基础。
 - [Agent 工具安全与权限边界](/agent/tool-safety)：工具最小权限、HITL、幂等与审计。
 - [RAG 生产化与系统设计](/rag/rag-production)：索引、权限、缓存和引用链路。
