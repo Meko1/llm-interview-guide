@@ -2,6 +2,8 @@
 
 > 浏览器/桌面 Agent 还需要评估元素定位、状态验证、误操作拦截、会话恢复和人工接管；完整题库见 [Computer Use / 浏览器 Agent 生产系统设计面试题](/interview/computer-use-browser-agent-system-design)。
 
+> 当面试题深入到 Claude Code、Codex、OpenClaw、Hermes 的遥测、审计取证、trace 回放、成本归因和事故 runbook 时，继续阅读 [Agent 观测、取证与事故响应手册](/interview/agent-observability-incident-response)。
+
 > 「能跑通 demo」和「能上生产」之间，隔着评估与可靠性。本文讲清 Agent 为什么难评、**结果评估 vs 轨迹评估**两条主线、主流 Agent 基准（GAIA / SWE-bench / τ-bench 等）、用 LLM-as-Judge 评 Agent，以及生产环境的失败模式、护栏与可观测性。Agent 基础见 [Agent 基础与框架](/agent/agent-basics)，多 Agent 见 [多 Agent 与进阶范式](/agent/multi-agent)，与工作流的边界见 [AI 工作流 vs Agent](/agent/workflow)，生产化面试追问见 [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)。
 
 ## 2026 面试先背这几句话
