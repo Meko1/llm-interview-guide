@@ -4,6 +4,8 @@
 
 > 后台 job、lease 与取消传播见 [Agent 自动化与后台编排生产设计](/interview/agent-automation-orchestration-playbook)，持续授权/撤权见 [长任务 Agent 持续授权与紧急撤权](/interview/agent-continuous-authorization-playbook)，证据与 effect 对账见 [Agent 观测、取证与事故响应手册](/interview/agent-observability-incident-response)。
 
+> 当重点是多系统写操作的业务幂等、SAGA 补偿、不可逆边界与对账协议时，继续阅读 [Agent 外部副作用事务与补偿](/interview/agent-effect-transaction-compensation-playbook)。
+
 ## 30 秒总答法
 
 > 我把长运行 Agent 分成逻辑 task、一次 execution attempt、交互 session 和外部 effect 四个对象。控制面在副作用前、工具返回后、人工等待前、worker 切换前写 checkpoint，持久化计划版本、run manifest、已验证 artifact、lease/fence、approval、intent digest、idempotency key 与 effect status。恢复时先获得新 lease，并重新检查身份、策略、配置、环境和审批；然后按 effect 对账结果决定 continue、wait、compensate、ask human 或从安全 step 重启。人工中途 steer 不是普通聊天追加，而是带 `expected_plan_revision` 的暂停/取消/重规划命令，先撤销未开始 step 的能力，再处理在途 effect。Claude Code 的 background session 可在 terminal 关闭后继续但休眠/关机后要 respawn；Codex 允许跨设备查看、批准与改方向而执行仍留在受信机器；OpenClaw 把 session/job/queue 放入持久存储并带恢复安全阀；Hermes 以 SQLite session、独立 background session 和 jobs API 支持恢复。所有 Runtime 的 transcript resume 都不能替代业务 effect 的查询与幂等控制。
