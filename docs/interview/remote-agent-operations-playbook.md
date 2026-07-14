@@ -4,6 +4,8 @@
 
 > 先阅读 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna) 建立统一 Runtime 模型；工具权限见 [企业 Tool Gateway 安全执行设计](/interview/tool-gateway-security-design)，跨 Agent 调度见 [A2A 跨 Agent 互操作生产设计](/interview/a2a-production-interoperability-qna)。
 
+> 需要进一步设计断网、休眠、Gateway 重启、检查点恢复与人工中途 steer 的一致性时，见 [长运行 Agent 检查点、恢复与人工 Steer](/interview/long-running-agent-recovery-playbook)。
+
 ## 怎么使用这页
 
 本页不推断闭源产品的内部实现。产品事实以官方文档为准，版本升级后应重新核对；文中的架构、状态机、表字段和控制策略是工程抽象。准备面试时按以下顺序组织回答：
