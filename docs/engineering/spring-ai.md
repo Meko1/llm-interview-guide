@@ -1,5 +1,7 @@
 # Spring AI 基础与面试题
 
+> Spring AI 的 Tool Calling 不能越过企业后端权限。需要回答身份委托、凭证代理、后端二次鉴权和写操作确认时，见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
+
 > Spring AI 是 Java/Spring 生态里的大模型应用抽象层。面试里出现 Spring AI，通常不是在考你背 API，而是在考你能不能把 LLM 能力接入已有 Java 后端、权限体系、日志审计、配置中心和微服务治理。应用全链路见 [LLM 应用开发实战](/engineering/llm-app-dev)，生产化追问见 [Spring AI / Java AI 生产化高频问答](/interview/spring-ai-production-qna)，完整 Java 分层、流式、事务工具和 LLMOps 架构见 [Java / Spring AI 生产架构系统设计面试题](/interview/java-ai-production-architecture-system-design)，框架对比见 [LangChain 与应用框架](/engineering/langchain)。
 
 面试前需要速刷 Spring AI、LangChain、Dify、Agent、RAG 的横向追问，可配合 [基础篇高频问答加厚版](/interview/foundation-qna)。

@@ -1,5 +1,7 @@
 # LLM 数据分级、外发治理与审计证据面试题
 
+> 当敏感数据通过 Agent 工具读取、处理或外发时，不能只看模型调用；还要审查工具身份委托、凭证范围、结果脱敏与确认令牌。完整执行链路见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
+
 > 企业大模型项目里，最有区分度的问题常常不是“会不会脱敏”，而是：**一份数据进入 RAG、Memory、Prompt、模型、工具和日志后，是否始终带着可执行的权限与用途；能不能发到某个模型或第三方；删除后是否真的消失；出了事件是否拿得出证据。**
 >
 > 本页与 [AI 安全合规与治理](/advanced/governance)、[Agent 工具安全与权限边界](/agent/tool-safety)、[RAG 生产化与系统设计](/rag/rag-production)、[LLM 评测与发布门禁实战](/interview/evaluation-release-gates) 配套使用。

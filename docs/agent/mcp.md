@@ -1,5 +1,7 @@
 # MCP 协议深入
 
+> MCP 统一的是接入协议，不会自动提供身份委托或资源授权。涉及短期凭证、确认令牌与执行边界时，见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
+
 > MCP（Model Context Protocol）是 2024 年底以来最受关注的 AI 工程标准，已被主流厂商广泛采纳，几乎成了 Agent 方向的必考题。本文系统讲清它要解决的问题、架构、三大原语、JSON-RPC 消息细节、能力协商与生命周期、传输演进、生态与实战、安全风险。基础的工具调用机制见 [Function Calling 与 MCP](/agent/function-calling-mcp)，企业治理和系统设计追问见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。
 
 ## 一、MCP 要解决什么问题？
