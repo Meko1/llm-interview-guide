@@ -4,6 +4,8 @@
 
 > 任务在远程 Node、云端 sandbox 或本地机器执行时的网络和身份边界，见 [远程与云端 Agent 生产运行手册](/interview/remote-agent-operations-playbook)。变更如何走向 PR 与 CI，见 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)。
 
+> 当问题从“怎么并发跑”深入到控制权、责任、预算和审批如何从父任务转给子任务，以及如何处理孤儿任务与冲突收敛时，继续阅读 [多 Agent 委派与 Handoff 控制平面](/interview/multi-agent-delegation-handoff-playbook)。
+
 ## 怎么用这页
 
 产品能力会随着版本变化，本页只引用公开文档中可观察的行为，不猜测闭源系统内部实现。面试时先讲任务语义，再讲状态、资源和副作用的控制，最后用具体产品举例。不要把“有后台按钮”误答成“具备生产级调度”。
