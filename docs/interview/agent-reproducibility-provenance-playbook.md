@@ -8,6 +8,8 @@
 
 > 我把一次 Agent run 视为一个可签名的“配置闭包”，不是一段聊天。控制面在 admission 时解析并固定 instruction tree、skill/plugin/MCP 清单、模型/endpoint、tool schema、policy、sandbox、repo/worktree/image、环境变量的引用、retrieval snapshot 和 session/memory 的版本，写成 `run_manifest` 与 digest。执行时记录实际命中的 path rule、实际调用的 tool version 和 effect；回放时区分 trace replay、context replay 和 sandbox replay，默认不重放外部副作用。所有 Agent 配置都像代码一样走 PR、schema 校验、签名/来源校验、golden task、对抗注入与权限回归；变更采用 canary、shadow 或 pinned version。Claude Code 通过 CLAUDE.md、rules、settings、memory、skills/MCP 形成多层输入；Codex 聚合 AGENTS.md、config、skills、环境与 thread；OpenClaw 按 agent 隔离 workspace、auth profile、session 与 tool policy；Hermes 通过优先级 context files、profile、config 与 session snapshot 形成上下文。它们的加载规则不同，因此企业必须记录解析后的有效配置，而不能只记文件名。
 
+> Runtime、插件、配置 schema 和状态目录发生升级时，如何分批、迁移、验证和回滚，见 [Agent Runtime 升级、兼容性与回滚](/interview/agent-runtime-upgrade-rollback-playbook)。
+
 ## 一、为什么“配置闭包”比 Prompt 更重要
 
 一个 prompt 是用户意图；配置闭包是使同一意图在某次运行中产生特定行为的所有版本化输入。
