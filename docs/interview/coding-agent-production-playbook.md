@@ -2,6 +2,8 @@
 
 > 这是一份面向面试与真实落地的操作页。它不把 Claude Code、Codex、OpenClaw、Hermes 当成四个“哪个更强”的产品，而是把它们映射为四类运行时能力：开发任务执行、云端或本地工作区、长驻消息 Gateway、持久记忆与技能闭环。架构原理见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)，工具边界见 [企业 Tool Gateway 安全执行系统设计](/interview/tool-gateway-security-design)。
 
+> 需要深入设计跨 Claude Code、Codex、OpenClaw 与 Hermes 的 `SKILL.md` 作用域、自动触发、供应链、密钥、Plugin、MCP 与 Hook 撤销机制时，见 [跨运行时 Agent 扩展生产治理](/interview/agent-skills-production-governance)。
+
 ## 怎么用这页
 
 面试时按“任务性质 -> 运行时边界 -> 产品能力 -> 治理措施 -> 验收证据”作答。落地时先完成最小闭环，再逐步开放写入、网络、外部系统和自动发布；不要从“给 Agent 一个管理员 shell”开始。
