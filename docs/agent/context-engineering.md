@@ -4,6 +4,8 @@
 
 > 需要将上述原理落到 Claude Code、Codex、OpenClaw 与 Hermes 的项目指令、会话压缩、跨会话检索、隐私边界与运维流程时，见 [Agent 上下文与记忆生产治理](/interview/agent-context-memory-governance)。
 
+> 当面试进一步追问“这一次 Agent 到底加载了哪份指令、Skill、插件、模型与环境，如何重放并给配置变更做回归测试”时，见 [Agent 可复现运行与配置溯源](/interview/agent-reproducibility-provenance-playbook)。
+
 > 业界共识已从「Prompt 工程」升级到「上下文工程」——决定 Agent 成败的，往往不是某句提示词，而是**喂进上下文窗口的全部信息如何组织**。Karpathy 的说法：上下文窗口是 LLM 的 RAM，上下文工程就是「为下一步计算精心装填 RAM 的艺术」。
 
 ## 从 Prompt 工程到上下文工程
