@@ -201,6 +201,8 @@ Hook 常被误解为“多写一段脚本就更安全”。实际上 Hook 是可
 
 Claude Code 的 Hook 体系覆盖工具调用、权限请求、子 Agent、worktree、压缩等生命周期事件，适合作为产品层的实现参考；企业平台仍应在资源服务侧保留最终判定。[Claude Code Hooks](https://code.claude.com/docs/en/hooks)
 
+> 本页讨论 Hook、Plugin、Skill 的发布与供应链治理。要设计跨 Claude Code、Codex、OpenClaw、Hermes 的事件信封、同步 Policy Gate、webhook ingress、outbox、DLQ 与运行时适配边界，见 [Agent 生命周期事件与 Policy Hook Fabric](/interview/agent-lifecycle-policy-hook-fabric)。
+
 ## 十、Plugin 与 Skill 供应链
 
 Plugin 可能一次引入 Skills、Hooks、MCP Server、二进制依赖和安装器，应按软件包而不是 Markdown 文件治理：
