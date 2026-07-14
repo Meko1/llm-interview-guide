@@ -324,6 +324,8 @@ LLM 应用至少要能独立回退下面几类资产：
 
 ## 继续阅读
 
+- 想将离线门禁衔接到 shadow、canary、A/B、错误预算和回滚演练，见 [LLM 线上评测、灰度实验与质量运营面试题](/interview/online-evaluation-rollout-operations)。
+
 - 想深入 RAG 的检索、生成和引用评测，见 [RAG 评估](/rag/rag-evaluation) 与 [RAG、Memory 与评测安全高频问答](/interview/rag-memory-eval-qna)。
 - 想深入工具轨迹、权限和高危动作，见 [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)。
 - 想把评测平台放进完整架构回答，见 [大模型应用系统设计面试题](/interview/application-system-design)。

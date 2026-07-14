@@ -1,6 +1,8 @@
 # Dify / 低代码工作流生产化高频问答
 
 > Dify 面试不要答成“我会拖节点”。真正高频的是：低代码为什么适合 PoC、生产化要补哪些治理、什么时候迁到代码、如何做权限/评估/成本/版本/灰度。框架基础见 [Dify 与低代码智能工作流](/engineering/dify-workflow)，工作流边界见 [AI 工作流 vs Agent](/agent/workflow)，跨环境发布时的评测、审批、灰度和回滚闭环见 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)。
+>
+> 工作流草稿进入真实流量后，如何做版本粘性、影子验证、灰度停止和配置漂移演练，见 [LLM 线上评测、灰度实验与质量运营面试题](/interview/online-evaluation-rollout-operations)。
 
 ## 怎么用这页
 

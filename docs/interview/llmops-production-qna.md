@@ -1,6 +1,6 @@
 # LLMOps 生产运营高频问答
 
-> LLMOps 考的不是“会不会调 API”，而是你能不能把一个大模型应用长期稳定地跑在生产环境里：上线前怎么评估，发布时怎么灰度，线上怎么监控，成本异常怎么止血，bad case 怎么回流，模型或 prompt 改坏了怎么回滚。工程原理可继续看 [LLMOps 生产运营](/engineering/llmops)，网关侧治理可看 [模型网关与多模型路由](/engineering/llm-gateway)，上线的统一质量门禁可看 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)，线上事故定位可看 [大模型应用线上排障手册](/interview/application-troubleshooting-playbook)。
+> LLMOps 考的不是“会不会调 API”，而是你能不能把一个大模型应用长期稳定地跑在生产环境里：上线前怎么评估，发布时怎么灰度，线上怎么监控，成本异常怎么止血，bad case 怎么回流，模型或 prompt 改坏了怎么回滚。工程原理可继续看 [LLMOps 生产运营](/engineering/llmops)，网关侧治理可看 [模型网关与多模型路由](/engineering/llm-gateway)，上线的统一质量门禁可看 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)，在线实验、质量 SLO 与回滚演练见 [LLM 线上评测、灰度实验与质量运营面试题](/interview/online-evaluation-rollout-operations)，线上事故定位可看 [大模型应用线上排障手册](/interview/application-troubleshooting-playbook)。
 
 ## 先给面试官的总览回答
 

@@ -1,6 +1,8 @@
 # Agent 评测与安全合规高频问答
 
 > 当问题从“怎么评 Agent”继续追问到“改了模型、工具或策略后怎么安全发布”，可衔接到 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)，其中给出了 release manifest、硬红线、sandbox、灰度和回滚的完整答题框架。
+>
+> 若继续追问“灰度怎么稳定分桶、写工具何时停止扩量、线上证据如何进入回归集”，见 [LLM 线上评测、灰度实验与质量运营面试题](/interview/online-evaluation-rollout-operations)。
 
 > Agent 面试不要只说“任务成功率”。生产 Agent 是多步、有状态、会调用工具、可能产生副作用的系统，评估必须同时看 Outcome、Trajectory、Cost、Safety 和 Audit。工程总览见 [Agent 评估与可靠性工程](/agent/agent-evaluation)，工具权限边界见 [Agent 工具安全与权限边界](/agent/tool-safety)，合规框架见 [AI 安全合规与治理](/advanced/governance)。
 
