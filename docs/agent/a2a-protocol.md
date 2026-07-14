@@ -1,5 +1,7 @@
 # A2A 协议与 Agent 互操作
 
+> 本页讲 Agent Card、Task、Message 和 Artifact 的协议模型；需要回答可信发现、身份委托、异步任务、回调验签、跨租户审计和事故止血时，见 [A2A 跨 Agent 互操作生产设计面试题](/interview/a2a-production-interoperability-qna)。
+
 > 当一个 Agent 需要把任务委托给「别人家」的 Agent 时，就需要一套通用语言。**A2A（Agent2Agent）** 由 Google 在 2025 年发起、后捐给 Linux 基金会，目标是成为跨厂商、跨框架的 Agent 间协作标准。本文讲清 A2A 解决什么问题、核心对象（Agent Card / Task / Message / Artifact）、通信流程，以及面试最爱问的 **A2A vs MCP** 区别与互补。MCP 见 [MCP 协议深入](/agent/mcp) 与 [Function Calling 与 MCP](/agent/function-calling-mcp)，多 Agent 协作见 [多 Agent 与进阶范式](/agent/multi-agent)。
 
 ## 一、为什么需要 Agent 互操作标准

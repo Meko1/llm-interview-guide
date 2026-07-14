@@ -1,5 +1,7 @@
 # 多 Agent 与进阶范式
 
+> 当多个 Agent 跨团队、跨框架或跨组织协作时，框架内编排需要升级为可发现、可授权、可追踪的协议边界；生产化回答见 [A2A 跨 Agent 互操作生产设计面试题](/interview/a2a-production-interoperability-qna)。
+
 > 单 Agent 解决不了的复杂任务，常用多 Agent 协作或更结构化的工作流。本文梳理进阶规划范式、多 Agent 架构与主流框架，是 Agent 方向的深水区考点。
 
 ## 进阶规划范式
