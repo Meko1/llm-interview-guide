@@ -2,6 +2,8 @@
 
 > 本页聚焦风险分级、ABAC 与人审原则；需要把这些原则落为身份委托、凭证代理、确认令牌和审计证据链时，见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
 
+> 长时间运行、暂停恢复或多 Agent 委派时，授权不应只在开始前做一次；关于续租、风险升阶、撤权与紧急接管，见 [长任务 Agent 持续授权与紧急撤权](/interview/agent-continuous-authorization-playbook)。
+
 > 浏览器与桌面自动化还要处理不可信网页内容、Cookie/会话隔离、视觉误点击和支付/外发确认，见 [Computer Use / 浏览器 Agent 生产系统设计面试题](/interview/computer-use-browser-agent-system-design)。
 
 > Agent 一旦能调用工具，就从「会说话的模型」变成了「会影响业务状态的软件系统」。面试里不要只说加 prompt、加审核，要讲清楚：模型只提出调用意图，服务端才是权限、校验、执行和审计的最终边界。
