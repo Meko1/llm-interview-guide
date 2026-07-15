@@ -227,6 +227,7 @@ export default defineConfig({
           text: '新手入门',
           items: [
             { text: '大模型零基础入门', link: '/beginner/getting-started' },
+            { text: '从零到能做项目：LLM 实战手册', link: '/beginner/llm-first-practice-handbook' },
             { text: '大模型是怎么工作的（直觉版）', link: '/beginner/how-llm-works' },
             { text: '能做什么·不能做什么', link: '/beginner/llm-capabilities' },
             { text: '大模型发展简史', link: '/beginner/llm-history' },
