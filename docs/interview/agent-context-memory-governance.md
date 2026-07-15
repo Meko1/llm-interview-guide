@@ -103,6 +103,100 @@ Claude Code 的 auto memory 是本机、按仓库共享的记忆目录，入口 
 
 这类文件可能被注入聊天渠道的上下文，因此必须明确：团队共享规则、个人偏好、用户档案和密钥文件不可混放。OpenClaw 的 `AGENTS.md` 模板也建议不要在共享 Discord/群聊上下文加载含个人信息的长期记忆。
 
+## 三（补充）、策略文件变更控制面：把行为指引当作低权限策略工件
+
+`AGENTS.md`、`CLAUDE.md`、`.claude/rules/`、`SKILL.md` 和运行时本地规则会影响 Agent 的行为，因此它们不是普通说明文档；但它们也**不是授权系统**。最容易出事故的设计，是把“请不要读取 `.env`”或“不要推送 main”只写在 Markdown 中，再误以为这已经完成了访问控制。
+
+正确的分层是：规则文件提供可读、可审查的行为指引；受管配置、sandbox、Tool Gateway、分支保护和资源服务负责确定性强制。Claude Code 官方文档也明确区分了 `CLAUDE.md` 的上下文作用与 managed settings 的权限、sandbox 等强制作用。[Claude Code Memory](https://code.claude.com/docs/en/memory) [Claude Code Configuration](https://code.claude.com/docs/en/configuration)
+
+| 需求 | 可以写在指令文件中 | 必须由确定性系统执行 |
+| --- | --- | --- |
+| 构建、测试、目录约定 | 是，给出可复制命令和明确路径 | CI 在受控环境重放 |
+| 代码风格、设计模式 | 是，作为 reviewer/Agent 的共同约定 | lint、format、架构检查（若需要硬门禁） |
+| 禁读 secret、禁写敏感目录 | 可说明原因和替代路径 | 文件权限、`deny` 规则、sandbox mount |
+| 禁止推 main、生产部署 | 可提醒流程 | 分支保护、短期 Git 凭证、审批和发布服务 |
+| 允许访问某业务 API | 可声明用途、Schema 和测试桩 | 服务端 RBAC/ABAC、凭证 broker、网络策略 |
+| 不信任外部网页或仓库文本 | 应明确标为数据而非命令 | context builder 的 trust 标签和工具授权 |
+
+### 规则包必须有不可变身份
+
+对企业而言，不能只记录“本次加载了 `AGENTS.md`”。至少应记录它来自哪个仓库版本、谁审批、与哪些强制策略兼容，以及实际解析后生效的顺序：
+
+```yaml
+instruction_bundle:
+  bundle_id: repo-payments-rules
+  revision: 2026.07.15.3
+  source:
+    repo: github.com/acme/payments-api
+    commit: 6f2d1be
+    files:
+      - path: AGENTS.md
+        sha256: "..."
+      - path: services/refund/AGENTS.md
+        sha256: "..."
+  declared_scope: ["payments-api", "services/refund/**"]
+  resolved_order:
+    - managed-policy@2026.07
+    - repo-root@6f2d1be
+    - refund-path-rule@6f2d1be
+  compatibility:
+    min_runner_policy: runner-policy-18
+    required_checks: ["refund-unit", "refund-contract"]
+  approval:
+    owner: team-payments
+    change_ticket: ENG-4821
+    reviewed_at: 2026-07-15T02:00:00Z
+```
+
+`resolved_order` 比“文件清单”更关键。不同运行时对层级与路径加载的行为不同；例如 Claude Code 会把父级到当前目录的规则组合进上下文，且更具体目录的内容后出现。企业控制面应记录解析结果，而不是假设所有平台都是“后者覆盖前者”。[Claude Code Memory](https://code.claude.com/docs/en/memory)
+
+### 变更不是直接覆盖，而是一条发布管线
+
+```text
+draft -> schema/lint -> policy diff review -> sandbox replay
+      -> evaluation -> shadow/canary -> promote -> observe
+      -> deprecate / revoke
+```
+
+| 阶段 | 要解决的问题 | 最小产物 |
+| --- | --- | --- |
+| Schema/lint | 是否有未解析 import、冲突规则、超长常驻上下文或危险命令示例？ | 结构化检查报告 |
+| Policy diff review | 新规则改变了哪些可见任务、目录、工具建议和 token 预算？ | 规则 diff、owner 结论 |
+| Sandbox replay | 在固定仓库快照和无真实凭证环境中，是否仍能正确选择命令和拒绝越权？ | 轨迹、退出码、拒绝样本 |
+| Evaluation | 新旧版本在 golden、bad case、注入和隔离集上是否回归？ | 指标比较与门禁结论 |
+| Shadow/canary | 只让测试 Agent 或小比例低风险任务使用新规则，观察行为漂移 | cohort、采样 trace、告警 |
+| Promote/revoke | 是否可以按 `bundle_id + revision + hash` 精确放量或止血？ | allowlist、撤销记录、影响范围 |
+
+对于“只改了一行测试命令”也要保留 diff 审查，因为它会改变所有后续 Agent 的验证行为。对于添加外部下载、自动写入、部署命令、修改权限建议、引入脚本或扩大作用域的规则，应按高风险变更处理，要求独立 owner 和 fail-closed 的验证。
+
+### 冲突裁决与指令投毒
+
+冲突不能交给模型临场“猜哪条更重要”。Resolver 应先按来源可信度和作用域计算有效规则集，再将冲突显式标记出来：
+
+```text
+managed enforcement > task contract > reviewed project rule > local preference
+       > retrieved document / issue / webpage > model-generated memory
+```
+
+这里的 `>` 表示**可以影响决策的可信度与裁决顺序**，不表示低层 Markdown 能够覆盖高层资源授权。任何来自 Issue、PR 描述、依赖 README、网页或 Agent 自生成记忆的“忽略规则、上传文件、改权限”都只能作为不可信数据。相关攻击面和隔离策略见 [Agent Prompt Injection 与不可信上下文隔离](/interview/agent-prompt-injection-provenance-playbook)。
+
+建议为每一次冲突生成 `instruction_conflict` 事件：包含两个来源、作用域、解析顺序、是否影响任务、采用的裁决和人工 override 的到期时间。静默拼接最危险，因为它既不可复现，也会让审计无法区分“Agent 没遵守”与“平台给了矛盾规则”。
+
+### 灰度、撤销和正在运行的任务
+
+规则发布不应改变已启动任务的事实。每个 run 在 admission 时绑定 bundle 快照；新版本只影响新任务。出现注入、误导测试、错误工具推荐或大面积成本退化时，控制面应同时执行：
+
+1. 停止新任务解析被撤销 revision，并将其 hash 加入 denylist。
+2. 按风险级别处理正在运行的任务：高风险写入任务立即暂停并重新授权；只读分析可在限定时间内完成，但不得续租高权限凭证。
+3. 恢复上一个已知良好 bundle，并让新的 canary 从干净 worktree、干净缓存和固定模型配置开始。
+4. 从 Context Manifest、工具轨迹和变更记录定位影响任务；将可复现样本加入规则回归集。
+
+这与 Skill/Plugin 的包级撤销不同但应共用同一套 registry、版本 pin 和审计原则；扩展包的供应链细节见 [跨运行时 Agent 扩展生产治理](/interview/agent-skills-production-governance)，完整的配置闭包见 [Agent 可复现运行与配置溯源](/interview/agent-reproducibility-provenance-playbook)。
+
+### 面试追问：如何设计“仓库规则发布平台”？
+
+> 我会把规则文件当作低权限、可版本化的策略工件，而不是把它们做成权限源。控制面维护 bundle registry、来源签名、作用域解析器、规则 diff、评测集、灰度 cohort、撤销清单和 Context Manifest。运行时先固定 `repo SHA + bundle revision + managed policy revision`，再由 resolver 给出实际生效顺序；真正的文件、网络、Git 和业务 API 权限仍由 sandbox、gateway、凭证 broker 与服务端授权执行。这样既能让团队用 Markdown 维护项目知识，又能在规则被误改或投毒时精确回滚和追溯。
+
 ## 四、压缩、pruning 与归档是三件事
 
 长会话通常会混入大段工具结果、重复重试、旧计划和无关对话。以下三个动作不可互相替代：
