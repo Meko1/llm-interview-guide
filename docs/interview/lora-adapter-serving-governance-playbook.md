@@ -56,6 +56,38 @@ adapter 参数少于全量模型，但多 adapter 同时驻留仍会占 GPU/CPU 
 
 新 adapter 不能只在训练集上变好。发布门禁应包含：领域任务、基础通用能力、拒答/安全、结构化输出、成本与延迟。灰度按稳定用户/租户分桶，比较基础模型与 adapter 的任务成功、人工纠错、投诉、token 成本和 OOM。退化时按 release manifest 回滚；已产生的业务副作用仍由工具幂等/补偿机制处理。
 
+### 7.1 Adapter 发布状态机
+
+把 adapter 的生命周期显式建模，避免“上传成功就是线上可用”：
+
+```text
+draft -> candidate -> canary -> stable -> deprecated
+                         \-> revoked
+```
+
+- `draft`：制品仅可被作者和 CI 读取。
+- `candidate`：兼容性、签名和离线评测已通过，可预加载但不接真实流量。
+- `canary`：稳定分桶的小流量灰度，自动采集质量、OOM、加载和成本指标。
+- `stable`：路由策略可选择的正式版本，仍保留基线与回滚指针。
+- `deprecated/revoked`：不再接受新请求；`revoked` 用于安全、许可证或严重质量事件，立即阻断新加载。
+
+每个状态转换写入不可变 release manifest：制品 digest、base model/tokenizer/chat template、PEFT 配置、量化/引擎版本、租户范围、评测证据、审批人与生效时间。路由只读取已批准的状态，而不是依据文件名或最新上传时间。
+
+### 7.2 会话黏附与原子切换
+
+同一个会话或可恢复 run 必须固定 effective adapter 版本。否则用户在多轮对话、流式重连或工具重试中可能前半段使用 `v12`、后半段使用 `v13`，结果无法复现。运行快照和缓存 key 至少包含：
+
+```text
+tenant + isolation domain + base model + adapter digest
++ prompt version + engine/quant config + routing policy version
+```
+
+发布时先将 candidate 预加载并做健康探针，再原子更新 routing pointer；在途请求继续使用原快照，旧 adapter 等待 drain 后卸载。紧急 revoke 则阻断新请求、失效相关缓存，并按风险回退到已验证的 stable adapter 或基础模型。
+
+### 7.3 Adapter 专项观测与暂停阈值
+
+除通用质量门禁外，按 `base + adapter + prompt + engine/quant` 组合观察：加载延迟、热加载命中率、GPU 显存、KV 分配失败、OOM、队列等待、成本、领域成功率和通用能力回归。预先定义自动暂停 canary 的规则，例如：连续质量回归、OOM 超过基线、加载错误增加或安全拒绝异常。排障时先核对 digest 与兼容矩阵，再看路由/缓存、引擎热加载和实际容量，避免把 adapter 问题误判为模型整体退化。
+
 ## 八、高频问答
 
 **Q：多 adapter 如何避免串租户？**
