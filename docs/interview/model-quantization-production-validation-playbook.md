@@ -29,9 +29,21 @@ base model digest + quant method/config + calibration dataset hash
 
 对照实验固定数据、随机种子、并发、模型参数和硬件。比较 `FP baseline` 与候选量化版的质量-成本曲线，而非只比较单点吞吐。若 INT4 节省显存却导致需要更多重试、fallback 或人工复核，实际每成功任务成本可能更高。
 
+### 3.1 可判定的非劣门禁与运行证据
+
+关键切片预先定义非劣阈值、最小样本量和置信区间；schema/tool/safety 等合约失败属于硬失败，不允许用平均分抵消。逐样本配对比较基线与候选，使用 bootstrap CI 或重复运行处理非确定性；golden/bad-case 集冻结版本、标签复核并与训练数据隔离。面对“胜率差 0.8% 能否发布”，回答应是看 CI、关键切片和硬失败，而非看一个平均数字。
+
+线上 trace/metrics 还要证明实际运行的是目标配置：权重与 KV 精度、kernel 命中率、dequant/fallback 比率、engine、CUDA/driver 和权重 digest。否则部署了 INT4 文件却静默回退 FP16，容量与成本结论都不成立。
+
 ## 四、灰度、告警与回滚
 
 量化灰度应稳定分桶，分别观察质量、schema valid rate、工具成功、拒答、TTFT、TPOT、KV 使用率、OOM、fallback、成本和用户纠错。停止规则预先定义：关键安全/权限退化、结构化输出失败、P99 超标、OOM 增长或真实成本无收益时暂停。回滚是切换到上一个 base+precision+engine manifest；在途请求固定已有快照，避免同一会话混用不同数值精度。
+
+### 4.1 容量分位数与原子回滚
+
+容量使用 P95/P99 输入输出长度、突发到达、Prefill/Decode 竞争、KV 碎片和长请求隔离来测每实例可接纳并发，再加入 N+1、灰度余量、故障域和冷启动时间。成本口径统一为 `(推理 + 重试 + fallback + 人工介入) / 成功任务数`，并按任务切片比较。
+
+灰度使用稳定 hash 分桶、候选/基线对照、最小样本量与连续 N 个观察窗口；安全/合约失败立即回滚，其他指标触发自动暂停。回滚时原子切换路由权重，新请求读取旧 manifest，在途会话保持 affinity；tokenizer、chat template、LoRA、索引和缓存均按 manifest 隔离或失效，随后运行自动验收与演练记录。
 
 ## 五、高频问答
 
