@@ -152,7 +152,8 @@ export default defineConfig({
             items: [
               { text: '多模态大模型', link: '/multimodal/multimodal' },
               { text: '扩散模型与图像生成', link: '/multimodal/diffusion' },
-              { text: '语音大模型', link: '/multimodal/speech' }
+              { text: '语音大模型', link: '/multimodal/speech' },
+              { text: '实时语音 Agent 生产化', link: '/engineering/voice-agent-production' }
             ]
           }
         ]
@@ -378,6 +379,7 @@ export default defineConfig({
             { text: 'LangGraph 生产化与系统设计', link: '/engineering/langgraph-production' },
             { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
             { text: 'LLM 流式应用生产化', link: '/engineering/llm-streaming-production' },
+            { text: '实时语音 Agent 生产化', link: '/engineering/voice-agent-production' },
             { text: 'Dify 与低代码工作流', link: '/engineering/dify-workflow' },
             { text: '模型网关与多模型路由', link: '/engineering/llm-gateway' },
             { text: 'MaaS 平台与模型服务治理', link: '/engineering/maas-platform' },
@@ -492,7 +494,8 @@ export default defineConfig({
             { text: '多模态架构深挖（VLM）', link: '/multimodal/vlm-architecture' },
             { text: '扩散模型与图像生成', link: '/multimodal/diffusion' },
             { text: '视频生成', link: '/multimodal/video-generation' },
-            { text: '语音大模型', link: '/multimodal/speech' }
+            { text: '语音大模型', link: '/multimodal/speech' },
+            { text: '实时语音 Agent 生产化', link: '/engineering/voice-agent-production' }
           ]
         }
       ],
