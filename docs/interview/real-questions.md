@@ -81,7 +81,7 @@
 1. **设计一个企业知识库问答系统**：从文档接入、切分、Embedding 选型、检索、Rerank、Prompt、评估、增量更新到权限隔离。→ [AI 项目实战](/engineering/projects)
 2. **设计一个支持 10 万用户的高并发大模型服务**：推理框架、批处理、限流降级、缓存、多副本、监控。→ [LLM 应用开发实战](/engineering/llm-app-dev)
 3. **设计一个大模型私有化部署方案**：模型选型与量化、显卡选型与成本、推理框架、高可用、数据安全。
-4. **设计一个 Text-to-SQL / ChatBI 系统**：Schema 检索、SQL 生成与纠错循环、安全、评估。→ [AI 项目实战](/engineering/projects)
+4. **设计一个 Text-to-SQL / ChatBI 系统**：Schema 检索、SQL 生成与纠错循环、安全、评估。→ [Text-to-SQL / ChatBI 生产系统设计](/interview/text2sql-chatbi-production-playbook)
 5. **如何评估和监控一个上线的 RAG 系统？** 检索与生成分开评（RAGAS）、线上反馈、bad case 分析、持续迭代。
 6. **客服场景下怎么降低幻觉、保证可信？** RAG 溯源 + Prompt 约束 + 拒答机制 + 人工兜底。→ [模型评估与幻觉](/evaluation/evaluation)
 
