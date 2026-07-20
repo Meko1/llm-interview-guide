@@ -380,6 +380,7 @@ export default defineConfig({
             { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
             { text: 'LLM 流式应用生产化', link: '/engineering/llm-streaming-production' },
             { text: '实时语音 Agent 生产化', link: '/engineering/voice-agent-production' },
+            { text: '多模态输入接入与资产处理', link: '/engineering/multimodal-input-pipeline' },
             { text: 'Dify 与低代码工作流', link: '/engineering/dify-workflow' },
             { text: '模型网关与多模型路由', link: '/engineering/llm-gateway' },
             { text: 'MaaS 平台与模型服务治理', link: '/engineering/maas-platform' },
@@ -495,7 +496,8 @@ export default defineConfig({
             { text: '扩散模型与图像生成', link: '/multimodal/diffusion' },
             { text: '视频生成', link: '/multimodal/video-generation' },
             { text: '语音大模型', link: '/multimodal/speech' },
-            { text: '实时语音 Agent 生产化', link: '/engineering/voice-agent-production' }
+            { text: '实时语音 Agent 生产化', link: '/engineering/voice-agent-production' },
+            { text: '多模态输入接入与资产处理', link: '/engineering/multimodal-input-pipeline' }
           ]
         }
       ],
