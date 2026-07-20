@@ -378,6 +378,7 @@ export default defineConfig({
             { text: 'LangGraph 与状态图 Agent', link: '/engineering/langgraph' },
             { text: 'LangGraph 生产化与系统设计', link: '/engineering/langgraph-production' },
             { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
+            { text: 'Deep Research 生产化', link: '/engineering/deep-research-production' },
             { text: 'LLM 流式应用生产化', link: '/engineering/llm-streaming-production' },
             { text: '实时语音 Agent 生产化', link: '/engineering/voice-agent-production' },
             { text: '多模态输入接入与资产处理', link: '/engineering/multimodal-input-pipeline' },
