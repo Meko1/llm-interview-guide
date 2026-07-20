@@ -249,3 +249,15 @@ else:
 表格题要覆盖表头继承、跨页、合计、单位、负号和时间维度；图表题要覆盖图例、坐标轴、趋势、异常点和无法可靠读取的拒答。对扫描模糊、旋转页、双栏、密集图表和 OCR 故意错字做压力样本，避免只在干净 PDF 上得高分。
 
 发布门禁同时比较解析器、视觉 embedding、reranker 和 VLM 版本。任一环节升级都可能提升页面召回却降低数值准确率，因此按文档类型与风险切片报告置信区间。低视觉置信度、关键数值冲突或引用定位失败时，系统应回退到原图确认、请求澄清或转人工，而不是让模型补全猜测。
+
+### 15.1 论断到证据原子的验证协议
+
+不要只标“引用了第 12 页”。每个结论标注 `value/unit/time/operator`，每个证据标注 `version/page/bbox/table_cell/chart_mark`，并判定为 `supported / contradicted / insufficient`。由此计算 claim support precision、evidence coverage 和最小充分证据率，避免一张相关截图掩盖关键断言无依据。
+
+### 15.2 表格与图表的可执行 oracle
+
+表格黄金标注使用 `table_id + cell/range + header path + raw/normalized value + unit + period + formula`，分别检查单元格定位、数值、单位/符号/量级和聚合公式。图表标注 `chart_type`、轴尺度/单位、series-legend mapping、数据点/范围和注释，评估 series 绑定、坐标轴理解、趋势/比较、读数容差及“不可可靠读取”的正确拒答率。答案字符串相同不能证明季度、单位或系列正确。
+
+### 15.3 多证据集合与校准式复核
+
+为跨页表格、版本对比和图文联合问题标注 `required_evidence_set`，度量 all-evidence recall、evidence-set completion 和干扰证据拒绝率。低置信回退也要校准：按文档类型报告 ECE/Brier、risk-coverage curve、selective accuracy 和转人工 precision；阈值由可接受错误风险反推，而不是只相信 OCR/VLM 自报分数。错误版本、ACL 泄露、关键数值缺单元格/图元证据、区域失配和拒答失效属于发布硬失败，风险切片需在置信区间内非劣于基线。
