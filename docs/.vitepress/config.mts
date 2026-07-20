@@ -273,7 +273,10 @@ export default defineConfig({
             { text: '长上下文专题', link: '/basics/long-context' },
             { text: '模型架构谱系与选型', link: '/basics/model-architecture-landscape' },
             { text: '从数据到回答：LLM 全链路', link: '/basics/llm-lifecycle-dataflow' },
-            { text: '缩放规律、容量与能力边界', link: '/basics/scaling-capacity-boundaries' }
+            { text: '缩放规律、容量与能力边界', link: '/basics/scaling-capacity-boundaries' },
+            { text: '自回归训练：Teacher Forcing 与标签构造', link: '/basics/autoregressive-training' },
+            { text: '反向传播、自动微分与参数更新', link: '/basics/backpropagation-optimization' },
+            { text: '分布式训练与显存账本', link: '/basics/distributed-training-memory' }
           ]
         }
       ],
