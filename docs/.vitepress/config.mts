@@ -373,6 +373,7 @@ export default defineConfig({
             { text: 'LangGraph 与状态图 Agent', link: '/engineering/langgraph' },
             { text: 'LangGraph 生产化与系统设计', link: '/engineering/langgraph-production' },
             { text: 'LLM 应用开发实战', link: '/engineering/llm-app-dev' },
+            { text: 'LLM 流式应用生产化', link: '/engineering/llm-streaming-production' },
             { text: 'Dify 与低代码工作流', link: '/engineering/dify-workflow' },
             { text: '模型网关与多模型路由', link: '/engineering/llm-gateway' },
             { text: 'MaaS 平台与模型服务治理', link: '/engineering/maas-platform' },
