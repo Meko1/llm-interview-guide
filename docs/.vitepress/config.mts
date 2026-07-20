@@ -53,6 +53,7 @@ export default defineConfig({
           { text: '推理类提示（CoT 全家桶）', link: '/prompt/cot-reasoning' },
           { text: '高级提示模式与技巧', link: '/prompt/advanced-patterns' },
           { text: '自动化优化与 Prompt Ops', link: '/prompt/prompt-optimization' },
+          { text: 'Prompt 生命周期、实验与发布', link: '/prompt/prompt-lifecycle' },
           { text: '提示注入与越狱攻防', link: '/prompt/prompt-injection' },
           { text: '上下文/循环工程（最新）', link: '/prompt/agentic-prompting' }
         ]
@@ -292,6 +293,7 @@ export default defineConfig({
             { text: '推理类提示（CoT 全家桶）', link: '/prompt/cot-reasoning' },
             { text: '高级提示模式与工程技巧', link: '/prompt/advanced-patterns' },
             { text: '自动化优化与 Prompt Ops', link: '/prompt/prompt-optimization' },
+            { text: 'Prompt 生命周期、实验与发布', link: '/prompt/prompt-lifecycle' },
             { text: '提示注入与越狱攻防', link: '/prompt/prompt-injection' },
             { text: '上下文/循环工程（最新范式）', link: '/prompt/agentic-prompting' }
           ]
