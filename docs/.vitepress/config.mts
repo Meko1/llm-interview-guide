@@ -266,7 +266,10 @@ export default defineConfig({
             { text: '从 Logits 到损失（Softmax/PPL）', link: '/basics/logits-loss' },
             { text: 'Mask 与 Padding（掩码/打包）', link: '/basics/masks-padding' },
             { text: 'MoE 混合专家模型', link: '/basics/moe' },
-            { text: '长上下文专题', link: '/basics/long-context' }
+            { text: '长上下文专题', link: '/basics/long-context' },
+            { text: '模型架构谱系与选型', link: '/basics/model-architecture-landscape' },
+            { text: '从数据到回答：LLM 全链路', link: '/basics/llm-lifecycle-dataflow' },
+            { text: '缩放规律、容量与能力边界', link: '/basics/scaling-capacity-boundaries' }
           ]
         }
       ],
