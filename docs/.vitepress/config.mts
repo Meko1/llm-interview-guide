@@ -414,6 +414,7 @@ export default defineConfig({
             { text: 'AI 系统设计专题', link: '/engineering/system-design' },
             { text: 'LLMOps 生产运营', link: '/engineering/llmops' },
             { text: 'LLM 应用版本血缘与质量归因', link: '/engineering/llm-release-provenance-control-plane' },
+            { text: '多租户 LLM 应用控制面', link: '/engineering/llm-multi-tenant-identity-isolation' },
             { text: 'AI 项目实战案例', link: '/engineering/projects' },
             { text: '商业落地与价值评估', link: '/engineering/llm-business' }
           ]
