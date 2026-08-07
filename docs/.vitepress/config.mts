@@ -78,7 +78,8 @@ export default defineConfig({
           { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' },
           { text: 'Computer Use 与浏览器 Agent', link: '/agent/computer-use' },
           { text: '深度研究 Agent', link: '/agent/deep-research' },
-          { text: 'Agent 评估与可靠性工程', link: '/agent/agent-evaluation' }
+          { text: 'Agent 评估与可靠性工程', link: '/agent/agent-evaluation' },
+          { text: 'Agent 持续进化与能力生命周期', link: '/agent/agent-continuous-evolution' }
         ]
       },
       {
@@ -354,7 +355,8 @@ export default defineConfig({
           { text: '多 Agent 与进阶范式', link: '/agent/multi-agent' },
             { text: 'Computer Use 与浏览器 Agent', link: '/agent/computer-use' },
             { text: '深度研究 Agent', link: '/agent/deep-research' },
-            { text: 'Agent 评估与可靠性工程', link: '/agent/agent-evaluation' }
+            { text: 'Agent 评估与可靠性工程', link: '/agent/agent-evaluation' },
+            { text: 'Agent 持续进化与能力生命周期', link: '/agent/agent-continuous-evolution' }
           ]
         }
       ],
