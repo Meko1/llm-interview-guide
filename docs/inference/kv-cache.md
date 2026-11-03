@@ -1,19 +1,77 @@
+---
+title: KV Cache 深度专题
+description: 从缓存原理走到可复算的显存账本，区分 GB/GiB、GQA/MLA 与调度边界。
+level: L2
+roles:
+  - Infra
+  - 后端转型
+classification: reviewed
+---
 # KV Cache 深度专题
 
-> 大模型推理岗**最高频**的面试题就是"KV Cache 讲一下"。它把自回归推理从"每步重算全历史"降到"每步只算新 token"，但也带来了长上下文与高并发的**头号显存瓶颈**。本文把 KV Cache 从原理、显存公式、四条优化路线（架构/系统/量化/驱逐）到面试常问的 prefix cache/PagedAttention/MLA 一次讲透。前置阅读：[Attention 与变体](/basics/attention)、[推理优化与部署](/inference/inference-optimization)、[长上下文专题](/basics/long-context)。
+> 主阅读级别 L2，前置要求是 [Attention](/basics/attention) 与自回归生成。先解释缓存为什么有效，再建立显存账本，最后区分架构、存储、量化和驱逐的边界。公式结果不是引擎能接纳的请求数，必须计入运行时与调度。
 
-## 面试先背这几句话
+## 容量决策：先列假设，再做乘法
+
+标准 MHA / GQA 缓存、各请求长度可能不同且无共享时，原始缓存预算是：
+
+$$M_{KV}=2N_{layer}N_{kvhead}d_{head}p\sum_i T_i$$
+
+$p$ 是每个缓存元素的字节数，$T_i$ 含 prompt 与已生成 token；批次长度相同才可写成 $BT$。MLA、滑窗、跨层共享、量化元数据与分块分配必须单独核算。
+
+**教学配置**：80 层、8 个 KV 头、head_dim=128、每元素 2 字节。每 token 的 KV 为 327,680 字节。32,768 token 对应 **10 GiB = 10.73741824 GB**。128K token 的单序列为 40 GiB，32 条等长序列为 **1,280 GiB = 1.25 TiB ≈ 1.374 TB**。这是裸缓存，不含权重、工作区、块尾浪费或预留。
+
+```python
+def kv_bytes(layers, kv_heads, head_dim, bytes_per_element, lengths):
+    return 2 * layers * kv_heads * head_dim * bytes_per_element * sum(lengths)
+
+memory = kv_bytes(80, 8, 128, 2, [32768])
+assert memory == 10737418240
+print(memory / 2**30, "GiB", memory / 10**9, "GB")
+```
+
+运行：保存为 `kv_budget.py`，执行 `python kv_budget.py`；只依赖 Python 标准库，输出 `10.0 GiB 10.73741824 GB`。只验证公式与单位，不构成性能 benchmark。
+
+## 超时、OOM 和缓存命中：三个不同问题
+
+| 现象 | 应记录什么 | 下一步动作 |
+| --- | --- | --- |
+| 并发提高后 OOM | 请求实际长度、缓存分配块、权重与预留 | 按剩余可用显存与最大生成预算做 admission control |
+| 命中前缀但 TPOT 没变快 | 命中 token 数、Prefill 时间、Decode 时间 | 前缀缓存主要复用前缀计算，不承诺消除后续 Decode 的访存 |
+| 吞吐提升但 TTFT 变差 | 到达率、队列、批次与长度分布 | 分清排队和执行，调整调度而不只扩大 batch |
+| 同样文本却未命中 | 完整 token 前缀、模板、模型版本与位置配置 | 缓存基于实际计算前缀，不按人类语义相似共享 |
+
+## 追问链：从公式到上线判断
+
+- **L1**：为什么缓存 K/V 而通常不保留历史 Q？历史 Q 的输出已算完，未来 query 需要的是历史 K/V；不是说 Q 物理上不能存。
+- **L2**：分页减少碎片，是否降低单 token 理论 KV 大小？没有；它改变分配与共享方式。
+- **L2**：可用显存除以每请求 KV 就是并发上限吗？还要计入最大输出、块取整、工作区、权重与 SLO，纸面上限不能作为上线承诺。
+
+<details>
+<summary>L3：为什么不能直接把 MLA 套进 2 × KV head × head_dim？</summary>
+
+MLA 通常缓存共享压缩 latent 与解耦的位置部分，而不是每头一份标准 K、V。示例中 latent=512、位置维度=64，若均以 2 字节缓存，单层每 token 为 $(512+64)\times2$ 字节。61 层、8,192 token 为 **0.5361328125 GiB**。具体引擎可能缓存不同表示，必须对照模型配置与实现；不能把标准 GQA 公式或仅 latent 的预算当作实际占用。
+</details>
+
+## 一手参考
+
+- [PagedAttention / vLLM 论文](https://arxiv.org/abs/2309.06180)：分块缓存、共享与论文实验；倍数不是任意服务的承诺。
+- [vLLM Prefix Caching 文档](https://docs.vllm.ai/en/latest/features/automatic_prefix_caching/)：前缀复用语义与约束，版本升级时重新核查。
+- [GQA 论文](https://arxiv.org/abs/2305.13245)：结构层减少 KV 头的取舍。
+- [DeepSeek-V3 技术报告](https://arxiv.org/abs/2412.19437)：MLA 表示与模型配置；需核对实际 serving 实现。
+
+## 核心机制速查
 
 - **为什么要有 KV Cache**：自回归 Decode 每步只产生一个新 token，但 Attention 需要"新 Q 对全部历史 K、V"做点积。如果每步都重算前面所有 token 的 K、V，就有 $O(L^2)$ 的重复计算。缓存下来 → 每步只算 **1 个新 token 的 K、V**，Decode 从 $O(L^2)$ 降到 $O(L)$。
 - **KV Cache 显存公式（务必背下来）**：$\text{Bytes} = 2 \times B \times L \times N_{\text{layer}} \times N_{\text{kvhead}} \times d_{\text{head}} \times \text{precision}$。前面的 **2 = K 和 V**。
-- **一个具体数字**：LLaMA3-70B（80 层，8 个 KV head，head_dim=128，FP16）在 32K 上下文下，单序列 KV = $2 \times 32{,}768 \times 80 \times 8 \times 128 \times 2 \text{B} \approx 10.7 \text{GB}$。当 batch=32、上下文 128K 时，KV Cache 单独就要 **1.3 TB**——这就是长上下文的核心瓶颈。
+- **一个具体数字**：上述 80 层 GQA 教学配置在 32K 下为 10 GiB；batch=32、128K 下为 1.25 TiB ≈ 1.374 TB。区分二进制和十进制单位，且这不代表模型原生支持这些上下文长度。
 - **四条优化路线**：① **架构层**（GQA/MQA/MLA，砍 KV head 数或维度）；② **系统层**（PagedAttention 消碎片、Prefix Caching 复用、RadixAttention 树形共享、Offload 到 CPU）；③ **量化层**（KV INT8/INT4/FP8）；④ **驱逐层**（H2O/StreamingLLM/SnapKV/PyramidKV，只保留重要 token）。
 
 ## 一、KV Cache 是什么 & 数学推导
 
 ### 1.1 为什么 Decode 阶段可以缓存
 
-Transformer 自注意力（简化，省略缩放和 softmax）：
+Transformer 自注意力（省略 batch、head 与位置编码维度）：
 
 $$\text{Attention}(Q, K, V) = \text{softmax}(QK^\top / \sqrt{d}) \cdot V$$
 
@@ -25,7 +83,7 @@ $$o_t = \text{softmax}\left(\frac{q_t [k_1, k_2, \dots, k_t]^\top}{\sqrt{d}}\rig
 
 关键观察：**$k_1, \dots, k_{t-1}$ 和 $v_1, \dots, v_{t-1}$ 只依赖过去的 $x$，与新 token 无关**——完全可以缓存。这就是 KV Cache。
 
-对比：**Q 不能缓存**，因为每步的新 Q 都是新的，且下一步用不到（自回归结构下，未来 token 不 attention 到过去的 Q）。
+对比：标准自回归推理通常**不需要缓存历史 Q**：历史输出已完成，下一步的新 Q 查询的是历史 K/V，而不是历史 Q。不是说 Q 不能被存储。
 
 ### 1.2 复杂度对比
 
@@ -35,7 +93,7 @@ $$o_t = \text{softmax}\left(\frac{q_t [k_1, k_2, \dots, k_t]^\top}{\sqrt{d}}\rig
 | Decode 单步 | $O(t^2 d)$（重算历史） | $O(t d)$（只算新 token 的 K/V + $q_t$ 对 $t$ 个 K 的点积） |
 | 生成 L token 总量 | $O(L^3 d)$ | $O(L^2 d)$ |
 
-**Decode 阶段用 KV Cache 后是 memory-bound**（每步都要把整个 KV Cache 从 HBM 读一遍），而不是 compute-bound——这决定了后续所有优化都围绕**减少 KV Cache 大小 / 减少访存**展开。
+小 batch 的 Decode 常受权重与 KV 访存限制；长上下文下 KV 读写更突出。大 batch、并行通信或其他瓶颈可能改变这一判断，应通过 profiler 验证，不能把所有 Decode 都归为同一种瓶颈。
 
 ## 二、显存公式与真实数字
 
@@ -54,17 +112,17 @@ $$\text{KV Bytes} = \underbrace{2}_{K + V} \times B \times L \times N_{\text{lay
 
 ### 2.2 常见模型 KV Cache 大小对照
 
-以下按 **单序列、FP16** 计算：
+以下是根据表中结构参数计算的**单序列 FP16 裸缓存预算**；单位统一为 GiB，K=1,024。表中的长度只用于容量外推，不保证模型原生支持。量化元数据、块取整与工作区不计入。
 
 | 模型 | 层 | KV head | head_dim | Attention | 8K 上下文 | 32K 上下文 | 128K 上下文 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LLaMA2-7B | 32 | 32（MHA） | 128 | MHA | 4.0 GB | 16 GB | 64 GB |
-| LLaMA3-8B | 32 | 8（GQA） | 128 | GQA | 1.0 GB | 4.0 GB | 16 GB |
-| LLaMA3-70B | 80 | 8（GQA） | 128 | GQA | 2.5 GB | 10 GB | 40 GB |
-| Qwen2.5-7B | 28 | 4（GQA） | 128 | GQA | 0.5 GB | 1.75 GB | 7 GB |
-| DeepSeek-V3 | 61 | — | — | MLA | ≈0.14 GB | ≈0.6 GB | ≈2.2 GB |
+| 32 层 MHA 示例（LLaMA2-7B 结构） | 32 | 32 | 128 | MHA | 4 GiB | 16 GiB | 64 GiB |
+| 32 层 GQA 示例（LLaMA3-8B 结构） | 32 | 8 | 128 | GQA | 1 GiB | 4 GiB | 16 GiB |
+| 80 层 GQA 示例（LLaMA3-70B 结构） | 80 | 8 | 128 | GQA | 2.5 GiB | 10 GiB | 40 GiB |
+| 28 层 GQA 示例（Qwen2.5-7B 结构） | 28 | 4 | 128 | GQA | 0.4375 GiB | 1.75 GiB | 7 GiB |
+| 61 层 MLA 示例（latent=512、位置=64、均为 FP16） | 61 | — | — | MLA | 0.5361 GiB | 2.1445 GiB | 8.5781 GiB |
 
-> **DeepSeek-V3 的 MLA** 通过压缩 K、V 到低秩 latent（$d_c \approx 512$），把 KV Cache 从"每 head 一份"变成"整层共享一份 latent"，是**当前最激进的 KV 压缩**。详见 [DeepSeek 专题](/models/deepseek)。
+> MLA 的缓存表示与标准 K/V 不同；还要计入位置部分，具体以引擎实现为准。详见上方算例与 [DeepSeek 专题](/models/deepseek)。
 
 ### 2.3 一个"警醒式"的例子
 
@@ -72,7 +130,7 @@ $$\text{KV Bytes} = \underbrace{2}_{K + V} \times B \times L \times N_{\text{lay
 
 $$2 \times 64 \times 131{,}072 \times 80 \times 8 \times 128 \times 2 \text{B} \approx 2.75 \text{ TB}$$
 
-这比 8×H100（640 GB HBM）总显存还多 4 倍——**没有 KV Cache 优化就跑不了长上下文高并发**。
+上式为 2.5 TiB ≈ 2.749 TB 的裸缓存预算。是否能承载还取决于 GPU 配置、权重与并行方式；因此需要容量控制与缓存优化，不把理论外推等同于具体集群压测。
 
 ## 三、架构层优化：从模型结构上砍 KV
 
@@ -103,7 +161,7 @@ $$2 \times 64 \times 131{,}072 \times 80 \times 8 \times 128 \times 2 \text{B} \
 - 按需分配、非连续存储；
 - **写时复制（Copy-on-Write）** 支持前缀共享。
 
-收益：显存浪费 <4%，实际吞吐提升 2-4×。这是 vLLM 的核心黑科技，也是当前推理引擎的事实标准。
+论文在其评测设置中报告了较低的缓存浪费和吞吐提升；这是特定模型、基线和工作负载的实验结论。上线时重新测量块尾浪费、前缀共享和调度收益，不承诺固定倍数。
 
 ### 4.2 Prefix Caching（跨请求前缀复用）
 
@@ -138,7 +196,7 @@ KV 量化的好处比权重量化更纯粹——**只影响长上下文/高并�
 | 精度 | 显存/带宽 | 质量影响 | 代表 |
 | --- | --- | --- | --- |
 | **FP16 / BF16** | 1× | 无 | 基线 |
-| **FP8（E4M3）** | 0.5× | 几乎无损 | H100 原生支持、TensorRT-LLM |
+| **FP8（E4M3）** | 理论元素约 0.5× | 需验证模型、尺度与任务，非无损保证 | 支持条件取决于硬件与引擎 |
 | **INT8** | 0.5× | 长上下文微降 | vLLM 内置、SmoothQuant KV |
 | **INT4** | 0.25× | 有可感知损失，需仔细调 | KIVI、KVQuant |
 | **KIVI 2-bit** | 0.125× | 需 per-channel 校准 | 学术前沿 |
@@ -210,15 +268,15 @@ KV 量化的好处比权重量化更纯粹——**只影响长上下文/高并�
 **Q：为什么长上下文推理显存会爆炸？**
 KV Cache 显存随**序列长度 L 线性、层数 N 线性、batch B 线性**共同放大。LLaMA3-70B 单序列 128K 就要 40 GB KV，batch=32 时 1.28 TB，远超单卡显存。所以长上下文推理有三条现实路径：① 从架构上砍（MLA）；② 从系统上省（PagedAttention + 驱逐 + Offload）；③ 从量化上压（KV INT8/INT4）。
 
-**Q：GQA、MQA、MLA 的核心区别？为什么现在旗舰模型都选 GQA 或 MLA？**
-- **MHA**：Q/K/V head 一一对应，KV 最多，质量最好，显存爆；
-- **MQA**：所有 Q head 共享 1 组 K/V，显存最省但质量有可感知下降；
-- **GQA**：折中——Q head 分组，每组共享 1 组 K/V，$G=8$ 时 KV 是 MHA 的 1/4；质量几乎无损；
-- **MLA**：把 K、V 压到低秩 latent（$d_c \ll d_{\text{model}}$），推理时 latent 就是 KV Cache，显存最小，质量最好；训练成本略高。
-旗舰模型选 GQA 是"最保守的最优解"，DeepSeek 选 MLA 是"最激进的最优解"。
+**Q：GQA、MQA、MLA 的核心区别？为什么要减少 KV 存储？**
+- **MHA**：每个查询头有独立 KV。
+- **MQA**：全部查询头共享一组 KV。
+- **GQA**：按组共享；例如 32 个 Q 头与 8 个 KV 头时，标准 KV 元素数为相应 MHA 的 1/4。
+- **MLA**：缓存压缩表示与位置部分，按具体表示而非标准 KV 头公式核算。
+这些结构降低资源需求的方式不同，质量没有脱离训练和任务的统一排序，也不存在无条件「最优解」。
 
 **Q：PagedAttention 到底解决了什么问题？**
-解决**KV Cache 显存碎片**问题。传统按最大长度预分配连续块，实际浪费 60%+；PagedAttention 用固定块（如 16 token）+ 虚拟块表按需分配，浪费 <4%。省下的显存可以塞更多并发请求，吞吐直接翻 2-4 倍。副产品是**前缀共享**：多个请求共用 system prompt 的物理 KV 块。
+解决缓存的分块分配、碎片与共享问题。使用虚拟块表映射非连续物理块，按需分配；不会改变相同结构与精度下每 token 的裸 KV 元素数。论文倍数不能作为生产承诺，需要用自己的长度分布与调度策略重测。
 
 **Q：Prefix Caching 和 PagedAttention 是一回事吗？**
 不是同一件事，但强耦合：
@@ -229,7 +287,7 @@ KV Cache 显存随**序列长度 L 线性、层数 N 线性、batch B 线性**�
 **Q：KV 量化到 INT4 会不会掉性能？**
 掉多少取决于**校准**和**量化粒度**：
 - **naive per-tensor INT4** → 掉点明显（K 有 outlier channel）；
-- **per-channel INT4 K + per-token INT4 V**（KIVI 思路）→ 长上下文几乎无损；
+- **per-channel INT4 K + per-token INT4 V**（KIVI 思路）→ 分别处理 K/V 的分布差异，实际质量需按任务实测；
 - **热 KV FP16 + 冷 KV INT4** → 更保险。
 质量掉的形式通常是"长上下文任务上乱码"，需要在 needle-in-a-haystack 等任务上专门测。
 

@@ -1,3 +1,14 @@
+---
+title: 大模型应用实战高频追问
+description: >-
+  本页面向“已经学过基础概念，但面试时容易被项目追问打穿”的读者。内容参考 ProcessOn 大模型应用实战知识体系与上传截图中的
+  Prompt、RAG、Agent、LangGraph、MCP、Dify、DeepResearch、模型微调、MaaS、部署成本、商业项目模块，整理成可直接用于面试复盘的
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 大模型应用实战高频追问
 
 > 本页面向“已经学过基础概念，但面试时容易被项目追问打穿”的读者。内容参考 ProcessOn 大模型应用实战知识体系与上传截图中的 Prompt、RAG、Agent、LangGraph、MCP、Dify、DeepResearch、模型微调、MaaS、部署成本、商业项目模块，整理成可直接用于面试复盘的追问链。

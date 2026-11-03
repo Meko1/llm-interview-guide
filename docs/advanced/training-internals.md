@@ -1,3 +1,14 @@
+---
+title: 训练深入：优化器、混合精度与稳定性
+description: >-
+  「Adam 和 AdamW 有什么区别？」「为什么要做学习率 warmup？」「训练 loss
+  突然飙升怎么办？」这些是算法岗深挖训练细节的高频题。本文补齐大模型训练的工程内功。分布式并行见 分布式训练。
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # 训练深入：优化器、混合精度与稳定性
 
 > 「Adam 和 AdamW 有什么区别？」「为什么要做学习率 warmup？」「训练 loss 突然飙升怎么办？」这些是算法岗深挖训练细节的高频题。本文补齐大模型训练的工程内功。分布式并行见 [分布式训练](/pretraining/distributed-training)。

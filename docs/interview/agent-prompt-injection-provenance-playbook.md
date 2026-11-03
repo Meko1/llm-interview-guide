@@ -1,3 +1,14 @@
+---
+title: Agent Prompt Injection 与不可信上下文隔离：来源、能力与外发防线
+description: >-
+  Prompt Injection 不只是“忽略前文指令”的文本把戏。攻击者可通过网页、邮件、RAG 文档、代码仓库、MCP 工具结果或协作 Agent
+  影响模型，再诱导它调用高权限工具或向外部泄露数据。本页给出可用于系统设计题的 source-to-sink 防御框架。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent Prompt Injection 与不可信上下文隔离：来源、能力与外发防线
 
 > Prompt Injection 不只是“忽略前文指令”的文本把戏。攻击者可通过网页、邮件、RAG 文档、代码仓库、MCP 工具结果或协作 Agent 影响模型，再诱导它调用高权限工具或向外部泄露数据。本页给出可用于系统设计题的 source-to-sink 防御框架。

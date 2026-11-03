@@ -1,3 +1,12 @@
+---
+title: Embedding 与向量数据库
+description: RAG 的召回质量上限由 Embedding 决定，召回效率由向量数据库决定。这两块的原理与选型是 RAG 面试的必考区。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Embedding 与向量数据库
 
 > RAG 的召回质量上限由 Embedding 决定，召回效率由向量数据库决定。这两块的原理与选型是 RAG 面试的必考区。

@@ -1,3 +1,14 @@
+---
+title: AI 编译器与图优化
+description: >-
+  「模型从 PyTorch 代码到高效跑在 GPU 上，中间发生了什么？」这是推理优化与系统岗的深水区问题。本文参考 llm-action 的 AI
+  编译器章节，讲清 AI 编译器要解决什么、计算图与中间表示（IR）、核心优化（算子融合/内存规划）、主流工具（XLA/TVM/TensorRT/torc
+level: L2
+roles:
+  - Infra
+  - 后端转型
+classification: inferred
+---
 # AI 编译器与图优化
 
 > 「模型从 PyTorch 代码到高效跑在 GPU 上，中间发生了什么？」这是推理优化与系统岗的深水区问题。本文参考 [llm-action](https://github.com/liguodongiot/llm-action) 的 AI 编译器章节，讲清 AI 编译器要解决什么、计算图与中间表示（IR）、核心优化（算子融合/内存规划）、主流工具（XLA/TVM/TensorRT/torch.compile），以及它与 LLM 推理框架的关系。推理框架见 [推理框架对比](/inference/serving-frameworks)，FlashAttention 见 [FlashAttention 深入](/advanced/flash-attention)。

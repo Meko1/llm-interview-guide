@@ -1,3 +1,14 @@
+---
+title: Java / Spring AI 生产架构系统设计面试题
+description: >-
+  Spring AI / Java AI 生产化高频问答 适合回答“某个点怎么做”；本页适合回答“让你用 Java/Spring 设计一个企业 AI
+  服务，完整架构怎样落地”。重点不是背 ChatClient，而是把 LLM 接进现有 Java 的身份、事务、限流、可观测和运维体系。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Java / Spring AI 生产架构系统设计面试题
 
 > [Spring AI / Java AI 生产化高频问答](/interview/spring-ai-production-qna) 适合回答“某个点怎么做”；本页适合回答“让你用 Java/Spring 设计一个企业 AI 服务，完整架构怎样落地”。重点不是背 `ChatClient`，而是把 LLM 接进现有 Java 的身份、事务、限流、可观测和运维体系。

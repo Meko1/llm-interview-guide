@@ -1,3 +1,16 @@
+---
+title: 归一化、激活函数与训练稳定性
+description: >-
+  「为什么大模型用 RMSNorm 而不是 LayerNorm」「Pre-Norm 和 Post-Norm 区别」「QK-Norm
+  是什么」——归一化看似小组件，实际是训练稳定性这条暗线的核心，从 2017 年的 Post-Norm 到 2025 年的
+  QK-Norm，每次演进都对应一次「模型更深更大
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 归一化、激活函数与训练稳定性
 
 > 「为什么大模型用 RMSNorm 而不是 LayerNorm」「Pre-Norm 和 Post-Norm 区别」「QK-Norm 是什么」——归一化看似小组件，实际是**训练稳定性**这条暗线的核心，从 2017 年的 Post-Norm 到 2025 年的 QK-Norm，每次演进都对应一次「模型更深更大后训崩了」的实战教训。

@@ -1,3 +1,14 @@
+---
+title: 智能体运行时架构高频问答：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  面试问 Claude Code、Codex、OpenClaw 或 Hermes 时，最差的回答是复述产品功能。更有区分度的回答是：把它们视为不同取向的
+  Agent Runtime，比较任务循环、上下文、工具执行、隔离、记忆、调度和评测如何协作。编程 Agent 的通用机制见 编程 Agent 底层架
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 智能体运行时架构高频问答：Claude Code / Codex / OpenClaw / Hermes
 
 > 面试问 Claude Code、Codex、OpenClaw 或 Hermes 时，最差的回答是复述产品功能。更有区分度的回答是：把它们视为不同取向的 **Agent Runtime**，比较任务循环、上下文、工具执行、隔离、记忆、调度和评测如何协作。编程 Agent 的通用机制见 [编程 Agent 底层架构与内部机制](/engineering/coding-agent-internals)，Claude Code 的分层见 [Claude Code 代码架构](/claude-code/architecture)，工具执行安全见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。

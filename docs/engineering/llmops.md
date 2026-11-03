@@ -1,3 +1,15 @@
+---
+title: LLMOps：大模型应用的生产运营
+description: >-
+  把 demo 做上线只是开始：prompt 改一个词全链路行为变了怎么管？成本突然翻倍怎么查？答错的 case 怎么变成资产？LLMOps
+  就是回答这些问题的体系——也是「有没有真把 LLM 应用跑在生产上」的面试照妖镜。
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # LLMOps：大模型应用的生产运营
 
 > 把 demo 做上线只是开始：prompt 改一个词全链路行为变了怎么管？成本突然翻倍怎么查？答错的 case 怎么变成资产？LLMOps 就是回答这些问题的体系——也是「有没有真把 LLM 应用跑在生产上」的面试照妖镜。

@@ -1,3 +1,14 @@
+---
+title: Agent 代码审查与变更交付证据链：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  Agent 写出 diff 不等于变更可合并；Agent 留下 review comment
+  也不等于系统应阻断发布。生产交付必须拆开：发现问题、验证问题、修复、验证修复、合并决策和发布对账，避免模型自评、自批、自合并。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 代码审查与变更交付证据链：Claude Code / Codex / OpenClaw / Hermes
 
 > Agent 写出 diff 不等于变更可合并；Agent 留下 review comment 也不等于系统应阻断发布。生产交付必须拆开：发现问题、验证问题、修复、验证修复、合并决策和发布对账，避免模型自评、自批、自合并。

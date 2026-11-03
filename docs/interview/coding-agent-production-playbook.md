@@ -1,3 +1,15 @@
+---
+title: 智能编码 Agent 企业操作手册：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  这是一份面向面试与真实落地的操作页。它不把 Claude Code、Codex、OpenClaw、Hermes
+  当成四个“哪个更强”的产品，而是把它们映射为四类运行时能力：开发任务执行、云端或本地工作区、长驻消息 Gateway、持久记忆与技能闭环。架构原理见
+  智能体运行时架构高频问答，工具边界见
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 智能编码 Agent 企业操作手册：Claude Code / Codex / OpenClaw / Hermes
 
 > 这是一份面向面试与真实落地的操作页。它不把 Claude Code、Codex、OpenClaw、Hermes 当成四个“哪个更强”的产品，而是把它们映射为四类运行时能力：开发任务执行、云端或本地工作区、长驻消息 Gateway、持久记忆与技能闭环。架构原理见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)，工具边界见 [企业 Tool Gateway 安全执行系统设计](/interview/tool-gateway-security-design)。

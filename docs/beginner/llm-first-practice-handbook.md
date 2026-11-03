@@ -1,3 +1,15 @@
+---
+title: 从零到能做项目：LLM 新手实战手册
+description: >-
+  这不是一份“背完术语再开始”的目录，而是一条从会用聊天产品、会验证答案，到能调用
+  API、做出一个可靠小应用的路径。读完并做完其中的练习，你应该能清楚回答：大模型在做什么、为什么它会出错、何时该用
+  Prompt/RAG/Agent、一个最小应用怎样上线前自检，以及下一步该学什么。
+level: L0
+roles:
+  - 在校生
+  - 后端转型
+classification: inferred
+---
 # 从零到能做项目：LLM 新手实战手册
 
 > 这不是一份“背完术语再开始”的目录，而是一条从会用聊天产品、会验证答案，到能调用 API、做出一个可靠小应用的路径。读完并做完其中的练习，你应该能清楚回答：大模型在做什么、为什么它会出错、何时该用 Prompt/RAG/Agent、一个最小应用怎样上线前自检，以及下一步该学什么。
@@ -368,7 +380,7 @@ LLM 输出具有一定随机性，且不同任务对好坏的定义不同。评�
 
 能清楚回答这些问题，就已经具备继续深入的地基。接下来按你的方向选择：
 
-- 想理解底层：进入 [大模型基础总览](/basics/overview)、[Transformer](/basics/transformer) 与 [训练与微调](/finetuning/finetune-overview)。
+- 想理解底层：进入 [大模型基础总览](/basics/overview)、[Transformer](/basics/transformer) 与 [训练与微调](/finetuning/finetuning)。
 - 想做知识库：进入 [RAG 基础](/rag/rag-basics) 与 [向量检索](/advanced/vector-search)。
 - 想做智能体：进入 [Agent 基础与架构](/agent/agent-basics)、[工作流与 Agent](/agent/workflow)。
 - 想做 Java 应用：进入 [Spring AI / Java AI 生产化问答](/interview/spring-ai-production-qna)。

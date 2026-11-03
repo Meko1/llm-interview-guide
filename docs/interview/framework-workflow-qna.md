@@ -1,3 +1,14 @@
+---
+title: 框架与智能工作流高频问答
+description: >-
+  这页面向 Spring AI、LangChain、LangGraph、Dify、智能工作流、Function Calling 和 Agent
+  工程岗位。它不追求逐 API 教程，而是回答面试最常问的三件事：为什么选这个框架、生产里怎么治理、项目里怎么讲。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 框架与智能工作流高频问答
 
 > 这页面向 Spring AI、LangChain、LangGraph、Dify、智能工作流、Function Calling 和 Agent 工程岗位。它不追求逐 API 教程，而是回答面试最常问的三件事：为什么选这个框架、生产里怎么治理、项目里怎么讲。

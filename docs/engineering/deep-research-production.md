@@ -1,3 +1,16 @@
+---
+title: Deep Research 生产化：可验证来源、可控预算与可恢复研究工作流
+description: >-
+  我会把 Deep Research 设计成证据驱动的可恢复工作流，而不是一个循环搜索的
+  Agent。任务先生成带验收条件和预算的子问题计划，再把每个来源按权威性、时间、许可和快照登记；网页始终是不可信数据，不能影响工具权限或控制流。抽取、综合和核验通过
+  claim ledger 分离，报告中的每个关
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # Deep Research 生产化：可验证来源、可控预算与可恢复研究工作流
 
 Deep Research 的难点不在于让 Agent “多搜几次”。一个企业级研究系统必须把模糊问题拆成可验证子问题，从不可信网页中获取材料，维护来源与证据链，避免网页 Prompt 注入，并在时间、token、浏览和工具预算受限时产出可审计的结论。

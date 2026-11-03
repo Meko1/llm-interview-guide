@@ -1,3 +1,15 @@
+---
+title: Agent 模型路由、降级与能力契约：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  企业模型网关解决“请求该发给哪个模型服务”；Agent Runtime 还要回答“当前 session、子
+  Agent、计划阶段、工具循环、压缩、视觉和审批各自用谁，主模型失败时能否切换，以及切换后还是否有资格执行动作”。只把备用 URL
+  写进配置，会把一个可用性问题变成质量、成本和安全事故。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 模型路由、降级与能力契约：Claude Code / Codex / OpenClaw / Hermes
 
 > 企业模型网关解决“请求该发给哪个模型服务”；Agent Runtime 还要回答“当前 session、子 Agent、计划阶段、工具循环、压缩、视觉和审批各自用谁，主模型失败时能否切换，以及切换后还是否有资格执行动作”。只把备用 URL 写进配置，会把一个可用性问题变成质量、成本和安全事故。

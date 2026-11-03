@@ -1,3 +1,14 @@
+---
+title: LoRA / QLoRA 详解
+description: >-
+  LoRA 是目前最主流的参数高效微调（PEFT）方法，几乎是微调方向的必考题。本文从全参微调的痛点讲起，深入低秩假设、前向与初始化、超参数、QLoRA
+  三件套、主流变体、多 LoRA 服务、实战配方与高频追问。微调全貌见 微调范式。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # LoRA / QLoRA 详解
 
 > LoRA 是目前最主流的参数高效微调（PEFT）方法，几乎是微调方向的必考题。本文从全参微调的痛点讲起，深入低秩假设、前向与初始化、超参数、QLoRA 三件套、主流变体、多 LoRA 服务、实战配方与高频追问。微调全貌见 [微调范式](/finetuning/finetuning)。

@@ -1,3 +1,15 @@
+---
+title: 量化实战深入（GPTQ / AWQ / SmoothQuant / KV 量化）
+description: >-
+  量化是让大模型「跑得起、跑得省」的第一手段，也是推理岗的高频深挖点。本文参考 llm-action
+  的量化实战体系，系统讲清量化的数学本质、离群值难题、主流算法（GPTQ/AWQ/SmoothQuant）、W#A# 命名法、KV Cache 量化与
+  QAT。压缩总览（含蒸馏/剪枝）见 知识蒸馏与模型
+level: L2
+roles:
+  - Infra
+  - 后端转型
+classification: inferred
+---
 # 量化实战深入（GPTQ / AWQ / SmoothQuant / KV 量化）
 
 > 量化是让大模型「跑得起、跑得省」的第一手段，也是推理岗的高频深挖点。本文参考 [llm-action](https://github.com/liguodongiot/llm-action) 的量化实战体系，系统讲清量化的数学本质、离群值难题、主流算法（GPTQ/AWQ/SmoothQuant）、W#A# 命名法、KV Cache 量化与 QAT。压缩总览（含蒸馏/剪枝）见 [知识蒸馏与模型压缩](/inference/model-compression)，推理全景见 [推理优化与部署](/inference/inference-optimization)。

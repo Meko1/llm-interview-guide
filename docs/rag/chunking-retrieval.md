@@ -1,3 +1,15 @@
+---
+title: 切分与检索策略深挖
+description: >-
+  RAG 的天花板由检索决定——「检索不到 /
+  检索不准」时，再强的生成模型也无能为力。本文系统拆解切分（chunking）与检索两个环节的全部主流策略，从固定切分到 2025 年的 LLM
+  自适应切分、late chunking、contextual retrieval，每种都给出原理、适用场景与取
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 切分与检索策略深挖
 
 > RAG 的天花板由检索决定——「检索不到 / 检索不准」时，再强的生成模型也无能为力。本文系统拆解切分（chunking）与检索两个环节的全部主流策略，从固定切分到 2025 年的 LLM 自适应切分、late chunking、contextual retrieval，每种都给出原理、适用场景与取舍。基础流程见 [RAG 基础](/rag/rag-basics)。

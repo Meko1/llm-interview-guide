@@ -1,3 +1,14 @@
+---
+title: Agent 工具安全与权限边界
+description: >-
+  本页聚焦风险分级、ABAC 与人审原则；需要把这些原则落为身份委托、凭证代理、确认令牌和审计证据链时，见 企业 Tool Gateway
+  安全执行系统设计面试题。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 工具安全与权限边界
 
 > 本页聚焦风险分级、ABAC 与人审原则；需要把这些原则落为身份委托、凭证代理、确认令牌和审计证据链时，见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。

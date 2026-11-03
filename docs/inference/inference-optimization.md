@@ -1,3 +1,14 @@
+---
+title: 推理优化与部署
+description: >-
+  把大模型高效、低成本地跑起来对外服务，是工程岗的核心考点。本文系统讲清推理的两阶段与性能特性、核心指标、KV Cache 与
+  PagedAttention、量化、批处理、投机解码、并行与缓存，以及主流推理框架对比。硬件基础见 GPU 与硬件。
+level: L2
+roles:
+  - Infra
+  - 后端转型
+classification: inferred
+---
 # 推理优化与部署
 
 > 把大模型高效、低成本地跑起来对外服务，是工程岗的核心考点。本文系统讲清推理的两阶段与性能特性、核心指标、KV Cache 与 PagedAttention、量化、批处理、投机解码、并行与缓存，以及主流推理框架对比。硬件基础见 [GPU 与硬件](/inference/gpu-hardware)。

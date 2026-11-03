@@ -1,3 +1,15 @@
+---
+title: A2A 跨 Agent 互操作生产设计面试题
+description: >-
+  A2A 解决的是独立 Agent 如何发现、委托和交付任务，不等于“给多个 Agent 加一条 HTTP
+  通道”。生产难点在可信发现、委托身份、长任务状态、Artifact 安全、回调、预算和审计。协议基础见 A2A 协议与 Agent 互操作，工具接入见
+  MCP Server 生产化与企业治理高频
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # A2A 跨 Agent 互操作生产设计面试题
 
 > A2A 解决的是独立 Agent 如何发现、委托和交付任务，不等于“给多个 Agent 加一条 HTTP 通道”。生产难点在可信发现、委托身份、长任务状态、Artifact 安全、回调、预算和审计。协议基础见 [A2A 协议与 Agent 互操作](/agent/a2a-protocol)，工具接入见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)，权限执行见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。

@@ -1,6 +1,58 @@
+---
+title: Attention 与变体
+description: 理解 Attention 的形状、mask、复杂度与数值边界，区分 IO 优化和结构改进。
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: reviewed
+---
 # Attention 与变体
 
-> 注意力机制是 Transformer 的灵魂，也是面试最爱深挖的考点。本文从 Self-Attention 的数学与直觉讲起，到多头注意力的维度走查、因果掩码、KV Cache，再到 MHA→MQA→GQA→MLA 的演进与稀疏/线性注意力，力求把「为什么」讲透。架构全景见 [Transformer](/basics/transformer)，FlashAttention 见 [深入页](/advanced/flash-attention)。
+> 先明确张量形状，再讨论复杂度、缓存与内核。L1 读者先看 QKV 和 mask；L2 关注错误定位和成本；L3 追问等变性、缩放假设与数值误差。前置阅读：[Transformer](/basics/transformer)。
+
+## 先把形状与复杂度说准确
+
+标准 MHA 中，设 $Q,K,V$ 均为 $[B,H,T,D]$。$QK^\top$ 是 $[B,H,T,T]$，softmax 沿 key 的最后一维，输出回到 $[B,H,T,D]$。GQA 中 Q 头数与 KV 头数不同，需按分组映射，不能直接假设三个张量头数一样。
+
+| 场景 | Query 长度 | Key 长度 | 注意力核心算术量 |
+| --- | --- | --- | --- |
+| Prefill | $T$ | $T$ | $O(BHT^2D)$ |
+| 带缓存的 Decode 单步 | $1$ | $T$ | $O(BHTD)$ |
+| Cross-Attention | $T_q$ | $T_k$ | $O(BHT_qT_kD)$ |
+
+这里只计密集注意力核心，不含 QKV 投影、输出投影、FFN 与调度。FlashAttention 减少中间矩阵的物化和 HBM 往返，并没有把密集注意力的二次算术复杂度变成线性。
+
+## 工程失败：mask 错误比公式背错更难发现
+
+- **整行都被屏蔽**：全部分数为 $-\infty$ 时，直接 softmax 可能得到 NaN。不同内核行为不一定相同；应明确空行策略并覆盖全 padding 样本。
+- **mask 布尔语义反了**：PyTorch 的 `scaled_dot_product_attention` 布尔 True 表示允许参与注意力；其他 API 的 True 可能表示需要屏蔽。迁移时必须核对接口，不能机械复用。
+- **缓存非方阵因果对齐错误**：Decode 的 query 长度通常为 1，key 长度包含历史；盲用面向方阵的上三角规则可能屏蔽历史或放开未来。用具体位置 ID 构造允许关系，再比较缓存与无缓存基线。
+- **评估还在 dropout**：SDPA 会按传入的 `dropout_p` 应用 dropout；推理应显式设为 0，而不是假定模块 `eval()` 自动覆盖函数参数。
+
+## 方案选择，不把所有优化混为一谈
+
+| 方案 | 改变什么 | 核心限制 |
+| --- | --- | --- |
+| FlashAttention | IO 与中间存储 | 保留密集注意力语义；有浮点舍入与硬件 / 内核差异 |
+| GQA / MQA | KV 头的共享方式 | 是结构与训练取舍，不是只换一个推理开关 |
+| 滑窗 / 稀疏注意力 | 允许交互的 token 对 | 改变可访问范围，要验证远距离依赖 |
+| 线性注意力 | 交互或归一化形式 | 通常不与标准 softmax attention 等价 |
+
+<details>
+<summary>L3 追问：缩放为什么是 √D，实验时该验证什么？</summary>
+
+若各维 query 和 key 近似独立、均值为 0、方差为 1，点积是 $D$ 项乘积之和，方差约为 $D$；除以 $\sqrt D$ 让方差回到单位量级。真实训练的表示不严格满足这些假设，因此这是初始化与数值稳定性的动机，不是每一层每一步的精确方差保证。实验应记录 score 分布、softmax 熵和梯度，而不仅比较最终 loss。
+</details>
+
+## 一手参考
+
+- [Attention Is All You Need](https://arxiv.org/abs/1706.03762)：缩放点积与多头注意力。
+- [FlashAttention](https://arxiv.org/abs/2205.14135)：IO-aware exact attention，exact 指不采用注意力近似，并不保证位级一致。
+- [PyTorch SDPA 官方接口](https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html)：mask、dropout 与内核选择的接口边界，升级版本时重新核查。
+
+下面按机制展开完整参考。
 
 ## 一、自注意力机制（Self-Attention）
 
@@ -85,7 +137,7 @@ $$\text{MultiHead}=\text{Concat}(\text{head}_1,...,\text{head}_h)W^O,\quad \text
 
 ## 六、FlashAttention：让注意力又快又省
 
-**FlashAttention 是 IO 感知的精确注意力算法**（结果与标准注意力完全一致，非近似）。核心：分块（tiling）+ online softmax + 算子融合，把中间的 N×N 矩阵留在 GPU 高速 SRAM 中分块计算，避免反复读写慢速 HBM。收益：显存 O(n²)→O(n)、速度数倍提升。原理与 v1/v2/v3 演进详见 [FlashAttention 深入](/advanced/flash-attention)。
+**FlashAttention 是 IO 感知的精确注意力算法**：不近似注意力语义，但浮点计算顺序不同可能造成舍入差异。通过分块、online softmax 与融合，避免在 HBM 中物化完整 N×N 分数矩阵；只在 SRAM 中处理当前块。注意力额外中间存储可从二次量级降至线性，算术量仍为密集注意力的二次量级；实际速度取决于硬件与负载。详见 [FlashAttention 深入](/advanced/flash-attention)。
 
 ## 七、高效注意力变体（降 O(n²)）
 
@@ -108,7 +160,7 @@ $$\text{MultiHead}=\text{Concat}(\text{head}_1,...,\text{head}_h)W^O,\quad \text
 
 **Q：为什么要 Q、K、V 三个矩阵？** 解耦「查询/被查/取值」三种角色分别学习，表达力更强；直接点积会对称且受限。
 
-**Q：MHA、MQA、GQA、MLA 的区别？** MHA 每个 Q 头有独立 KV（显存大、质量好）；MQA 所有 Q 头共享 1 组 KV（最省、略降质量）；GQA 分组共享（折中、主流）；MLA 低秩压缩 KV（DeepSeek，省得多且近乎无损）。
+**Q：MHA、MQA、GQA、MLA 的区别？** MHA 每个 Q 头有独立 KV；MQA 共享一组 KV；GQA 按组共享；MLA 使用共享压缩表示与位置部分。缓存大小可按结构核算，质量比较必须控制数据、训练与任务，不直接排序为「最好」或「无损」。
 
 **Q：为什么 MQA/GQA 只共享 K/V？** 推理瓶颈是 KV Cache 显存与带宽，Q 不缓存；共享 Q 无收益且损害表达力。
 
@@ -116,7 +168,7 @@ $$\text{MultiHead}=\text{Concat}(\text{head}_1,...,\text{head}_h)W^O,\quad \text
 
 **Q：多头注意力头数越多越好吗？** 不是。固定 d_model 下头越多每头维度越小、单头表达越弱；需权衡。常见做法是 d_head 取 64/128。
 
-**Q：FlashAttention 是近似吗？为什么快？** 不是近似，结果与标准注意力完全一致。它靠分块 + online softmax 把中间矩阵留在 SRAM、减少对慢速 HBM 的读写（注意力是访存受限的），所以快且省显存。
+**Q：FlashAttention 是近似吗？为什么快？** 不近似注意力语义，但不保证浮点结果位级相同。分块与 online softmax 避免物化完整分数矩阵，减少 HBM 往返；收益需结合 Prefill / Decode、形状与内核实测。
 
 **Q：Attention 为什么是 O(n²)？怎么缓解？** 需算每对 token 的分数。缓解：FlashAttention（降访存）、稀疏/滑窗注意力、线性注意力/SSM、长上下文扩展。
 

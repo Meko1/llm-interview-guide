@@ -1,3 +1,14 @@
+---
+title: Claude Code 代码架构
+description: >-
+  这页专注 Claude Code 的分层；横向比较 Claude Code、Codex、OpenClaw、Hermes 的任务运行时与可迁移设计原则，见
+  智能体运行时架构高频问答。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Claude Code 代码架构
 
 > 这页专注 Claude Code 的分层；横向比较 Claude Code、Codex、OpenClaw、Hermes 的任务运行时与可迁移设计原则，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。

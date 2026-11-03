@@ -1,3 +1,14 @@
+---
+title: Claude Code 最佳实践与高效用法
+description: >-
+  懂原理还要会用。这一页是 Claude Code 的实战手册：怎么写
+  CLAUDE.md、怎么组织工作流、怎么控成本、怎么配权限、怎么避坑——把前面几页的机制转成「我该怎么做」。机制原理见 核心机制。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Claude Code 最佳实践与高效用法
 
 > 懂原理还要会用。这一页是 Claude Code 的实战手册：怎么写 CLAUDE.md、怎么组织工作流、怎么控成本、怎么配权限、怎么避坑——把前面几页的机制转成「我该怎么做」。机制原理见 [核心机制](/claude-code/mechanisms)。

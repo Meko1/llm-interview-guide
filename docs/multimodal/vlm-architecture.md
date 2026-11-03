@@ -1,3 +1,15 @@
+---
+title: 多模态大模型架构深挖（VLM）
+description: >-
+  「图片是怎么进到 LLM
+  里的？」是多模态面试的核心问题。本文深挖视觉语言模型（VLM）的架构：视觉编码器、连接器（projector）、特征对齐、原生多模态，以及高分辨率/视频的处理。多模态总览见
+  多模态大模型，检索见 多模态 RAG。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 多模态大模型架构深挖（VLM）
 
 > 「图片是怎么进到 LLM 里的？」是多模态面试的核心问题。本文深挖视觉语言模型（VLM）的架构：视觉编码器、连接器（projector）、特征对齐、原生多模态，以及高分辨率/视频的处理。多模态总览见 [多模态大模型](/multimodal/multimodal)，检索见 [多模态 RAG](/rag/multimodal-rag)。

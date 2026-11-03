@@ -1,3 +1,14 @@
+---
+title: Agent 观测、取证与事故响应手册：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  “有日志”不等于可观测，“能重放聊天记录”不等于能解释一次副作用，“任务完成”不等于已被安全审计。生产 Agent 的观测系统必须把用户、任务、子
+  Agent、模型、上下文、工具、执行器、外部 effect 和交付结果连成一条可查询证据链，并且在采集时不把密钥、源代码和私人对话再次扩散。本页将 Cl
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 观测、取证与事故响应手册：Claude Code / Codex / OpenClaw / Hermes
 
 > “有日志”不等于可观测，“能重放聊天记录”不等于能解释一次副作用，“任务完成”不等于已被安全审计。生产 Agent 的观测系统必须把用户、任务、子 Agent、模型、上下文、工具、执行器、外部 effect 和交付结果连成一条可查询证据链，并且在采集时不把密钥、源代码和私人对话再次扩散。本页将 Claude Code、Codex、OpenClaw、Hermes 的公开运行面整理为统一的运维方法。

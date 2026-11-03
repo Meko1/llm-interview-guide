@@ -1,3 +1,16 @@
+---
+title: MaaS 平台与模型服务治理
+description: >-
+  MaaS（Model as a
+  Service）平台把多个模型变成企业内部可申请、可调用、可计费、可观测、可评估的公共能力。它比“模型网关”更像平台，比“推理服务”更面向业务治理。网关细节见
+  模型网关与多模型路由，生产化追问见 MaaS 平台生产化高频问答，生产运营见 LLMOps。
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # MaaS 平台与模型服务治理
 
 > MaaS（Model as a Service）平台把多个模型变成企业内部可申请、可调用、可计费、可观测、可评估的公共能力。它比“模型网关”更像平台，比“推理服务”更面向业务治理。网关细节见 [模型网关与多模型路由](/engineering/llm-gateway)，生产化追问见 [MaaS 平台生产化高频问答](/interview/maas-production-qna)，生产运营见 [LLMOps](/engineering/llmops)。

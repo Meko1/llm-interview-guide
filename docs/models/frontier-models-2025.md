@@ -1,3 +1,15 @@
+---
+title: 2025-2026 前沿模型盘点
+description: >-
+  2025
+  年是大模型从「拼规模」转向「拼推理、拼Agent、拼多模态」的分水岭。本文按厂商梳理旗舰模型的核心特点与架构创新，帮助你在面试中快速建立"当前业界最先进的是什么"的认知地图。经典架构谱系见
+  经典模型盘点，LLaMA/Qwen 演进见 LLaMA 与 Qwen 架构演进，DeepSeek 专
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 2025-2026 前沿模型盘点
 
 > 2025 年是大模型从「拼规模」转向「拼推理、拼Agent、拼多模态」的分水岭。本文按厂商梳理旗舰模型的核心特点与架构创新，帮助你在面试中快速建立"当前业界最先进的是什么"的认知地图。经典架构谱系见 [经典模型盘点](/models/classic-models)，LLaMA/Qwen 演进见 [LLaMA 与 Qwen 架构演进](/models/llama-qwen)，DeepSeek 专题见 [DeepSeek 专题](/models/deepseek)。

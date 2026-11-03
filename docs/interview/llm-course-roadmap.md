@@ -1,3 +1,14 @@
+---
+title: LLM Course 中文版路线图（Maxime Labonne）
+description: >-
+  本页是对 Maxime Labonne 开源项目 mlabonne/llm-course（GitHub 80k+
+  Star）的中文翻译与整理。原项目是一份广受欢迎的大模型学习路线图，配有大量 Colab Notebook 与精选资源。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # LLM Course 中文版路线图（Maxime Labonne）
 
 > 本页是对 Maxime Labonne 开源项目 [**mlabonne/llm-course**](https://github.com/mlabonne/llm-course)（GitHub 80k+ Star）的**中文翻译与整理**。原项目是一份广受欢迎的大模型学习路线图，配有大量 Colab Notebook 与精选资源。

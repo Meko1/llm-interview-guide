@@ -1,3 +1,15 @@
+---
+title: 微调与模型平台高频问答
+description: >-
+  这页面向算法微调、LLM 应用工程、AI Infra / MaaS 平台岗位。目标是把
+  SFT、PEFT、LoRA、QLoRA、RLHF、DPO、模型网关、评测门禁这些高频词，整理成面试可直接复述的答案。基础概念见 微调范式、LoRA /
+  QLoRA、RLHF / DPO、MaaS 平台。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 微调与模型平台高频问答
 
 > 这页面向算法微调、LLM 应用工程、AI Infra / MaaS 平台岗位。目标是把 SFT、PEFT、LoRA、QLoRA、RLHF、DPO、模型网关、评测门禁这些高频词，整理成面试可直接复述的答案。基础概念见 [微调范式](/finetuning/finetuning)、[LoRA / QLoRA](/finetuning/lora)、[RLHF / DPO](/finetuning/rlhf)、[MaaS 平台](/engineering/maas-platform)。

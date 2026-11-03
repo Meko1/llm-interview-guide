@@ -1,3 +1,14 @@
+---
+title: 耐久化 Agent 工作流：LangGraph、Temporal 与长任务恢复
+description: >-
+  工作流一旦跨越分钟、小时甚至人工审批周期，问题就从“模型回答得怎样”变成“进程重启、网络超时、重复消息、审批延迟后还能不能正确继续”。这类系统的核心不是记忆，而是耐久执行（durable
+  execution）。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 耐久化 Agent 工作流：LangGraph、Temporal 与长任务恢复
 
 > 工作流一旦跨越分钟、小时甚至人工审批周期，问题就从“模型回答得怎样”变成“进程重启、网络超时、重复消息、审批延迟后还能不能正确继续”。这类系统的核心不是记忆，而是耐久执行（durable execution）。

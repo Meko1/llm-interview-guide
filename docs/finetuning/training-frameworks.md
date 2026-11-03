@@ -1,3 +1,14 @@
+---
+title: 微调训练工具链实战
+description: >-
+  懂 LoRA 原理却没跑过一次训练，面试讲不出细节、工作上手就懵。本文覆盖微调工具链选型、LLaMA-Factory 实操流程、显存估算、loss
+  曲线判读与高频踩坑——把「会原理」补成「能动手」。原理部分见 微调范式 与 LoRA 详解。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 微调训练工具链实战
 
 > 懂 LoRA 原理却没跑过一次训练，面试讲不出细节、工作上手就懵。本文覆盖微调工具链选型、LLaMA-Factory 实操流程、显存估算、loss 曲线判读与高频踩坑——把「会原理」补成「能动手」。原理部分见 [微调范式](/finetuning/finetuning) 与 [LoRA 详解](/finetuning/lora)。

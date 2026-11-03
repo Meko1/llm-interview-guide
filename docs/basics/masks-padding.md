@@ -1,3 +1,16 @@
+---
+title: Mask 与 Padding：因果掩码、填充与序列打包
+description: >-
+  「因果掩码和 padding 掩码有什么区别？」「decoder-only 推理为什么要左 padding？」「训练时 packing
+  是什么、会不会串味？」——这些是简历上写过微调/推理的人必被追问的实现级细节，也是手撕 Attention 时最容易写错的部分。本文把两种 mask
+  的本质、pad
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # Mask 与 Padding：因果掩码、填充与序列打包
 
 > 「因果掩码和 padding 掩码有什么区别？」「decoder-only 推理为什么要左 padding？」「训练时 packing 是什么、会不会串味？」——这些是简历上写过微调/推理的人必被追问的实现级细节，也是手撕 Attention 时最容易写错的部分。本文把**两种 mask 的本质、padding 方向、序列打包（packing）、以及它们与 KV Cache/损失计算的联动**讲透。Attention 原理见 [Attention 与变体](/basics/attention)，损失屏蔽见 [从 Logits 到损失](/basics/logits-loss)，KV Cache 见 [KV Cache 原理](/inference/kv-cache)。

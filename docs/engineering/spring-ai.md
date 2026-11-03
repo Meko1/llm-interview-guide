@@ -1,3 +1,15 @@
+---
+title: Spring AI 基础与面试题
+description: >-
+  Spring AI 的 Tool Calling 不能越过企业后端权限。需要回答身份委托、凭证代理、后端二次鉴权和写操作确认时，见 企业 Tool
+  Gateway 安全执行系统设计面试题。
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # Spring AI 基础与面试题
 
 > Spring AI 的 Tool Calling 不能越过企业后端权限。需要回答身份委托、凭证代理、后端二次鉴权和写操作确认时，见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。

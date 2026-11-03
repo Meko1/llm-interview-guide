@@ -1,3 +1,12 @@
+---
+title: Claude Code 核心机制与扩展
+description: 对 Hooks、上下文压缩、子 Agent 与权限机制的运行时取舍做系统设计回答，见 智能体运行时架构高频问答。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Claude Code 核心机制与扩展
 
 > 对 Hooks、上下文压缩、子 Agent 与权限机制的运行时取舍做系统设计回答，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。

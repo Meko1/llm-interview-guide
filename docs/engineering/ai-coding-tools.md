@@ -1,3 +1,13 @@
+---
+title: AI 编程工具实战
+description: 别把 AI 编程想成"需求丢进去，代码自动写好"。更常见的场景是：AI 写到一半方向歪了你得接回来；一次改太多文件你得拆小；测试没过你得顺着错误往回追。
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # AI 编程工具实战
 
 ## 概述

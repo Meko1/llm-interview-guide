@@ -1,3 +1,14 @@
+---
+title: 机制可解释性（Mechanistic Interpretability）
+description: >-
+  RLHF/DPO 教模型「该说什么」，但我们并不知道模型「在想什么」——大模型至今仍是一个几千亿参数的黑箱。机制可解释性（Mechanistic
+  Interpretability, MI） 试图像逆向工程一段编译后的程序一样，把神经网络的权重「反汇编」成人能读懂的算法。它是 Anthropic、Op
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # 机制可解释性（Mechanistic Interpretability）
 
 > RLHF/DPO 教模型「该说什么」，但我们并不知道模型「在想什么」——大模型至今仍是一个几千亿参数的黑箱。**机制可解释性（Mechanistic Interpretability, MI）** 试图像逆向工程一段编译后的程序一样，把神经网络的权重「反汇编」成人能读懂的算法。它是 Anthropic、OpenAI、DeepMind 安全团队与顶尖高校最看重的研究方向之一，也是研究型岗位面试的高区分度考点。前置阅读：[Transformer 架构详解](/basics/transformer)、[嵌入层与表示学习](/basics/embeddings)、[从 Logits 到损失](/basics/logits-loss)、[大模型安全与对齐](/advanced/safety)。

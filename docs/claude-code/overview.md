@@ -1,3 +1,15 @@
+---
+title: Claude Code 功能总览
+description: >-
+  Claude Code 是 Anthropic 推出的终端原生编程 Agent（terminal-native agentic coding
+  system）：直接跑在你的项目目录里，能读写文件、执行命令、跑测试、提交 Git，把「让 AI 帮我改代码」从补全升级成「让 AI
+  自主完成一个工程任务」。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Claude Code 功能总览
 
 > Claude Code 是 Anthropic 推出的**终端原生编程 Agent**（terminal-native agentic coding system）：直接跑在你的项目目录里，能读写文件、执行命令、跑测试、提交 Git，把「让 AI 帮我改代码」从补全升级成「让 AI 自主完成一个工程任务」。本块系统介绍它的功能、代码架构与底层机制。通用编程 Agent 原理见 [编程 Agent 底层架构与机制](/engineering/coding-agent-internals)。

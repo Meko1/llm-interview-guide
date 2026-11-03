@@ -1,3 +1,15 @@
+---
+title: Agent Tool Contract 工程：Schema 演进、兼容性与验证面试手册
+description: >-
+  Function Calling、MCP 和普通内部 API 的共同难题不是“能否解析
+  JSON”，而是模型、Agent、UI、Gateway、评测集和下游服务在不同版本并存时，是否仍对一次工具调用有相同理解。本页讨论 Tool
+  Contract 如何像生产 API 一样演进。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent Tool Contract 工程：Schema 演进、兼容性与验证面试手册
 
 > Function Calling、MCP 和普通内部 API 的共同难题不是“能否解析 JSON”，而是模型、Agent、UI、Gateway、评测集和下游服务在不同版本并存时，是否仍对一次工具调用有相同理解。本页讨论 Tool Contract 如何像生产 API 一样演进。

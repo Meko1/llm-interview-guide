@@ -1,3 +1,15 @@
+---
+title: DeepSeek 专题（MLA / GRPO / R1）
+description: >-
+  DeepSeek 系列以「高性价比 + 强推理」成为 2024–2025 最热门的面试话题，V3
+  技术报告几乎是大厂面试官的题库。本文系统拆解它的全部关键创新：MLA、DeepSeekMoE、FP8 训练、MTP、GRPO 与 R1
+  训练流程——每一项都是当下面试的必问点。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # DeepSeek 专题（MLA / GRPO / R1）
 
 > DeepSeek 系列以「高性价比 + 强推理」成为 2024–2025 最热门的面试话题，V3 技术报告几乎是大厂面试官的题库。本文系统拆解它的全部关键创新：MLA、DeepSeekMoE、FP8 训练、MTP、GRPO 与 R1 训练流程——每一项都是当下面试的必问点。

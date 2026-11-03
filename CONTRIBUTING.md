@@ -1,5 +1,11 @@
 # 贡献指南
 
+## 分级与审校约定
+
+请先阅读根目录 `PRODUCT.md` 和 `AGENTS.md`。知识文章 frontmatter 需要 `title`、`description`、`level`（L0–L4）、`roles` 和 `classification`。自动标签用 `inferred`，人工核实阅读级别后用 `reviewed`；这不代表整篇事实已完成技术认证。只有实际审校时才记录 `reviewedAt`，不能从 Git 日期推断。
+
+数字注明配置、单位和假设；论文实验倍数不得直接写成生产承诺。优先提供一手资料、可复算例子、失败分析与替代方案。保留旧 URL。提交前执行 `npm run check` 与 `npm run build`；构建会同步生成文章目录与机械体检报告。
+
 感谢你愿意为 **LLMGuide（大模型面试指南）** 贡献内容！无论是修正错别字、完善表述，还是新增一整个主题，都非常欢迎。本指南帮你快速上手。
 
 ## 贡献方式

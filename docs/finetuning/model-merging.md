@@ -1,3 +1,14 @@
+---
+title: 模型融合与合并（Model Merging）
+description: >-
+  不训练、不用 GPU、几分钟就能「合」出一个更强的模型——模型融合（model merging）是 2024
+  年以来开源社区的热门技巧，开源榜单上大量高分模型都是 merge 出来的。本文讲清它的原理、主流算法和适用边界。微调基础见 微调范式、LoRA。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 模型融合与合并（Model Merging）
 
 > 不训练、不用 GPU、几分钟就能「合」出一个更强的模型——模型融合（model merging）是 2024 年以来开源社区的热门技巧，开源榜单上大量高分模型都是 merge 出来的。本文讲清它的原理、主流算法和适用边界。微调基础见 [微调范式](/finetuning/finetuning)、[LoRA](/finetuning/lora)。

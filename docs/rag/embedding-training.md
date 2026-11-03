@@ -1,3 +1,14 @@
+---
+title: Embedding 与 Reranker 模型训练
+description: >-
+  RAG 检索质量的天花板由 Embedding 和 Reranker 模型决定。「Embedding 模型是怎么训出来的？难负例是什么？Reranker 和
+  Embedding 有什么区别？」是 RAG 岗的进阶考点。本文讲清对比学习原理、难负例挖掘、多阶段训练范式（BGE/GTE/E5）、双塔 v
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Embedding 与 Reranker 模型训练
 
 > RAG 检索质量的天花板由 Embedding 和 Reranker 模型决定。「Embedding 模型是怎么训出来的？难负例是什么？Reranker 和 Embedding 有什么区别？」是 RAG 岗的进阶考点。本文讲清对比学习原理、难负例挖掘、多阶段训练范式（BGE/GTE/E5）、双塔 vs 交叉编码器、以及 MTEB 评测。使用侧见 [Embedding 与向量数据库](/rag/embedding-vectordb)，切分检索见 [切分与检索策略深挖](/rag/chunking-retrieval)。

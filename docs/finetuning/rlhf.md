@@ -1,3 +1,14 @@
+---
+title: RLHF / DPO 对齐
+description: >-
+  对齐（Alignment）让模型输出更符合人类偏好，是 ChatGPT 之所以「好用」的关键一步，也是高频考点。本文深入 RLHF 三阶段、奖励模型、PPO
+  的复杂性、DPO 的推导直觉，以及 RLAIF/Constitutional AI/KTO/ORPO/GRPO 等方法谱系与工程坑。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # RLHF / DPO 对齐
 
 > 对齐（Alignment）让模型输出更符合人类偏好，是 ChatGPT 之所以「好用」的关键一步，也是高频考点。本文深入 RLHF 三阶段、奖励模型、PPO 的复杂性、DPO 的推导直觉，以及 RLAIF/Constitutional AI/KTO/ORPO/GRPO 等方法谱系与工程坑。

@@ -1,3 +1,14 @@
+---
+title: 多 Agent 委派与 Handoff 控制平面：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  多 Agent 不是“多开几个聊天窗口”。它是一个有身份、能力、预算、资源租约、副作用和最终责任的分布式任务系统。面试中最容易失分的回答是：把任务分给几个
+  Agent，最后汇总。真正需要讲清的是谁仍然拥有控制权，交接何时生效，子任务失联后谁停止副作用，多份结论冲突时谁裁决，以及如何证明最终交付确实发
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 多 Agent 委派与 Handoff 控制平面：Claude Code / Codex / OpenClaw / Hermes
 
 > 多 Agent 不是“多开几个聊天窗口”。它是一个有身份、能力、预算、资源租约、副作用和最终责任的分布式任务系统。面试中最容易失分的回答是：把任务分给几个 Agent，最后汇总。真正需要讲清的是谁仍然拥有控制权，交接何时生效，子任务失联后谁停止副作用，多份结论冲突时谁裁决，以及如何证明最终交付确实发生。

@@ -1,3 +1,12 @@
+---
+title: 知识蒸馏与模型压缩
+description: 实际工程中常组合使用：先蒸馏得到小模型 → 剪枝去除冗余 → 量化降低位宽，可在精度损失 <5% 的前提下实现模型体积缩减 80%+。
+level: L2
+roles:
+  - Infra
+  - 后端转型
+classification: inferred
+---
 # 知识蒸馏与模型压缩
 
 ## 总览

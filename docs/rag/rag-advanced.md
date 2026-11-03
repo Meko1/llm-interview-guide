@@ -1,3 +1,14 @@
+---
+title: RAG 进阶与优化
+description: >-
+  朴素 RAG 在真实场景常常召回不准、答非所问。本文系统梳理「检索前-检索中-检索后」三段优化、高级 RAG
+  范式与评估方法，是进阶面试的高频深水区。基础流程见 RAG 基础，向量检索原理见 Embedding 与向量库。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # RAG 进阶与优化
 
 > 朴素 RAG 在真实场景常常召回不准、答非所问。本文系统梳理「检索前-检索中-检索后」三段优化、高级 RAG 范式与评估方法，是进阶面试的高频深水区。基础流程见 [RAG 基础](/rag/rag-basics)，向量检索原理见 [Embedding 与向量库](/rag/embedding-vectordb)。

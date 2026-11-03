@@ -1,3 +1,14 @@
+---
+title: 状态空间模型与 Mamba
+description: >-
+  Transformer 的 O(n²) 注意力是长序列的天敌。以 Mamba 为代表的状态空间模型（SSM）用 O(n) 复杂度挑战
+  Transformer，是近年最受关注的架构方向之一，也是进阶面试的前沿加分点。
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # 状态空间模型与 Mamba
 
 > Transformer 的 O(n²) 注意力是长序列的天敌。以 Mamba 为代表的状态空间模型（SSM）用 O(n) 复杂度挑战 Transformer，是近年最受关注的架构方向之一，也是进阶面试的前沿加分点。

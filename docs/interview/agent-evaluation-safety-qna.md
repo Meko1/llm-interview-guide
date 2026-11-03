@@ -1,3 +1,14 @@
+---
+title: Agent 评测与安全合规高频问答
+description: >-
+  当问题从“怎么评 Agent”继续追问到“改了模型、工具或策略后怎么安全发布”，可衔接到 LLM 评测与发布门禁实战，其中给出了 release
+  manifest、硬红线、sandbox、灰度和回滚的完整答题框架。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 评测与安全合规高频问答
 
 > 当问题从“怎么评 Agent”继续追问到“改了模型、工具或策略后怎么安全发布”，可衔接到 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)，其中给出了 release manifest、硬红线、sandbox、灰度和回滚的完整答题框架。

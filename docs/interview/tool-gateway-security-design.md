@@ -1,3 +1,14 @@
+---
+title: 企业 Tool Gateway 安全执行系统设计面试题
+description: >-
+  这页回答一个很容易被问深的问题：模型已经选好了工具和参数，企业系统凭什么允许它触达订单、退款、邮件、工单、数据库或生产资源？核心答案是：模型只生成调用意图，Tool
+  Gateway 才拥有受策略约束的执行权。 Function Calling 基础见 Function Calling 与 MCP，风
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 企业 Tool Gateway 安全执行系统设计面试题
 
 > 这页回答一个很容易被问深的问题：模型已经选好了工具和参数，企业系统凭什么允许它触达订单、退款、邮件、工单、数据库或生产资源？核心答案是：**模型只生成调用意图，Tool Gateway 才拥有受策略约束的执行权。** Function Calling 基础见 [Function Calling 与 MCP](/agent/function-calling-mcp)，风险模型见 [Agent 工具安全与权限边界](/agent/tool-safety)，MCP Server 治理见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。

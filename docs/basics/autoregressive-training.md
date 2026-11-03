@@ -1,3 +1,15 @@
+---
+title: 自回归训练：Teacher Forcing 与标签构造
+description: >-
+  自回归训练中我会把可见性和监督分开：causal/padding mask 决定 token 能看见什么，labels 与 loss mask
+  决定哪些位置参与交叉熵。Teacher Forcing 让完整真实前缀已知，所以训练能并行；推理则把模型输出回填，必须顺序生成，这也带来 exposure
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 自回归训练：Teacher Forcing 与标签构造
 
 大模型“预测下一个 token”是一句正确但不够工程化的话。面试中更重要的是说明：一段原始文本如何被整理成 `input_ids`、`labels`、attention mask 和 loss mask；训练为什么可以并行，推理为什么却必须逐 token 进行。

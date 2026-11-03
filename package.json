@@ -4,8 +4,11 @@
   "description": "大模型面试指南 —— 系统整理 LLM / 大模型八股文与高频面试题，覆盖大模型基础、Transformer、预训练、微调、RLHF、Prompt、RAG、Agent、推理优化与部署、评估、多模态等。",
   "type": "module",
   "scripts": {
-    "dev": "vitepress dev docs",
-    "build": "vitepress build docs",
+    "catalog": "node scripts/content.mjs",
+    "check": "node scripts/content.mjs --check",
+    "dev": "npm run catalog && vitepress dev docs",
+    "check:built": "node scripts/validate-build.mjs",
+    "build": "npm run catalog && npm run check && vitepress build docs && npm run check:built",
     "preview": "vitepress preview docs"
   },
   "keywords": [
@@ -21,6 +24,8 @@
   "author": "Meko1",
   "license": "MIT",
   "devDependencies": {
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^15.0.3",
     "vitepress": "^1.6.3"
   }
 }

@@ -1,3 +1,15 @@
+---
+title: 深度研究 Agent（Deep Research）
+description: >-
+  「Deep Research」是 2025 年走红的一类 Agent 产品：给一个研究问题，Agent
+  自主上网搜索几十上百个来源、交叉验证、综合成一份带引用的长报告。它把「检索 + 多步推理 + 长文写作」端到端串起来，是 Agent
+  落地最成功的形态之一。基础范式见 Agent 基础，检索见 A
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 深度研究 Agent（Deep Research）
 
 > 「Deep Research」是 2025 年走红的一类 Agent 产品：给一个研究问题，Agent 自主上网搜索几十上百个来源、交叉验证、综合成一份带引用的长报告。它把「检索 + 多步推理 + 长文写作」端到端串起来，是 Agent 落地最成功的形态之一。基础范式见 [Agent 基础](/agent/agent-basics)，检索见 [Agentic RAG](/rag/agentic-rag)，成本和搜索预算视角见 [推理时算力扩展](/inference/test-time-scaling)。

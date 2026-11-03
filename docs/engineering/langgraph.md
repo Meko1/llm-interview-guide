@@ -1,3 +1,16 @@
+---
+title: LangGraph 与状态图 Agent
+description: >-
+  LangGraph 的核心价值不是“又一个 Agent 框架”，而是把自由循环的 Agent
+  做成显式状态图：节点、边、状态、条件、持久化、人审和回放都可控。Agent 基础见 Agent 基础，框架总览见 LangChain 与应用框架，生产级
+  State、Checkpoint、HITL 和恢复设
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # LangGraph 与状态图 Agent
 
 > LangGraph 的核心价值不是“又一个 Agent 框架”，而是把自由循环的 Agent 做成显式状态图：节点、边、状态、条件、持久化、人审和回放都可控。Agent 基础见 [Agent 基础](/agent/agent-basics)，框架总览见 [LangChain 与应用框架](/engineering/langchain)，生产级 State、Checkpoint、HITL 和恢复设计见 [LangGraph 生产化与系统设计](/engineering/langgraph-production)。

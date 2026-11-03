@@ -1,3 +1,14 @@
+---
+title: LoRA / QLoRA Adapter 服务化、多租户路由与回滚
+description: >-
+  训练出一个 LoRA adapter 只是起点。上线后真正的问题是：它与哪个 base model 兼容、如何不撑爆显存地挂载多个
+  adapter、谁能调用、如何灰度、如何发现退化并回滚。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # LoRA / QLoRA Adapter 服务化、多租户路由与回滚
 
 > 训练出一个 LoRA adapter 只是起点。上线后真正的问题是：它与哪个 base model 兼容、如何不撑爆显存地挂载多个 adapter、谁能调用、如何灰度、如何发现退化并回滚。

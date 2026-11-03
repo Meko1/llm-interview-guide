@@ -1,3 +1,15 @@
+---
+title: Agent 沙箱、执行准入与逃逸处置：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  “在 Docker
+  里跑”不是沙箱设计的完整答案。生产面试真正要讲清：谁能请求执行、代码实际在哪台机器运行、能读写哪些路径、能访问哪些域名、携带什么身份、何时需要批准、无法被隔离时是否
+  fail-closed，以及越过边界后如何留下可追溯证据。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 沙箱、执行准入与逃逸处置：Claude Code / Codex / OpenClaw / Hermes
 
 > “在 Docker 里跑”不是沙箱设计的完整答案。生产面试真正要讲清：谁能请求执行、代码实际在哪台机器运行、能读写哪些路径、能访问哪些域名、携带什么身份、何时需要批准、无法被隔离时是否 fail-closed，以及越过边界后如何留下可追溯证据。

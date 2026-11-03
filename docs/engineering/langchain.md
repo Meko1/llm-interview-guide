@@ -1,3 +1,15 @@
+---
+title: LangChain 与应用开发框架
+description: >-
+  LangChain / LlamaIndex / LangGraph
+  是大模型应用开发最主流的框架阵营。面试常考核心抽象、框架对比，以及「该不该用框架」的工程判断——后者最能看出真实生产经验。
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # LangChain 与应用开发框架
 
 > LangChain / LlamaIndex / LangGraph 是大模型应用开发最主流的框架阵营。面试常考核心抽象、框架对比，以及「该不该用框架」的工程判断——后者最能看出真实生产经验。

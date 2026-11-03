@@ -1,3 +1,14 @@
+---
+title: 上下文工程（Context Engineering）
+description: >-
+  Coding Agent 与长驻消息 Agent 的上下文不仅要压缩，还要管理快照、摘要版本、子 Agent 回传与可追溯性；完整运行时视角见
+  智能体运行时架构高频问答。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 上下文工程（Context Engineering）
 
 > Coding Agent 与长驻消息 Agent 的上下文不仅要压缩，还要管理快照、摘要版本、子 Agent 回传与可追溯性；完整运行时视角见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。

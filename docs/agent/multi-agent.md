@@ -1,3 +1,14 @@
+---
+title: 多 Agent 与进阶范式
+description: >-
+  当多个 Agent 跨团队、跨框架或跨组织协作时，框架内编排需要升级为可发现、可授权、可追踪的协议边界；生产化回答见 A2A 跨 Agent
+  互操作生产设计面试题。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 多 Agent 与进阶范式
 
 > 当多个 Agent 跨团队、跨框架或跨组织协作时，框架内编排需要升级为可发现、可授权、可追踪的协议边界；生产化回答见 [A2A 跨 Agent 互操作生产设计面试题](/interview/a2a-production-interoperability-qna)。

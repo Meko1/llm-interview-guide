@@ -1,8 +1,20 @@
+---
+title: 反向传播、自动微分与参数更新
+description: >-
+  我会把训练理解为计算图上的闭环：前向得到 logits，loss 定义误差，backward 用链式法则把误差传到可训练参数，optimizer
+  根据梯度和状态更新参数。排障时我不只看 loss，还检查参数是否在 optimizer 参数组、grad 是否有限、step 后权重差是否非零，并用单 b
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 反向传播、自动微分与参数更新
 
 Transformer 给出 logits，训练系统还必须把“预测错了多少”变成“每个参数该如何调整”。这一过程由计算图、链式法则、自动微分和优化器共同完成。理解它，才能解释为什么模型没学会、为什么冻结参数不更新、为什么恢复 checkpoint 不能只恢复权重。
 
-优化器和学习率策略的深入讨论见 [优化器、学习率与训练动力学](/basics/optimization-training-dynamics)；本页先建立从 loss 到参数更新的最小闭环。
+优化器和学习率策略的深入讨论见 [训练内部机制与稳定性](/advanced/training-internals)；本页先建立从 loss 到参数更新的最小闭环。
 
 ## 一、链式法则如何穿过一个 Transformer
 

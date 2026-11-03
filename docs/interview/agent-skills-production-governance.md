@@ -1,3 +1,14 @@
+---
+title: 跨运行时 Agent 扩展生产治理：Skills、Plugins、MCP 与 Hooks
+description: >-
+  Skill 不是“把一段 prompt 保存起来”。它是一个可发现的过程工件，通常同时改变模型的上下文、可调用工具、脚本依赖和外部系统接入方式。本文把
+  Claude Code、Codex、OpenClaw、Hermes 的公开能力抽象成一套企业可落地的 Skill 生命周期。Coding Agent
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 跨运行时 Agent 扩展生产治理：Skills、Plugins、MCP 与 Hooks
 
 > Skill 不是“把一段 prompt 保存起来”。它是一个可发现的过程工件，通常同时改变模型的上下文、可调用工具、脚本依赖和外部系统接入方式。本文把 Claude Code、Codex、OpenClaw、Hermes 的公开能力抽象成一套企业可落地的 Skill 生命周期。Coding Agent 的完整交付链见 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)，MCP 工具服务的生产治理见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。

@@ -1,3 +1,15 @@
+---
+title: LLM 应用开发实战
+description: >-
+  把大模型能力做成稳定、可控、可上线的服务，是应用/工程岗的核心。本文梳理流式输出、Function
+  Calling、结构化输出、服务化与成本控制等高频实战考点。
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # LLM 应用开发实战
 
 > 把大模型能力做成稳定、可控、可上线的服务，是应用/工程岗的核心。本文梳理流式输出、Function Calling、结构化输出、服务化与成本控制等高频实战考点。

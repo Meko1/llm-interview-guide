@@ -1,3 +1,15 @@
+---
+title: 推理性能压测与服务化指标
+description: >-
+  「你怎么评估一个 LLM 推理服务够不够快、扛不扛得住？」这是推理/工程岗的必考题。本文参考 llm-action
+  的推理性能压测经验，讲清核心指标（TTFT/TPOT/吞吐/goodput）、压测方法论、性能与成本的权衡曲线，以及常见调优手段。推理原理见
+  推理优化与部署，框架选型见 推理框架对比。
+level: L2
+roles:
+  - Infra
+  - 后端转型
+classification: inferred
+---
 # 推理性能压测与服务化指标
 
 > 「你怎么评估一个 LLM 推理服务够不够快、扛不扛得住？」这是推理/工程岗的必考题。本文参考 [llm-action](https://github.com/liguodongiot/llm-action) 的推理性能压测经验，讲清核心指标（TTFT/TPOT/吞吐/goodput）、压测方法论、性能与成本的权衡曲线，以及常见调优手段。推理原理见 [推理优化与部署](/inference/inference-optimization)，框架选型见 [推理框架对比](/inference/serving-frameworks)。

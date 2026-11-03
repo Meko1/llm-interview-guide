@@ -1,3 +1,14 @@
+---
+title: LLM 数据分级、外发治理与审计证据面试题
+description: >-
+  当敏感数据通过 Agent 工具读取、处理或外发时，不能只看模型调用；还要审查工具身份委托、凭证范围、结果脱敏与确认令牌。完整执行链路见 企业 Tool
+  Gateway 安全执行系统设计面试题。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # LLM 数据分级、外发治理与审计证据面试题
 
 > 当敏感数据通过 Agent 工具读取、处理或外发时，不能只看模型调用；还要审查工具身份委托、凭证范围、结果脱敏与确认令牌。完整执行链路见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。

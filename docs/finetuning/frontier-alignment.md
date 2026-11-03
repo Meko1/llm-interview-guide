@@ -1,3 +1,12 @@
+---
+title: 前沿对齐技术（2025-2026）
+description: 前沿对齐技术（2025-2026）：原理、设计取舍与面试准备。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 前沿对齐技术（2025-2026）
 
 ## 从 RLHF 到新一代对齐

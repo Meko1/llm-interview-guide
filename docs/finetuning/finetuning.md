@@ -1,3 +1,14 @@
+---
+title: 微调范式（SFT / PEFT）
+description: >-
+  微调让通用基座模型适配具体任务、风格或领域。本文系统梳理全参微调、SFT、参数高效微调（PEFT）的全貌、数据构造、灾难性遗忘与选型。LoRA 细节见
+  LoRA / QLoRA 详解，对齐见 RLHF / DPO。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 微调范式（SFT / PEFT）
 
 > 微调让通用基座模型适配具体任务、风格或领域。本文系统梳理全参微调、SFT、参数高效微调（PEFT）的全貌、数据构造、灾难性遗忘与选型。LoRA 细节见 [LoRA / QLoRA 详解](/finetuning/lora)，对齐见 [RLHF / DPO](/finetuning/rlhf)。

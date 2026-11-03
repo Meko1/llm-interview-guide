@@ -1,3 +1,15 @@
+---
+title: LangGraph 生产化与系统设计
+description: >-
+  这页专门回答面试里最容易追问的生产问题：State 怎么设计、Checkpoint 怎么存、HITL
+  怎么恢复、工具副作用怎么幂等、线上怎么排障。基础概念先看 LangGraph 与状态图 Agent，工具权限边界见 Agent 工具安全与权限边界。
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # LangGraph 生产化与系统设计
 
 > 这页专门回答面试里最容易追问的生产问题：State 怎么设计、Checkpoint 怎么存、HITL 怎么恢复、工具副作用怎么幂等、线上怎么排障。基础概念先看 [LangGraph 与状态图 Agent](/engineering/langgraph)，工具权限边界见 [Agent 工具安全与权限边界](/agent/tool-safety)。

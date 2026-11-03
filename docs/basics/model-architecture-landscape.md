@@ -1,3 +1,16 @@
+---
+title: 模型架构谱系与选型
+description: >-
+  面试里问“Transformer 有哪些架构”时，不要只报出 BERT、GPT、T5 三个名字。更完整的回答是：先按信息可见性和训练目标划分
+  Encoder-only、Decoder-only、Encoder-Decoder；再解释它们分别擅长表示、生成和条件生成；最后落到今天为什么通用 LLM
+  几
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 模型架构谱系与选型
 
 > 面试里问“Transformer 有哪些架构”时，不要只报出 BERT、GPT、T5 三个名字。更完整的回答是：先按**信息可见性和训练目标**划分 Encoder-only、Decoder-only、Encoder-Decoder；再解释它们分别擅长表示、生成和条件生成；最后落到今天为什么通用 LLM 几乎都选择 Decoder-only，以及何时不应该盲从这一选择。

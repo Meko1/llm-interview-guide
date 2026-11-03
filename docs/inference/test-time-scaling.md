@@ -1,3 +1,15 @@
+---
+title: 推理时算力扩展（Test-Time Compute Scaling）
+description: >-
+  传统预训练 scaling law 靠"训练时堆参数和数据"提能力；推理时算力扩展开辟了第二条 scaling
+  曲线——同一个模型，推理时投入更多算力（更长思考、更多采样、结构化搜索），准确率就能显著提升。它和 推理模型（把 test-time scaling
+  内化到模型里）互补，而本页聚焦服务侧、
+level: L2
+roles:
+  - Infra
+  - 后端转型
+classification: inferred
+---
 # 推理时算力扩展（Test-Time Compute Scaling）
 
 > 传统预训练 scaling law 靠"训练时堆参数和数据"提能力；推理时算力扩展开辟了**第二条 scaling 曲线**——同一个模型，推理时投入更多算力（更长思考、更多采样、结构化搜索），准确率就能显著提升。它和 [推理模型](/advanced/reasoning-models)（把 test-time scaling 内化到模型里）互补，而本页聚焦**服务侧、可加在任何模型之上的推理时增强技术**：Self-Consistency、Best-of-N、Tree of Thoughts、MCTS、PRM-guided beam、Budget Forcing、Snell 的 compute-optimal 结论。前置阅读：[推理模型与慢思考](/advanced/reasoning-models)、[CoT 全家桶](/prompt/cot-reasoning)、[KV Cache 深度专题](/inference/kv-cache)、[投机解码详解](/inference/speculative-decoding)。

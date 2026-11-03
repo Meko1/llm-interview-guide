@@ -1,3 +1,12 @@
+---
+title: MCP Server 生产化与企业治理高频问答
+description: 需要把 scoped token、身份委托、确认令牌、凭证撤销和后端二次鉴权连成完整回答时，见 企业 Tool Gateway 安全执行系统设计面试题。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # MCP Server 生产化与企业治理高频问答
 
 > 需要把 scoped token、身份委托、确认令牌、凭证撤销和后端二次鉴权连成完整回答时，见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。

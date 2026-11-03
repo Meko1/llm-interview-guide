@@ -1,3 +1,15 @@
+---
+title: 编程 Agent 底层架构与内部机制（Claude Code / Codex / Cursor）
+description: >-
+  需要从面试视角比较 Claude Code、Codex、OpenClaw 与 Hermes 的控制面、执行面、上下文隔离、持久记忆和安全边界时，见
+  智能体运行时架构高频问答。
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # 编程 Agent 底层架构与内部机制（Claude Code / Codex / Cursor）
 
 > 需要从面试视角比较 Claude Code、Codex、OpenClaw 与 Hermes 的控制面、执行面、上下文隔离、持久记忆和安全边界时，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。

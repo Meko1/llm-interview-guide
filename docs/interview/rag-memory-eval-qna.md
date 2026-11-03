@@ -1,3 +1,14 @@
+---
+title: RAG、Memory 与评测安全高频问答
+description: >-
+  本页回答 RAG 和 Memory 本身如何评；当面试官继续问“索引、Prompt、模型改动怎样通过发布审批”，可使用 LLM 评测与发布门禁实战
+  中的版本、门禁和灰度闭环。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # RAG、Memory 与评测安全高频问答
 
 > 本页回答 RAG 和 Memory 本身如何评；当面试官继续问“索引、Prompt、模型改动怎样通过发布审批”，可使用 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates) 中的版本、门禁和灰度闭环。

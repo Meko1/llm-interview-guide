@@ -1,3 +1,15 @@
+---
+title: 具身智能与 VLA（视觉-语言-动作模型）
+description: >-
+  大模型从「在屏幕里说话」走向「在物理世界行动」——具身智能（Embodied AI）让 AI
+  拥有身体，VLA（Vision-Language-Action）模型把「看 + 懂 + 动」端到端打通。这是 2024–2025
+  最受关注的前沿之一，也是机器人与基础模型交汇的方向。Agent 基础见 Ag
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # 具身智能与 VLA（视觉-语言-动作模型）
 
 > 大模型从「在屏幕里说话」走向「在物理世界行动」——具身智能（Embodied AI）让 AI 拥有身体，VLA（Vision-Language-Action）模型把「看 + 懂 + 动」端到端打通。这是 2024–2025 最受关注的前沿之一，也是机器人与基础模型交汇的方向。Agent 基础见 [Agent 基础](/agent/agent-basics)，多模态见 [VLM 架构](/multimodal/vlm-architecture)。

@@ -1,3 +1,14 @@
+---
+title: Agent 记忆系统
+description: >-
+  当面试追问长期运行的 OpenClaw / Hermes 类 Agent 如何管理工作、情节、语义和程序记忆，以及如何避免错误记忆直接影响生产行为时，见
+  智能体运行时架构高频问答。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 记忆系统
 
 > 当面试追问长期运行的 OpenClaw / Hermes 类 Agent 如何管理工作、情节、语义和程序记忆，以及如何避免错误记忆直接影响生产行为时，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。

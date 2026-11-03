@@ -1,3 +1,12 @@
+---
+title: ITSM / SRE 事故响应 Copilot：从告警噪声到可审计恢复闭环
+description: ITSM / SRE 事故响应 Copilot：从告警噪声到可审计恢复闭环：原理、设计取舍与面试准备。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # ITSM / SRE 事故响应 Copilot：从告警噪声到可审计恢复闭环
 
 事故响应是大模型特别有价值、也特别容易造成二次事故的应用场景。值班工程师面对的是告警风暴、变更记录、日志、Trace、指标、拓扑、Runbook、工单和跨团队聊天；AI 可以快速汇总证据、关联症状、草拟沟通和提出排查假设，但它也可能把相关性说成根因、泄露密钥、执行过期 Runbook，或在没有审批时重启关键服务。

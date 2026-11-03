@@ -1,3 +1,14 @@
+---
+title: 国产算力与大模型国产化适配
+description: >-
+  「模型能不能跑在昇腾上？」正在成为国内大模型岗位的差异化考点——政企、金融、运营商的私有化项目几乎都要求国产化。本文参考 llm-action
+  的国产化适配系列实战经验，讲清为什么要国产化、国产 AI 芯片格局、昇腾软件栈（CANN/MindIE/torch_npu）、模型迁移的真实工作量与坑。GP
+level: L2
+roles:
+  - Infra
+  - 后端转型
+classification: inferred
+---
 # 国产算力与大模型国产化适配
 
 > 「模型能不能跑在昇腾上？」正在成为国内大模型岗位的差异化考点——政企、金融、运营商的私有化项目几乎都要求国产化。本文参考 [llm-action](https://github.com/liguodongiot/llm-action) 的国产化适配系列实战经验，讲清**为什么要国产化、国产 AI 芯片格局、昇腾软件栈（CANN/MindIE/torch_npu）、模型迁移的真实工作量与坑**。GPU 通用知识见 [GPU 与硬件基础](/inference/gpu-hardware)，推理框架见 [推理框架对比](/inference/serving-frameworks)。

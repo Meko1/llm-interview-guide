@@ -1,3 +1,15 @@
+---
+title: Prompt 生命周期、实验与发布（PromptOps）
+description: >-
+  我会把 Prompt 当作可发布资产，而不是代码里的字符串。每次发布用 manifest 锁定模板、变量
+  schema、few-shot、模型参数、工具/RAG/安全策略和评测集；开发环境先做 lint、渲染与 token
+  预算检查，离线门禁同时看质量、安全、结构化成功率、延迟和成本。上线先 sha
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Prompt 生命周期、实验与发布（PromptOps）
 
 在线上系统里，Prompt 不是一段散落在代码中的字符串，而是一项会影响质量、成本、安全、工具行为和用户体验的**可发布资产**。改一条例子、一个变量默认值、一个模型参数，甚至一个工具 schema，都可能改变线上行为。因此 PromptOps 的目标不是“更快改提示词”，而是让每一次变更可复现、可评测、可灰度、可回滚、可审计。

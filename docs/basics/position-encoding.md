@@ -1,3 +1,15 @@
+---
+title: 位置编码（Positional Encoding）
+description: >-
+  Attention 本身对顺序无感知，必须显式注入位置信息。位置编码是长上下文相关面试题的核心，RoPE
+  更是现代大模型的标配。本文深入各方案的原理、优劣与长上下文扩展。长上下文系统梳理见 长上下文专题。
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 位置编码（Positional Encoding）
 
 > Attention 本身对顺序无感知，必须显式注入位置信息。位置编码是长上下文相关面试题的核心，RoPE 更是现代大模型的标配。本文深入各方案的原理、优劣与长上下文扩展。长上下文系统梳理见 [长上下文专题](/basics/long-context)。

@@ -1,3 +1,12 @@
+---
+title: 投机解码（Speculative Decoding）
+description: 投机解码（Speculative Decoding）：原理、设计取舍与面试准备。
+level: L2
+roles:
+  - Infra
+  - 后端转型
+classification: inferred
+---
 # 投机解码（Speculative Decoding）
 
 ## 为什么需要投机解码

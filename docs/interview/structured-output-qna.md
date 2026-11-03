@@ -1,3 +1,14 @@
+---
+title: 结构化输出与 Schema 约束高频问答
+description: >-
+  如果面试官把问题从“Schema 如何约束模型”推进到“流式 partial JSON、Java DTO、业务事务和写工具怎样衔接”，可继续使用 Java
+  / Spring AI 生产架构系统设计面试题 的三层校验与提交边界回答。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 结构化输出与 Schema 约束高频问答
 
 > 如果面试官把问题从“Schema 如何约束模型”推进到“流式 partial JSON、Java DTO、业务事务和写工具怎样衔接”，可继续使用 [Java / Spring AI 生产架构系统设计面试题](/interview/java-ai-production-architecture-system-design) 的三层校验与提交边界回答。

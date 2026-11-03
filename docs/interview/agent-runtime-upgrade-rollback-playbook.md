@@ -1,3 +1,15 @@
+---
+title: Agent Runtime 升级、兼容性与回滚：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  Agent Runtime 的升级绝不只是 npm update 或拉一个新镜像。它可能改变模型行为、指令加载、工具
+  schema、sandbox、网络、OAuth、Plugin ABI、memory/session
+  格式和审批默认值。生产面试要能解释：怎样在不丢身份、不放宽权限、不污染状态的前提下
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent Runtime 升级、兼容性与回滚：Claude Code / Codex / OpenClaw / Hermes
 
 > Agent Runtime 的升级绝不只是 `npm update` 或拉一个新镜像。它可能改变模型行为、指令加载、工具 schema、sandbox、网络、OAuth、Plugin ABI、memory/session 格式和审批默认值。生产面试要能解释：怎样在不丢身份、不放宽权限、不污染状态的前提下升级，以及出事后怎样回到一个已验证的运行闭包。

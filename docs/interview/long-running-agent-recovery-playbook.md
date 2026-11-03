@@ -1,3 +1,15 @@
+---
+title: 长运行 Agent 检查点、恢复与人工 Steer：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  长运行 Agent 的难点不在于把进程留在后台，而在于进程、客户端、Gateway
+  或机器中断之后，系统能否分辨“聊天可以恢复”“执行可以继续”和“外部副作用已经发生”这三件事。正确的生产答案不是重新运行最后一条
+  prompt，而是从持久状态、租约、幂等键和下游回执做恢复决策。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 长运行 Agent 检查点、恢复与人工 Steer：Claude Code / Codex / OpenClaw / Hermes
 
 > 长运行 Agent 的难点不在于把进程留在后台，而在于进程、客户端、Gateway 或机器中断之后，系统能否分辨“聊天可以恢复”“执行可以继续”和“外部副作用已经发生”这三件事。正确的生产答案不是重新运行最后一条 prompt，而是从持久状态、租约、幂等键和下游回执做恢复决策。

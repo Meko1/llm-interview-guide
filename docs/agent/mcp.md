@@ -1,3 +1,12 @@
+---
+title: MCP 协议深入
+description: MCP 统一的是接入协议，不会自动提供身份委托或资源授权。涉及短期凭证、确认令牌与执行边界时，见 企业 Tool Gateway 安全执行系统设计面试题。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # MCP 协议深入
 
 > MCP 统一的是接入协议，不会自动提供身份委托或资源授权。涉及短期凭证、确认令牌与执行边界时，见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。

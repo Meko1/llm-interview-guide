@@ -1,3 +1,14 @@
+---
+title: Claude Code 工具系统详解
+description: >-
+  工具（Tools）是编程 Agent 的「手脚」——模型的能力边界由它能调用的工具决定。这一页详解 Claude Code
+  的工具系统：工具如何定义/注册/调用、各类核心工具的设计要点、以及任务管理的双轨架构。架构见 代码架构，机制见 核心机制。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Claude Code 工具系统详解
 
 > 工具（Tools）是编程 Agent 的「手脚」——模型的能力边界由它能调用的工具决定。这一页详解 Claude Code 的工具系统：工具如何定义/注册/调用、各类核心工具的设计要点、以及任务管理的双轨架构。架构见 [代码架构](/claude-code/architecture)，机制见 [核心机制](/claude-code/mechanisms)。

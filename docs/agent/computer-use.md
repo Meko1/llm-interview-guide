@@ -1,3 +1,14 @@
+---
+title: Computer Use 与浏览器 Agent（GUI 智能体）
+description: >-
+  本页讲视觉-动作循环与 DOM/截图混合路线；面试如果进入浏览器会话隔离、网页注入、页面状态验证、高危动作确认、可恢复任务和评测，应转到 Computer
+  Use / 浏览器 Agent 生产系统设计面试题。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Computer Use 与浏览器 Agent（GUI 智能体）
 
 > 本页讲视觉-动作循环与 DOM/截图混合路线；面试如果进入浏览器会话隔离、网页注入、页面状态验证、高危动作确认、可恢复任务和评测，应转到 [Computer Use / 浏览器 Agent 生产系统设计面试题](/interview/computer-use-browser-agent-system-design)。

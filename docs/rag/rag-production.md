@@ -1,3 +1,15 @@
+---
+title: RAG 生产化与系统设计
+description: >-
+  教程里的 RAG 三行代码就能跑，但要扛住企业级的数据量、并发、时效和成本，是另一回事。本文从系统设计视角讲清生产级 RAG
+  的架构分层、离线索引链路（含增量更新）、在线检索链路、多级缓存、延迟与成本优化、引用溯源与高可用，并附踩坑清单。原理见 RAG 基础与流程，检索优化见
+  RAG 进阶与优化，切
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # RAG 生产化与系统设计
 
 > 教程里的 RAG 三行代码就能跑，但要扛住企业级的数据量、并发、时效和成本，是另一回事。本文从**系统设计**视角讲清生产级 RAG 的架构分层、离线索引链路（含增量更新）、在线检索链路、多级缓存、延迟与成本优化、引用溯源与高可用，并附踩坑清单。原理见 [RAG 基础与流程](/rag/rag-basics)，检索优化见 [RAG 进阶与优化](/rag/rag-advanced)，切分见 [切分与检索策略深挖](/rag/chunking-retrieval)，向量库见 [Embedding 与向量数据库](/rag/embedding-vectordb)。涉及分类标签继承、外发通道、删除传播和审计证据时，可继续看 [LLM 数据分级、外发治理与审计证据面试题](/interview/data-governance-egress-audit-qna)。

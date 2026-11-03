@@ -1,3 +1,16 @@
+---
+title: 实时语音 Agent 生产化：低延迟、可打断与可审计会话
+description: >-
+  我会把实时语音 Agent 当成一个带轮次 fence 的流式状态机，而不是 ASR-LLM-TTS 的串联。音频入口先做
+  AEC、VAD、endpointing 和流式 ASR；final transcript 才驱动业务规划，LLM delta 经语义分段后流式
+  TTS。用户插话时递增 turn
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # 实时语音 Agent 生产化：低延迟、可打断与可审计会话
 
 实时语音 Agent 不是把 ASR、LLM、TTS 三个 API 串起来。用户会抢话、停顿、改口；网络会抖动；电话通道有回声和丢包；语音里还可能出现身份信息、支付指令和情绪风险。要做到“像自然对话一样”，系统必须同时管理音频流、轮次状态、模型流、合成播放和业务动作。

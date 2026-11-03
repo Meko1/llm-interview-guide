@@ -1,3 +1,14 @@
+---
+title: 自动化提示优化与提示工程化（Prompt Ops）
+description: >-
+  手工调 prompt 不可规模化、不可复现、改一处可能崩一片。当提示进入生产，就需要把它当代码来管：自动优化、版本化、评估、回归。本文覆盖
+  APE/OPRO/DSPy/TextGrad 等自动优化方法，以及提示的工程化运维体系。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 自动化提示优化与提示工程化（Prompt Ops）
 
 > 手工调 prompt 不可规模化、不可复现、改一处可能崩一片。当提示进入生产，就需要把它当代码来管：**自动优化、版本化、评估、回归**。本文覆盖 APE/OPRO/DSPy/TextGrad 等自动优化方法，以及提示的工程化运维体系。

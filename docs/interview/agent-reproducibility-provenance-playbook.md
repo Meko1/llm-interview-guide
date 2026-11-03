@@ -1,3 +1,15 @@
+---
+title: Agent 可复现运行与配置溯源：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  “模型没变，为什么今天改坏了代码？”通常不是一个纯模型问题。实际一次 Agent run
+  同时受项目指令、路径规则、自动记忆、Skill、MCP/插件、模型/推理配置、权限、工作区、环境变量、检索索引和外部工具版本影响。只保存聊天
+  transcript 无法说明当时哪些配置真正生效；只保存 Git
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 可复现运行与配置溯源：Claude Code / Codex / OpenClaw / Hermes
 
 > “模型没变，为什么今天改坏了代码？”通常不是一个纯模型问题。实际一次 Agent run 同时受项目指令、路径规则、自动记忆、Skill、MCP/插件、模型/推理配置、权限、工作区、环境变量、检索索引和外部工具版本影响。只保存聊天 transcript 无法说明当时哪些配置真正生效；只保存 Git SHA 也无法证明 Agent 看到了什么。本页给出将 Agent 行为做成可追溯、可比较、可回归的运行 manifest。

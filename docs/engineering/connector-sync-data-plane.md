@@ -1,3 +1,16 @@
+---
+title: 企业 Connector 增量同步与撤权：把外部知识安全地带进 LLM
+description: >-
+  我会把 Connector 分成凭证控制面和数据同步面。数据面以稳定 source id、revision、ACL 快照和 cursor
+  建模，Webhook 触发增量、Delta API 保证可恢复、周期性对账发现漏事件；cursor
+  只在对象处理可重放后推进。内容更新创建不可变版本并原子发布，权
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # 企业 Connector 增量同步与撤权：把外部知识安全地带进 LLM
 
 企业知识助手接入 Google Drive、Confluence、Slack、Notion、SharePoint 或 CRM 后，最难的不是 OAuth 登录成功，而是后续几十万份内容如何持续同步：新建、改名、移动、编辑、权限变化、删除、API 限流和 webhook 丢失都可能让索引与源系统不一致。

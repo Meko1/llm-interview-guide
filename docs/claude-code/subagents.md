@@ -1,3 +1,12 @@
+---
+title: Claude Code 子 Agent 与多 Agent 编排
+description: 若要把子 Agent 放进企业级控制面，系统回答上下文隔离、worktree、任务所有权、验证门禁和合并仲裁，见 智能体运行时架构高频问答。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Claude Code 子 Agent 与多 Agent 编排
 
 > 若要把子 Agent 放进企业级控制面，系统回答上下文隔离、worktree、任务所有权、验证门禁和合并仲裁，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。

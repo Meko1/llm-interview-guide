@@ -1,3 +1,14 @@
+---
+title: A2A 协议与 Agent 互操作
+description: >-
+  本页讲 Agent Card、Task、Message 和 Artifact
+  的协议模型；需要回答可信发现、身份委托、异步任务、回调验签、跨租户审计和事故止血时，见 A2A 跨 Agent 互操作生产设计面试题。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # A2A 协议与 Agent 互操作
 
 > 本页讲 Agent Card、Task、Message 和 Artifact 的协议模型；需要回答可信发现、身份委托、异步任务、回调验签、跨租户审计和事故止血时，见 [A2A 跨 Agent 互操作生产设计面试题](/interview/a2a-production-interoperability-qna)。

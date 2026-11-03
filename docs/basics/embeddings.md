@@ -1,3 +1,16 @@
+---
+title: 嵌入层与表示学习
+description: >-
+  token 经过分词后是一串整数
+  ID，模型怎么把「离散符号」变成「能计算的向量」？答案是嵌入层（embedding）。它是大模型的输入门户，也藏着权重绑定、表示空间、参数占比等高频细节题。分词见
+  Tokenizer，检索用的句向量见 Embedding 与向量数据库。
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 嵌入层与表示学习
 
 > token 经过分词后是一串整数 ID，模型怎么把「离散符号」变成「能计算的向量」？答案是嵌入层（embedding）。它是大模型的输入门户，也藏着权重绑定、表示空间、参数占比等高频细节题。分词见 [Tokenizer](/basics/tokenizer)，检索用的句向量见 [Embedding 与向量数据库](/rag/embedding-vectordb)。

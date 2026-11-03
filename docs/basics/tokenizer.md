@@ -1,3 +1,13 @@
+---
+title: Tokenizer 与分词
+description: Tokenizer 决定了模型如何把文本切成 token，是输入输出的第一道关口，也是中英文成本差异、词表大小等问题的根源。
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # Tokenizer 与分词
 
 > Tokenizer 决定了模型如何把文本切成 token，是输入输出的第一道关口，也是中英文成本差异、词表大小等问题的根源。

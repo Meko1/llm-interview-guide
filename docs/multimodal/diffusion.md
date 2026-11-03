@@ -1,3 +1,14 @@
+---
+title: 扩散模型与图像生成
+description: >-
+  文生图（Stable
+  Diffusion、DALL·E、Midjourney、Flux）和文生视频（Sora）背后都是扩散模型。它和大语言模型是两条不同的技术路线，理解其原理是多模态面试的高频点。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 扩散模型与图像生成
 
 > 文生图（Stable Diffusion、DALL·E、Midjourney、Flux）和文生视频（Sora）背后都是扩散模型。它和大语言模型是两条不同的技术路线，理解其原理是多模态面试的高频点。

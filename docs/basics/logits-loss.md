@@ -1,3 +1,16 @@
+---
+title: 从 Logits 到损失：Softmax、交叉熵与困惑度
+description: >-
+  「写一下交叉熵公式」「PPL 是怎么算的」「softmax
+  为什么要减最大值」——这些微观数学题是大模型基础面试的照妖镜：背概念的人答不出，真理解的人几分钟讲透。本文把模型最后一层输出（logits）→
+  概率（softmax）→ 损失（交叉熵）→ 评估（困惑度）这条链一次讲清，含数值稳定性、labe
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 从 Logits 到损失：Softmax、交叉熵与困惑度
 
 > 「写一下交叉熵公式」「PPL 是怎么算的」「softmax 为什么要减最大值」——这些微观数学题是大模型基础面试的照妖镜：背概念的人答不出，真理解的人几分钟讲透。本文把**模型最后一层输出（logits）→ 概率（softmax）→ 损失（交叉熵）→ 评估（困惑度）**这条链一次讲清，含数值稳定性、label smoothing、z-loss 等工程细节。采样侧（温度/top-p 怎么选词）见 [解码与采样策略](/basics/decoding)，训练全景见 [预训练目标与数据](/pretraining/pretrain)，手撕实现见 [手撕代码题解集](/interview/coding-problems)。

@@ -1,3 +1,14 @@
+---
+title: 向量检索与 ANN 算法深入
+description: >-
+  「HNSW 的原理是什么？」「为什么用近似最近邻而不是精确检索？」——向量检索的数学与算法细节是 RAG / 搜索方向的硬核考点。本文深入相似度度量、ANN
+  索引（HNSW/IVF/PQ）与工程权衡。选型概览见 Embedding 与向量库。
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # 向量检索与 ANN 算法深入
 
 > 「HNSW 的原理是什么？」「为什么用近似最近邻而不是精确检索？」——向量检索的数学与算法细节是 RAG / 搜索方向的硬核考点。本文深入相似度度量、ANN 索引（HNSW/IVF/PQ）与工程权衡。选型概览见 [Embedding 与向量库](/rag/embedding-vectordb)。

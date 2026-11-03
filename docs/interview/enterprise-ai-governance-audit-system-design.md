@@ -1,3 +1,14 @@
+---
+title: 企业 AI 安全、合规与审计控制面系统设计面试题
+description: >-
+  LLM 数据分级、外发治理与审计证据面试题
+  解决“单份数据如何被正确使用”；本页解决“企业如何对模型、Prompt、RAG、Agent、MCP、数据和供应商建立统一的治理控制面”。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 企业 AI 安全、合规与审计控制面系统设计面试题
 
 > [LLM 数据分级、外发治理与审计证据面试题](/interview/data-governance-egress-audit-qna) 解决“单份数据如何被正确使用”；本页解决“企业如何对模型、Prompt、RAG、Agent、MCP、数据和供应商建立统一的治理控制面”。

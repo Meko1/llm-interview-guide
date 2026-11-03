@@ -1,3 +1,14 @@
+---
+title: LLM-as-a-Judge 校准、偏差控制与发布门禁
+description: >-
+  用 LLM 给 LLM 打分可以把评测规模做大，但 Judge 也会偏爱长答案、受选项顺序影响、被风格诱导，甚至随模型升级而漂移。把 Judge
+  分数直接当真，会把评测自动化变成自动化自欺。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # LLM-as-a-Judge 校准、偏差控制与发布门禁
 
 > 用 LLM 给 LLM 打分可以把评测规模做大，但 Judge 也会偏爱长答案、受选项顺序影响、被风格诱导，甚至随模型升级而漂移。把 Judge 分数直接当真，会把评测自动化变成自动化自欺。

@@ -1,3 +1,15 @@
+---
+title: Agentic RAG（智能体检索增强）
+description: >-
+  传统 RAG 是「检索一次 → 生成一次」的静态流水线，遇到复杂、多跳、需要判断的问题就力不从心。Agentic RAG 把 Agent
+  的「规划、反思、工具调用」能力注入检索流程，让系统能自主决定「要不要检索、检索什么、检索够了没、检索得对不对」。这是 2024–2025 RAG
+  演进的主线方向。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agentic RAG（智能体检索增强）
 
 > 传统 RAG 是「检索一次 → 生成一次」的静态流水线，遇到复杂、多跳、需要判断的问题就力不从心。Agentic RAG 把 Agent 的「规划、反思、工具调用」能力注入检索流程，让系统能自主决定「要不要检索、检索什么、检索够了没、检索得对不对」。这是 2024–2025 RAG 演进的主线方向。基础概念见 [RAG 基础](/rag/rag-basics)、Agent 概念见 [Agent 基础](/agent/agent-basics)。

@@ -1,3 +1,16 @@
+---
+title: 模型网关与多模型路由
+description: >-
+  企业里很少「一个应用直连一个模型」——通常是几十个应用调十几个模型（GPT/Claude/Qwen/DeepSeek/自部署
+  vLLM）。在应用和模型之间加一层模型网关（LLM Gateway），统一接入、鉴权、限流、路由、计费、观测，是后端工程师最能发挥老本行的 AI
+  基建岗位方向。本文讲清网关解
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # 模型网关与多模型路由
 
 > 企业里很少「一个应用直连一个模型」——通常是几十个应用调十几个模型（GPT/Claude/Qwen/DeepSeek/自部署 vLLM）。在应用和模型之间加一层**模型网关（LLM Gateway）**，统一接入、鉴权、限流、路由、计费、观测，是后端工程师最能发挥老本行的 AI 基建岗位方向。本文讲清网关解决什么、核心能力清单、多模型路由与降级策略、以及 OneAPI / LiteLLM / Higress 等选型。应用开发见 [LLM 应用开发实战](/engineering/llm-app-dev)，运营见 [LLMOps 生产运营](/engineering/llmops)。

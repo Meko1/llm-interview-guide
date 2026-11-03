@@ -1,3 +1,14 @@
+---
+title: AI 工作流 vs Agent
+description: >-
+  「什么时候用 Workflow，什么时候用 Agent？」是 Anthropic《Building Effective
+  Agents》提出、如今被反复问到的工程判断题。本文讲清两者区别、五种编排模式的细节与组合，以及低代码平台与代码框架的选型。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # AI 工作流 vs Agent
 
 > 「什么时候用 Workflow，什么时候用 Agent？」是 Anthropic《Building Effective Agents》提出、如今被反复问到的工程判断题。本文讲清两者区别、五种编排模式的细节与组合，以及低代码平台与代码框架的选型。

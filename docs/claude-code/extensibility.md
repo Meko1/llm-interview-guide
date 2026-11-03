@@ -1,3 +1,14 @@
+---
+title: Claude Code 扩展机制（Hooks / MCP / Skills / 命令）
+description: >-
+  Claude Code 的强大不只在内置能力，更在可扩展性：用 Hooks 加确定性约束、用 MCP 接外部系统、用 Skills 封装专长、用 Slash
+  Commands 和自定义 Agent 定制工作流。这一页讲清四大扩展机制怎么用、各自解决什么问题。功能总览见 功能总览。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Claude Code 扩展机制（Hooks / MCP / Skills / 命令）
 
 > Claude Code 的强大不只在内置能力，更在**可扩展性**：用 Hooks 加确定性约束、用 MCP 接外部系统、用 Skills 封装专长、用 Slash Commands 和自定义 Agent 定制工作流。这一页讲清四大扩展机制怎么用、各自解决什么问题。功能总览见 [功能总览](/claude-code/overview)。

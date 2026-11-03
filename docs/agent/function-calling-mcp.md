@@ -1,3 +1,14 @@
+---
+title: Function Calling 与 MCP（工具调用）
+description: >-
+  本页讲模型如何表达工具调用意图、如何设计 schema 与生命周期；当面试进入用户身份委托、短期凭证、策略义务、写操作确认和事故止血时，继续看 企业
+  Tool Gateway 安全执行系统设计面试题。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Function Calling 与 MCP（工具调用）
 
 > 本页讲模型如何表达工具调用意图、如何设计 schema 与生命周期；当面试进入用户身份委托、短期凭证、策略义务、写操作确认和事故止血时，继续看 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。

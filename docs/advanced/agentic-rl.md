@@ -1,3 +1,14 @@
+---
+title: Agentic RL（智能体强化学习）
+description: >-
+  当强化学习从「对齐人类偏好」走向「训练模型自主完成多步任务」，就进入了 Agentic RL。2025
+  年它从「最前沿研究方向」变成有成熟工具链的生产范式（verl、TRL），并与推理模型在 o3/o4-mini「工具调用嵌进 CoT」后明显合流。
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # Agentic RL（智能体强化学习）
 
 > 当强化学习从「对齐人类偏好」走向「训练模型自主完成多步任务」，就进入了 Agentic RL。2025 年它从「最前沿研究方向」变成有成熟工具链的生产范式（verl、TRL），并与推理模型在 o3/o4-mini「工具调用嵌进 CoT」后明显合流。

@@ -1,3 +1,14 @@
+---
+title: 多模态大模型
+description: >-
+  多模态让模型能同时理解文本、图像、音频等。本文聚焦视觉-语言模型（VLM）的核心机制：从 CLIP、ViT 到 LLaVA
+  架构、训练范式、原生多模态与高分辨率处理。图像生成见 扩散模型，语音见 语音大模型。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 多模态大模型
 
 > 多模态让模型能同时理解文本、图像、音频等。本文聚焦视觉-语言模型（VLM）的核心机制：从 CLIP、ViT 到 LLaVA 架构、训练范式、原生多模态与高分辨率处理。图像生成见 [扩散模型](/multimodal/diffusion)，语音见 [语音大模型](/multimodal/speech)。

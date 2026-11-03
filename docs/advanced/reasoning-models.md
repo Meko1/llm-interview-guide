@@ -1,3 +1,14 @@
+---
+title: 推理模型与慢思考（Test-time Compute）
+description: >-
+  从 OpenAI o1/o3 到 DeepSeek-R1、Qwen QwQ，「会慢慢想」的推理模型是 2024–2025 最大的范式变化。到 2025
+  下半年，GPT-5 把「快思考」和「慢思考」收进同一个模型、按问题难度自适应调节推理深度，推理模型与普通模型的边界开始模糊。理解它「为什么强、怎么训
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # 推理模型与慢思考（Test-time Compute）
 
 > 从 OpenAI o1/o3 到 DeepSeek-R1、Qwen QwQ，「会慢慢想」的推理模型是 2024–2025 最大的范式变化。到 2025 下半年，GPT-5 把「快思考」和「慢思考」收进同一个模型、按问题难度自适应调节推理深度，推理模型与普通模型的边界开始模糊。理解它「为什么强、怎么训出来」是当下面试的前沿必考点。服务侧如何外挂 Self-Consistency、Best-of-N、ToT、MCTS、PRM 和动态预算，见 [推理时算力扩展](/inference/test-time-scaling)。

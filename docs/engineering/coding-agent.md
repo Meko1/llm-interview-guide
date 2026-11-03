@@ -1,3 +1,15 @@
+---
+title: AI 编程与 Coding Agent
+description: >-
+  AI 写代码是大模型落地最成功的场景之一，从代码补全到能自主修 bug 的 Coding Agent。理解它的原理、形态与评估，是 AI
+  应用方向的高频考点。
+level: L2
+roles:
+  - 后端转型
+  - 应用开发
+  - Infra
+classification: inferred
+---
 # AI 编程与 Coding Agent
 
 > AI 写代码是大模型落地最成功的场景之一，从代码补全到能自主修 bug 的 Coding Agent。理解它的原理、形态与评估，是 AI 应用方向的高频考点。

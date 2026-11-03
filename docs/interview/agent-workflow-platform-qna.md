@@ -1,3 +1,14 @@
+---
+title: Dify、Coze、n8n 与耐久 Agent 工作流：高频面试题库
+description: >-
+  这页面向 LLM 应用开发、Agent 工程、AI 平台、Java AI
+  工程和解决方案岗位。题目不考你能否背出节点名称，而是检验你是否能将大模型的不确定性嵌进可靠的业务流程。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Dify、Coze、n8n 与耐久 Agent 工作流：高频面试题库
 
 > 这页面向 LLM 应用开发、Agent 工程、AI 平台、Java AI 工程和解决方案岗位。题目不考你能否背出节点名称，而是检验你是否能将大模型的不确定性嵌进可靠的业务流程。

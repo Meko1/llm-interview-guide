@@ -1,3 +1,14 @@
+---
+title: LLM Prompt/Prefix Cache 生产工程
+description: >-
+  Prefix Cache 不是“把 system prompt 放进 Redis”。它复用的是完全相同 token 前缀的模型 KV 状态，主要减少
+  prefill 计算和 TTFT；收益取决于 prompt 布局、请求分布、引擎拓扑、版本兼容性与驱逐策略。把这件事做成生产能力，关键不是打开一个开关
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # LLM Prompt/Prefix Cache 生产工程
 
 > Prefix Cache 不是“把 system prompt 放进 Redis”。它复用的是**完全相同 token 前缀的模型 KV 状态**，主要减少 prefill 计算和 TTFT；收益取决于 prompt 布局、请求分布、引擎拓扑、版本兼容性与驱逐策略。把这件事做成生产能力，关键不是打开一个开关，而是把稳定前缀设计成可治理的接口契约。

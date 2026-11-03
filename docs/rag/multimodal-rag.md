@@ -1,3 +1,14 @@
+---
+title: 多模态 RAG（图文检索与 ColPali）
+description: >-
+  真实文档不只有纯文本——PDF 里有表格、图表、扫描件、流程图。传统 RAG 先用 OCR 把文档转成文本再检索，会丢掉版式和视觉信息。多模态 RAG
+  直接在「图 + 文」上做检索，是 2024–2025 的活跃方向。基础流程见 RAG 基础，多模态模型原理见 多模态大模型。
+level: L1
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 多模态 RAG（图文检索与 ColPali）
 
 > 真实文档不只有纯文本——PDF 里有表格、图表、扫描件、流程图。传统 RAG 先用 OCR 把文档转成文本再检索，会丢掉版式和视觉信息。多模态 RAG 直接在「图 + 文」上做检索，是 2024–2025 的活跃方向。基础流程见 [RAG 基础](/rag/rag-basics)，多模态模型原理见 [多模态大模型](/multimodal/multimodal)。

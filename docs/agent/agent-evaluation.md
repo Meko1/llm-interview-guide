@@ -1,3 +1,14 @@
+---
+title: Agent 评估与可靠性工程
+description: >-
+  浏览器/桌面 Agent 还需要评估元素定位、状态验证、误操作拦截、会话恢复和人工接管；完整题库见 Computer Use / 浏览器 Agent
+  生产系统设计面试题。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 评估与可靠性工程
 
 > 浏览器/桌面 Agent 还需要评估元素定位、状态验证、误操作拦截、会话恢复和人工接管；完整题库见 [Computer Use / 浏览器 Agent 生产系统设计面试题](/interview/computer-use-browser-agent-system-design)。

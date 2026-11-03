@@ -1,3 +1,15 @@
+---
+title: MoE 训练与专家并行
+description: >-
+  DeepSeek-V3、Qwen-MoE、Mixtral 把 MoE 推成了主流架构，「MoE
+  怎么训、怎么并行、怎么保证专家负载均衡」成了训练岗的高频深挖点。本文承接 MoE 混合专家模型 的架构介绍，聚焦工程侧：路由与负载均衡、辅助损失、容量因子与
+  token 丢弃、专家并行（EP）与 AllT
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # MoE 训练与专家并行
 
 > DeepSeek-V3、Qwen-MoE、Mixtral 把 MoE 推成了主流架构，「MoE 怎么训、怎么并行、怎么保证专家负载均衡」成了训练岗的高频深挖点。本文承接 [MoE 混合专家模型](/basics/moe) 的架构介绍，聚焦**工程侧**：路由与负载均衡、辅助损失、容量因子与 token 丢弃、专家并行（EP）与 AllToAll 通信、DeepSeekMoE 的细粒度+共享专家设计。并行通信基础见 [AI 训练集群与网络通信](/pretraining/ai-infra-networking)。

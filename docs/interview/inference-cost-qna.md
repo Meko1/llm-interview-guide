@@ -1,3 +1,15 @@
+---
+title: 推理部署与成本治理高频问答
+description: >-
+  这页面向 AI Infra、推理部署、模型平台、Java AI 后端岗位。面试官通常不会只问「vLLM
+  用过吗」，而会追问：为什么慢、怎么压测、怎么估卡、怎么量化、怎么降成本、线上 SLA 被打爆时怎么止血。相关原理见
+  推理优化与部署、推理框架对比、推理性能压测、量化实战。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 推理部署与成本治理高频问答
 
 > 这页面向 AI Infra、推理部署、模型平台、Java AI 后端岗位。面试官通常不会只问「vLLM 用过吗」，而会追问：为什么慢、怎么压测、怎么估卡、怎么量化、怎么降成本、线上 SLA 被打爆时怎么止血。相关原理见 [推理优化与部署](/inference/inference-optimization)、[推理框架对比](/inference/serving-frameworks)、[推理性能压测](/inference/inference-benchmark)、[量化实战](/inference/quantization)。

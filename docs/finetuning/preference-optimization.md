@@ -1,3 +1,14 @@
+---
+title: 偏好优化方法全景（DPO 及其变体）
+description: >-
+  RLHF 之后，「怎么用偏好数据对齐模型」演化出一大家族方法：DPO、IPO、KTO、ORPO、SimPO……面试常被追问「DPO
+  和这些变体的区别」。本文把这条线索理清，给出选型直觉。RLHF/PPO/DPO 推导见 RLHF / DPO 对齐，RL 基础见 强化学习基础。
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 偏好优化方法全景（DPO 及其变体）
 
 > RLHF 之后，「怎么用偏好数据对齐模型」演化出一大家族方法：DPO、IPO、KTO、ORPO、SimPO……面试常被追问「DPO 和这些变体的区别」。本文把这条线索理清，给出选型直觉。RLHF/PPO/DPO 推导见 [RLHF / DPO 对齐](/finetuning/rlhf)，RL 基础见 [强化学习基础](/advanced/rl-basics)。

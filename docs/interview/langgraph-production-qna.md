@@ -1,3 +1,14 @@
+---
+title: LangGraph 状态图 Agent 生产化高频问答
+description: >-
+  这页不重复讲 LangGraph 基础 API，而是模拟面试官连续追问：State 怎么拆、checkpoint 怎么恢复、人审怎么
+  resume、写操作怎么防重复、trace 和上线门禁怎么做。系统设计细节见 LangGraph 生产化与系统设计。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # LangGraph 状态图 Agent 生产化高频问答
 
 > 这页不重复讲 LangGraph 基础 API，而是模拟面试官连续追问：State 怎么拆、checkpoint 怎么恢复、人审怎么 resume、写操作怎么防重复、trace 和上线门禁怎么做。系统设计细节见 [LangGraph 生产化与系统设计](/engineering/langgraph-production)。

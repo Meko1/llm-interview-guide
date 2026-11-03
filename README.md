@@ -150,6 +150,15 @@ LLMGuide 是一份开源的**大模型面试知识库**，把大模型方向零�
 - [LLM Course 中文路线图](https://meko1.github.io/llm-interview-guide/interview/llm-course-roadmap)（Maxime Labonne 经典路线图译本）
 - [学习资源汇总](https://meko1.github.io/llm-interview-guide/interview/resources)
 
+## 分层学习与内容质量
+
+- 从 [岗位学习路径](https://meko1.github.io/llm-interview-guide/paths/) 开始：在校生、后端转型、应用开发、算法研究，以及推理 Infra 与前沿入口。
+- [知识地图](https://meko1.github.io/llm-interview-guide/catalog) 支持级别、岗位、板块与关键词筛选；原文章 URL 保留。
+- 阅读级别为 L0–L4；初次自动分类与人工确认分开标记。时长是阅读量估算，Git 更新日期不等于技术审校日期。
+- `npm run catalog` 根据源文件生成目录与 `audit/inventory.csv` / `audit/report.md`，不以机械数量冒充准确性评分。
+- `npm run check` 检查元数据、站内路径与旧 URL；`npm run check:built` 检查产物链接和锚点；`npm run build` 自动执行全部检查，死链不再被忽略。
+- 首轮补强 Transformer、Attention、KV Cache、RAG、Agent 的决策、失败案例、追问与一手参考。其余文章持续分批审校。
+
 ## 🚀 本地运行
 
 需要 Node.js 18+。

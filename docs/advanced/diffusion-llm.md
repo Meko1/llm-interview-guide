@@ -1,3 +1,14 @@
+---
+title: 扩散语言模型（Diffusion LLM）
+description: >-
+  主流大模型清一色都是自回归（Autoregressive, AR）—— 从左到右逐 token 生成。2025 年 Inception Labs 的
+  Mercury、蚂蚁/中国人大的 LLaDA 把扩散模型这一在图像领域大杀四方的范式搬到了文本上：并行生成、双向上下文、任意顺序填空。这是当下最"反直
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # 扩散语言模型（Diffusion LLM）
 
 > 主流大模型清一色都是**自回归**（Autoregressive, AR）—— 从左到右逐 token 生成。2025 年 Inception Labs 的 Mercury、蚂蚁/中国人大的 LLaDA 把**扩散模型**这一在图像领域大杀四方的范式搬到了文本上：**并行**生成、**双向**上下文、**任意顺序**填空。这是当下最"反直觉"的前沿方向之一，也是进阶面试的加分题。相关前置阅读：[扩散模型与图像生成](/multimodal/diffusion)、[状态空间模型与 Mamba](/advanced/state-space-models)、[解码与采样策略](/basics/decoding)。

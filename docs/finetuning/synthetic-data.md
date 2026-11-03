@@ -1,3 +1,15 @@
+---
+title: 合成数据与自我改进（Synthetic Data & Self-Improvement）
+description: >-
+  "高质量真实数据不够用了"是 2024-2026 大模型训练的中心矛盾——Chinchilla-optimal 需要几万亿
+  token、GPT-4/Llama-3 已经吃到了公开互联网的天花板。合成数据从"补充"变成了主力增量来源：Llama-3 后训练主要靠拒绝采样、Phi
+  系列的预训练几乎全靠"
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 合成数据与自我改进（Synthetic Data & Self-Improvement）
 
 > "**高质量真实数据不够用了**"是 2024-2026 大模型训练的中心矛盾——Chinchilla-optimal 需要几万亿 token、GPT-4/Llama-3 已经吃到了公开互联网的天花板。合成数据从"补充"变成了**主力增量来源**：Llama-3 后训练主要靠拒绝采样、Phi 系列的预训练几乎全靠"教科书合成"、DeepSeek-R1 用自己的推理轨迹蒸馏出一系列小模型。本文把合成数据的**五大技术路线、质量控制、模型崩溃风险与规避**一次讲透。前置阅读：[数据工程与合成数据](/pretraining/data-engineering)、[RLHF/DPO 对齐](/finetuning/rlhf)、[推理模型与慢思考](/advanced/reasoning-models)。
@@ -193,7 +205,7 @@ RLAIF vs RLHF：**RLAIF 便宜、可扩展、闭环稳定**；风险是偏好会
 ## 高频追问
 
 **Q：合成数据能否完全替代真实数据？**
-不能。① 真实数据是"分布锚点"，防止 [model collapse](#五-模型崩溃-model-collapse)；② 真实数据里的"长尾罕见知识"是合成模型无论怎么改写都造不出来的；③ 有版权和溯源的真实数据是法律合规的最终依据。合成数据是"扩量 + 领域增强"，不是"替代"。
+不能。① 真实数据是"分布锚点"，防止 [model collapse](#五、模型崩溃-model-collapse)；② 真实数据里的"长尾罕见知识"是合成模型无论怎么改写都造不出来的；③ 有版权和溯源的真实数据是法律合规的最终依据。合成数据是"扩量 + 领域增强"，不是"替代"。
 
 **Q：Self-Instruct 和 Evol-Instruct 的核心差别？**
 Self-Instruct **横向扩量**——用种子生成更多样但相似难度的指令；Evol-Instruct **纵向加深**——把一条指令逐步进化得更难更复杂。WizardLM 系列证明"复杂度 > 数量"，同样规模数据下 Evol-Instruct 训出的模型在复杂任务上显著强于 Self-Instruct 版本。

@@ -1,3 +1,12 @@
+---
+title: 推理框架对比（vLLM / SGLang / TensorRT-LLM）
+description: 推理框架对比（vLLM / SGLang / TensorRT-LLM）：原理、设计取舍与面试准备。
+level: L2
+roles:
+  - Infra
+  - 后端转型
+classification: inferred
+---
 # 推理框架对比（vLLM / SGLang / TensorRT-LLM）
 
 ## 为什么需要专用推理框架

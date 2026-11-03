@@ -1,3 +1,14 @@
+---
+title: 数据工程与合成数据
+description: >-
+  "Garbage in, garbage out" 在大模型时代尤其成立。LLaMA 3 与 LLaMA 2 架构几乎相同，效果差距主要来自数据；Phi
+  系列用"教科书级"数据让小模型越级打怪。数据工程是大模型团队投入人力最多、但面试资料最少的环节，这也让它成为面试中的区分度题。
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # 数据工程与合成数据
 
 > "Garbage in, garbage out" 在大模型时代尤其成立。LLaMA 3 与 LLaMA 2 架构几乎相同，效果差距主要来自数据；Phi 系列用"教科书级"数据让小模型越级打怪。数据工程是大模型团队投入人力最多、但面试资料最少的环节，这也让它成为面试中的区分度题。

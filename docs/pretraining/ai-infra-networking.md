@@ -1,3 +1,15 @@
+---
+title: AI 训练集群与网络通信
+description: >-
+  千卡万卡训练大模型，瓶颈往往不在算力，而在通信与稳定性。本文参考 llm-action 的 AI 基础设施与网络通信章节，讲清 GPU
+  集群互联（NVLink/NVSwitch/IB/RoCE）、集合通信（NCCL/HCCL 的
+  AllReduce/AllGather）、计算与通信重叠、以及超大规模
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # AI 训练集群与网络通信
 
 > 千卡万卡训练大模型，**瓶颈往往不在算力，而在通信与稳定性**。本文参考 [llm-action](https://github.com/liguodongiot/llm-action) 的 AI 基础设施与网络通信章节，讲清 GPU 集群互联（NVLink/NVSwitch/IB/RoCE）、集合通信（NCCL/HCCL 的 AllReduce/AllGather）、计算与通信重叠、以及超大规模训练的稳定性与故障恢复。并行策略本身见 [分布式训练与显存优化](/pretraining/distributed-training)，国产栈见 [国产算力与国产化适配](/inference/domestic-ai-stack)。

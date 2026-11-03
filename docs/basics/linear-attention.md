@@ -1,3 +1,15 @@
+---
+title: 线性注意力与混合架构
+description: >-
+  标准注意力的 $O(n^2)$ 复杂度是长序列的根本瓶颈。一条研究主线试图把它降到线性 $O(n)$——线性注意力、RWKV、RetNet，以及把它们和
+  Transformer 缝在一起的混合架构（Jamba 等）。这是 2024–2025 长上下文与高效推理的前沿。标准注意力见 Attention
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 线性注意力与混合架构
 
 > 标准注意力的 $O(n^2)$ 复杂度是长序列的根本瓶颈。一条研究主线试图把它降到**线性** $O(n)$——线性注意力、RWKV、RetNet，以及把它们和 Transformer 缝在一起的**混合架构**（Jamba 等）。这是 2024–2025 长上下文与高效推理的前沿。标准注意力见 [Attention 与变体](/basics/attention)，状态空间模型见 [Mamba/SSM](/advanced/state-space-models)。

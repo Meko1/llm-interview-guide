@@ -1,3 +1,15 @@
+---
+title: 远程与云端 Agent 生产运行手册：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  面试里问“怎样把 Agent 放到云端或远程机器上运行”时，不能只回答“套一层 WebSocket、加 SSH 或部署
+  Docker”。真正的难点是明确：谁拥有任务状态，谁能调度执行器，远端设备凭什么被信任，断网后能否安全继续，以及怎样一键停止已经拿到工具权限的运行。本页把
+  Claude Code、
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 远程与云端 Agent 生产运行手册：Claude Code / Codex / OpenClaw / Hermes
 
 > 面试里问“怎样把 Agent 放到云端或远程机器上运行”时，不能只回答“套一层 WebSocket、加 SSH 或部署 Docker”。真正的难点是明确：谁拥有任务状态，谁能调度执行器，远端设备凭什么被信任，断网后能否安全继续，以及怎样一键停止已经拿到工具权限的运行。本页把 Claude Code、Codex、OpenClaw、Hermes 的公开能力抽象成可迁移的生产设计。

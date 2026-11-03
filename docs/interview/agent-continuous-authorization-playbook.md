@@ -1,3 +1,14 @@
+---
+title: 长任务 Agent 持续授权与紧急撤权：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  一次“允许执行”不能覆盖一个持续数小时、会暂停恢复、会调用多个工具、可能更换资源的 Agent 任务。真实生产问题是：用户批准了读日志，Agent
+  之后要部署怎么办？审批后 prompt、目标分支或金额变了怎么办？策略刚收紧，正在运行的 job 能否继续？紧急撤权时，已经发到下游的命令如何阻止或对账
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # 长任务 Agent 持续授权与紧急撤权：Claude Code / Codex / OpenClaw / Hermes
 
 > 一次“允许执行”不能覆盖一个持续数小时、会暂停恢复、会调用多个工具、可能更换资源的 Agent 任务。真实生产问题是：用户批准了读日志，Agent 之后要部署怎么办？审批后 prompt、目标分支或金额变了怎么办？策略刚收紧，正在运行的 job 能否继续？紧急撤权时，已经发到下游的命令如何阻止或对账？本页将审批从一次 UI 点击提升为持续授权状态机。

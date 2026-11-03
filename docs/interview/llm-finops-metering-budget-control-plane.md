@@ -1,3 +1,15 @@
+---
+title: LLM FinOps：计量、归因与预算控制面
+description: >-
+  “按 token 乘单价”只能得到一个估算，不能构成生产级成本系统。真实 LLM
+  调用会流式中断、重试、fallback、工具循环、异步批处理和多供应商计费；自建推理还要分摊 GPU、显存、空闲容量和共享网关成本。FinOps
+  的目标是让每一笔费用从 usage event 进入可对账账本，并在成本
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # LLM FinOps：计量、归因与预算控制面
 
 > “按 token 乘单价”只能得到一个估算，不能构成生产级成本系统。真实 LLM 调用会流式中断、重试、fallback、工具循环、异步批处理和多供应商计费；自建推理还要分摊 GPU、显存、空闲容量和共享网关成本。FinOps 的目标是让每一笔费用从 usage event 进入可对账账本，并在成本真正失控前以确定性的配额、预扣、审批和熔断动作介入。

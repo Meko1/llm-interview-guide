@@ -1,6 +1,60 @@
+---
+title: Transformer 架构详解
+description: 从 token 数据流、组件职责与张量形状理解 Transformer，结合参数算例、失败案例和分层追问。
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: reviewed
+---
 # Transformer 架构详解
 
-> Transformer 是几乎所有大模型的基石，也是面试出现频率最高的考点。本文从历史动机讲到每个组件的原理，再到完整的前向走查、参数量与计算复杂度的实算、现代改进与高频追问，力求一篇讲透。Attention、位置编码、归一化等子主题有独立深入页，本文负责把它们串成完整图景。
+> 本页负责串起 Transformer 的数据流、组件职责与资源取舍。主阅读级别为 L1；工程决策与研究追问面向 L2/L3。前置要求是矩阵乘法与基本概率，第一次阅读可先跳过长推导。
+
+## 阅读目标：从组件名走向数据流
+
+| 阅读深度 | 要回答的问题 | 检验方式 |
+| --- | --- | --- |
+| L0 / L1 | 一个 token 经历哪些变换？ | 画出 Embedding → Attention → FFN → logits，不把 logits 当概率 |
+| L2 | 序列长度、隐藏维度和并发分别影响什么？ | 分开算参数、注意力中间量与 KV Cache，不只报一个大 O |
+| L3 | 为什么选某种归一化、位置编码与注意力结构？ | 提出对照实验，区分结构收益和训练配方差异 |
+
+## 工程走查：同一层里有两类不同的成本
+
+以 **MHA、两层线性 FFN、忽略 bias 和归一化小项** 的教学层为例，设 batch 为 $B$、序列长度为 $T$、隐藏维度为 $d$、FFN 中间维度为 $d_{ff}$：
+
+- 输入与输出均为 $[B,T,d]$。Attention 改变 token 之间的信息交互，FFN 逐 token 变换特征，不改变 token 数量。
+- 参数约为 $4d^2 + 2dd_{ff}$；取 $d_{ff}=4d$ 才得到常见的 $12d^2$。GQA、门控 FFN、权重共享与 MoE 都要重新按实际矩阵计数，不能套用此式。
+- 投影与 FFN 的主要矩阵乘成本随 $BTd^2$ 增长；密集注意力的两次矩阵乘随 $BT^2d$ 增长。固定 $d$ 时，序列加倍使注意力核心算术量约四倍，但不代表完整端到端耗时四倍。
+- 训练的激活、推理的权重与 KV Cache 属于不同账本；参数量相同的两个模型也可能有不同的并发上限。
+
+**算例**：$d=512,d_{ff}=2048$ 时，单层近似参数为 $4\times512^2+2\times512\times2048=3{,}145{,}728$，不含 Embedding 和输出头。先确认结构假设，再把层数乘上去。
+
+## 失败案例：训练看似正常，生成却不正常
+
+| 现象 | 应排查的边界 | 不应直接下的结论 |
+| --- | --- | --- |
+| 训练 loss 很低，部署生成很差 | target shift、因果 mask、数据泄漏与训练 / 推理模板差异 | 「模型规模不够」 |
+| 开启 KV Cache 后输出变化明显 | 位置索引、缓存长度、padding 与 mask 对齐 | 「缓存天然是有损近似」 |
+| 长输入 OOM | 激活、中间矩阵、KV 与运行时工作区分别计数 | 「参数不多就不会 OOM」 |
+| FP16 出现 NaN | mask 全屏蔽行、score 溢出、归约精度 | 「调小学习率一定能解决」 |
+
+<details>
+<summary>L3 追问：不加位置编码，Attention 是不变还是等变？</summary>
+
+无位置编码、无固定因果等位置相关 mask 时，对 token 维应用同一置换矩阵 $P$，有 $Q'=PQ,K'=PK,V'=PV$。分数变为 $P(QK^\top)P^\top$，逐行 softmax 与置换相容，输出满足 $f(PX)=Pf(X)$。这是**置换等变**，不是输出保持不变。固定因果 mask 会引入顺序约束，不满足上述无条件推导。把 token 输出进一步用对称池化聚合，才可能获得置换不变的整体表示。
+
+面试追加实验：保持权重不变，打乱 token；分别比较无 mask 与因果 mask 的输出，解释为什么测试前必须声明假设。
+</details>
+
+## 一手参考与使用边界
+
+- [Attention Is All You Need（2017）](https://arxiv.org/abs/1706.03762)：原始 Encoder–Decoder、缩放点积与参数设计；不等同于所有现代 Decoder-only 结构。
+- [On Layer Normalization in the Transformer Architecture（2020）](https://arxiv.org/abs/2002.04745)：Pre-LN / Post-LN 的梯度与 warmup 分析；不能简化为一方永远表达力更强。
+- [GQA（2023）](https://arxiv.org/abs/2305.13245)：查询头与 KV 共享的设计；具体质量与效率取决于训练和任务。
+
+下面保留完整机制讲解。首次阅读先走数据流，再按问题进入子专题。
 
 ![Transformer Decoder-Only 块结构：残差直通 + Pre-Norm](/diagrams/transformer.svg)
 
@@ -20,7 +74,7 @@
 
 2017 年论文《Attention Is All You Need》提出：**完全抛弃循环和卷积，只用注意力机制来建模序列**。它的优势：
 
-- **并行化训练**：对整个序列**同时**计算注意力，充分利用 GPU，训练速度数量级提升。
+- **并行化训练**：teacher forcing 下可同时计算序列位置的表示，去掉 RNN 的时间步串行依赖；实际速度收益取决于硬件、长度与实现，生成新 token 仍有自回归依赖。
 - **任意距离 O(1) 路径**：序列中任意两个位置之间可以直接交互，路径长度恒为 1，长距离依赖建模能力极强。
 - **可扩展性**：结构规整、易堆叠，配合 [缩放定律](/pretraining/scaling-law) 能稳定放大到千亿参数。
 
@@ -76,7 +130,7 @@
 
 ### 3.2 位置编码（Positional Encoding）
 
-**Attention 本身是「置换不变」的**——打乱输入顺序，输出只会相应打乱，模型无法区分「我打你」和「你打我」。因此必须显式注入位置信息。
+**无位置编码和位置相关 mask 的自注意力是「置换等变」的**——打乱输入，输出相应打乱，而不是输出不变。位置编码为表示补充顺序信息；固定因果 mask 也引入位置约束，不能忽略该假设。
 
 原始 Transformer 用**正弦位置编码**（不同频率的 sin/cos），加到词嵌入上。现代大模型主流用 **RoPE（旋转位置编码）**，作用在注意力内部、兼具绝对与相对位置优点、外推性好。详见 [位置编码](/basics/position-encoding)。
 
@@ -225,7 +279,7 @@ $$z'=z+mask,\quad m=\max(z'),\quad p_i=\frac{e^{z'_i-m}}{\sum_j e^{z'_j-m}}$$
 
 mask 必须在 softmax 前加到 score 上，使不可见位置概率为零。若 softmax 后再置零，剩余概率和不再为一，除非重新归一化。若一整行所有 key 都被 mask，`max` 和分母会失去有效定义，常导致 NaN；变长 batch、左 padding 和 fused kernel 都应保证每个有效 query 至少有一个可见 key。
 
-FP16/BF16 下还要注意 mask sentinel、score 累积和归约精度。低精度负责高吞吐矩阵乘，softmax 的行最大值、分母和输出累积常使用更高精度路径。更多数值细节见 [数值精度、混合精度与训练稳定性](/basics/numerical-precision-stability)。
+FP16/BF16 下还要注意 mask sentinel、score 累积和归约精度。低精度负责高吞吐矩阵乘，softmax 的行最大值、分母和输出累积常使用更高精度路径。更多数值细节见 [训练内部机制与稳定性](/advanced/training-internals)。
 
 ### Pre-Norm 的梯度“直通”到底是什么意思
 
@@ -334,7 +388,7 @@ Teacher forcing 让模型训练时总看到真实前缀，推理时却要以自�
 | FFN | 稠密 | 稠密 或 MoE（稀疏） | [MoE](/basics/moe) |
 | 架构 | Encoder-Decoder | Decoder-only | 本页 §6 |
 
-> 一句话记忆：**现代 Decoder-only 标配 = RMSNorm + Pre-Norm + SwiGLU + RoPE + GQA/MLA +（可选）MoE。**
+> 常见现代 Decoder-only 设计组合包括 RMSNorm、Pre-Norm、SwiGLU、RoPE 和 GQA / MLA；不是每个模型都采用全部组件，必须回到具体结构与配置核查。
 
 ## 十、高频追问
 
@@ -348,7 +402,7 @@ Teacher forcing 让模型训练时总看到真实前缀，推理时却要以自�
 
 **Q：FFN 的作用？为什么中间放大 4 倍？** 提供非线性表达能力、存储知识。放大 4 倍是经验设计（给足非线性容量），并非必须；SwiGLU 因有门控、用 3 矩阵，中间维度常取约 8/3·d。
 
-**Q：Pre-Norm 和 Post-Norm 的区别？** Post-Norm（原文）表达力强但深层难训、需 warmup；Pre-Norm 梯度经残差直通、训练稳、能堆更深，是现代主流，代价是表达力略弱。
+**Q：Pre-Norm 和 Post-Norm 的区别？** 区别是归一化在子层前还是残差相加后。Pre-Norm 通常改善深层初始化时的梯度行为；Post-Norm 的训练稳定性与 warmup 等配方有关。不要脱离深度、初始化和训练配方判断谁的表达力必然更强。
 
 **Q：为什么用 LayerNorm 不用 BatchNorm？** 序列变长、batch 内样本长度不齐、自回归推理时 batch 统计不稳；LayerNorm 在单样本特征维归一化，与 batch 和序列长度无关，更稳定。
 
@@ -366,6 +420,6 @@ Teacher forcing 让模型训练时总看到真实前缀，推理时却要以自�
 
 **Q：KV Cache 是什么？和 Transformer 推理什么关系？** 自回归生成时缓存历史 token 的 K、V，避免每步重算，大幅加速；但显存随序列长度线性增长，是长上下文瓶颈。详见 [推理优化](/inference/inference-optimization)。
 
-**Q：Attention 是置换不变的，这意味着什么？** 不加位置编码时，打乱输入顺序输出只会相应打乱，模型分不清词序。所以必须显式注入位置信息（位置编码/RoPE）。
+**Q：Attention 的置换性质是什么？** 无位置编码与位置相关 mask 的自注意力是置换等变：打乱输入，输出相应打乱，而不是输出不变。位置编码和固定因果 mask 会引入顺序信息，见本页 L3 推导。
 
 **Q：一句话概括 Transformer 每个组件的职责？** 注意力让 token 之间「交流信息」、FFN 对每个 token「做变换/存知识」、残差让梯度「跨层流动」、归一化让训练「稳定」、位置编码补上「顺序信息」。

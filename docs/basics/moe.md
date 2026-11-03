@@ -1,3 +1,15 @@
+---
+title: MoE 混合专家模型
+description: >-
+  MoE（Mixture of
+  Experts）是当前大模型「以稀疏激活换取大容量」的主流路线，Mixtral、DeepSeek-V3、Qwen-MoE、GPT-4（传闻）都采用了它。也是近两年面试的高频新考点。
+level: L1
+roles:
+  - 在校生
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # MoE 混合专家模型
 
 > MoE（Mixture of Experts）是当前大模型「以稀疏激活换取大容量」的主流路线，Mixtral、DeepSeek-V3、Qwen-MoE、GPT-4（传闻）都采用了它。也是近两年面试的高频新考点。

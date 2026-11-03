@@ -1,3 +1,15 @@
+---
+title: Computer Use / 浏览器 Agent 生产系统设计面试题
+description: >-
+  Computer Use 面试的难点不在“能不能点一个按钮”，而在“如何让 Agent
+  在不可信网页、真实账号和有副作用的浏览器会话中做到可验证、可中断、可审计”。概念与技术路线见 Computer Use 与浏览器 Agent，工具权限基础见
+  Agent 工具安全与权限边界，执行授权见 企业 To
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Computer Use / 浏览器 Agent 生产系统设计面试题
 
 > Computer Use 面试的难点不在“能不能点一个按钮”，而在“如何让 Agent 在不可信网页、真实账号和有副作用的浏览器会话中做到可验证、可中断、可审计”。概念与技术路线见 [Computer Use 与浏览器 Agent](/agent/computer-use)，工具权限基础见 [Agent 工具安全与权限边界](/agent/tool-safety)，执行授权见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。

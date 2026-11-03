@@ -1,3 +1,14 @@
+---
+title: Agent 生命周期事件与 Policy Hook Fabric：跨运行时事件契约、同步闸门与可靠分发
+description: >-
+  本页不讨论“怎样把一个 Hook 打包发布”，而是讨论运行中的 Agent 事件怎样进入企业控制面：哪些路径能在副作用前阻断，哪些只能异步观察，外部
+  webhook 怎样可靠接入，以及如何让 Claude Code、Codex、OpenClaw、Hermes 的差异不污染业务策略。
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 生命周期事件与 Policy Hook Fabric：跨运行时事件契约、同步闸门与可靠分发
 
 > 本页不讨论“怎样把一个 Hook 打包发布”，而是讨论运行中的 Agent 事件怎样进入企业控制面：哪些路径能在副作用前阻断，哪些只能异步观察，外部 webhook 怎样可靠接入，以及如何让 Claude Code、Codex、OpenClaw、Hermes 的差异不污染业务策略。

@@ -1,3 +1,14 @@
+---
+title: FlashAttention 深入
+description: >-
+  「FlashAttention 为什么能又快又省显存？它是近似算法吗？」是工程/算法岗的硬核进阶题。本文讲清它的核心思想、online
+  softmax、反向重计算，以及 v1/v2/v3 的演进。基础概念见 Attention 与变体。
+level: L3
+roles:
+  - 算法研究
+  - Infra
+classification: inferred
+---
 # FlashAttention 深入
 
 > 「FlashAttention 为什么能又快又省显存？它是近似算法吗？」是工程/算法岗的硬核进阶题。本文讲清它的核心思想、online softmax、反向重计算，以及 v1/v2/v3 的演进。基础概念见 [Attention 与变体](/basics/attention)。

@@ -1,3 +1,14 @@
+---
+title: 中文大模型生态全景
+description: >-
+  国内面试有一类高频问题是「你了解国产大模型吗？各家有什么特点？中文评测用什么基准？」。本文参考 Awesome-Chinese-LLM（GitHub
+  20k+ Star 的中文 LLM 资料集）的分类体系，系统盘点国内厂商模型矩阵、开源系谱、垂直领域模型、中文数据集与中文评测基准。单个模型架构细节见
+level: L2
+roles:
+  - 算法研究
+  - 应用开发
+classification: inferred
+---
 # 中文大模型生态全景
 
 > 国内面试有一类高频问题是「你了解国产大模型吗？各家有什么特点？中文评测用什么基准？」。本文参考 [Awesome-Chinese-LLM](https://github.com/HqWu-HITCS/Awesome-Chinese-LLM)（GitHub 20k+ Star 的中文 LLM 资料集）的分类体系，系统盘点**国内厂商模型矩阵、开源系谱、垂直领域模型、中文数据集与中文评测基准**。单个模型架构细节见 [LLaMA 与 Qwen 架构演进](/models/llama-qwen)、[DeepSeek 专题](/models/deepseek)、[2025-2026 前沿模型盘点](/models/frontier-models-2025)。

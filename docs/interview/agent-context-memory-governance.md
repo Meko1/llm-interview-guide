@@ -1,3 +1,15 @@
+---
+title: Agent 上下文与记忆生产治理：Claude Code / Codex / OpenClaw / Hermes
+description: >-
+  长上下文不是“把更多聊天记录塞给模型”，记忆也不是“让 Agent
+  永远记住一切”。生产系统真正要解决的是：哪些信息每轮必须在场，哪些只可按需检索，哪些允许跨会话保存，哪些必须隔离、过期或删除；当上下文被压缩时，如何保留可验证的任务状态而不是让模型凭摘要猜测。本页将
+  Claude Code、Code
+level: L2
+roles:
+  - 应用开发
+  - 后端转型
+classification: inferred
+---
 # Agent 上下文与记忆生产治理：Claude Code / Codex / OpenClaw / Hermes
 
 > 长上下文不是“把更多聊天记录塞给模型”，记忆也不是“让 Agent 永远记住一切”。生产系统真正要解决的是：哪些信息每轮必须在场，哪些只可按需检索，哪些允许跨会话保存，哪些必须隔离、过期或删除；当上下文被压缩时，如何保留可验证的任务状态而不是让模型凭摘要猜测。本页将 Claude Code、Codex、OpenClaw、Hermes 的公开机制归纳为可实施的治理模型。
