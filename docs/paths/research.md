@@ -11,6 +11,8 @@ classification: reviewed
 
 目标是理解设计动机、推导与实验边界，而不是只记论文结论。前置要求：线性代数、概率、自动微分、PyTorch 和训练基本流程。缺口可从 [必备数学](/beginner/math-basics) 补起。
 
+<PathJourney />
+
 ## 四个阶段，建议四至八周
 
 | 阶段 | 读什么 | 研究产出 | 应能回答 |

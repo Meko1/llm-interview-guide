@@ -8,7 +8,7 @@ const BASE = '/llm-interview-guide/'
 export default defineConfig({
   base: BASE,
   lang: 'zh-CN',
-  title: 'LLMGuide',
+  title: 'Atlas · 大模型能力地图',
   description:
     '大模型面试指南，覆盖大模型基础、Transformer、预训练、微调、RLHF、Prompt、RAG、Agent、推理优化与部署、评估与多模态',
   lastUpdated: true,
@@ -21,26 +21,26 @@ export default defineConfig({
   },
 
   head: [
-    ['meta', { name: 'theme-color', content: '#3c8772' }],
+    ['meta', { name: 'theme-color', content: '#101b29' }],
     ['meta', { name: 'keywords', content: '大模型,LLM,面试,八股文,Transformer,Attention,RAG,Agent,MCP,微调,LoRA,RLHF,DeepSeek,推理优化,多模态,大模型面试题' }],
     ['meta', { name: 'author', content: 'Meko1' }],
     // Open Graph（社交分享卡片）
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: 'LLMGuide · 大模型面试指南' }],
-    ['meta', { property: 'og:description', content: '系统整理大模型/LLM 方向的八股文与高频面试题，覆盖从底层原理到工程落地的完整知识体系。' }],
-    ['meta', { property: 'og:site_name', content: 'LLMGuide' }],
+    ['meta', { property: 'og:title', content: 'Atlas · 大模型能力地图' }],
+    ['meta', { property: 'og:description', content: '从一个 token 到可靠系统，连接知识学习、工程实践与面试自测。' }],
+    ['meta', { property: 'og:site_name', content: 'Atlas' }],
     ['meta', { property: 'og:url', content: 'https://meko1.github.io/llm-interview-guide/' }],
-    ['meta', { property: 'og:image', content: 'https://meko1.github.io/llm-interview-guide/logo.svg' }],
+    ['meta', { property: 'og:image', content: 'https://meko1.github.io/llm-interview-guide/atlas-mark.svg' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary' }],
-    ['meta', { name: 'twitter:title', content: 'LLMGuide · 大模型面试指南' }],
-    ['meta', { name: 'twitter:description', content: '系统整理大模型/LLM 八股文与高频面试题，覆盖原理到工程落地。' }]
+    ['meta', { name: 'twitter:title', content: 'Atlas · 大模型能力地图' }],
+    ['meta', { name: 'twitter:description', content: '理解机制、构建系统、验证能力。以面试为入口的中文大模型能力地图。' }]
   ],
 
   themeConfig: {
-    logo: '/logo.svg',
-    siteTitle: 'LLMGuide',
+    logo: '/atlas-mark.svg',
+    siteTitle: 'Atlas · 能力地图',
 
 
     nav,
@@ -81,7 +81,7 @@ export default defineConfig({
 
     footer: {
       message: '基于 MIT 许可发布',
-      copyright: 'Copyright © 2026 Meko1 · 大模型面试指南'
+      copyright: 'Copyright © 2026 Meko1 · Atlas 大模型能力地图'
     }
   }
 })

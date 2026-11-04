@@ -12,6 +12,8 @@ classification: reviewed
 
 > 本页负责串起 Transformer 的数据流、组件职责与资源取舍。主阅读级别为 L1；工程决策与研究追问面向 L2/L3。前置要求是矩阵乘法与基本概率，第一次阅读可先跳过长推导。
 
+<LessonLab kind="transformer" />
+
 ## 阅读目标：从组件名走向数据流
 
 | 阅读深度 | 要回答的问题 | 检验方式 |

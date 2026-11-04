@@ -12,6 +12,8 @@ classification: reviewed
 
 > 先明确张量形状，再讨论复杂度、缓存与内核。L1 读者先看 QKV 和 mask；L2 关注错误定位和成本；L3 追问等变性、缩放假设与数值误差。前置阅读：[Transformer](/basics/transformer)。
 
+<LessonLab kind="attention" />
+
 ## 先把形状与复杂度说准确
 
 标准 MHA 中，设 $Q,K,V$ 均为 $[B,H,T,D]$。$QK^\top$ 是 $[B,H,T,T]$，softmax 沿 key 的最后一维，输出回到 $[B,H,T,D]$。GQA 中 Q 头数与 KV 头数不同，需按分组映射，不能直接假设三个张量头数一样。

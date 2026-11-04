@@ -11,6 +11,8 @@ classification: reviewed
 
 目标是能基于工作负载做容量、成本和 SLO 决策。前置要求：Linux、GPU 基本概念、性能分析和服务部署。没有 GPU 也可以先完成公式复算，但不能把纸面结果称为压测结论。
 
+<PathJourney />
+
 | 阶段 | 阅读 | 可验证产出 | 面试检验 |
 | --- | --- | --- | --- |
 | 显存账本 | [KV Cache](/inference/kv-cache)、[GPU 硬件](/inference/gpu-hardware) | 权重、KV、运行时保留与碎片的预算 | GB 与 GiB 为什么不能混用？ |

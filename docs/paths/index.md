@@ -19,6 +19,8 @@ import PathFinder from '../.vitepress/theme/components/PathFinder.vue'
 
 路径不是课程进度条，也不是就业承诺。每个阶段都应留下一个可演示、可复述、可验证的产出。建议周次可以根据基础调整；不要用读完页面数代替学会。
 
+<PathJourney />
+
 <PathFinder :heading-level="2" />
 
 ## 按目标直接进入

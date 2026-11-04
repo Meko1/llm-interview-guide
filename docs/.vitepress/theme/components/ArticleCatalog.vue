@@ -36,6 +36,7 @@ const reset = () => { level.value = ''; role.value = ''; section.value = ''; que
       <ul class="catalog-list">
         <li v-for="page in group.pages" :key="page.path">
           <a :href="withBase(page.url)">{{ page.title }}</a>
+          <p class="catalog-description">{{ page.description }}</p>
           <span class="catalog-meta">{{ page.level }} · 约 {{ page.readingMinutes }} 分钟 · {{ page.classification === 'reviewed' ? '已核分级' : '初次分级' }}</span>
         </li>
       </ul>

@@ -1,5 +1,5 @@
 ---
 layout: home
-title: 大模型面试与工程学习指南
-description: 从 Transformer、RAG、Agent 到推理工程，面向不同岗位与阅读级别的中文大模型知识体系。
+title: Atlas · 大模型能力地图
+description: 从一个 token 到可靠系统，连接大模型原理、应用实践、工程判断与面试自测。
 ---

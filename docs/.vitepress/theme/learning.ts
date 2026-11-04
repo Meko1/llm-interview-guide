@@ -18,5 +18,7 @@ export const featured = [
   { url: '/basics/attention', question: 'Attention 的瓶颈究竟在哪里？', note: '形状、掩码、复杂度与数值稳定性。' },
   { url: '/inference/kv-cache', question: '长上下文的显存账，怎么算？', note: '用可复算公式区分架构、缓存与调度。' },
   { url: '/rag/rag-basics', question: '检索到了，为什么还是答错？', note: '定位召回、上下文与生成的分段失败。' },
-  { url: '/agent/agent-basics', question: 'Agent 怎么从演示走向可靠执行？', note: '控制循环、权限边界与重复副作用。' }
+  { url: '/agent/agent-basics', question: 'Agent 怎么从演示走向可靠执行？', note: '控制循环、权限边界与重复副作用。' },
+  { url: '/finetuning/lora', question: 'LoRA 到底省下了哪部分训练预算？', note: '调节 rank 与矩阵形状，区分参数、存储与总显存。' },
+  { url: '/finetuning/rlhf', question: '更低的偏好损失，意味着回答更正确吗？', note: '从一个 DPO 偏好对看参考校正、损失与评测边界。' }
 ]

@@ -11,11 +11,11 @@
     "classification": null,
     "article": false,
     "readingMinutes": 2,
-    "characters": 982,
+    "characters": 963,
     "codeBlocks": 0,
     "formulas": 0,
     "diagrams": 0,
-    "externalLinks": 4,
+    "externalLinks": 3,
     "hasFrontmatter": false,
     "gitModifiedAt": "2026-05-24",
     "reviewedAt": null
@@ -41,7 +41,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -65,7 +65,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -89,7 +89,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-23",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -113,7 +113,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-24",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -137,7 +137,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -161,7 +161,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-08",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -185,7 +185,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -209,7 +209,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -233,7 +233,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -257,7 +257,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-24",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -281,7 +281,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-24",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -305,7 +305,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-25",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -329,31 +329,31 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
     "path": "agent/agent-basics.md",
     "url": "/agent/agent-basics",
     "title": "Agent 基础与框架",
-    "description": "从模型决策到可靠执行，理解 Agent 的权限、预算、幂等、状态与轨迹评测。",
+    "description": "理解模型决策与执行器的分工，设计有预算、权限、审批、恢复与轨迹评测的 Agent。",
     "section": "Agent 工程",
     "folder": "agent",
-    "level": "L2",
+    "level": "L1",
     "roles": [
       "应用开发",
       "后端转型"
     ],
     "classification": "reviewed",
     "article": true,
-    "readingMinutes": 35,
-    "characters": 19808,
-    "codeBlocks": 22,
-    "formulas": 1,
+    "readingMinutes": 12,
+    "characters": 6212,
+    "codeBlocks": 2,
+    "formulas": 0,
     "diagrams": 0,
     "externalLinks": 3,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-09",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -377,7 +377,7 @@
     "diagrams": 0,
     "externalLinks": 5,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-08-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -401,7 +401,7 @@
     "diagrams": 0,
     "externalLinks": 6,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -425,7 +425,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -449,7 +449,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -473,7 +473,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -497,7 +497,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -521,7 +521,7 @@
     "diagrams": 0,
     "externalLinks": 3,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -545,7 +545,7 @@
     "diagrams": 0,
     "externalLinks": 4,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -569,7 +569,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -593,7 +593,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -617,7 +617,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -641,7 +641,7 @@
     "diagrams": 0,
     "externalLinks": 3,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -665,7 +665,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -689,7 +689,7 @@
     "diagrams": 0,
     "externalLinks": 5,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -713,7 +713,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -738,7 +738,7 @@
     "diagrams": 0,
     "externalLinks": 3,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -763,7 +763,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -788,7 +788,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -813,7 +813,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -838,7 +838,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -863,7 +863,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -888,7 +888,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -913,7 +913,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -938,7 +938,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-08",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -963,7 +963,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-24",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -988,7 +988,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-08",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1013,7 +1013,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1038,7 +1038,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1063,7 +1063,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1088,7 +1088,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1113,7 +1113,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-25",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1138,7 +1138,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1163,7 +1163,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1188,7 +1188,7 @@
     "diagrams": 0,
     "externalLinks": 3,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1212,7 +1212,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-24",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1236,7 +1236,7 @@
     "diagrams": 0,
     "externalLinks": 1,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-24",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1260,7 +1260,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1284,7 +1284,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1308,7 +1308,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1332,7 +1332,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-13",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1356,7 +1356,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-24",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1377,7 +1377,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": null,
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1401,7 +1401,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1425,7 +1425,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-23",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1449,7 +1449,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-23",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1473,7 +1473,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1497,7 +1497,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-23",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1521,7 +1521,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1545,7 +1545,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-23",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1570,7 +1570,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-02",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1595,7 +1595,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1620,7 +1620,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-25",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1645,7 +1645,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1670,7 +1670,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1695,7 +1695,7 @@
     "diagrams": 0,
     "externalLinks": 3,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-08",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1720,7 +1720,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1745,7 +1745,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1770,7 +1770,7 @@
     "diagrams": 0,
     "externalLinks": 2,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1795,7 +1795,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-02",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1820,7 +1820,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-08",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1845,7 +1845,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1870,7 +1870,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1895,7 +1895,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-22",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1920,7 +1920,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1945,7 +1945,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1970,7 +1970,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -1995,7 +1995,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-08",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2020,7 +2020,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2045,7 +2045,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-09",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2070,7 +2070,7 @@
     "diagrams": 0,
     "externalLinks": 2,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2095,7 +2095,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-12",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2120,7 +2120,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2145,7 +2145,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2169,7 +2169,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-08",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2193,7 +2193,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2217,7 +2217,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-08",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2241,7 +2241,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2265,14 +2265,14 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-02",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
     "path": "finetuning/lora.md",
     "url": "/finetuning/lora",
     "title": "LoRA / QLoRA 详解",
-    "description": "LoRA 是目前最主流的参数高效微调（PEFT）方法，几乎是微调方向的必考题。本文从全参微调的痛点讲起，深入低秩假设、前向与初始化、超参数、QLoRA 三件套、主流变体、多 LoRA 服务、实战配方与高频追问。微调全貌见 微调范式。",
+    "description": "从低秩更新、初始化梯度和显存账本理解 LoRA，区分 QLoRA 存储、训练、合并与多适配器部署。",
     "section": "微调与对齐",
     "folder": "finetuning",
     "level": "L2",
@@ -2282,14 +2282,14 @@
     ],
     "classification": "inferred",
     "article": true,
-    "readingMinutes": 8,
-    "characters": 4448,
-    "codeBlocks": 1,
-    "formulas": 1,
+    "readingMinutes": 9,
+    "characters": 4505,
+    "codeBlocks": 5,
+    "formulas": 0,
     "diagrams": 0,
-    "externalLinks": 0,
+    "externalLinks": 3,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2313,7 +2313,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2337,14 +2337,14 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
     "path": "finetuning/rlhf.md",
     "url": "/finetuning/rlhf",
     "title": "RLHF / DPO 对齐",
-    "description": "对齐（Alignment）让模型输出更符合人类偏好，是 ChatGPT 之所以「好用」的关键一步，也是高频考点。本文深入 RLHF 三阶段、奖励模型、PPO 的复杂性、DPO 的推导直觉，以及 RLAIF/Constitutional AI/KTO/ORPO/GRPO 等方法谱系与工程坑。",
+    "description": "从偏好数据与目标函数理解 RLHF、PPO、DPO 和 GRPO，掌握奖励代理、评测偏差与上线边界。",
     "section": "微调与对齐",
     "folder": "finetuning",
     "level": "L2",
@@ -2354,14 +2354,14 @@
     ],
     "classification": "inferred",
     "article": true,
-    "readingMinutes": 8,
-    "characters": 4525,
-    "codeBlocks": 2,
-    "formulas": 2,
+    "readingMinutes": 10,
+    "characters": 5159,
+    "codeBlocks": 7,
+    "formulas": 0,
     "diagrams": 0,
-    "externalLinks": 0,
+    "externalLinks": 5,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2385,7 +2385,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2409,14 +2409,14 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-13",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
     "path": "index.md",
     "url": "/",
-    "title": "大模型面试与工程学习指南",
-    "description": "从 Transformer、RAG、Agent 到推理工程，面向不同岗位与阅读级别的中文大模型知识体系。",
+    "title": "Atlas · 大模型能力地图",
+    "description": "从一个 token 到可靠系统，连接大模型原理、应用实践、工程判断与面试自测。",
     "section": "站点页面",
     "folder": "index.md",
     "level": null,
@@ -2430,7 +2430,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-09",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2454,7 +2454,7 @@
     "diagrams": 0,
     "externalLinks": 1,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-03",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2478,7 +2478,7 @@
     "diagrams": 0,
     "externalLinks": 1,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-03",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2502,7 +2502,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2526,7 +2526,7 @@
     "diagrams": 0,
     "externalLinks": 1,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2550,7 +2550,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2574,7 +2574,7 @@
     "diagrams": 0,
     "externalLinks": 4,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2598,7 +2598,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-02",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2622,7 +2622,7 @@
     "diagrams": 0,
     "externalLinks": 1,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2646,7 +2646,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2670,7 +2670,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-02",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2694,7 +2694,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2718,7 +2718,7 @@
     "diagrams": 0,
     "externalLinks": 2,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2742,7 +2742,7 @@
     "diagrams": 0,
     "externalLinks": 21,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2766,7 +2766,7 @@
     "diagrams": 0,
     "externalLinks": 8,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2790,7 +2790,7 @@
     "diagrams": 0,
     "externalLinks": 13,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2814,7 +2814,7 @@
     "diagrams": 0,
     "externalLinks": 22,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2838,7 +2838,7 @@
     "diagrams": 0,
     "externalLinks": 20,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2862,7 +2862,7 @@
     "diagrams": 0,
     "externalLinks": 6,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2886,7 +2886,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2910,7 +2910,7 @@
     "diagrams": 0,
     "externalLinks": 12,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2934,7 +2934,7 @@
     "diagrams": 0,
     "externalLinks": 13,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2958,7 +2958,7 @@
     "diagrams": 0,
     "externalLinks": 23,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -2982,7 +2982,7 @@
     "diagrams": 0,
     "externalLinks": 7,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3006,7 +3006,7 @@
     "diagrams": 0,
     "externalLinks": 16,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3030,7 +3030,7 @@
     "diagrams": 0,
     "externalLinks": 5,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3054,7 +3054,7 @@
     "diagrams": 0,
     "externalLinks": 13,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3078,7 +3078,7 @@
     "diagrams": 0,
     "externalLinks": 16,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3102,7 +3102,7 @@
     "diagrams": 0,
     "externalLinks": 12,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3126,7 +3126,7 @@
     "diagrams": 0,
     "externalLinks": 10,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3150,7 +3150,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3174,7 +3174,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-11",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3198,7 +3198,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-11",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3222,7 +3222,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3246,7 +3246,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3270,7 +3270,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3294,7 +3294,7 @@
     "diagrams": 0,
     "externalLinks": 17,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3318,7 +3318,7 @@
     "diagrams": 0,
     "externalLinks": 3,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3342,7 +3342,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3366,7 +3366,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3390,7 +3390,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-17",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3414,7 +3414,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3438,7 +3438,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3462,7 +3462,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3486,7 +3486,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3510,7 +3510,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3534,7 +3534,7 @@
     "diagrams": 0,
     "externalLinks": 4,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3558,7 +3558,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3582,7 +3582,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3606,7 +3606,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3630,7 +3630,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3654,7 +3654,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3678,7 +3678,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-08",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3702,7 +3702,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3726,7 +3726,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3750,7 +3750,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3774,7 +3774,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3798,7 +3798,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-09",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3822,7 +3822,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3846,7 +3846,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-08",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3870,7 +3870,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3894,7 +3894,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-16",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3918,7 +3918,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3942,7 +3942,7 @@
     "diagrams": 0,
     "externalLinks": 198,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3966,7 +3966,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -3990,7 +3990,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4014,7 +4014,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4038,7 +4038,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-16",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4062,7 +4062,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-16",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4086,7 +4086,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4110,7 +4110,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4134,7 +4134,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4158,7 +4158,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4182,7 +4182,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4206,7 +4206,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4230,7 +4230,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4254,7 +4254,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-24",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4278,7 +4278,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4302,7 +4302,7 @@
     "diagrams": 0,
     "externalLinks": 12,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4326,7 +4326,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-17",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4350,7 +4350,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4374,7 +4374,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4398,7 +4398,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-17",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4422,7 +4422,7 @@
     "diagrams": 0,
     "externalLinks": 15,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4446,7 +4446,7 @@
     "diagrams": 0,
     "externalLinks": 6,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-15",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4470,7 +4470,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-16",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4494,7 +4494,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4518,7 +4518,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4542,7 +4542,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4566,7 +4566,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-16",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4590,7 +4590,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4614,7 +4614,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4638,7 +4638,7 @@
     "diagrams": 0,
     "externalLinks": 16,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4662,7 +4662,7 @@
     "diagrams": 0,
     "externalLinks": 26,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-03",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4686,7 +4686,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-21",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4710,7 +4710,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4734,7 +4734,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4758,7 +4758,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-17",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4782,7 +4782,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-17",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4806,7 +4806,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4830,7 +4830,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4854,7 +4854,7 @@
     "diagrams": 0,
     "externalLinks": 2,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-03",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4878,7 +4878,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-12",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4902,7 +4902,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-12",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4926,7 +4926,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4950,7 +4950,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-12",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4974,7 +4974,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-12",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -4998,7 +4998,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5022,7 +5022,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5046,7 +5046,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-12",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5070,7 +5070,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5094,7 +5094,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5118,7 +5118,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": null,
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5142,7 +5142,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": null,
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5166,7 +5166,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": null,
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5193,7 +5193,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": null,
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5217,7 +5217,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": null,
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5241,7 +5241,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": null,
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5264,7 +5264,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": null,
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5288,7 +5288,7 @@
     "diagrams": 0,
     "externalLinks": 1,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-03",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5312,7 +5312,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5336,7 +5336,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5360,7 +5360,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-03",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5384,7 +5384,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-03",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5408,7 +5408,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-25",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5432,7 +5432,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5456,7 +5456,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5480,7 +5480,7 @@
     "diagrams": 0,
     "externalLinks": 1,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5504,7 +5504,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5528,7 +5528,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5552,7 +5552,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5576,7 +5576,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-20",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5600,7 +5600,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5624,7 +5624,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5648,7 +5648,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5672,7 +5672,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-03",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5696,7 +5696,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-05-24",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5720,7 +5720,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5744,7 +5744,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-18",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5768,14 +5768,14 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-06",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
     "path": "rag/rag-basics.md",
     "url": "/rag/rag-basics",
     "title": "RAG 基础与完整流程",
-    "description": "建立证据进入回答的 RAG 链路，分析检索、上下文、生成与业务的分段失败。",
+    "description": "从证据链理解 RAG，掌握文档治理、检索诊断、权限边界、分段评测与容量估算。",
     "section": "RAG 检索",
     "folder": "rag",
     "level": "L1",
@@ -5785,14 +5785,14 @@
     ],
     "classification": "reviewed",
     "article": true,
-    "readingMinutes": 38,
-    "characters": 22097,
-    "codeBlocks": 21,
+    "readingMinutes": 11,
+    "characters": 5921,
+    "codeBlocks": 3,
     "formulas": 0,
     "diagrams": 0,
     "externalLinks": 3,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-09",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5816,7 +5816,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-07",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5840,7 +5840,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-07-14",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5864,7 +5864,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": "2026-06-30",
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   },
   {
@@ -5885,7 +5885,7 @@
     "diagrams": 0,
     "externalLinks": 0,
     "hasFrontmatter": true,
-    "gitModifiedAt": null,
+    "gitModifiedAt": "2026-11-03",
     "reviewedAt": null
   }
 ]
