@@ -8,7 +8,8 @@
     "check": "node scripts/content.mjs --check",
     "dev": "npm run catalog && vitepress dev docs",
     "check:built": "node scripts/validate-build.mjs",
-    "build": "npm run catalog && npm run check && vitepress build docs && npm run check:built",
+    "check:search": "node scripts/validate-search.mjs",
+    "build": "npm run catalog && npm run check && vitepress build docs && npm run check:built && npm run check:search",
     "preview": "vitepress preview docs"
   },
   "keywords": [
@@ -26,6 +27,8 @@
   "devDependencies": {
     "gray-matter": "^4.0.3",
     "markdown-it": "^15.0.3",
+    "markdown-it-mathjax3": "^4.3.2",
+    "minisearch": "^7.2.0",
     "vitepress": "^1.6.3"
   }
 }

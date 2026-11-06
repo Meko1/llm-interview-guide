@@ -1,8 +1,6 @@
 ---
 title: Agent 生命周期事件与 Policy Hook Fabric：跨运行时事件契约、同步闸门与可靠分发
-description: >-
-  本页不讨论“怎样把一个 Hook 打包发布”，而是讨论运行中的 Agent 事件怎样进入企业控制面：哪些路径能在副作用前阻断，哪些只能异步观察，外部
-  webhook 怎样可靠接入，以及如何让 Claude Code、Codex、OpenClaw、Hermes 的差异不污染业务策略。
+description: 区分同步策略闸门与异步观察，推演事件信封、webhook 信任、输入修改再授权、inbox 恢复和 outbox 边界。
 level: L2
 roles:
   - 应用开发
@@ -129,14 +127,14 @@ tool intent
   "reason_code": "PROD_DEPLOY_REQUIRES_CHANGE_WINDOW",
   "policy_revision": "policy@2026-07-15.4",
   "plan_digest": "sha256:...",
-  "capability": { "id": "cap_8f", "expires_at": "2026-07-15T10:10:00Z" },
+  "approval_request": { "id": "apr_8f", "expires_at": "2026-07-15T10:10:00Z" },
   "constraints": { "network": "none", "max_runtime_seconds": 120 }
 }
 ```
 
 允许的决策集合应少且稳定：`allow`、`deny`、`require_approval`、`defer`、`modify`。其中：
 
-- `modify` 只能产生符合工具 schema 的替换输入，并连同原始输入、修改人/策略版本写入审计；禁止把它做成悄悄改生产目标的黑箱。
+- `modify` 只能产生符合工具 schema 的替换输入，并记录原/新 digest；修改后必须重新做参数、资源授权和风险检查，旧批准不能自动沿用。尤其不能先授权 staging 再 normalize 成 production。
 - `defer` 表示当前无法安全完成决策，例如等待权威资源状态，不是“默认放行”。
 - `allow` 也只应签发绑定 `task + tool + resource + plan_digest + TTL` 的短期 capability，不是授予长期万能权限。
 
@@ -144,7 +142,7 @@ tool intent
 
 1. 静态显式 deny、资源服务 deny、撤销状态永远优先，低层 Hook 不能用 `allow` 覆盖。
 2. 同层规则使用显式 priority 和稳定 tie-break；记录每条匹配规则，不只记录最终结果。
-3. 高风险写入的 Gate 超时、未识别 schema、策略版本缺失均为 fail-closed；只读诊断可以受控 fail-open，但要打上 `policy_unavailable` 标签并限制能力。
+3. 高风险写入的 Gate 超时、未识别 schema、策略版本缺失均为 fail-closed；只读不等于无风险，涉及秘密、跨租户或外部传输仍不可 fail-open。仅预先授权的低敏本地诊断可在策略不可用时继续，并记录原因。
 4. 同步 Hook 必须有独立小预算，例如 100 至 500 ms 的本地规则或几秒的审批创建；慢速检索、LLM 判断、网络爬取放到异步预计算，不能卡住每一个工具调用。
 
 **反例**：把 `PostToolUse` 当作部署拦截点。部署已经被发送，再阻断对话只能阻止模型继续解释，不能撤回 effect。正确方式是在 `effect.prepared` 或 `tool.requested` 时冻结对象并要求批准，执行后只做 receipt 对账与补偿。
@@ -200,7 +198,7 @@ HTTP receive
   -> create a fresh, least-privilege Agent task
 ```
 
-1. **先验证再解析业务语义**：使用原始字节验签；校验 timestamp、nonce 或 provider delivery ID，拒绝时间窗外和重复请求。
+1. **先验证再解析业务语义**：使用原始字节验签；timestamp/nonce 是否受签名保护需看提供方合约，delivery ID 本身不是签名，也不一定带可信事件时间。无签名时间戳时，不能声称实现了精确时间窗防重放；持久化 delivery 去重、重新查权威对象并限制派生效果。
 2. **持久化与投递原子化**：将 payload metadata、去重记录和 outbox 同事务写入。直接“HTTP handler 发 Kafka”会在数据库成功、消息失败时丢任务，或反过来造成幽灵任务。
 3. **重新读取权威对象**：PR 标题、Issue 评论、commit message 都是不可信文本。worker 以安装凭证重新拉取实际 diff、仓库权限和当前分支状态，再构造 Agent 任务。
 4. **事件不能携带执行权**：webhook 只能提议“可能需要 review”；发布、合并、支付等动作仍需新的 capability、审批和资源鉴权。
@@ -222,7 +220,9 @@ DLQ 不是垃圾桶。必须记录失败分类、consumer 版本、重试次数�
 
 ### Transactional outbox
 
-工具 runner 应在同一业务事务中写入：执行状态、effect receipt 或未知状态、以及待发布 outbox。publisher 使用 at-least-once 投递；消费者以 `event_id` 或业务幂等键去重。这样接受“消息会重复”，但拒绝“关键状态与消息会分叉”。
+工具 runner 的本地事务可以一起写执行状态、已取得 receipt 或 UNKNOWN、以及 outbox，不能把远端部署/付款包含在这个事务里。消费者若先写 inbox 去重后崩溃、尚未外部执行，重投可能被错误丢弃；应存 pending/processing/receipted，恢复处理 pending，外部调用另有幂等与对账。outbox 解决本地状态与发布意图的双写，不提供跨服务 exactly-once。
+
+**L1 口述**应分清接收 ack 与业务完成；**L2 白板**应标出远端已执行但 receipt 未落盘的崩溃窗，以及 inbox pending 的恢复策略；**L3 证据**要覆盖重复、乱序、publisher/consumer 崩溃和未知效果。文中时延数是候选预算，不是实测默认值；产品 Hook 优先级和命令仍需固定版本核验。
 
 ```text
 runner transaction:

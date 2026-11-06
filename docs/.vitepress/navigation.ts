@@ -2,14 +2,16 @@ import type { DefaultTheme } from 'vitepress'
 import pages from '../_data/pages.json'
 
 export const nav: DefaultTheme.NavItem[] = [
+  { text: '能力定位', link: '/capability-map' },
   { text: '学习路径', link: '/paths/', activeMatch: '/paths/' },
-  { text: '知识地图', link: '/catalog' },
+  { text: '知识目录', link: '/catalog' },
   { text: '模型原理', items: [
     { text: '基础与数学', link: '/basics/overview' },
     { text: 'Transformer 与 Attention', link: '/basics/transformer' },
     { text: '预训练', link: '/pretraining/pretrain' },
     { text: '微调与对齐', link: '/finetuning/finetuning' },
-    { text: '研究与前沿', link: '/advanced/reasoning-models' }
+    { text: '研究与前沿', link: '/advanced/reasoning-models' },
+    { text: '一手资料阅读地图', link: '/advanced/primary-source-reading' }
   ] },
   { text: '应用工程', items: [
     { text: 'Prompt 工程', link: '/prompt/prompt-engineering' },
@@ -58,7 +60,7 @@ for (const folder of [...new Set(pages.filter(page => page.article || page.folde
     })
   } else groups = chunkGroups(records[0]?.section || '学习路径', records)
   sidebar[`/${folder}/`] = [
-    { text: '选择适合你的内容', items: [{ text: '岗位学习路径', link: '/paths/' }, { text: '全部文章 · 分级筛选', link: '/catalog' }] },
+    { text: '选择适合你的内容', items: [{ text: '能力定位与自查', link: '/capability-map' }, { text: '岗位学习路径', link: '/paths/' }, { text: '全部文章 · 分级筛选', link: '/catalog' }] },
     ...groups
   ]
 }

@@ -1,0 +1,181 @@
+:root {
+  --atlas-reading-width: 46rem;
+  --atlas-reading-size: 1rem;
+  --atlas-reading-leading: 1.95;
+}
+
+.VPDoc.has-aside .content-container {
+  max-width: var(--atlas-reading-width) !important;
+}
+
+.VPDoc .vp-doc {
+  font-size: var(--atlas-reading-size);
+  line-height: var(--atlas-reading-leading);
+  overflow-wrap: break-word;
+}
+
+.VPDoc .vp-doc h1,
+.VPDoc .vp-doc h2,
+.VPDoc .vp-doc h3,
+.article-meta {
+  overflow-wrap: anywhere;
+}
+
+.VPDoc .vp-doc h2 {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+}
+
+.VPDoc .vp-doc h2 .header-anchor {
+  top: 1.25rem;
+}
+
+.VPDoc .vp-doc .lab-heading h2,
+.VPDoc .vp-doc .self-check-heading h2,
+.VPDoc .vp-doc .journey-header h2 {
+  margin: 0;
+  padding: 0;
+}
+
+.VPDoc .vp-doc h4 {
+  margin-top: 1.75rem;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.VPDoc .vp-doc blockquote {
+  padding: 1rem 1.25rem;
+}
+
+.VPDoc .vp-doc blockquote p {
+  font-size: 0.9375rem;
+  line-height: 1.9;
+}
+
+.VPDoc .vp-doc blockquote p + p {
+  margin-top: 0.75rem;
+}
+
+.VPDoc .vp-doc th,
+.VPDoc .vp-doc td {
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  vertical-align: top;
+}
+
+.VPDoc .vp-doc th {
+  font-weight: 600;
+}
+
+.VPDoc .vp-doc details:not(.self-check-question) {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+}
+
+.VPDoc .vp-doc details:not(.self-check-question) > summary {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.VPDoc .vp-doc details:not(.self-check-question)[open] > summary {
+  margin-bottom: 0.875rem;
+}
+
+.VPDoc .vp-doc details:not(.self-check-question) > :last-child {
+  margin-bottom: 0;
+}
+
+.VPDoc .vp-doc mjx-container[display='true'] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.5rem;
+}
+
+.article-meta {
+  align-items: start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.article-meta-copy {
+  min-width: 0;
+}
+
+.article-meta-main {
+  gap: 0.5rem 1rem;
+}
+
+.article-meta-readers {
+  margin: 0.625rem 0 0;
+  color: var(--vp-c-text-2);
+}
+
+.article-meta-readers span {
+  color: var(--vp-c-text-1);
+}
+
+.article-meta > a {
+  max-width: 100%;
+  font-size: inherit;
+  line-height: 1.8;
+  text-decoration-thickness: 1px;
+}
+
+.VPLocalSearchBox .results:empty::before {
+  content: '输入关键词搜索全文。\A 首次打开需加载索引，请稍候。';
+  display: block;
+  padding: 1rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.875rem;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+@media (max-width: 767px) {
+  .VPDoc .vp-doc mjx-container:not([display='true']) {
+    display: inline-block;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-block: 0.125rem;
+    vertical-align: middle;
+  }
+
+  .VPDoc .vp-doc h2 {
+    margin-top: 2rem;
+    padding-top: 1rem;
+  }
+
+  .VPDoc .vp-doc h2 .header-anchor {
+    top: 1rem;
+  }
+
+  .VPDoc .vp-doc details:not(.self-check-question) {
+    padding: 0.875rem 1rem;
+  }
+
+  .VPDoc .vp-doc blockquote {
+    padding: 0.875rem 1rem;
+  }
+
+  .VPDoc .vp-doc th,
+  .VPDoc .vp-doc td {
+    padding: 0.625rem;
+  }
+
+  .article-meta {
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .VPDoc .vp-doc div[class*='language-'],
+  .VPDoc .vp-doc div[class*='language-'] + div[class*='language-'] {
+    margin-inline: 0;
+  }
+}

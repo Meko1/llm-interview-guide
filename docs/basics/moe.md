@@ -2,7 +2,7 @@
 title: MoE 混合专家模型
 description: >-
   MoE（Mixture of
-  Experts）是当前大模型「以稀疏激活换取大容量」的主流路线，Mixtral、DeepSeek-V3、Qwen-MoE、GPT-4（传闻）都采用了它。也是近两年面试的高频新考点。
+  Experts）按 token 路由到部分专家，以活跃计算换取更大参数容量。理解路由权重、显存、负载均衡与跨设备通信，避免把稀疏激活等同于低部署成本。
 level: L1
 roles:
   - 在校生
@@ -12,7 +12,7 @@ classification: inferred
 ---
 # MoE 混合专家模型
 
-> MoE（Mixture of Experts）是当前大模型「以稀疏激活换取大容量」的主流路线，Mixtral、DeepSeek-V3、Qwen-MoE、GPT-4（传闻）都采用了它。也是近两年面试的高频新考点。
+> MoE 按 token 选择部分专家，扩大容量而不同比例扩大活跃计算。这里以公开的 Mixtral 与 DeepSeek 说明机制，不据传闻推断闭源模型架构。
 
 ![MoE 层结构：路由器选 Top-K 专家，稀疏激活](/diagrams/moe.svg)
 
@@ -30,11 +30,15 @@ MoE 的核心思想是：**用很多个「专家」（Expert）替换 Transforme
 1. **路由器 / 门控网络（Router / Gating）**：一个小的线性层，为每个 token 计算各专家的得分，选出 Top-K 个专家。
 2. **专家（Experts）**：若干个结构相同的 FFN，token 只送进被选中的专家，输出按门控权重加权求和。
 
-$$y = \sum_{i \in \text{TopK}} g_i \cdot E_i(x)，\quad g = \text{softmax}(\text{TopK}(W_g \cdot x))$$
+设 $s=W_gx$，$\mathcal I=\operatorname{TopK}(s)$，一种常见的选中项归一化形式为：
+
+$$g_i=\frac{\exp(s_i)}{\sum_{j\in\mathcal I}\exp(s_j)},\qquad y=\sum_{i\in\mathcal I}g_i E_i(x)$$
+
+未选中项权重为零。其他实现可使用 sigmoid、共享专家或不同的归一化方式；「选谁」和「输出权重多少」不一定使用同一分数。
 
 ## 为什么 MoE 能省成本？
 
-以 Mixtral 8x7B 为例：**总参数约 47B，但每个 token 只激活约 13B（2 个专家）**。所以它的推理计算量接近 13B 模型，效果却接近 47B 模型。
+以 [Mixtral 8x7B](https://arxiv.org/abs/2401.04088) 为例：约 47B 总参数、13B 活跃参数，每层选两个 FFN 专家。13B 是活跃参数口径，不是实际延迟或 FLOPs 的精确替代；也不能推断质量等同任何 47B 稠密模型。
 
 > 注意「8x7B」≠ 56B：只有 FFN 被复制成 8 份，Attention 等是共享的，所以总参数是 47B 而非 56B。
 
@@ -42,9 +46,9 @@ $$y = \sum_{i \in \text{TopK}} g_i \cdot E_i(x)，\quad g = \text{softmax}(\text
 | --- | --- | --- |
 | 总参数 | = 激活参数 | 远大于激活参数 |
 | 单 token 计算量 | 全部参数 | 只算 Top-K 专家 |
-| 显存占用 | 小（参数少） | 大（所有专家都要加载进显存） |
-| 训练难度 | 稳定 | 需处理负载均衡、训练不稳定 |
-| 性价比 | 一般 | 同等计算量下效果更好 |
+| 权重存储 | 随总参数与精度变化 | 随总参数变化，可分片或 offload，但有传输成本 |
+| 训练难度 | 也可能不稳定 | 额外有路由、容量和负载问题 |
+| 性价比 | 需按任务与硬件测 | 活跃计算可更少，通信和加载可能抵消收益 |
 
 ## 核心挑战：负载均衡（Load Balancing）
 
@@ -57,7 +61,11 @@ $$y = \sum_{i \in \text{TopK}} g_i \cdot E_i(x)，\quad g = \text{softmax}(\text
 
 - **辅助损失（Auxiliary Loss）**：额外加一个损失项，惩罚负载不均，鼓励 token 均匀分配到各专家。
 - **专家容量（Capacity Factor）**：给每个专家设一个处理上限，超出的 token 被丢弃（token dropping）或走残差直接跳过。
-- **DeepSeek 的无辅助损失均衡**：DeepSeek-V3 用「为每个专家加可学习的偏置项动态调节路由」的方式做负载均衡，避免辅助损失损害主任务效果。
+- **DeepSeek-V3 的路由偏置**：按每步负载调整各专家 bias，影响 Top-K 选择；加权输出仍使用原 affinity score，不应说成通过主任务梯度学习偏置。其报告仍保留很小的序列级辅助均衡项，「auxiliary-loss-free」不等于整个训练没有任何辅助损失。
+
+构造容量账本：8 个 token、Top-2、4 专家，共 16 次专家分配；若按平均分配数乘 capacity factor=1.25，每专家容量为 5。某专家收到 6 次就可能溢出，即使其他专家空闲。实际取整、token dropping、重路由或 dropless 实现必须明确，不能把某一种处理规则当作 MoE 固有属性。
+
+训练观察需同时记录专家接收量、router 概率质量、丢弃率与通信等待。总平均负载相同，也可能因单个热门专家拖慢整个并行组。
 
 ## 主流 MoE 设计
 
@@ -68,12 +76,21 @@ $$y = \sum_{i \in \text{TopK}} g_i \cdot E_i(x)，\quad g = \text{softmax}(\text
 
 ## 高频追问
 
-**Q：MoE 和 Dense 模型，推理时谁更省显存？** Dense 更省显存。MoE 虽然单次只激活少数专家，但**所有专家的参数都必须加载进显存**，所以 MoE 是「省计算、费显存」。这也是 MoE 部署成本不低的原因。
+**Q：MoE 和 Dense 模型，推理时谁更省显存？** 先说明比较口径：同活跃参数量下 MoE 通常需保存更多总权重；同总参数量、精度和分片方式下未必更多。专家可 offload 或跨设备分片，但内存和搬运成本没有消失。
 
-**Q：MoE 为什么训练不稳定？** 路由是离散的 Top-K 选择（不可导），且容易负载不均、专家坍缩，需要辅助损失、容量限制、合适的初始化和较小学习率来稳定。
+**Q：MoE 为什么训练不稳定？** Top-K 的离散索引不可直接求导，但选中专家及连续 gate 权重仍可训练。负载失衡、容量截断和 router 数值尺度都会影响优化，不能简化成「不可导所以不能训练」。
 
-**Q：每个 token 激活几个专家？为什么不全激活？** 通常 Top-1 或 Top-2。全激活就退化成 Dense，失去了稀疏带来的计算优势；只激活少数专家才能在固定算力下放大模型容量。
+**Q：每个 token 激活几个专家？为什么不全激活？** 取决于配置，细粒度专家可选择更多项。全激活仍是多专家加权结构，但失去稀疏计算优势，不等同于一个普通 FFN。
+
+<details>
+<summary>自测：只选两个专家，为什么 batch 很大时几乎所有专家仍会被读取？</summary>
+
+Top-K 是每 token 的选择，不是整个 batch 只选 K 个专家。不同 token 的路径不同，大 batch 可覆盖多数专家；因此实际带宽、分发与聚合都需要测。
+
+</details>
 
 **Q：MoE 的「专家」学到的是不同领域知识吗？** 不完全是。专家更多是按 token 级别的统计模式分工（如某些专家偏标点、偏数字、偏特定语法），并不能简单解释为「数学专家」「法律专家」，可解释性较弱。
 
 **Q：共享专家（Shared Expert）有什么用？** DeepSeekMoE 让部分专家对所有 token 都激活，用于学习通用基础知识，避免每个路由专家都重复学习公共能力，从而让路由专家更专注于专业化分工。
+
+细节依据：[DeepSeek-V3 报告 §2.1.2](https://arxiv.org/html/2412.19437v1)、[官方 Gate 实现](https://github.com/deepseek-ai/DeepSeek-V3/blob/main/inference/model.py)。后者是推理代码，可核对选择与加权差别，不是完整训练代码。

@@ -1,9 +1,7 @@
 ---
 title: 实时语音 Agent 生产化：低延迟、可打断与可审计会话
 description: >-
-  我会把实时语音 Agent 当成一个带轮次 fence 的流式状态机，而不是 ASR-LLM-TTS 的串联。音频入口先做
-  AEC、VAD、endpointing 和流式 ASR；final transcript 才驱动业务规划，LLM delta 经语义分段后流式
-  TTS。用户插话时递增 turn
+  用轮次与播放进度管理实时语音会话，区分取消生成、停止播放和截断服务端上下文。覆盖时延预算、误听确认、迟到事件、不可逆工具动作和恢复验收。
 level: L2
 roles:
   - 后端转型
@@ -29,7 +27,7 @@ classification: inferred
 | --- | --- | --- | --- |
 | 级联 | 客服、质检、强审计业务 | 文本可检索、可审核、可替换组件 | 串行延迟、丢失部分语气信息 |
 | 端到端 | 陪伴、实时助手、自然对话 | 低延迟、保留情绪/语调、自然打断 | 观测和精细控制较难 |
-| 混合 | 多数企业语音 Agent | 保留文本推理与工具能力，又能流式回应 | 状态同步和接口更复杂 |
+| 混合 | 需要文本审阅又希望流式回应的场景 | 保留文本与工具能力 | 状态同步和接口更复杂；不是市场占比结论 |
 
 不要把端到端说成永远更先进。对金融客服、呼叫中心等场景，文本中间态、证据引用、内容审核和工具权限往往比少几百毫秒更重要。
 
@@ -53,13 +51,15 @@ $$T_{first\_audio}=T_{endpoint}+T_{asr}+T_{orchestration}+T_{llm\_ttft}+T_{tts\_
 
 各段都可能是瓶颈。盲目切更快的模型未必改善体验：若 endpointing 一直等待用户静音 1 秒，或 TTS 只等全文才开始合成，模型再快也不会显得自然。应分别观测“用户停顿到系统开始说话”“LLM 首 token”“TTS 首音频帧”和“实际播放”四个时间点。
 
+上式仅是串行关键路径近似。流式 ASR 已处理说话期间的音频，此处只计端点后剩余等待；预取与合成重叠时用 trace 实际关键路径，不能把完整耗时相加。构造预算 `230 + 90 + 40 + 160 + 120 + 60 = 700ms` 不是实测，也不能把各段 P95 相加当全链路 P95。以客户端实际播放计体验，服务器发送首帧不等于用户已经听到。
+
 ## 三、音频入口：VAD、端点检测与会话轮次
 
 客户端通常将 10 到 40ms 音频帧经 WebRTC、WebSocket 或电话媒体网关发送。服务端做采样率/编码统一、抖动缓冲、VAD（语音活动检测）和 endpointing。
 
 - **VAD** 判断当前帧有没有人声，帮助节省 ASR 与带宽。
 - **endpointing** 判断一句话何时结束。阈值太短会把正常停顿误判为结束，太长又拖慢首句响应。
-- **partial transcript** 在用户还说话时不断更新；**final transcript** 作为本轮稳定输入进入工具和业务动作。
+- **partial transcript** 会不断修订；**final transcript** 只是 ASR 对该段的终态，不是正确性或授权证明。业务执行仍需语义、参数、身份与确认校验。
 
 端点策略应允许按场景配置：电话客服可接受稍长静音以降低误切，语音搜索追求更快结束，儿童/方言/嘈杂环境可能需要更保守的 VAD。不要把 ASR partial 当作永久事实；下游若已开始检索或生成，应能在 final 修订后取消或重规划。
 
@@ -69,14 +69,22 @@ $$T_{first\_audio}=T_{endpoint}+T_{asr}+T_{orchestration}+T_{llm\_ttft}+T_{tts\_
 
 ```text
 new speech detected
+  -> increment playback/turn epoch to fence old media
   -> stop local audio playback
   -> cancel TTS synthesis stream
   -> cancel/mark stale LLM generation
+  -> reconcile server conversation with actual playback position
   -> cancel unused tool work when safe
-  -> increment turn_epoch and start listening
+  -> start listening under new epoch
 ```
 
-`turn_epoch` 或 fence token 很关键。所有 ASR、LLM、TTS、工具事件都携带当前 epoch；旧轮次在网络延迟后才到达的音频和文本必须被丢弃，不能在用户新问题上继续播放“上一轮的答案”。
+`turn_epoch` 很关键，但展示 fence 与业务账本必须分开。旧音频/文本到达时丢弃，不在新轮次播放；已提交写动作的迟到回执仍须入账并供对账，不能因为 epoch 旧就丢掉“退款已成功”的事实。
+
+检测到语音时先停止旧播放，不直接等同于业务取消。若系统正在等待指定动作的确认，新语音可能正是期望的确认输入；先收齐该确认轮的转写并由受控状态机判定。明确取消、变更参数、主体/权限变化、过期或无法可靠判定时使候选确认失效；同一已认证用户在有效期内确认未变化的预览，可继续最终核权。**媒体 epoch 变化不应自动删除待确认动作**，也不能仅凭新轮次里一句“好的”执行旧动作。
+
+停止播放不自动修正服务端上下文。以 OpenAI 官方 SDK 定义为例，[response.cancel](https://github.com/openai/openai-python/blob/main/src/openai/types/realtime/response_cancel_event.py) 取消生成并返回取消终态；[conversation.item.truncate](https://github.com/openai/openai-python/blob/main/src/openai/types/realtime/conversation_item_truncate_event.py) 用实际已播放毫秒位置截断已发但未播放的 assistant 音频，同步服务端文本上下文。两者职责不同，其他供应商另验契约。不能用“已接收时长”代替“已播放时长”。
+
+构造演练：服务端已送 1,000ms 音频，客户端只播放 420ms 时用户插话。使旧播放失效，请求取消当前 response，并对对应 assistant item 按 `audio_end_ms=420` 请求截断；记录回执和播放位置。重连不得重播剩余 580ms，也不得让模型假设用户听过完整金额说明。不同管线的缓冲时长与时钟基准要单独验证。
 
 取消还要区分读操作和写操作：检索、TTS、模型生成可以尽快 abort；已提交的支付、工单修改等写操作不能简单终止，必须走 [人工审批与异常接管](/interview/llm-human-approval-exception-handoff-playbook) 和幂等/对账流程。
 
@@ -95,7 +103,7 @@ ASR partial -> final transcript -> LLM deltas
 
 电话和扬声器场景中，麦克风会收进系统自己播放的 TTS，VAD 可能把它当成用户插话。需要客户端/媒体层的回声消除（AEC）、噪声抑制和回声参考信号；不要完全依赖 LLM 从文本中“判断是不是自己说的话”。
 
-多人会议还需要 diarization（说话人分离）和 speaker attribution。业务动作必须绑定经过身份验证的说话人，而不是只因音频里出现“请给我转账”就执行。声纹可以作为辅助信号，但不应是高风险操作的唯一身份因子。
+多人会议需要 diarization 和 speaker attribution，但“说话人 A”标签不等于认证身份。业务动作绑定经认证的主体，不能只因音频出现“请给我转账”就执行。声纹可作辅助信号，不是高风险操作的唯一身份因子。
 
 ## 七、工具调用、确认与语音 UX
 
@@ -106,7 +114,9 @@ ASR partial -> final transcript -> LLM deltas
 3. 用户用明确确认语句或屏幕二次确认授权。
 4. 策略层、权限层和执行器完成最终校验后执行。
 
-不能把“好的”“嗯”一律解析为批准。确认状态必须与 `action_id`、当前会话 epoch、有效期和用户身份绑定；超时、插话或参数改动都应使确认失效。
+不能把“好的”“嗯”一律解析为批准。确认状态绑定 `action_id`、预览/参数摘要与对象版本、允许的确认输入轮、有效期和已认证身份；提交前核查当前权限。预期确认轮与取消/改参轮分别处理，不能用“任何新语音都使确认失效”的规则，否则用户开口确认也会把自己的批准作废。媒体 epoch 用于丢弃旧播放，不代替动作审批版本。
+
+确认还需规范化参数摘要、对象版本和当前权限。例如 partial 的“十五元”改为 final 的“五十元”，旧预览/确认作废；final 仍可能误听，ASR 完成不是同意。执行器在提交处再次验证，高风险动作可要求屏幕确认或已认证二次因子。
 
 ## 八、隐私、录音和声纹治理
 
@@ -154,7 +164,7 @@ ASR partial -> final transcript -> LLM deltas
 
 ### Q2：Barge-in 如何避免旧回答在新问题后继续播放？
 
-每一轮使用递增的 epoch/fence token；检测到新语音后取消播放和可取消任务。所有异步事件到达时校验 epoch，不匹配就丢弃，避免延迟消息污染新轮次。
+先原子推进 epoch，再停止旧播放并请求取消；旧音频/展示文本不匹配就丢弃，业务写回执即使过期也入账对账。还需以实际播放位置同步服务端上下文，不能只把前端静音当作全链路取消。
 
 ### Q3：ASR partial 能否直接触发工具调用？
 
@@ -174,4 +184,6 @@ ASR partial -> final transcript -> LLM deltas
 
 ## 十三、60 秒收束回答
 
-> 我会把实时语音 Agent 当成一个带轮次 fence 的流式状态机，而不是 ASR-LLM-TTS 的串联。音频入口先做 AEC、VAD、endpointing 和流式 ASR；final transcript 才驱动业务规划，LLM delta 经语义分段后流式 TTS。用户插话时递增 turn epoch，取消旧播放和可取消的生成/检索，迟到事件按 epoch 丢弃。高风险工具动作使用结构化预览、复述确认、权限和审批，不把模糊语气词当授权。最后按首音频、ASR 修订、打断成功、任务完成和录音访问审计做运营闭环，并准备降级到级联、文本或人工坐席。
+以下是参考设计表达，不是已部署或已验证的项目经历。L1 能复现 420ms 打断后的旧音频丢弃；L2 能说明取消/截断回执、迟到写回执与确认失效；L3 应按噪声/网络切片测实际停止延迟与漏播，不用 ASR 终态或一次演示保证生产可靠性。
+
+> 这份设计用轮次 fence 管理语音流。ASR final 进入候选规划，业务写入另做参数与授权确认；LLM 文本经语义分段进入 TTS。插话先推进 epoch，取消旧播放/可取消工作，并核对播放位置与服务端上下文；旧音频不播，但迟到业务回执保留。高风险动作绑定预览、确认、权限和对象版本。首音频、停止延迟、转写修订、误操作与录音访问分别观测；级联、文本或人工降级需重新通过能力与数据策略门禁。

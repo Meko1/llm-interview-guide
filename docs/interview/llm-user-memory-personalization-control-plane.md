@@ -168,6 +168,24 @@ requested -> access_blocked -> propagated -> verified -> completed
 
 ## 八、系统设计题：设计企业 Copilot 的用户记忆中心
 
+### 删除之后，迟到worker不能把记忆复活
+
+worker读v7后开始摘要，用户撤回时只删向量，worker仍可能稍后发布旧摘要。可为subject/scope维护单调 `memory_epoch`：读取拿7，撤回时原子置tombstone并升至8，提交派生物要求当前仍为7，否则丢弃。缓存命中也检查撤权epoch；备份恢复、索引重建先重放tombstone再开放读取。条件须由可信写入事务校验，不能任worker自报版本。
+
+Python 3标准库构造条件检查，可直接运行；未模拟数据库或网络故障：
+
+```python
+read_epoch = 7
+current_epoch = 8
+revoked_ids = {"mem_01"}
+may_publish = read_epoch == current_epoch and "mem_01" not in revoked_ids
+assert may_publish is False
+```
+
+[Redis官方事务说明](https://redis.io/docs/latest/develop/using-commands/transactions/) 实读WATCH/CAS片段说明，被观察键在EXEC前变化会使事务中止；但Redis不会自动跨向量库/对象存储原子提交。外部派生物仍需幂等任务、版本标记和失败回执。`propagated` 是下游确认，`verified` 还需读回验证；法律保留与参数内遗忘不在此技术方案中承诺，政策另审。
+
+L1列出仍可召回旧记忆的路径；L2分别设停止新使用和删除传播完成SLO；L3用迟到提交/备份恢复/跨scope反例检验设计。样例 `confidence=1.0` 仅表示来源确认，不证明事实永久真实；推断分数未经校准。
+
 ### 需求
 
 员工在 Web 和 IM 中使用 Copilot，希望助手记住语言、回答风格、常用项目和已授权的工作偏好；用户可查看/编辑/删除；群聊和项目空间有共享记忆；高敏行业默认关闭自动记忆；离职后不应继续使用个人记忆；错误记忆不得驱动写操作。
@@ -228,6 +246,8 @@ Identity / HR events -----------------> Scope / revocation processor
 身份事件触发撤权：立即停止读取与注入、冻结未完成任务；组织资产按公司政策保留并转移权限，个人偏好按用户合同/政策删除或导出；所有派生物按删除编排传播。不能因为“记忆在向量库”就脱离企业数据生命周期。
 
 ## 十、项目讲法模板
+
+这是设计表达，不是已上线证明；“跨scope为零”是目标，有限测试只能报告样本内未观察到。
 
 > 我们把用户记忆从聊天记录中独立为受治理的个性化控制面。显式偏好可以直接写入，模型从对话抽取的只作为候选，需经过敏感信息、来源、用途、冲突与同意 gate。每条记忆有 scope、来源、置信度、过期和版本，用户在记忆中心可查看、修改、关闭自动写入和删除。请求侧只在当前 tenant/目的允许时检索少量记忆，并明确本轮指令优先；工具调用仍走实时授权。删除先阻断读取，再传播到向量、缓存、摘要、评测与异步任务，最后给用户可审计回执。我们以个性化任务提升、错误记忆率、撤回完成时延和跨 scope 注入为零来衡量系统。
 

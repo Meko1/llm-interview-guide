@@ -2,7 +2,7 @@
 title: LLM 离线批处理与异步作业编排
 description: >-
   在线聊天追求 TTFT、P95 和交互体验；离线大模型任务追求单位成本、总吞吐、可恢复性和结果可审计。把百万份文档摘要、历史工单结构化、质检、批量
-  embedding、模型评测或夜间报告生成当成“循环调 API”，很快会遇到重复扣费、部分成功、脏数据回写、供应商回调丢失和离线任务挤占在线 SLA。生
+  embedding、模型评测或夜间报告生成当成“循环调 API”，很快会遇到重复扣费、部分成功、脏数据回写、供应商回调丢失和离线任务挤占在线 SLA。生产设计需要有状态编排与发布门禁。
 level: L2
 roles:
   - 应用开发
@@ -16,6 +16,8 @@ classification: inferred
 ## 一、30 秒面试回答
 
 **答法：**我会把离线 LLM 处理拆成提交、规划、分片、执行、校验、汇总和发布七个可恢复阶段。外部调用至少一次投递不可避免，所以每个输入用稳定的 `source_version + transform_version` 派生幂等键，输出以 staging 写入、通过 schema/质量校验后再原子发布。任务队列区分在线与离线资源池，按 token 而不只是按请求数限流；失败按可重试、需人工、永久失败分类，使用指数退避、死信队列和局部重跑。可观测性记录 batch、shard、item、模型/prompt、token、成本和结果版本，验收看完成率、有效吞吐、重复率、质量门禁和单位成功项成本，而不是只看“跑完了多少请求”。
+
+更准确地说，可靠执行通常要应对至少一次投递/重复处理，而非声称所有外部 API 必然采用同一种投递保证。幂等结果发布不等于只调用或只收费一次；业务结果、供应商任务和物理 attempt 应分别计数。
 
 ## 二、离线任务与在线请求的目标函数不同
 
@@ -64,6 +66,8 @@ CREATED -> PLANNING -> QUEUED -> RUNNING -> VALIDATING -> PUBLISHED
 
 对于需要处理最新状态的任务，也应明确语义：是处理开始时快照、每个 item 读取时最新版本，还是流式增量。三者成本、可重复性和一致性不同，不能默认混用。
 
+**L1：冻结事实不冻结授权。** 一份合同快照在提交时合法，运行到一半撤权或删除后仍需阻断读取/外发/发布。input manifest 记录 tenant、源版本、用途与授权 epoch；worker 在实际读取和提交结果时复核当前策略。模型端、对象存储与日志也属于数据路径，不把私有合同因为“夜间作业”发送到未获批准的 endpoint。文档或回调中的 URL、指令、路径都不可信，执行器只允许受控存储引用与输入 ID。
+
 ### 4.2 幂等键不应只用 job id
 
 一个可复用的 item key 形态：
@@ -77,6 +81,8 @@ idempotency_key = hash(
 ```
 
 这样同一文档版本在同一转换契约下重复投递只会产生一个有效结果；文档更新或 prompt 升级则自然形成新结果版本。外部模型调用可能因超时而“服务端已执行但客户端没收到响应”，所以不能假设 exactly-once；应以幂等写入、可查询 attempt 和去重结果来实现业务上的 effectively-once。
+
+该 key 是逻辑输出身份，不是外部请求自动去重承诺。用数据库唯一约束与条件提交选出唯一 accepted result，winner 规则在运行前固定（如首个通过当前校验的有效 attempt）；重复队列投递不能各自调用后覆盖彼此结果。领取 item 使用 lease/generation，提交时原子检查仍为有效租约。若所有 attempt 内容都不一致，保留 provenance 与未采用结果，不能把“最后到达”当正确答案。
 
 ### 4.3 按什么分片
 
@@ -101,6 +107,8 @@ LLM 的成本单位是 token，输出长度又在调用前未知。离线 worker
 
 若只按 QPS 限流，十个超长文档即可挤掉数千条短任务；若只按预估 token 又不设并发上限，慢调用会累积太多连接和内存。预算耗尽后 worker 应暂停取新任务而非无限重试，等待补充令牌、下一个时间窗或调度器降级。
 
+**L2：token 预算与并发是不同上限。** 构造 quota=600,000 token/分钟、每 item 输入均值 2,000、输出 300，则 token 配额理论上约 260.9 item/分钟；若 20 个并发槽、平均调用 10 秒，则并发约束仅 120 item/分钟。取较小值只是理想预算起点，还要考虑输出长尾、重试、校验与存储背压；Batch API 若使用独立配额或计量口径，应按该 API 文档核查，不能默认与在线 TPM 共用。硬费用上限要预留可执行最大消耗，历史均值不能保证不会超额。
+
 ### 5.2 背压不是失败
 
 当模型供应商限流、输出存储变慢或质量校验积压时，调度器应降低派发率，保留队列中的任务而不是把所有 item 标记失败。背压信号可来自：429 比例、队列等待、P95 调用时长、validator backlog、数据库写入延迟、预算消耗速度。把背压与熔断、重试分开，才能避免故障时产生指数级请求放大。
@@ -108,6 +116,10 @@ LLM 的成本单位是 token，输出长度又在调用前未知。离线 worker
 ### 5.3 Batch API 与自托管批量推理
 
 供应商 Batch API 适合延迟要求宽松、输入明确、可接受异步回调或轮询的任务，通常以较低单价交换较长完成时限。自托管推理可通过动态批处理提高吞吐，但仍需避免长 prompt 队首阻塞、处理 OOM、隔离低优先级流量。选型时需要比较总成本而不是单价：包括等待时间、失败重跑、数据传输、结果校验、人工复核和运维成本。
+
+提交 provider batch 本身也要可恢复：先记录 submission 意图与输入哈希，成功后存 provider job ID；若创建超时，先用供应商支持的查询/幂等机制确认是否已建，不能立即重新上传整批。缺少可关联查询时标 `submission_unknown` 并对账。回调只触发同步任务，不直接发布；验证回调来源、关联 job，再拉取受控结果。没有可靠回调则有界轮询，注意取消/暂停/失败不是“所有 item 成功”。
+
+结果按稳定 item key 映射，不依赖输出文件行号或完成顺序；重复 key、未知 key、缺项、逐项 error 和文件校验失败分别隔离。完整性检查使用 `planned_ids − returned_ids` 和 `returned_ids − planned_ids`，而不只是行数相同。价格与完成期限按实际合同验证，本页没有实读任何供应商价格表，不承诺统一折扣或 SLA。
 
 ## 六、输出写入：staging、校验与原子发布
 
@@ -128,6 +140,8 @@ model result
 
 若直接覆盖生产索引或客户可见摘要，半批失败、错误 prompt 或模型回归会让用户看到混合版本。staging + manifest 的好处是允许完整跑完、做抽样验收、比较旧新质量后一次性切换；回滚只需切回上一 manifest，而不是逐条修复已覆盖的数据。
 
+“原子发布”应有明确线性化点，例如当前 manifest 指针的条件更新：对比 expected_previous_revision、job generation、用途 epoch 与必需 item 完整性后切换。每个分片上传对象不等于整个发布原子；读者要在一次读取期间固定 manifest 版本。发布历史版本回滚也必须复核当前删除/ACL，不能重新暴露已经撤销的结果；已发送报告、邮件或下游写库另行补偿，指针回切不能收回外部副作用。
+
 ## 七、失败分类与重试策略
 
 | 失败类型 | 例子 | 自动动作 | 是否消耗重试预算 |
@@ -141,11 +155,15 @@ model result
 
 重试必须携带相同 idempotency key，并记录 attempt ordinal、错误类、退避时间和是否真正发出上游调用。死信队列不是垃圾桶：需要可检索的失败上下文、归因标签、修复后重放入口、保留期和告警 SLO。对某个坏 item 的反复失败要隔离，不能让它阻塞整个 shard。
 
+逻辑 key 保持不变，attempt ID 每次新建；若修复改变 Prompt/transform/output schema，则创建新结果版本，不能伪装为原版本的重试。模型结果已持久化但 staging 写入失败时，只重放写入/校验，不再调模型；provider 未知超时则先查询。限流退避和队列 requeue 也要总时间/次数上限，避免 DLQ 自动回流变成永久重试环。
+
 ## 八、取消、恢复与部分结果
 
 取消命令可能与 worker 完成写入同时发生。推荐使用 fencing token 或版本化 lease：worker 在提交结果前检查 job/run generation 是否仍有效；取消后的迟到结果只能进入审计或隔离区，不能重新发布。恢复时从已成功 item 的 checkpoint 和 staging manifest 继续，而不是从头重复调用模型。
 
 对于“允许 95% 完成即可”的业务，阈值本身是产品契约：哪些 item 可以缺失、如何标记、是否可供搜索、是否必须人工补齐。不能把完成率 95% 解释为“剩余 5% 随便丢掉”。
+
+取消是停止未来派发和提交，不是已发生计算免费或远端立即停止。先原子推进 job generation，迟到 worker 提交被拒；取消期间到达的 usage 仍入账，敏感输出按保留策略清理，不因审计需要永远存正文。恢复先读当前 generation、用途/撤销账本与 provider job 状态，对账后仅补缺项；不能直接把旧队列备份重放到新版本。部分发布按重要性指定必需项，关键合同缺失时不能由大量低风险成功项凑到 95% 就通过。
 
 ## 九、观测与验收指标
 
@@ -157,10 +175,14 @@ model result
 | retry amplification | 每个有效产物平均产生多少次调用 |
 | queue age / deadline miss | 是否已无法在业务窗口内完成 |
 | validation reject rate | 模型/模板/数据变化是否让结果变差 |
-| duplicate suppression rate | 幂等层实际避免了多少重复费用 |
+| duplicate suppression rate | 重复派发/提交中被抑制的比例；不直接等于避免的费用 |
 | partial publish / rollback count | 发布流程是否稳定 |
 
 所有指标应能按 tenant、作业类型、数据域、模型、prompt、版本、分片长度和错误类切片。平均成功率很好但某个大租户持续超时，或平均成本下降但质量拒绝率上升，都不能算作成功。
+
+**L3：完成、质量和费用用三个分母。** 构造计划 10,000 个 item、实际 11,000 次模型调用，9,500 个通过校验并发布，总消耗 220 元，则 completion=95%，物理调用/计划项放大=1.1，cost/accepted=220/9,500≈0.02316 元。若以 accepted 作重试放大分母，则是 11,000/9,500≈1.158，必须标明，不混用。校验通过是已执行规则的通过率，不等于人工业务正确率；只抽成功项也会遗漏难例，按风险/失败切片复核并报告不可判定。
+
+夜间窗口预算也要分开输入输出：构造一百万项、均值输入 2,000/输出 200 token、8 小时=28,800 秒，理想需求约 69,444 prefill token/s 和 6,944 decode token/s，另加重试和工具开销。不能把总 token/s 除以纯 decode benchmark。全管道吞吐受读取、模型、validator、发布最慢环节限制；记录计划到达与队列 age，不只在任务“终于完成”后算吞吐。
 
 ## 十、系统设计题：夜间处理千万份企业文档
 
@@ -201,7 +223,7 @@ events -> metrics/traces/cost ledger/DLQ/operator console
 
 ### Q3：Batch API 半批成功怎么处理？
 
-**答法：**不要把批次作为唯一重试单位。输出按 item id 与 idempotency key 对齐，成功项经校验写 staging，失败项分类进入重试/DLQ/人工队列；reconciler 根据 manifest 生成完成报告。这样只重跑缺失或不合格的 item，不会重复支付已经成功部分。
+**答法：**不要把批次作为唯一重试单位。输出按 item key 对齐，成功项经校验写 staging，失败项分类进入重试/DLQ/人工队列；reconciler 根据 manifest 生成完成报告。确认成功项不再调用可避免主动重跑它们，但未知提交和供应商重复执行仍可能收费，需按 job/attempt 对账，不能承诺永无重复费用。
 
 ### Q4：怎么证明批处理成本优化没有牺牲质量？
 
@@ -212,3 +234,5 @@ events -> metrics/traces/cost ledger/DLQ/operator console
 > “我们把百万文档抽取从同步循环改成了版本化异步作业。提交时冻结 input manifest，按 token 和租户分 shard；每个 document version 与 prompt/schema/model policy 生成幂等键。worker 在独立离线池按并发和 TPM 双预算处理，结果先过 schema、引用和字段规则后写 staging，全部达标才切换 manifest。429 与 5xx 退避重试，坏文件和反复 schema 失败进入 DLQ，支持按 item 局部重跑。我们按有效产物成本、完成率、队列 age、质量拒绝率和重复抑制率运营，在线 SLO 紧张时自动暂停离线派发。”
 
 这类项目故事能清楚展示：你不只是会调用 Batch API，而是能把 LLM 推理嵌入可靠、可审计、可控成本的数据处理系统。
+
+实读主源：[Kubernetes Job 官方说明](https://kubernetes.io/docs/concepts/workloads/controllers/job/)中单并发也可能重复启动、backoff 与 successPolicy 片段；[Google Gen AI Python SDK](https://github.com/googleapis/python-genai/blob/main/README.md)的 Batch Prediction 示例中输入 key、upload/create、按 job name 查询与 state 轮询。SDK main 示例不是完整 API 契约，且其平台支持说明需部署时再核。Gemini Batch 网页因 TLS 错误未读，仅作为待核入口；没有运行批任务、上传数据、实测吞吐或验证供应商折扣，全部数值为构造。

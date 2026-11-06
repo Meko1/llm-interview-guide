@@ -1,8 +1,6 @@
 ---
 title: 长任务 Agent 持续授权与紧急撤权：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  一次“允许执行”不能覆盖一个持续数小时、会暂停恢复、会调用多个工具、可能更换资源的 Agent 任务。真实生产问题是：用户批准了读日志，Agent
-  之后要部署怎么办？审批后 prompt、目标分支或金额变了怎么办？策略刚收紧，正在运行的 job 能否继续？紧急撤权时，已经发到下游的命令如何阻止或对账
+description: 将长任务批准收敛为短期 capability，推演资源变化、一次性效果重试、原子 fencing 和紧急撤权边界。
 level: L2
 roles:
   - 应用开发
@@ -126,7 +124,11 @@ model intent
 
 ### 为什么需要 fencing token
 
-网络分区时，旧 worker 可能没有收到取消消息但仍持有旧凭证。仅靠 TTL 仍可能在边界瞬间竞态。为每次 lease/owner 变更递增 fence，要求下游写 API 只接受最新值；旧 worker 即使恢复网络，也被确定性拒绝。这是分布式锁而非 LLM 推理应承担的职责。
+网络分区时，旧 worker 可能没有收到取消消息但仍持有旧凭证。fence 必须由网关或资源服务在写入的原子检查中比较当前 epoch；仅让 worker 先 GET epoch 再 POST 写入仍有 TOCTOU。下游不支持 fence 时，用可信代理串行化提交并在每次发送前复核；对已发出的不可取消请求，只能对账，不能保证撤权后外部效果立刻为零。
+
+实际读取的 [RFC 7662 官方说明](https://www.rfc-editor.org/info/rfc7662/)定义 introspection 用于查询 token 的 active 状态和授权元信息；`active=true` 不替代工具、资源、租户与当前审批校验。高风险路径应明确 introspection 超时 fail-closed、缓存存活窗和撤销传播上界；自包含 JWT 的本地验签也不能自行获知授权服务器刚发生的撤销。
+
+**一次性批准如何允许网络重试？** `max_uses=1` 应约束一个业务 effect，而不是一个 HTTP attempt。原子登记 `(capability_id, effect_key, action_digest)` 后，同键同动作返回原结果或继续对账，同键不同动作拒绝；不同键无法消费第二次。L1 说清重试与新动作的区别，L2 说明扣预算/占用 grant 与 effect 登记的事务边界，L3 需验证崩溃和并发窗口，不能拿短 TTL 证明 exactly-once。
 
 ## 七、紧急提权与紧急撤权
 
@@ -144,6 +146,8 @@ Break-glass 不是“打开 YOLO 模式”。它仅适用于已有故障/安全�
 紧急止血可以临时提高速度，不能降低事实校验。比如“关闭错误功能开关”仍应冻结具体 flag/key，执行后读取下游回执；不应批准“让 Agent 自己修复生产”。
 
 ## 八、四类 Runtime 的官方控制面映射
+
+下面保留原产品学习入口；具体 Hook 顺序、超时默认、命令和托管配置未逐版本核验。企业方案的 fail-closed、批准对象冻结和资源级二次鉴权是本页设计要求，不宣称四个产品默认实现了完整持续授权。
 
 ### Claude Code：Hook 先行，deny 仍有最高优先级
 

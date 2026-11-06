@@ -1,0 +1,652 @@
+{
+  "group": "interview-3",
+  "changedPaths": [
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\llm-output-contract-compatibility-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\llm-prompt-prefix-cache-production-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\llm-safety-policy-moderation-system-design.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\llm-streaming-session-resilience-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\llm-traffic-admission-overload-control-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\llm-user-memory-personalization-control-plane.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\llmops-production-qna.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\long-running-agent-recovery-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\lora-adapter-serving-governance-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\maas-production-qna.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\mcp-production-qna.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\model-quantization-production-validation-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\multi-agent-delegation-handoff-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\multi-agent-workspace-concurrency-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\multi-tenant-rag-index-governance-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\multimodal-rag-document-intelligence-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\online-evaluation-rollout-operations.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\procurement-vendor-due-diligence-copilot-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\promptops-production-governance-playbook.md",
+    "D:\\llm-projects\\llm-interview-guide\\docs\\interview\\rag-memory-eval-qna.md",
+    "D:\\llm-projects\\llm-interview-guide\\audit\\editorial-20261105\\receipts\\interview-3.json"
+  ],
+  "validation": {
+    "ownedArticles": 20,
+    "receiptOrder": "first20 inventory-order interview-3, ending rag-memory-eval-qna.md",
+    "baselineIdentityMatchedArticles": 20,
+    "baselineEol": "LF frontmatter + CRLF body reconstructed for exact byte-hash match against initial snapshot",
+    "preservedOriginalMarkdownLinks": 139,
+    "preservedOriginalHeadings": 384,
+    "preservedOriginalDiagrams": 41,
+    "metadata": "title/level/roles/classification/reviewedAt unchanged; selected descriptions fixed",
+    "standalonePythonExamples": "Five standard-library examples executed in-memory; all assertions passed",
+    "numericChecks": "prefix blocks/tokens; moderation; human-review workload; stream-buffer bytes; LoRA bytes; RRF; zero-event bound; two-proportion interval",
+    "gitDiffCheck": "Owned paths passed; Git LF-to-CRLF notices only",
+    "notRun": [
+      "catalog",
+      "npm check",
+      "build",
+      "browser/provider/engine integration",
+      "benchmarks or full-paper reproduction"
+    ],
+    "integrationOwner": "Main writer; shared outputs not touched",
+    "sourceReviewMeaning": "Verified means actually-read excerpts only; sourceEvidence labels each unread URL linked_only",
+    "modelServiceTokenRefresh403": false,
+    "localExecutableIssue": "Store codex.exe and rg.exe access denied; used installed npm codex.exe for apply_patch",
+    "tail": "Last ten never edited by this writer; remote-agent metadata note transferred to tail writer"
+  },
+  "entries": [
+    {
+      "path": "docs/interview/llm-output-contract-compatibility-playbook.md",
+      "contentSha256": "948f7f810e8386efc3b4d19ced522bfd44fe00ba9a24bea2c68e9bc407ca406b",
+      "sourceEvidence": [
+        {
+          "url": "https://json-schema.org/understanding-json-schema/reference/object",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/json-schema-org/understanding-json-schema/main/source/reference/object.rst",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        }
+      ],
+      "status": "edited",
+      "summary": "阅读全文；修正必填兼容方向，补集合/历史数据执行例及Schema/置信度/回滚证据边界。",
+      "sources": [
+        "https://json-schema.org/understanding-json-schema/reference/object",
+        "https://raw.githubusercontent.com/json-schema-org/understanding-json-schema/main/source/reference/object.rst"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读官方仓库properties/required/additionalProperties片段，非全文/SDK测试；web open无正文，官方raw HTTP200。标准库示例已在内存中运行通过；没有项目或事故统计。"
+      ]
+    },
+    {
+      "path": "docs/interview/llm-prompt-prefix-cache-production-playbook.md",
+      "contentSha256": "43fec337073ac6e4467fd39dde6ea6d5b81f12ec74c4d3b3a7c457902d727a3b",
+      "sourceEvidence": [
+        {
+          "url": "https://docs.vllm.ai/en/latest/design/prefix_caching/",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/vllm-project/vllm/main/docs/design/prefix_caching.md",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        }
+      ],
+      "status": "edited",
+      "summary": "阅读全文；修复摘要，补完整块/多模态键/隔离盐/侧信道、带单位价值函数、8%复用与800-token块复算。",
+      "sources": [
+        "https://docs.vllm.ai/en/latest/design/prefix_caching/",
+        "https://raw.githubusercontent.com/vllm-project/vllm/main/docs/design/prefix_caching.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读官方raw前110行缓存键/多模态/盐片段，非全部实现；web open无正文。滚动main未固定部署版；未压测/验证数值等价。"
+      ]
+    },
+    {
+      "path": "docs/interview/llm-safety-policy-moderation-system-design.md",
+      "contentSha256": "2efbf6a8f62a5763610ca0b46ff14081c9b868768596e99cb226a88cd8ae1e10",
+      "sourceEvidence": [
+        {
+          "url": "https://www.openpolicyagent.org/docs/policy-language",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/open-policy-agent/opa/main/docs/docs/policy-language.md",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        }
+      ],
+      "status": "edited",
+      "summary": "阅读全文；修正紧急撤权及异步审计风险，补混淆矩阵、72人份容量下界、PEP义务和分层任务。",
+      "sources": [
+        "https://www.openpolicyagent.org/docs/policy-language",
+        "https://raw.githubusercontent.com/open-policy-agent/opa/main/docs/docs/policy-language.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读OPA默认allow=false规则片段，非全文；未部署。数字均为构造复算，非模型效果/人工产能实测。"
+      ]
+    },
+    {
+      "path": "docs/interview/llm-streaming-session-resilience-playbook.md",
+      "contentSha256": "599880c6bdbd94cd972ce5140f47200ea785f64139bcbd135a87d1a03214a478",
+      "sourceEvidence": [
+        {
+          "url": "https://html.spec.whatwg.org/multipage/server-sent-events.html",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        }
+      ],
+      "status": "edited",
+      "summary": "阅读全文；补回放/live-tail空窗、字节缓冲账本、游标与取消终态边界。 交叉审查修复可解析前缀即工具就绪，等待供应商完整调用边界并冻结完整参数摘要后才审批/提交。",
+      "sources": [
+        "https://html.spec.whatwg.org/multipage/server-sent-events.html"
+      ],
+      "sourceReview": "linked_only",
+      "openIssues": [
+        "web未返回规范正文，未核浏览器实现；缓冲数值为构造复算，未压测。",
+        "主agent已修订静态协议反例；没有运行资源fence、OS隔离、供应商流式协议或真实恢复故障试验，不视为系统保证。"
+      ]
+    },
+    {
+      "path": "docs/interview/llm-traffic-admission-overload-control-playbook.md",
+      "contentSha256": "94f635f28bb5f11c5f5eceeaba2f966c986e845bb4d92b49f4acf099ba6d5d07",
+      "sourceEvidence": [
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc9110.txt",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        }
+      ],
+      "status": "edited",
+      "summary": "阅读全文；修摘要与prefix直接返回，补容量突发下界、lease超卖及TPM退款区别。",
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3",
+        "https://www.rfc-editor.org/rfc/rfc9110.txt"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读RFC9110 §10.2.3片段非全文；未压测或实现分布式lease。"
+      ]
+    },
+    {
+      "path": "docs/interview/llm-user-memory-personalization-control-plane.md",
+      "contentSha256": "c9fd733bd03a14f3b13fa130dd4dfe526a48c4e65b4e58e18d7a0410a262ca78",
+      "sourceEvidence": [
+        {
+          "url": "https://redis.io/docs/latest/develop/using-commands/transactions/",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/redis/docs/main/content/develop/using-commands/transactions.md",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        }
+      ],
+      "status": "edited",
+      "summary": "阅读全文；补撤回epoch防迟到写入、备份tombstone、执行断言及安全目标边界。",
+      "sources": [
+        "https://redis.io/docs/latest/develop/using-commands/transactions/",
+        "https://raw.githubusercontent.com/redis/docs/main/content/develop/using-commands/transactions.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读Redis WATCH/CAS章节片段非全文；未部署跨库删除或验证法律政策/参数遗忘。"
+      ]
+    },
+    {
+      "path": "docs/interview/llmops-production-qna.md",
+      "contentSha256": "a4ff47a09befcf70aeae0fba422abd4ccb1123ee098a200cf7043171696f82cb",
+      "sourceEvidence": [],
+      "status": "edited",
+      "summary": "全文审阅；修摘要、成本求和/双算重试、低风险安全门禁及一周承诺，补影子副作用/标签分母。",
+      "sources": [],
+      "sourceReview": "not_applicable",
+      "openIssues": [
+        "无外部产品事实核查；成本为构造单价演算，未跑平台/模型评测。"
+      ]
+    },
+    {
+      "path": "docs/interview/long-running-agent-recovery-playbook.md",
+      "contentSha256": "199bbb52bf757e43dbb0830dbed439e93ac7d5edf1dcf3bad69d8b2e4dc28303",
+      "sourceEvidence": [
+        {
+          "url": "https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/sessions.md",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/docs/user-guide/sessions.md",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        },
+        {
+          "url": "https://code.claude.com/docs/en/agent-view",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://openai.com/index/work-with-codex-from-anywhere/",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://docs.openclaw.ai/gateway/restart-recovery",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://docs.openclaw.ai/cli/cron",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://hermes-agent.nousresearch.com/docs/user-guide/sessions/",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        }
+      ],
+      "status": "edited",
+      "summary": "全文审阅；补202/丢回执对账与写边界fence，限定跨产品恢复声明，核Hermes网关崩溃unknown片段。 交叉审查修复fence最大已观察值与即时撤权混淆，增加18/19传播缺口、资源安装屏障与在途外部调用限制。",
+      "sources": [
+        "https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/sessions.md",
+        "https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/docs/user-guide/sessions.md",
+        "https://code.claude.com/docs/en/agent-view",
+        "https://openai.com/index/work-with-codex-from-anywhere/",
+        "https://docs.openclaw.ai/gateway/restart-recovery",
+        "https://docs.openclaw.ai/cli/cron",
+        "https://hermes-agent.nousresearch.com/docs/user-guide/sessions/",
+        "https://hermes-agent.nousresearch.com/docs/user-guide/cli"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "只实读Hermes前65行存储/网关段落，非全文；原Claude/OpenClaw/CLI链接均linked_only，OpenAI搜索无正文。未实测恢复。",
+        "主agent已修订静态协议反例；没有运行资源fence、OS隔离、供应商流式协议或真实恢复故障试验，不视为系统保证。"
+      ]
+    },
+    {
+      "path": "docs/interview/lora-adapter-serving-governance-playbook.md",
+      "contentSha256": "8d57d7ceca9727a9f5f76bcc1bf06783faf5ba207c316a56c9763ca4ad8b5bf9",
+      "sourceEvidence": [
+        {
+          "url": "https://docs.vllm.ai/en/latest/features/lora/",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/vllm-project/vllm/main/docs/features/lora.md",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        }
+      ],
+      "status": "edited",
+      "summary": "全文审阅；补rank/BF16/多adapter显存复算、QLoRA精度边界及运行时加载管理面警告。",
+      "sources": [
+        "https://docs.vllm.ai/en/latest/features/lora/",
+        "https://raw.githubusercontent.com/vllm-project/vllm/main/docs/features/lora.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读官方LoRA请求/SupportsLoRA/动态加载警告片段非全文；未部署或验证合并/量化数值，容量为构造值。"
+      ]
+    },
+    {
+      "path": "docs/interview/maas-production-qna.md",
+      "contentSha256": "27a1cb35bcfb7ff94ed69fe7ff4e1a1761875695553c22f2c845d52e432174ef",
+      "sourceEvidence": [],
+      "status": "edited",
+      "summary": "全文审阅；修摘要、虚拟key/尝试计量、预算预留复算、价格占位及候选网关/合规边界。",
+      "sources": [],
+      "sourceReview": "not_applicable",
+      "openIssues": [
+        "未核候选网关或供应商价格；0.018原值保留但标占位，不是真实账单。法律合同另审。"
+      ]
+    },
+    {
+      "path": "docs/interview/mcp-production-qna.md",
+      "contentSha256": "a91894ff2f716d488af3a0c50266927ff639f1cfa39956e07915191b2ba631f2",
+      "sourceEvidence": [
+        {
+          "url": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://modelcontextprotocol.io/specification/2025-06-18/client/roots",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/modelcontextprotocol/modelcontextprotocol/main/docs/specification/2025-06-18/server/tools.mdx",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/modelcontextprotocol/modelcontextprotocol/main/docs/specification/2025-06-18/client/roots.mdx",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        }
+      ],
+      "status": "edited",
+      "summary": "全文审阅；区分MCP标准isError和业务payload、请求ID/幂等、Roots/OS沙箱、M×N理想化和安全门禁目标。",
+      "sources": [
+        "https://modelcontextprotocol.io/specification/2025-06-18/server/tools",
+        "https://modelcontextprotocol.io/specification/2025-06-18/client/roots",
+        "https://raw.githubusercontent.com/modelcontextprotocol/modelcontextprotocol/main/docs/specification/2025-06-18/server/tools.mdx",
+        "https://raw.githubusercontent.com/modelcontextprotocol/modelcontextprotocol/main/docs/specification/2025-06-18/client/roots.mdx"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读2025-06-18工具Error Handling/Roots能力与list片段非全规范；未部署客户端或沙箱，未验证当前最新版本。"
+      ]
+    },
+    {
+      "path": "docs/interview/model-quantization-production-validation-playbook.md",
+      "contentSha256": "7f7debc58c06928f7373b30e071b2cf9f3fc0d1c1222d405c558b44f4ad2e856",
+      "sourceEvidence": [
+        {
+          "url": "https://github.com/mit-han-lab/llm-awq",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/mit-han-lab/llm-awq/main/README.md",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        },
+        {
+          "url": "https://arxiv.org/abs/2306.00978",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        }
+      ],
+      "status": "edited",
+      "summary": "全文审阅；补7B权重/scale字节复算、kernel与KV边界、阈值分支反例、配对净差及FP回滚容量。",
+      "sources": [
+        "https://github.com/mit-han-lab/llm-awq",
+        "https://raw.githubusercontent.com/mit-han-lab/llm-awq/main/README.md",
+        "https://arxiv.org/abs/2306.00978"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读AWQ README前45行功能列表，非论文/代码全文；arxiv web无正文为linked_only。未复现速度或统计CI；数字为构造。"
+      ]
+    },
+    {
+      "path": "docs/interview/multi-agent-delegation-handoff-playbook.md",
+      "contentSha256": "f1860eec6fc50be7e3ee63df2addfa25613507c5e2e8a9612483cd603f732bb5",
+      "sourceEvidence": [
+        {
+          "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/delegation",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/docs/user-guide/features/delegation.md",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        },
+        {
+          "url": "https://code.claude.com/docs/en/worktrees",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://code.claude.com/docs/en/sub-agents",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://code.claude.com/docs/en/agents",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://openai.com/codex/",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://openai.com/index/introducing-the-codex-app/",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://docs.openclaw.ai/tools/subagents",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://hermes-agent.nousresearch.com/docs/guides/delegation-patterns/",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        }
+      ],
+      "status": "edited",
+      "summary": "全文审阅；修摘要与Hermes默认3/隔离权限过强声明，补ACK丢失新fence、预算树与completed/schema分离。 交叉审查修复先对账后撤权竞态，先关闭既有写准入、隔离进程与记录在途未知，再对账回收。",
+      "sources": [
+        "https://hermes-agent.nousresearch.com/docs/user-guide/features/delegation",
+        "https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/docs/user-guide/features/delegation.md",
+        "https://code.claude.com/docs/en/worktrees",
+        "https://code.claude.com/docs/en/sub-agents",
+        "https://code.claude.com/docs/en/agents",
+        "https://openai.com/codex/",
+        "https://openai.com/index/introducing-the-codex-app/",
+        "https://docs.openclaw.ai/tools/subagents",
+        "https://hermes-agent.nousresearch.com/docs/guides/delegation-patterns/"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读Hermes官方滚动前72行，非全部实现；Claude/OpenClaw/OpenAI原链接未读均linked_only。未部署/验证取消和崩溃恢复。",
+        "主agent已修订静态协议反例；没有运行资源fence、OS隔离、供应商流式协议或真实恢复故障试验，不视为系统保证。"
+      ]
+    },
+    {
+      "path": "docs/interview/multi-agent-workspace-concurrency-playbook.md",
+      "contentSha256": "4a2ace5cc536a049027697e304868106a974b45d2c6152fbd0fe941e3a6f0823",
+      "sourceEvidence": [
+        {
+          "url": "https://git-scm.com/docs/git-worktree",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/git/git/master/Documentation/git-worktree.adoc",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        },
+        {
+          "url": "https://code.claude.com/docs/en/worktrees",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://openai.com/index/introducing-the-codex-app/",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://code.claude.com/docs/en/agents",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        }
+      ],
+      "status": "edited",
+      "summary": "全文审阅；补worktree lock非写互斥、tested-tree/head失效、只读检查命令和清理保全、共享库容量约束。 交叉审查修复文件停止写入缺口，全部活跃写者需OS/容器隔离与进程树停止确认，新attempt不用旧路径。",
+      "sources": [
+        "https://git-scm.com/docs/git-worktree",
+        "https://raw.githubusercontent.com/git/git/master/Documentation/git-worktree.adoc",
+        "https://code.claude.com/docs/en/worktrees",
+        "https://openai.com/index/introducing-the-codex-app/",
+        "https://code.claude.com/docs/en/agents"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读Git worktree前61行描述/管理锁片段非全文；未读产品页面均linked_only。未创建工作区或执行CI，manifest exit0为构造。",
+        "主agent已修订静态协议反例；没有运行资源fence、OS隔离、供应商流式协议或真实恢复故障试验，不视为系统保证。"
+      ]
+    },
+    {
+      "path": "docs/interview/multi-tenant-rag-index-governance-playbook.md",
+      "contentSha256": "ced5c1cb4c03c4907731fc7e501af3f5e1359facfffd1c18c6bb9c0cfb46c46b",
+      "sourceEvidence": [],
+      "status": "edited",
+      "summary": "全文审阅；区分安全过滤/ANN物理策略，复算授权Recall/Precision，补跨库manifest、水位追赶及回滚撤权覆盖。",
+      "sources": [],
+      "sourceReview": "not_applicable",
+      "openIssues": [
+        "未核具体向量库执行计划；数字构造，未跑索引/ACL故障演练。原有站内延伸不作外部source验证。"
+      ]
+    },
+    {
+      "path": "docs/interview/multimodal-rag-document-intelligence-playbook.md",
+      "contentSha256": "f6aee3c254bf816c9cb64f0d57b6ebfbbb39c2f3244572ba5bdcd0f24e7111a9",
+      "sourceEvidence": [
+        {
+          "url": "https://github.com/illuin-tech/colpali",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/illuin-tech/colpali/main/README.md",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        },
+        {
+          "url": "https://arxiv.org/abs/2407.01449",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        }
+      ],
+      "status": "edited",
+      "summary": "全文审阅；补坐标变换/页号约定、视觉检索不等于单元格oracle、Decimal单位执行例及相关解析器证据边界。",
+      "sources": [
+        "https://github.com/illuin-tech/colpali",
+        "https://raw.githubusercontent.com/illuin-tech/colpali/main/README.md",
+        "https://arxiv.org/abs/2407.01449"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读ColPali README前58行Introduction/弃用提示，非论文或实现全文；arxiv web无正文linked_only。未跑OCR/VLM/多向量检索；数值构造。"
+      ]
+    },
+    {
+      "path": "docs/interview/online-evaluation-rollout-operations.md",
+      "contentSha256": "eca35d99618376f4bda0201178ab95d2c19f3029923fc283f21d2d72a609e56d",
+      "sourceEvidence": [
+        {
+          "url": "https://github.com/sierra-research/tau-bench",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sierra-research/tau-bench/main/README.md",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        }
+      ],
+      "status": "edited",
+      "summary": "全文审阅；修实验单位分桶键，补0事故上界、3pp区间、连续偷看偏差、pass^k/至少一次成功区别及回滚撤权。",
+      "sources": [
+        "https://github.com/sierra-research/tau-bench",
+        "https://raw.githubusercontent.com/sierra-research/tau-bench/main/README.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读tau-bench README前55行简介/历史表/过时警告，未读指标估计器或论文全文；不引用任何榜单分数，区间是教学近似。未运行真实实验。"
+      ]
+    },
+    {
+      "path": "docs/interview/procurement-vendor-due-diligence-copilot-playbook.md",
+      "contentSha256": "167a02c794f5a35e45e46c3789ae49e2e7a086388f15ff01abee4f6ff4a36d1e",
+      "sourceEvidence": [
+        {
+          "url": "https://docs.python.org/3/library/decimal.html",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/python/cpython/3.13/Doc/library/decimal.rst",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        }
+      ],
+      "status": "edited",
+      "summary": "全文审阅；修摘要，补子公司证书实体错配、收集/核验状态、两年Decimal报价演算及审批版本变更边界。",
+      "sources": [
+        "https://docs.python.org/3/library/decimal.html",
+        "https://raw.githubusercontent.com/python/cpython/3.13/Doc/library/decimal.rst"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读Python decimal精确表示/会计不变量/精度段落，非全文；价格/税率是教学假设不是市场/法律判断。标准库示例已在内存中运行通过；未验证真实供应商。"
+      ]
+    },
+    {
+      "path": "docs/interview/promptops-production-governance-playbook.md",
+      "contentSha256": "4ac795d4c8e8ec529202b28caade237b98b412ae2b3545178bf59312df1ec234",
+      "sourceEvidence": [
+        {
+          "url": "https://github.com/python/cpython/blob/3.13/Lib/string.py",
+          "sourceReview": "linked_only",
+          "scope": "URL linked, not read as source text this turn."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/python/cpython/3.13/Lib/string.py",
+          "sourceReview": "verified",
+          "scope": "Read excerpts only; scope in openIssues."
+        }
+      ],
+      "status": "edited",
+      "summary": "全文审阅；补缺失变量执行检查、safe_substitute非安全沙箱、字符/token/hash快照边界及minor/回滚安全覆盖。",
+      "sources": [
+        "https://github.com/python/cpython/blob/3.13/Lib/string.py",
+        "https://raw.githubusercontent.com/python/cpython/3.13/Lib/string.py"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读CPython3.13 substitute/safe_substitute实现48行片段，非整个库；标准库示例已在内存中运行通过，未部署Prompt平台/模型实验。"
+      ]
+    },
+    {
+      "path": "docs/interview/rag-memory-eval-qna.md",
+      "contentSha256": "6f777558ed4e65e9a20bc915e4af0c6895b06e39c8514eb1dc5fd57f79fa857d",
+      "sourceEvidence": [],
+      "status": "edited",
+      "summary": "全文审阅；修先删后写空窗、hash兼容/撤权回滚及rerank绝对结构与收益，补检索/注入/支持分母和RRF复算，划清记忆/领域事实。",
+      "sources": [],
+      "sourceReview": "not_applicable",
+      "openIssues": [
+        "构造RRF/证据分母演算，非模型或RAGAS得分；未核具体引擎/部署，相关标签和法律合规另审。"
+      ]
+    },
+    {"path":"docs/interview/real-questions.md","status":"edited","summary":"全文阅读；移除无来源真题/JD频率，修LoRA/PPO/GGUF/decode/投机分布边界；补分层权限反例、Little定律、参数与采样复算。","sources":["https://github.com/microsoft/LoRA","https://raw.githubusercontent.com/microsoft/LoRA/main/README.md","https://proceedings.mlr.press/v202/leviathan23a.html"],"sourceReview":"verified","openIssues":["web工具未返回正文；通过官方公开URL实读LoRA README前5500字符和PMLR摘要约2200字符，不是全文或实验复现。","最初arxiv web无可读结果，未重试或绕过403/404。","练习题没有真实面试来源或题频证据。"],"preservation":{"headings":["# 分岗位面试真题","## 怎么用这份题库？","## 大模型算法 / 研究岗","## 大模型应用开发岗","## 大模型工程 / 推理部署岗","## 系统设计 / 场景题","### 系统设计专题追问","## 手撕 / 编码题","## 基础篇 12 类高频追问","## 2026 岗位驱动追问","### LLM 应用开发 / Java AI","### 框架与智能工作流追问","### Agent 工程","### RAG & Memory / AI Search","### RAG、Memory 与评测安全追问","### AI Infra / 推理部署","### 推理部署与成本治理追问","### 微调与模型平台追问","### AI Coding / 工具提效","## 软性 / 项目题"],"classification":"inferred","reviewedAt":null,"diagrams":[]},"sourceChecks":[{"url":"https://github.com/microsoft/LoRA","sourceReview":"linked_only","readEvidence":"实际读取官方raw README前5500字符；该网页本身未读"},{"url":"https://raw.githubusercontent.com/microsoft/LoRA/main/README.md","sourceReview":"verified","readEvidence":"README前5500字符：冻结权重、低秩更新与局部实验描述"},{"url":"https://proceedings.mlr.press/v202/leviathan23a.html","sourceReview":"verified","readEvidence":"Abstract及引用元数据约2200字符；未读PDF"}],"remainingReferencesReview":"未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。","staticValidation":{"oldHeadingIdsPreserved":true,"diagramBlocksPreserved":0,"classificationPreserved":true,"reviewedAtPreserved":true,"detailsBalanced":true,"utf8Decode":"passed","contentSha256":"909f340f0ad996c2cf13c31a4feaf3c20b30f38803ff803e8199b71fa2db9747","runtimeValidation":"not_run"}},
+    {"path":"docs/interview/remote-agent-operations-playbook.md","status":"edited","summary":"全文阅读；补全截断摘要；删未核CLI/网络默认/后端保证，区分本地状态权威；修幂等键、CAS/fence和撤销窗口，补分层故障注入。 末轮补核执行入口、逻辑权威或成本/退款口径边界。","sources":["https://raw.githubusercontent.com/openclaw/openclaw/main/docs/gateway/remote.md","https://code.claude.com/docs/en/remote-control","https://developers.openai.com/codex/cloud/internet-access","https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/docs/user-guide/messaging.md"],"sourceReview":"verified","openIssues":["仅实读OpenClaw remote.md前6000字符；其余产品文档linked_only。","Claude Remote Control与OpenAI云网络页面403、Hermes所试仓库路径404，均不重试/绕过；删除对应未经核验的产品保证。","所有契约、取消协议与时间算例均为参考/mocked设计，未运行产品或验证SaaS fence。"],"preservation":{"headings":["# 远程与云端 Agent 生产运行手册：Claude Code / Codex / OpenClaw / Hermes","## 怎么使用这页","## 30 秒总答法","## 一、先分清四个常被混淆的概念","## 二、四类产品带来的架构启发","### 1. Claude Code：远程控制与远程执行必须分开叙述","### 2. Codex：把云端 Agent 当作隔离的短生命周期执行单元","### 3. OpenClaw：Gateway 是状态与策略的唯一控制点","### 4. Hermes：把消息入口、会话持久化与终端后端拆开","## 三、远程 Agent 的生产状态机","### 断网、重启和重复投递如何处理","## 四、身份、配对与能力：必须四层拆分","## 五、网络设计：默认 loopback，远程通道显式化","### 入口：操作者、Node 与 Gateway 如何连","### 出口：任务容器能访问什么","## 六、执行器与 Node 的注册、心跳和隔离","## 七、远程 kill switch：取消必须是级联动作","## 八、面试系统设计题：设计一个企业远程 Coding Agent","### 题目","### 推荐回答结构","### 核心数据模型","### 追问：为什么不让 Gateway 直接 SSH 到所有机器","### 追问：远程会话恢复时怎样避免重复部署","## 九、上线前检查表","### 身份与入口","### 执行与网络","### 可靠性与治理","## 十、常见错误答案与修正","## 延伸阅读"],"classification":"inferred","reviewedAt":null,"diagrams":["04f4d815582bc304a461d6dbc8d30017f1a4738fd7bd56af50b03285b677ddf0","cfc0a33b8048c6dbcee1fab1020fd4c557f75b5afe6f89d345fb513b34c2a90a","ec8d27c5d41a9c74732b6b75f473793f33ee345fa19975b068a3e92bee540064","84ff50c8b88467fb30e33453a6beaa46832edafc14999d5b0f5d77153af16f79","a68d556825c089ac65df8fd06e5efeea74143d6a990cf36f5be1b6276fbf0dd9","6e4c00fe69b17aa307bd02493e72a7434527be2ad66ef553650fc108d186d5a5","19f468cf45798aef49c99ab1c56f4c4010a331d1a91f75485090d5fa80559513","70d1753442abed8d79884962cde80191bbffa7506d877f2a7dc44db33f51ec47"]},"sourceChecks":[{"url":"https://raw.githubusercontent.com/openclaw/openclaw/main/docs/gateway/remote.md","sourceReview":"verified","readEvidence":"前6000字符：Gateway权威、loopback、拓扑与命令流"},{"url":"https://code.claude.com/docs/en/remote-control","sourceReview":"linked_only","openIssue":"HTTP 403; no retry or evasion"},{"url":"https://developers.openai.com/codex/cloud/internet-access","sourceReview":"linked_only","openIssue":"HTTP 403; no retry or evasion"},{"url":"https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/docs/user-guide/messaging.md","sourceReview":"linked_only","openIssue":"HTTP 404; no retry or alternate-path evasion"}],"remainingReferencesReview":"未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。","staticValidation":{"oldHeadingIdsPreserved":true,"diagramBlocksPreserved":8,"classificationPreserved":true,"reviewedAtPreserved":true,"detailsBalanced":true,"utf8Decode":"passed","contentSha256":"eea0222522c731c20b323987742d2327c4d4d640cb15b37cea2d42408ae126bf","runtimeValidation":"not_run"}},
+    {"path":"docs/interview/resources.md","status":"edited","summary":"全文阅读；移除无出处价格倍数、stars/图数和商业免费保证；区分候选/一手/社区、Faiss库与数据库，补学习证据、预算和分层验证。","sources":["https://huggingface.co/learn/llm-course/chapter1/1","https://research.google.com/colaboratory/faq.html"],"sourceReview":"verified","openIssues":["实读Colab FAQ资源限制片段；Hugging Face课程TLS读取失败，仅链接，未重试。","其他原有链接均linked_only；课程费用/许可证、仓库维护和硬件可用性未逐条核验。","算例为构造，不是实际学习效果或商业单价。"],"preservation":{"headings":["# 学习资源汇总","## 必学课程（按优先级）","## 必读书籍","## 必读论文（经典 + 前沿）","## 优质博客 / 社区","## 优质开源项目（学产品设计）","## 实验平台","## 🛠️ 工具与框架速览","## 中文社区与专栏","## 同类优秀开源指南（致敬 & 延伸阅读）","## 跟踪前沿的渠道"],"classification":"inferred","reviewedAt":null,"diagrams":[]},"sourceChecks":[{"url":"https://huggingface.co/learn/llm-course/chapter1/1","sourceReview":"linked_only","openIssue":"TLS UNEXPECTED_EOF; no retry"},{"url":"https://research.google.com/colaboratory/faq.html","sourceReview":"verified","readEvidence":"not guaranteed/not unlimited资源限制前后片段；非全文"}],"remainingReferencesReview":"未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。","staticValidation":{"oldHeadingIdsPreserved":true,"diagramBlocksPreserved":0,"classificationPreserved":true,"reviewedAtPreserved":true,"detailsBalanced":true,"utf8Decode":"passed","contentSha256":"3a55a445563a3bfe1cf7bc7ab924adefa0805cb4f79a06edbb8c3a398f60cb23","runtimeValidation":"not_run"}},
+    {"path":"docs/interview/sales-crm-copilot-production-playbook.md","status":"edited","summary":"全文阅读；摘要改为治理链，项目讲法标参考；补CRM快照/审批hash/CAS、未知发送对账、折扣毛利与pipeline口径、分层负例和因果评估。","sources":["https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1","https://www.rfc-editor.org/rfc/rfc9110.txt"],"sourceReview":"verified","openIssues":["仅实读RFC9110 §13.1.1与§9.2.2各约2800字符，非全RFC。","未核特定CRM API条件写入/幂等能力；方案需资源服务实际支持。","财务数字为构造简化值，非会计或法律意见；未执行CRM/发送/对照实验。"],"preservation":{"headings":["# 销售 / CRM Deal Copilot 生产系统设计：从账户事实到可控的成交工作流","## 一、产品边界：建议可以自动化，商业承诺必须受控","## 二、账户事实包：CRM 不是唯一真相，也不能被模型重写","## 三、四条核心工作流","### 1. 账户研究与机会准备","### 2. 会议纪要与 CRM 回填","### 3. 商机健康与预测解释","### 4. 折扣、报价和跨团队协作","## 四、CRM 数据质量：让 Copilot 修复流程，不制造脏数据","## 五、权限、隐私与客户信任","## 六、人工审核与销售工作台体验","## 七、评测与商业指标：不要用“生成次数”冒充收入价值","## 八、系统设计题：设计企业 Deal Copilot","## 九、高频追问","### Q1：为什么 CRM 回填不能自动执行？","### Q2：如何让商机健康度可解释而不误导？","### Q3：模型如何帮助报价又不越过价格策略？","### Q4：如何处理销售邮件中的 Prompt 注入或敏感信息？","### Q5：如何证明 Deal Copilot 创造价值？","## 十、60 秒项目讲法"],"classification":"inferred","reviewedAt":null,"diagrams":["6ecbc7c4df65ec401f6ddda7ee70db80839f0e5605c82325c3fe7e11efa20bcc","f04be5b518f3c334989326bc9e49a828d6716b31731dbc5c880edcd6152b97ff","53ab38f73da81e51028168f7446d7a0d26c6f2a4af7c7d9eb6a22a256d616cf4","6be0681ded01cf509f8c5ceca506a587bc51a336982e027b0b8d91b1bc7ebda5"]},"sourceChecks":[{"url":"https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1","sourceReview":"linked_only","readEvidence":"同文档txt §9.2.2/§13.1.1已实读；html入口未读"},{"url":"https://www.rfc-editor.org/rfc/rfc9110.txt","sourceReview":"verified","readEvidence":"§9.2.2幂等、§13.1.1 If-Match各约2800字符"}],"remainingReferencesReview":"未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。","staticValidation":{"oldHeadingIdsPreserved":true,"diagramBlocksPreserved":4,"classificationPreserved":true,"reviewedAtPreserved":true,"detailsBalanced":true,"utf8Decode":"passed","contentSha256":"aee27d88cbdc7b810a16eea09f93d39f39eb71e28c85e1e6819670b9b62efa61","runtimeValidation":"not_run"}},
+    {"path":"docs/interview/spring-ai-production-qna.md","status":"edited","summary":"全文阅读；修截断摘要和框架自动治理保证；区分converter/native与DTO验证；补SSE不可撤回/取消计费、阻塞上下文、deadline/SLO、重试副作用与缓冲容量和零事件统计。 末轮补核执行入口、逻辑权威或成本/退款口径边界。","sources":["https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html","https://docs.spring.io/spring-ai/reference/api/chatclient.html"],"sourceReview":"verified","openIssues":["实读官方滚动文档best-effort/BeanOutputConverter、stream与blocking摘录；不是全API或项目固定版本验证。","未运行Java/Reactor、供应商计费或SSE负载，项目讲法和算例均为参考。","依赖/供应商schema支持、自动工具调用与上下文传播仍需真实集成验证。"],"preservation":{"headings":["# Spring AI / Java AI 生产化高频问答","## 怎么用这页","## 追问链一：Spring AI 相比自己封装 HTTP 有什么收益","## 追问链二：Java 服务怎么做 SSE 流式输出","### SSE 事件建议","### 关键处理","## 追问链三：慢模型如何不拖垮 Java 微服务","## 追问链四：Spring AI RAG 权限怎么做","## 追问链五：Tool Calling 如何接企业业务系统","## 追问链六：结构化输出和业务校验","## 追问链七：模型网关与 Spring AI 如何分工","## 追问链八：可观测、审计和成本怎么做","## 系统设计题：Java + Spring AI 银行客服 Agent","### 需求澄清","### 架构答法","### 主链路","### 上线门禁","## 项目讲法模板","### 模板一：政企知识库问答","### 模板二：银行客服 Agent","### 模板三：Dify PoC 迁 Java 生产","## 反面回答清单","## 面试前 5 分钟速记","## 延伸阅读"],"classification":"inferred","reviewedAt":null,"diagrams":["1a89322df3e050313ad3de728511d787fabe9ce045422836b173f4adecfb3777","fd8bd6dfc8db41a29510f900ff70997895f40bce5d5beb537fdb5ec39bf0e6bb"]},"sourceChecks":[{"url":"https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html","sourceReview":"verified","readEvidence":"best effort、BeanOutputConverter相关摘录"},{"url":"https://docs.spring.io/spring-ai/reference/api/chatclient.html","sourceReview":"verified","readEvidence":"stream()与blocking/tool调用注意事项摘录"}],"remainingReferencesReview":"未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。","staticValidation":{"oldHeadingIdsPreserved":true,"diagramBlocksPreserved":2,"classificationPreserved":true,"reviewedAtPreserved":true,"detailsBalanced":true,"utf8Decode":"passed","contentSha256":"2c1b103a5cd2bfffd787e72671bc8a322ed95e5eca1af054c542650d4a6b81bb","runtimeValidation":"not_run"}},
+    {"path":"docs/interview/structured-output-qna.md","status":"edited","summary":"全文阅读；修schema严格保证、FSM泛化、token/字节、两阶段推理绝对论；补null/required、拒答截断、repair语义、流式提交、fallback兼容及mask概率/指标分母与分层负例。","sources":["https://raw.githubusercontent.com/mlc-ai/xgrammar/main/README.md","https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html","https://json-schema.org/understanding-json-schema/reference/object"],"sourceReview":"verified","openIssues":["实读XGrammar README的CFG支持片段和此前Spring converter片段，非全文/实现验证。","JSON Schema对象页面403后不重试/绕过，具体draft、format断言及供应商schema子集待核。","未调用供应商、编译grammar或运行parser；数字与案例均构造。"],"preservation":{"headings":["# 结构化输出与 Schema 约束高频问答","## 先给面试官的总览回答","## Q1：JSON Mode、Structured Outputs、Function Calling 有什么区别？","## Q2：约束解码的原理是什么？","## Q3：约束解码会不会影响模型能力？","## Q4：Schema 怎么设计才稳定？","## Q5：合法 JSON 为什么仍然会失败？","## Q6：解析失败后怎么处理？","## Q7：流式输出下怎么处理结构化结果？","## Q8：Function Calling 和结构化输出是什么关系？","## Q9：多模型 fallback 时 schema 怎么兼容？","## Q10：结构化输出怎么评估？","## Q11：为什么模型会编造字段值？怎么缓解？","## Q12：结构化输出系统设计怎么讲？","## Q13：项目里怎么讲结构化输出亮点？","## Q14：常见反面回答","## Q15：Spring AI / LangChain / LangGraph / Dify 里怎么落地？","### Spring AI","### LangChain","### LangGraph","### Dify","## 最后一页速记"],"classification":"inferred","reviewedAt":null,"diagrams":["5cece19d92205fdea5cbd2322e02891a00c34cf226f4ec7d1011e5c348bfebe0","6e1f26bf8612306831c514e16281c40ade618bde27b0648ab4d30ae4cdeba909","de83e654443ed181fdf9c0d665bc5feeb18a21846eee76ca12c6f06b26628e14","fb5a921b47b7f453fd1501a4286fbce62430cfc66fd0c02431555e10a11c6fa8","0fd02b2bb603d2d95063bf0a5507bf40b01d381c33f6258b43859b730063f8ad","7494d1b6a591e6cf28f86e9d80b8d7f4ff2797ce0c425733053f55bbd20f5d7e","1f3bbdf5f70d8c0ebef579a2b664ee22060ac1ef02b97d8d0a66e7a2c1d6c9ef"]},"sourceChecks":[{"url":"https://raw.githubusercontent.com/mlc-ai/xgrammar/main/README.md","sourceReview":"verified","readEvidence":"CFG结构支持摘录；未采用近零开销宣传"},{"url":"https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html","sourceReview":"verified","readEvidence":"best effort、BeanOutputConverter相关摘录"},{"url":"https://json-schema.org/understanding-json-schema/reference/object","sourceReview":"linked_only","openIssue":"HTTP 403; no retry or evasion"}],"remainingReferencesReview":"未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。","staticValidation":{"oldHeadingIdsPreserved":true,"diagramBlocksPreserved":7,"classificationPreserved":true,"reviewedAtPreserved":true,"detailsBalanced":true,"utf8Decode":"passed","contentSha256":"addf831772a8cf1c5b12d6a734d056274f51e143e1fd1dc4358074e626b994f5","runtimeValidation":"not_run"}},
+    {"path":"docs/interview/synthetic-data-quality-governance-playbook.md","status":"edited","summary":"全文阅读；补任务族/来源seed先split、许可证非schema检测、定向与随机抽检分母、clean边界、撤回构建阻断；补产率/成本复算与oracle/多教师相关偏差、L1-L3实验设计。","sources":["https://github.com/yizhongw/self-instruct","https://raw.githubusercontent.com/yizhongw/self-instruct/main/README.md"],"sourceReview":"verified","openIssues":["仅实读Self-Instruct README前4800字符的流程与质量警告，非论文/实现全文或实验复现。","没有运行训练、污染检测、抽检或参数遗忘；数字和项目模板均构造。","许可证/删除义务需独立专业核对，未知教师预训练数据不能证明无污染。"],"preservation":{"headings":["# 合成数据质量、污染控制与训练集治理","## 一、30 秒面试回答","## 二、先定义哪些样本值得合成","## 三、候选生成与质量漏斗","## 四、去重、泄漏与数据污染","## 五、数据血缘与不可变发布","## 六、SFT、偏好数据与评测集的边界","## 七、发布门禁与线上闭环","## 八、高频问答","## 九、污染检测不是二元判断","## 十、评测集有寿命，增益要证明泛化","## 十一、撤回、删除与模型记忆的真实边界","## 九、项目讲法模板"],"classification":"inferred","reviewedAt":null,"diagrams":["e85aa84bbc2db577724df752f8b35a450d8a8bc7c3eaf0fcd3c5dafcab255eed","498816e386a8560f43032e0578a674770e5b5e17e53e7fadcc860e928ecab1da"]},"sourceChecks":[{"url":"https://github.com/yizhongw/self-instruct","sourceReview":"linked_only","readEvidence":"实际读取官方raw README前4800字符；该网页本身未读"},{"url":"https://raw.githubusercontent.com/yizhongw/self-instruct/main/README.md","sourceReview":"verified","readEvidence":"前4800字符：seed生成/过滤与错误偏见警告"}],"remainingReferencesReview":"未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。","staticValidation":{"oldHeadingIdsPreserved":true,"diagramBlocksPreserved":2,"classificationPreserved":true,"reviewedAtPreserved":true,"detailsBalanced":true,"utf8Decode":"passed","contentSha256":"0189b8d9296a06c8c3c240bb746e4de294273361f47fffb94a904ee09b2fb59b","runtimeValidation":"not_run"}},
+    {"path":"docs/interview/test-time-compute-budget-routing-playbook.md","status":"edited","summary":"全文阅读；修取消即释放、规则验证即真值、投票不可反超与统计独立性混淆；补reasoning计费、原子分层预留/对账、shadow无副作用、多数票相关性与L1-L3验证。 末轮补核执行入口、逻辑权威或成本/退款口径边界。","sources":["https://research.google/pubs/self-consistency-improves-chain-of-thought-reasoning-in-language-models/"],"sourceReview":"verified","openIssues":["仅实读Google Research论文摘要约3500字符，非论文全文或实验复现。","算例、预算与项目讲法均构造；未验证供应商reasoning usage/取消计费或运行fan-out。","候选独立性与verifier可靠性是实验假设，不是实际保证。"],"preservation":{"headings":["# Test-time Compute：推理预算、动态路由与早停系统设计","## 一、30 秒面试回答","## 二、适用边界","## 三、预算控制面","### 3.1 预算账本与分层配额","## 四、动态路由与早停","### 4.1 增量价值路由与安全早停","## 五、评测与成本门禁","### 5.1 Verifier 与双层成本门禁","## 六、高频问答","## 七、项目讲法模板"],"classification":"inferred","reviewedAt":null,"diagrams":["5d923b2eb1645aba1c5147e6d8502e273a3e22a0b54dbc81f601b53178df2088"]},"sourceChecks":[{"url":"https://research.google/pubs/self-consistency-improves-chain-of-thought-reasoning-in-language-models/","sourceReview":"verified","readEvidence":"Abstract相关摘录约3500字符；未读PDF"}],"remainingReferencesReview":"未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。","staticValidation":{"oldHeadingIdsPreserved":true,"diagramBlocksPreserved":1,"classificationPreserved":true,"reviewedAtPreserved":true,"detailsBalanced":true,"utf8Decode":"passed","contentSha256":"99c83969e0745705e5345e7d406e8f42c6e4d85ee192caefcdb2a04211da7c42","runtimeValidation":"not_run"}},
+    {"path":"docs/interview/text2sql-chatbi-production-playbook.md","status":"edited","summary":"全文阅读；修无题频/上线故事、指标准确率断言；改半开时间IR，补标识符编译、EXPLAIN ANALYZE真执行、RLS角色绕过、权限不放宽、join/DISTINCT/环比反例与L1-L3对抗验证。 末轮补核执行入口、逻辑权威或成本/退款口径边界。","sources":["https://www.postgresql.org/docs/current/ddl-rowsecurity.html","https://www.postgresql.org/docs/current/sql-explain.html"],"sourceReview":"verified","openIssues":["实读PostgreSQL滚动文档RLS绕过与EXPLAIN摘录，非全章/部署验证；其他引擎和实际角色需核。","未连接数仓或执行SQL；对抗数据、IR日期、财务数字与项目讲法均构造。","小群体保护与数据合规未作法律或正式差分隐私保证。"],"preservation":{"headings":["# Text-to-SQL / ChatBI 生产系统设计：语义层、安全边界与可信回答","## 一、先反驳错误前提：这不是“翻译 SQL”","## 二、先建设语义层：让业务词汇有唯一含义","### 指标治理要点","## 三、数据目录检索：只给模型任务相关的 schema","## 四、从自然语言到受限查询计划","## 五、SQL 安全不止禁止 DELETE","## 六、权限：先过滤数据域，再决定回答能否展示","## 七、纠错循环：让系统修复可诊断错误，而不是盲目重试","## 八、结果对账与可信表达","## 九、架构与状态机","## 十、评测体系：SQL 执行正确率不够","## 十一、系统设计答题框架","## 十二、高频追问与参考回答","### Q1：为什么要用 DSL，直接让模型写 SQL 不更灵活吗？","### Q2：Schema RAG 和普通 RAG 有什么不同？","### Q3：如何防止用户用自然语言绕过行级权限？","### Q4：SQL 成功但结果明显不合理时怎么办？","### Q5：怎样控制一次“帮我分析过去三年所有订单”的成本？","## 十三、60 秒项目讲法"],"classification":"inferred","reviewedAt":null,"diagrams":["c71bf958c8fd1675447134ae6b3b066f03d6674a899d86e55dc0d038cd637477","aef0321f486c2d23e559f3ad7bae31c4bc6d291d73d4cd0ec2535856a62b7f39","f228382208d4becdb8ff928cc4fe2829402749a9455c9e148c2489090d5e265d","a8b9aa2710a6a2b4638abec804bf950537c3439338084af90a7b67f7872bdb4e","4666b57390f1202c99a8fc03b81e289b6f100cfca119c5e744a70d3ca1e75e6a"]},"sourceChecks":[{"url":"https://www.postgresql.org/docs/current/ddl-rowsecurity.html","sourceReview":"verified","readEvidence":"BYPASSRLS/表owner/FORCE RLS及策略相关摘录"},{"url":"https://www.postgresql.org/docs/current/sql-explain.html","sourceReview":"verified","readEvidence":"ANALYZE实际执行、cost unit与LIMIT相关摘录"}],"remainingReferencesReview":"未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。","staticValidation":{"oldHeadingIdsPreserved":true,"diagramBlocksPreserved":5,"classificationPreserved":true,"reviewedAtPreserved":true,"detailsBalanced":true,"utf8Decode":"passed","contentSha256":"7c56e54e3823a074ffbf6d17a3d1219babf7321b1bcd319381e08ae2ab400873","runtimeValidation":"not_run"}},
+    {"path":"docs/interview/tool-gateway-security-design.md","status":"edited","summary":"全文阅读；补全截断摘要；修jti/短JWT即时防重放撤销、不可抵赖审计与凭证故障自动只读；补payload幂等/原子提交、unknown effect、Outbox至少一次、审批消费重试、撤销窗口与分层验证。","sources":["https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2","https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1","https://www.rfc-editor.org/rfc/rfc8693.html","https://www.rfc-editor.org/rfc/rfc7519.html","https://www.rfc-editor.org/rfc/rfc9110.txt"],"sourceReview":"verified","openIssues":["实际阅读证据仅为此前RFC9110幂等/If-Match摘录，不是全RFC；JWT/Token Exchange本轮TLS失败，仅链接，未重试。","未部署Gateway/IAM或验证JWT profile/重放/撤销；所有时序、并发与预算数字为构造验证计划。","审计非法律不可抵赖认证，SaaS原子幂等和跨服务补偿需实际实现核验。"],"preservation":{"headings":["# 企业 Tool Gateway 安全执行系统设计面试题","## 怎么用这页","## 30 秒总答法","## 一、Tool Gateway 不是普通 API 转发层","## 二、信任边界与分层","## 三、身份传播与身份委托怎么设计","### 为什么不能让模型带 `user_id` 直接调用","## 四、工具可见性裁剪不等于执行时授权","## 五、ABAC 策略与策略义务","## 六、高危写操作：prepare、approval、commit","### prepare 阶段必须冻结什么","### 幂等与补偿","## 七、凭证隔离、密钥代理与紧急撤销","## 八、工具结果同样是不可信输入","## 九、MCP、HTTP、stdio 与本地执行器如何统一治理","## 十、可观测、审计与事故响应","### 发现越权风险后的止血顺序","## 十一、系统设计白板题：多租户金融客服 Agent 的工具平台","### 白板回答结构","### 退款申请的示例链路","## 十二、项目讲法模板","## 十三、反面回答清单","## 十四、递进追问速答","## 面试前 5 分钟速记","## 延伸阅读"],"classification":"inferred","reviewedAt":null,"diagrams":["c241de7a121510172a400cbf36859a89f27e338e7eb7336e48e5cfa9ffe145f6","438b6551e12d56fa67551c16e1bdd558567100b518c48477415b6b332a3d8b3d","38d379c266ad08e4bbf3456130f40b210dffdac0c45deedb949b23eab3bad332","e94499c7c2664faf1aa77104618801886f671971b2c4c5e590c2cbad1826f116"]},"sourceChecks":[{"url":"https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2","sourceReview":"linked_only","readEvidence":"同文档txt §9.2.2/§13.1.1已实读；html入口未读"},{"url":"https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1","sourceReview":"linked_only","readEvidence":"同文档txt §9.2.2/§13.1.1已实读；html入口未读"},{"url":"https://www.rfc-editor.org/rfc/rfc8693.html","sourceReview":"linked_only","openIssue":"web无正文；txt读取TLS UNEXPECTED_EOF; no retry"},{"url":"https://www.rfc-editor.org/rfc/rfc7519.html","sourceReview":"linked_only","openIssue":"txt读取TLS UNEXPECTED_EOF; no retry"},{"url":"https://www.rfc-editor.org/rfc/rfc9110.txt","sourceReview":"verified","readEvidence":"§9.2.2幂等、§13.1.1 If-Match各约2800字符"}],"remainingReferencesReview":"未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。","staticValidation":{"oldHeadingIdsPreserved":true,"diagramBlocksPreserved":4,"classificationPreserved":true,"reviewedAtPreserved":true,"detailsBalanced":true,"utf8Decode":"passed","contentSha256":"080ab14cda70f4f9116a2e0389c303062dc2c423a3744d9e51bd18dc14156b85","runtimeValidation":"not_run"}}
+  ],
+  "scope": {
+    "ownership": "inventory-order first 20 interview-3 articles",
+    "lastOwnedPath": "docs/interview/rag-memory-eval-qna.md",
+    "excludedTailStart": "docs/interview/real-questions.md",
+    "tailReceipt": "owned by separate writer; no tail entry in this receipt"
+  },
+  "tailEvidenceFile": "audit/editorial-20261105/partition-evidence/interview-3.json"
+}

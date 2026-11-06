@@ -1,8 +1,6 @@
 ---
 title: Agent 代码审查与变更交付证据链：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  Agent 写出 diff 不等于变更可合并；Agent 留下 review comment
-  也不等于系统应阻断发布。生产交付必须拆开：发现问题、验证问题、修复、验证修复、合并决策和发布对账，避免模型自评、自批、自合并。
+description: 拆分补丁、finding、验证、合并门禁和发布对账，避免过期 SHA、跳过检查与模型自评成为错误交付证据。
 level: L2
 roles:
   - 应用开发
@@ -45,7 +43,11 @@ issue -> plan -> isolated worktree + base SHA -> patch/commit
 {"finding_id":"f_19","head_sha":"abc123","file":"src/auth/session.ts","line":142,"severity":"important","claim":"logout 与 refresh 存在竞态","evidence":["file:142","test:repro_7"],"confidence":"verified","status":"OPEN"}
 ```
 
-仅推测的内容标记 hypothesis，不作阻断合并的 finding；高风险 finding 应有最小复现、静态规则或第二独立 reviewer。
+推测标记 hypothesis，不能伪装成 verified finding。但尚未证实不等于允许合并：鉴权绕过、数据丢失等高后果问题可进入 `NEEDS_INVESTIGATION`，由负责人排除风险后放行。第二个模型同意不等于独立复现；应提供触发输入、预期/实际行为及确定性代码证据。
+
+证据包同时绑定 base/head SHA、CI 实际测试 SHA（可能是合成 merge commit）、命令、环境、退出码与未执行项。实际读取的 [GitHub 分支保护文档](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)说明，过期 approval 是否撤销取决于配置；required checks 可以接受 `success`、`skipped`、`neutral`。因此“required check 存在”不自动等于“测试实际执行并通过”。下方产品映射只作导航，未逐版本核验。审查费用应同时按 PR 和有效确认 finding 统计，并报告误报与漏报。
+
+**失败案例**：扫描器因无凭证返回 neutral，PR 又只有文档变更而 CI 被跳过。若组织要求安全扫描，门禁必须验证扫描覆盖范围、实际执行状态和匹配的 head SHA，不把平台允许合并当组织风险已被满足；也不能把无凭证改为自动提权。例外需要单独的审批与有效期。
 
 ## 三、独立性与自动修复
 
@@ -61,7 +63,7 @@ issue -> plan -> isolated worktree + base SHA -> patch/commit
 
 ### Claude Code
 
-[Claude Code Review](https://code.claude.com/docs/en/code-review) 对 PR 使用多个专门 Agent 并行分析、验证、去重和分级发布 finding。其 check run 是 neutral，默认不阻断合并；若要门禁，应让组织 CI 读取机器可解析的严重度结果。这正是 reviewer 与 merge gate 分离。[Desktop](https://code.claude.com/docs/en/desktop) 支持逐文件 diff 审阅和通过 `gh` 展示 checks。
+[Claude Code Review](https://code.claude.com/docs/en/code-review) 与 [Desktop](https://code.claude.com/docs/en/desktop) 保留为产品入口；本轮未核验其固定版本的 check run、finding 导出和 UI 行为。接入前实际验证能否取得机器可解析结果；没有受支持接口时，将审查作为人工建议，不抓取长评语推测严重度，更不宣称它已形成阻断门禁。
 
 ### Codex
 
@@ -79,10 +81,12 @@ OpenClaw 可由 webhook/cron 触发审查，但 PR payload 是不可信输入。
 
 ```yaml
 merge_gate:
-  required: [head_sha_matches_review_and_ci, tests_pass, no_verified_important_findings, codeowner_approval]
+  required: [head_sha_matches_review_and_ci, required_tests_executed_and_passed, no_unresolved_high_risk_findings, codeowner_approval]
   optional: [agent_review_advisory]
   forbidden: [agent_merges_own_patch, stale_review_reused]
 ```
+
+这段 YAML 是组织门禁的伪配置，不是 GitHub 或某个 Agent 的可直接加载配置。L1 应能拿一个 finding 说明触发输入与实际行为；L2 应说明隔离 reviewer 只降低上下文污染，并不保证统计独立，测试也可能由同一作者错误编写；L3 若声称漏报更少，需有盲标缺陷集、按严重度的召回与误报、相同代码快照及人工仲裁，不能用“两个模型都赞同”作实验结论。
 
 设计企业 PR Agent 时，每个 PR/head SHA 创建 author attempt 和只读 reviewer attempt；finding 有证据/置信度/生命周期；high severity 经 verifier 或规则确认；fixer 创建新 commit 使旧 finding/check 失效并重跑；CI/CodeOwner/branch policy 才能 merge，生产发布另需 environment approval/effect 对账。
 

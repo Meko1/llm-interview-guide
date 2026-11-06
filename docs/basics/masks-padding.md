@@ -1,9 +1,7 @@
 ---
 title: Mask 与 Padding：因果掩码、填充与序列打包
 description: >-
-  「因果掩码和 padding 掩码有什么区别？」「decoder-only 推理为什么要左 padding？」「训练时 packing
-  是什么、会不会串味？」——这些是简历上写过微调/推理的人必被追问的实现级细节，也是手撕 Attention 时最容易写错的部分。本文把两种 mask
-  的本质、pad
+  按 query/key 可见性构造因果与 padding mask，区分生成实现的左填充约定、独立样本 packing 与损失屏蔽。
 level: L1
 roles:
   - 在校生
@@ -30,12 +28,15 @@ Attention 的原始形式是「每个位置看所有位置」：$\text{softmax}(
 1. **未来不可看**（因果性）：语言模型训练目标是预测下一个 token，如果位置 t 能看到 t+1，就是**标签泄漏**，训练直接作弊。
 2. **填充不可看**（有效性）：batch 内序列长短不一，短的要补 padding token 对齐成矩形张量；padding 是无意义占位，被注意到会污染表示。
 
-实现手法统一：构造 mask 矩阵，把非法位置的注意力分数置为 $-\infty$（实际用 −1e9 或 dtype 最小值），softmax 后这些位置权重为 0。
+加性 mask 可用 $-\infty$ 屏蔽分数，但有限大负数并不总等价：全行同为有限负数时 Softmax 仍会归一化出非零权重；全行 $-\infty$ 又可能产生 NaN。FP16 也不能安全表示 -1e9。应对空行定义策略并核对内核行为。
+
+以下为 PyTorch 运算片段：`query,key` 形状 `[B,H,T,D]`，`value` 为 `[B,H,T,Dv]`；`allowed` 是可广播到 `[B,H,T,T]` 的布尔矩阵，True=可读，且每行至少一个有效 key。它展示朴素语义，不是高效内核。
 
 ```python
-scores = Q @ K.T / sqrt(d)          # [seq, seq]
-scores = scores.masked_fill(mask == 0, float('-inf'))
-attn   = softmax(scores, dim=-1)
+scores = query @ key.transpose(-2, -1) / math.sqrt(query.size(-1))
+scores = scores.masked_fill(~allowed, float("-inf"))
+attention = torch.softmax(scores, dim=-1)
+output = attention @ value
 ```
 
 ## 二、因果掩码（Causal Mask）★
@@ -63,7 +64,7 @@ BERT 类 encoder 用**双向注意力**（无因果掩码），适合理解任�
 
 ### 3.1 为什么有 padding
 
-GPU 要求 batch 是规整张量，batch 内句子长度不一，就用特殊 pad token 补齐到同长。pad 位置需要：
+常规批量算子使用规整张量，长度不同可用 pad 对齐；GPU 并非物理上只能处理这种布局，varlen/ragged 内核也可处理变长输入。使用 pad 时需要：
 
 1. **attention 屏蔽**：任何位置都不应注意到 pad（列屏蔽）。
 2. **损失屏蔽**：pad 位置不计损失（`ignore_index=-100`，见 [从 Logits 到损失](/basics/logits-loss)）。
@@ -75,9 +76,9 @@ GPU 要求 batch 是规整张量，batch 内句子长度不一，就用特殊 pa
 | --- | --- | --- |
 | 形态 | `[A B C pad pad]` | `[pad pad A B C]` |
 | 训练/批量前向 | ✅ 标准做法 | 少用 |
-| **decoder-only 批量生成** | ❌ **错误**：生成从「最后一个位置」续写，右侧是 pad，模型对着垃圾续写 | ✅ **正确**：真实内容顶到右端，新 token 紧接真实上文 |
+| **按最后张量位置取 logits 的批量生成** | 右端若为 pad，会选错预测位置 | 真实 token 位于右端，适配这种实现 |
 
-这就是 HuggingFace 对 decoder-only 模型做 `generate` 时要求 `tokenizer.padding_side = "left"` 的原因——面试问「为什么推理要左 padding」，标准答案：**自回归生成永远从序列最右端继续，必须保证最右端是真实内容而非 padding**。
+Transformers 常见 `generate` 路径取 `outputs.logits[:, -1]`，因此提示 decoder-only 使用左 padding；attention mask 无法自动改变这行取值。若实现按每条真实长度 gather 或使用无填充内核，右 padding 并非数学禁忌。批量 prefill 的要求也取决于后续如何选择 logits，不能只背阶段名称。
 
 （配合位置编码时，pad 位置的 position id 也要正确偏移，否则 RoPE 相位错位——工程实现里 `position_ids` 由 attention_mask 累加得出。）
 
@@ -89,7 +90,7 @@ vLLM/SGLang 等框架不做 batch padding：它们把请求的 token **摊平成
 
 ### 4.1 动机
 
-预训练/SFT 语料长短悬殊：按最长补齐，短样本 batch 里可能 **50%+ 算力花在 pad 上**。Packing 把多条样本首尾相接拼成固定长度（如 4096）的序列，几乎零浪费。
+预训练/SFT 长短悬殊时，padding 会浪费空间和计算。浪费比例应由真实长度分布核算；packing 也有尾部剩余、边界处理和调度开销，不应承诺零浪费。
 
 ```
 序列1: [样本A(1200) | 样本B(800) | 样本C(2000) | pad(96)]
@@ -103,7 +104,7 @@ vLLM/SGLang 等框架不做 batch padding：它们把请求的 token **摊平成
 - **重置 position ids**：每个样本内位置从 0 重新计数，RoPE 相位不跨样本。
 - **实现**：FlashAttention 提供 `varlen` 接口（传 `cu_seqlens` 边界数组），不需物化巨大 mask 矩阵；主流微调框架（LLaMA-Factory、Axolotl 等）都有 packing 开关（见 [微调训练工具链实战](/finetuning/training-frameworks)）。
 
-> 追问「不隔离行不行？」——早期不少预训练就是朴素拼接（用 EOS 分隔），实践上模型也能学会「EOS 后重置注意」，但 SFT 等短样本场景中隔离更干净、已成为标准做法。面试答「要隔离 + 说得出 block-diagonal 与 position id 重置」即到位。
+> 连续文本预训练可明确选择跨文档可见；独立样本训练应隔离。EOS 不会自动重置 attention，重置 position IDs 也不等于隔离。要同时检查允许关系和标签边界：A 的末尾不应被错误监督为预测 B 的开头。
 
 ### 4.3 其他相关变体
 
@@ -131,3 +132,14 @@ vLLM/SGLang 等框架不做 batch padding：它们把请求的 token **摊平成
 6. **BERT 和 GPT 注意力的区别？** BERT 双向（无因果掩码，适合理解），GPT 因果单向（生成）；Prefix-LM 前缀双向+生成因果折中。
 7. **手撕 Attention 时 mask 怎么写？** 分数矩阵上 `masked_fill(mask==0, -inf)` 再 softmax；注意 −∞ 要用 dtype 安全值，且 mask 要广播到 [batch, head, q, k]。
 8. **推理的 decode 阶段还需要因果掩码吗？** 结构上天然满足：KV Cache 里只有历史 token，新 token 只能看到过去，无需显式未来屏蔽；prefill 阶段仍需完整因果掩码。
+
+上述单步结论要求只有一个有效 query 且所有 key 都是可见历史；投机验证或分块 decode 有多个 query 时仍需块内因果关系。SDPA 与某些 FlashAttention 版本的非方阵 causal 对齐规则不同，应按真实位置 ID 核查。
+
+<details>
+<summary>自测：pad_token_id = eos_token_id，按 ID 把所有 EOS labels 设为 -100 会怎样？</summary>
+
+会误删真实结束位置的监督。应按 attention_mask 或真实长度屏蔽填充目标，并保留自然 EOS；再检查 shift 后有效标签是否对应正确预测位置。训练应区分 token 身份和位置有效性。
+
+</details>
+
+接口依据：[Transformers 生成实现](https://github.com/huggingface/transformers/blob/main/src/transformers/generation/utils.py)、[PyTorch SDPA](https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html)。迁移 mask 时核对 True 的含义，不能直接把 MHA 的 key_padding_mask 传给 SDPA。

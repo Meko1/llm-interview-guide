@@ -48,6 +48,8 @@ Web / App / 客服台
 
 面试表达：Spring AI 是编排层的 SDK 抽象；企业生产能力主要来自边界清晰的 Java 服务，而不是把所有内容塞进一个 `@Service`。
 
+这是逻辑职责划分，不要求每层独立微服务。简单应用可在同一进程中保持清晰接口；拆服务会引入网络、身份和一致性成本。Java 本身也不保证安全或事务正确，企业控制可以由其他技术栈实现，关键是业务最终权威与可验证边界。
+
 ## 三、同步、SSE、WebFlux 和异步 Job 怎么选
 
 LLM 请求有两类完全不同的生命周期：短对话希望尽快看到首字，长任务可能需要检索、多个工具、审批和几十秒甚至分钟的执行。
@@ -75,6 +77,8 @@ message_end: token usage, latency, result id
 
 客户端断开后要取消上游模型流和可取消的检索/工具任务；如果业务写操作已经进入 commit，则不能简单按断开取消，需要通过 `operation_id` 查询最终状态。Nginx/网关缓冲、SSE 最大连接数、心跳和超时也属于面试常见追问。
 
+`message_end` 是本页自定义契约，后文 `done` 应映射为同一完成终态，不是 Spring AI 自动输出这些事件。定义事件序号、partial/cancelled/unknown 和缓冲上限；响应头发送后错误用流内事件表达。重连只能按 request/result ID 取已有结果，不能把 `Last-Event-ID` 当成重新运行 Agent 的授权。取消订阅是尝试停止，不证明供应商停止计费或外部写入已撤销；usage 缺失记为待对账，不填零。
+
 ### 为什么长任务要异步化
 
 把 Deep Research、文件解析、批量 embedding 或多轮 Agent 放在在线 HTTP 连接里，会占满连接、难以恢复、也不利于审批等待。更稳的设计是：提交 Job -> 返回 job_id -> Worker 执行 -> checkpoint/状态事件 -> 前端轮询或订阅结果。Job 需要保存 `release_id`、输入摘要、tenant、预算、工具状态和可重试分类。
@@ -90,6 +94,8 @@ Java 企业系统通常已有 SSO、网关、RBAC/ABAC 和审计体系。AI 服�
 5. 子 Agent 或异步 Job 使用短期、范围衰减的 service token，不能继承无限期管理员权限。
 
 常见坑是在线请求有 tenant，异步 Worker、SSE 回调或缓存 key 却丢了 tenant/role/policy version，最终产生跨租户数据泄露。
+
+Reactor Context、ThreadLocal 和 MQ Header 不是天然互通：明确任务提交时捕获、执行时恢复、完成后清理，并对跨线程/消息重复投递做授权回归。业务消息保存主体与用途引用，执行时用新授权检查撤权，不永久复制旧登录 token。观测 trace 上下文也不是身份凭证，不能据其 tenant 字段授权。
 
 ## 五、RAG：在线读链路与离线索引链路分离
 
@@ -137,7 +143,11 @@ Agent proposes action
 
 ### 事务外盒和最终一致性
 
-模型调用本身不在本地数据库事务里，外部工具也不能用分布式大事务硬包。通常做法是领域服务先在本地事务中写入操作意图和 outbox，再异步可靠投递；外部执行通过 `operation_id` 和幂等键保证可查询、可重试、不重复。失败时使用补偿或转人工，而不是让 Agent 无限制重放写工具。
+不要把慢模型/外部 API 放在持有数据库锁的长事务里。领域服务在一个短本地事务中写入操作意图与 outbox，再异步投递；这解决本地状态与事件发布的一致性，不自动保证外部执行 exactly-once。消费者可能重复收到消息，业务 API 必须原子去重、保存参数摘要与可查询结果；未知状态先对账，补偿有独立审批与幂等键。
+
+构造失败序列：操作/outbox 已提交，Worker 已发退款，响应丢失，MQ 又投递同一消息。没有业务去重时仍会二次退款；仅给 outbox 事件去重不能解决“远端已成功但本地未记结果”的窗口。`prepare/confirm/commit` 是业务流程，不是分布式数据库 2PC；审批应绑定金额、订单版本和目标，commit 时重新校验。
+
+[Spring 事务注解文档](https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html)指出默认代理模式的 self-invocation 不触发被调方法事务。把 `prepare()` 和带 `@Transactional` 的 `commit()` 放在同类内部调用，不能只凭注解证明 outbox 原子写入；验证实际事务边界和异常回滚配置。这里未验证某个项目版本或数据库。
 
 ## 七、结构化输出、契约和业务验证
 
@@ -185,6 +195,10 @@ AI 调用慢、供应商限流、上下文膨胀和 Agent 循环不应拖垮支�
 
 Java 落地时用 OpenTelemetry 把上下文从网关传播到 WebFlux/Reactor Context、`ai-executor`、MQ Job、RAG、模型和 Tool Gateway。SSE 的 span 应从 `message_start` 持续到 `done/error/cancel` 终态；高流量 trace 可做 tail sampling，但安全、失败、高成本、写操作和策略拒绝必须保留。注意不要把原始 Prompt、PII 或高基数用户标识直接塞进 metric label。
 
+这是保留目标，不是 OpenTelemetry 自动保证。[官方采样说明](https://opentelemetry.io/docs/concepts/sampling/)区分 head 与 tail：head 无法根据完整 trace 判定后续错误，tail 依赖收集到的 spans。长任务的等待时间、Collector 容量和链路丢失都会形成证据缺口；必审事件用独立耐久账本记录，trace 抽样用于排障，不替代审计。异步任务可拆执行/等待 spans 并关联 Job，避免把整段审批等待误计为模型服务时间。
+
+衡量可用性时以全部已接纳请求为分母，包含格式失败、超时和取消的独立状态；工具成功率以真实已授权尝试为分母，业务拒绝不能偷偷当模型成功。L1 展示 SSE错误/断开及引用证据；L2 说明事务、自调用、重复消息和撤权；L3 再评价采样缺口与并发故障窗口。本文未运行这些检查，测试列表是验收协议，不是完成记录。
+
 测试不能只 mock 模型返回。至少包括 DTO/领域单测、工具契约测试、RAG ACL/删除回归、sandbox 副作用测试、SSE 断开取消测试、发布前 golden/regression、安全集和灰度 trace 回放。详见 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)。
 
 ## 十一、系统设计追问与项目讲法
@@ -202,6 +216,8 @@ Java 落地时用 OpenTelemetry 把上下文从网关传播到 WebFlux/Reactor C
 确定流程和业务事务适合 Java；复杂探索式图编排可能使用 LangGraph 等专用运行时。无论 Agent 在哪，身份、工具权限、业务提交、审计和成本治理应回到企业 Java 服务边界。
 
 项目讲法：
+
+下面是架构模板；没有真实实现和验证时说“我会这样设计”，不宣称可靠性已经由技术栈保证。
 
 > 我们在 Spring Boot 中将 AI API、编排、检索和工具网关拆层。在线客服用 SSE 返回 token，并通过断开取消、独立线程池和租户限流保护核心服务；知识库检索带 ACL 与索引版本，返回引用 DTO；写工具采取 prepare/confirm/commit，领域服务负责 ABAC、幂等和 outbox。所有请求关联模型、Prompt、索引、工具和 release 版本，离线回归通过后影子和灰度发布。这样 Spring AI 负责统一模型/RAG 抽象，真正的生产可靠性由 Java 的事务、权限、观测和治理能力保证。
 

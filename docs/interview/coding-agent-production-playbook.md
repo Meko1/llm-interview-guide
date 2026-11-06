@@ -1,9 +1,6 @@
 ---
 title: 智能编码 Agent 企业操作手册：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  这是一份面向面试与真实落地的操作页。它不把 Claude Code、Codex、OpenClaw、Hermes
-  当成四个“哪个更强”的产品，而是把它们映射为四类运行时能力：开发任务执行、云端或本地工作区、长驻消息 Gateway、持久记忆与技能闭环。架构原理见
-  智能体运行时架构高频问答，工具边界见
+description: 以参考架构设计企业编码 Agent 的受限工作区、工具权限、扩展治理与 PR 交付，明确产品导航和实测证据的区别。
 level: L2
 roles:
   - 应用开发
@@ -24,7 +21,7 @@ classification: inferred
 
 ## 30 秒总答法
 
-> 我会把 Claude Code、Codex、OpenClaw 和 Hermes 放到统一的企业 Agent 平台里管理，而不是分别配置。Claude Code 适合用项目规则、Hooks、子 Agent 和 worktree 把开发动作事件化；Codex 适合把 `AGENTS.md`、权限模式、沙箱和任务证据做成可重复的交付闭环；OpenClaw 用于把多渠道和远程节点收敛到 Gateway，但必须按操作者边界拆 Gateway；Hermes 用于长期运行、可检索记忆、技能沉淀和定时自动化，但记忆与技能都要经过版本、评测和审批。共同底座是统一身份、任务契约、受限执行器、审计轨迹、预算和发布门禁。
+> 以下是设计目标话术，未搭建或未验证时须明确说“拟设计”：我会用一致的身份与任务策略管理四类运行时，不必先建立一整套企业平台。Claude Code 适合用项目规则、Hooks、子 Agent 和 worktree 把开发动作事件化；Codex 适合把 `AGENTS.md`、权限模式、沙箱和任务证据做成可重复的交付闭环；OpenClaw 用于把多渠道和远程节点收敛到 Gateway，但必须按操作者边界拆 Gateway；Hermes 用于长期运行、可检索记忆、技能沉淀和定时自动化，但记忆与技能都要经过版本、评测和审批。共同底座是统一身份、任务契约、受限执行器、审计轨迹、预算和发布门禁。
 
 > 如果面试官继续追问“沙箱能管什么、什么时候会逃逸、网络和密钥如何不被带出去”，可直接转到 [Agent 沙箱、执行准入与逃逸处置](/interview/agent-sandbox-execution-boundaries-playbook)。
 
@@ -38,7 +35,7 @@ classification: inferred
 | 并行 | 子 Agent、团队、worktree | 任务、worktree、子 Agent | 多 Agent 路由与远程节点 | delegates、隔离子 Agent | 资源配额、冲突合并、取消 |
 | 长期状态 | 会话和项目规则 | 任务与项目说明 | 会话路由、cron、Gateway 状态 | 记忆、会话检索、技能 | 生命周期、清理、可审计读写 |
 
-表格的目的不是声称四者实现相同，而是防止选型时漏掉某一控制面。闭源产品只能依据公开文档描述可观察能力；开源产品也不应把当前代码结构当作长期 API 承诺。
+表格是产品候选能力索引，不是逐版本认证；本轮 Claude Code、OpenClaw、Hermes 相关官方正文均未取得，具体事件名、配置和功能应按固定安装版本复核。开源结构也不是长期 API 承诺。下文 YAML、状态图与控制清单均为企业参考设计，不能直接复制成四种产品通用配置。
 
 ## 二、所有产品先接入同一份任务契约
 
@@ -91,7 +88,7 @@ INTAKE -> PLANNED -> BRANCH_READY -> PATCHED -> VERIFIED
 
 ### Git 身份委派原则
 
-不要把个人 PAT、长期 deploy key 或具有管理员权限的 Git 凭证交给 Agent。更合理的模式是 GitHub App 或企业 Git 服务账号为任务签发短期 token，token 至少绑定仓库、分支前缀、PR 动作、到期时间和 task ID。Agent 只提出“创建分支/推送 patch/创建 PR”的请求，真正的合并与分支保护仍由 Git 平台执行。
+不要把个人 PAT、长期 deploy key 或管理员凭证交给 Agent。用 GitHub App 安装令牌时，提供方主要按仓库与权限限制；分支前缀、task ID、指定 patch 等细粒度约束应由企业代理和 Git 平台规则另行强制，不能假称令牌原生具备这些字段。[GitHub 安装认证](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation)本轮检索摘录确认令牌有仓库/权限范围并在一小时后过期。若要真正限制动作，Agent 不接触真实 token，只提出带任务 ID 的交付请求，代理验证 revision、路径、diff 与审批后执行。
 
 **面试官：为什么 Agent 推送成功后还要进入 merge queue？**
 
@@ -120,7 +117,7 @@ Runner 不应无限制地按请求创建。控制面应根据仓库、语言、�
 
 ## 五、Claude Code：把 Hook 看成确定性策略插槽
 
-Claude Code 的公开 Hook 文档将生命周期细分到会话、用户输入、工具调用、子 Agent、任务、worktree 和上下文压缩等事件。工程价值不在“可以写自动化脚本”，而在于能在模型意图和真实副作用之间插入可测试的策略层。官方文档明确说明 `PreToolUse` 可在工具执行前阻止调用，而 `PostToolUse` 可在执行后补充检查或触发动作。[Claude Code Hooks 参考](https://code.claude.com/docs/en/hooks)
+Hook 的参考用法是在模型意图与真实副作用之间插入可测试策略。本轮 [Claude Code Hooks](https://code.claude.com/docs/en/hooks)未取得正文；下表事件名和具体阻断/异步语义须按安装版本确认，不把不可读页面当作已证实合约。尤其执行后的检查不能撤销已经外发的密钥或邮件。
 
 ### 推荐的 Hook 分层
 
@@ -142,11 +139,11 @@ Claude Code 的公开 Hook 文档将生命周期细分到会话、用户输入�
 3. 角色定义文件必须有唯一名称，且要明确 tools、权限模式、最大轮数和隔离方式。
 4. 在组织级使用托管设置管理全局 deny 与允许的扩展；项目级规则只表达项目事实和验收命令。
 
-Claude Code 公开文档支持以 Markdown 前置元数据定义子 Agent，并可限定工具、模型、权限、MCP、Hooks、技能、最大轮数和 worktree 隔离。可配置并不代表应全部开启，最小工具集才更容易审计。[子 Agent 文档](https://code.claude.com/docs/en/sub-agents)
+子角色需要声明工具与权限；具体 Markdown 字段、隔离和轮数支持以固定版本为准。[子 Agent 文档](https://code.claude.com/docs/en/sub-agents)本轮仅作导航，未读部分不承诺已经支持全部治理字段。
 
 ## 六、Codex：把 AGENTS.md、权限和证据链收敛为交付流程
 
-Codex CLI 的公开文档把本地仓库检查、编辑、命令执行、权限选择、项目指令和 review 放在同一开发回路中。`/init` 可创建 `AGENTS.md`，`/permissions` 显式查看或选择 Agent 被允许做什么，`/review` 用于检查改动。[Codex CLI 文档](https://learn.chatgpt.com/docs/codex/cli)
+将上下文、工具路由、沙箱和审批划为harness控制面是本文架构视角；[OpenAI harness说明](https://developers.openai.com/blog/codex-as-a-platform)与旧 [Codex CLI入口](https://learn.chatgpt.com/docs/codex/cli)本轮未取得可核正文，仅作导航。不把 `/init`、`/permissions` 或 `/review` 未读行为写成稳定合约。
 
 ### `AGENTS.md` 的正确职责
 
@@ -172,7 +169,7 @@ Codex CLI 的公开文档把本地仓库检查、编辑、命令执行、权限�
 
 ## 七、OpenClaw：Gateway 是控制面，不是多租户安全边界
 
-OpenClaw 的官方文档将 Gateway 描述为渠道连接、会话路由和节点传输的单一控制面。一个 Gateway 可接多种消息渠道、Web UI、CLI 和移动节点；默认状态与配置集中在本机。它适合长期可达的个人或小团队 Agent，但官方安全文档也明确指出：单个 Gateway 不是为互不信任的多租户或对抗性用户提供隔离的边界。[OpenClaw 概览](https://docs.openclaw.ai/) 与 [安全模型](https://docs.openclaw.ai/gateway/security)
+沿用 Gateway 作为渠道、会话与节点控制面的选型视角；[OpenClaw 概览](https://docs.openclaw.ai/)及 [安全模型](https://docs.openclaw.ai/gateway/security)本轮未取得正文，不声称核验了默认配置。工程上不把同进程共享文件、凭证和节点的 session 隔离当作敌对租户隔离；真实边界须以部署和攻击验证确认。
 
 ### Gateway 部署基线
 
@@ -198,7 +195,7 @@ Internet / Chat Channel
 
 ### OpenClaw Skills 供应链
 
-第三方 Skill 是携带说明、脚本、依赖和工具调用路径的能力包，应视为“待审计的特权代码”，而不是普通提示词。官方 Skills 文档也要求在启用前检查第三方 Skill，并建议对不可信输入和高风险工具使用 sandbox。[Skills 文档](https://github.com/openclaw/openclaw/blob/main/docs/tools/skills.md)
+第三方Skill可能携带说明、脚本、依赖和工具路径，应按可触发能力审计，不是普通提示词。[OpenClaw Skills文档](https://github.com/openclaw/openclaw/blob/main/docs/tools/skills.md)本轮未读，不将参考清单冒充产品默认防护。
 
 建议设置四道门：
 
@@ -209,7 +206,7 @@ Internet / Chat Channel
 
 ## 八、Hermes：把“自我改进”设计成受控的学习发布链
 
-Hermes Agent 的公开架构把 CLI、Gateway、ACP、批处理和 API 等入口接到同一 Agent Loop；其 prompt 组装会纳入人格、记忆、技能和上下文文件，工具注册、会话存储、Gateway、插件和 cron 是独立子系统。[Hermes 架构文档](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md)
+将长期运行、记忆和技能作为 Hermes 的待核候选控制面；[Hermes 架构文档](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md)本轮未读，不据此确认 ACP、API 或各子系统的具体实现。
 
 这类“长期运行且会沉淀经验”的 Agent 最容易出现两个误区：把记忆当数据库，把自动生成 Skill 当自动获得生产权限。正确做法是把学习闭环拆开：
 
@@ -231,7 +228,7 @@ trajectory -> candidate memory / candidate skill
 | 读取 | 基于任务与来源检索，返回引用和置信度；跨用户和跨项目默认隔离 |
 | 变更 | 记忆与 Skill 都保留版本、提交者、评测集、回滚点 |
 
-Hermes 官方安全页采用纵深防御：用户授权、危险命令审批、容器隔离、MCP 凭证过滤、上下文文件扫描、跨会话隔离和输入净化是不同层的措施。任何一层都不能被宣传成“自动 Agent 已经安全”。[Hermes Security](https://hermes-agent.nousresearch.com/docs/user-guide/security/)
+用户授权、命令审批、容器隔离、凭证代理和输入净化是不同控制层，不因产品宣称支持而省略验收。[Hermes Security](https://hermes-agent.nousresearch.com/docs/user-guide/security/)本轮不可访问，保留为 linked_only，不能证明上述能力已经在目标版本启用。
 
 ## 九、统一的 Skill、MCP 与插件治理
 
@@ -325,7 +322,20 @@ kill switch 不能只是 UI 上的“停止”按钮。至少分为：
 - [ ] 不可信渠道消息、仓库文本、网页、Issue 和工具输出不被当作高权限指令。
 - [ ] 远程 Gateway 默认私网访问，陌生私聊需 pairing，群聊需 allowlist/mention gate。
 - [ ] 任务产出包含 diff、测试、工具轨迹、策略决定、成本和未解决风险。
-- [ ] P0 演练能在分钟级停止调度、撤销凭证、禁用 capability 并保留证据。
+- [ ] P0 演练记录检测、停止调度、撤销凭证和禁用 capability 的各自延迟及未取消副作用；按组织事先约定目标验收，不假定分钟级必然可达。
+
+worktree 只隔离检出文件，仍可能共享 Git 对象、配置、hook 和宿主资源。恶意仓库的构建脚本、测试或包安装都能执行代码；“只运行测试”并非只读。先在无生产密钥、受控网络和资源限额的 runner 验证，缓存按信任域与依赖哈希划分，执行器校验真实路径并拦截符号链接逃逸。
+
+交付证据应由 runner 产生并绑定 patch digest、base SHA、镜像与命令，而不是让模型自行编一个“tests passed”。构造 10 个子任务，每个上限 8 美元，若无父任务原子预留，总上限可能是 80 美元而非 8 美元；并发时间能下降但总成本仍相加，终止后在途调用也可能继续计费。
+
+<details>
+<summary>L1–L3：Agent 修改了测试把缺陷藏起来，怎样发现？</summary>
+
+**L1**：检查 diff 是否删断言、跳过测试或改验收配置；不只看绿灯。**L2**：独立验证者从可信基线取得验收任务，给目标 patch 出不可由作者修改的证据；主干漂移后证据失效需重验。**L3**：构造恶意 README、包脚本和测试投毒集合，分别计模型诱导提案、执行器拦截和实际损害，研究边界而非把多模型一致当独立证明。
+
+</details>
+
+kill switch 只能阻止尚未发生或仍可取消的动作。已经发送的邮件、推送的 commit 与泄露的凭证需分别对账、回退或轮换；进程结束不证明资源已撤权。没有部署这些控制面时，面试应说“方案/演练计划”，不能套用上面的第一人称话术冒充履历。
 
 ## 面试前 5 分钟速记
 

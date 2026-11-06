@@ -1,0 +1,14 @@
+{
+  "repository": "D:\\llm-projects\\llm-interview-guide",
+  "serverRenderer": "3.5.34",
+  "shared": "3.5.34",
+  "advisory": "GHSA-g2v6-rqmx-r4w6",
+  "input": {
+    "data-safe\ronfocus": "alert(1)",
+    "title": "safe"
+  },
+  "expected": " title=\"safe\"",
+  "actual": " data-safe\ronfocus=\"alert(1)\" title=\"safe\"",
+  "emitsRawCarriageReturn": true,
+  "attributeRejected": false
+}

@@ -9,7 +9,7 @@ classification: inferred
 ---
 # LLM 输出契约兼容与演进：从模型响应到稳定业务接口
 
-结构化输出解决的是“这段内容能否被解析成 JSON”；真正的线上系统还要解决“所有消费者能否持续按同一种业务语义使用它”。模型升级、Provider 切换、fallback、Prompt 修改、Schema 扩展或流式协议调整，都可能让请求成功却让前端错渲染、工作流走错分支、金额单位被误解，甚至在高风险操作中改变决策含义。
+结构化输出可约束字段与类型，不只是让JSON可解析；真正的线上系统还要解决“所有消费者能否持续按同一种业务语义使用它”。模型升级、Provider 切换、fallback、Prompt 修改、Schema 扩展或流式协议调整，都可能让请求成功却让前端错渲染、工作流走错分支、金额单位被误解，甚至在高风险操作中改变决策含义。
 
 本文讨论 **LLM Provider / Prompt / 编排层 到业务 API、UI、队列消费者和流式客户端** 的响应契约。它不同于 [结构化输出](/engineering/structured-output) 的语法约束，也不同于 [Agent Tool Contract 演进](/interview/agent-tool-contract-evolution-playbook) 的工具调用契约：前者关注“模型给业务系统的结果如何可消费、可演进、可回滚”。
 
@@ -81,7 +81,7 @@ provider response
 | 风险层 | 来源、是否降级、是否可自动执行、审批要求 | fallback 后仍标作可写操作 |
 | 生命周期层 | 版本、弃用、兼容窗口、迁移方式 | 发布后直接删除旧字段 |
 
-生产事故多数发生在语义、状态和风险层，恰恰是 JSON Schema 很难完整表达的部分。因此除了 schema 文件，还要维护字段字典、枚举表、样例、状态机、兼容性规则和 owner。
+语义、状态和风险层也会造成事故；没有事故分布统计，不能判断它们占多数。除了schema文件，还要维护字段字典、枚举表、样例、状态机、兼容性规则和owner。
 
 ## 四、版本策略：何时可以兼容，何时必须新版本
 
@@ -91,7 +91,7 @@ provider response
 | --- | --- | --- |
 | 新增可选字段，默认语义无副作用 | 通常可以 | 文档化、灰度并观察未知字段 |
 | 新增枚举值 | 取决于消费者是否有安全默认分支 | 先扩展消费者，再启用生产者 |
-| 可选字段改必填 | 否 | 新 major 或新 endpoint |
+| 响应可选字段改必填 | 区分输出保证和读取要求 | 新生产者保证返回字段可能兼容；新消费者要求字段则未必能读旧响应 |
 | 字段重命名/删除 | 否 | 双写旧新字段，经历弃用期 |
 | 单位、时间基准、置信度尺度改变 | 否，即使类型未变 | 新字段/新 major，显式标记语义 |
 | 默认模型或 fallback 变化导致能力边界不同 | 不应静默视作兼容 | 在元数据暴露降级和能力标签，并重新验证 |
@@ -99,6 +99,21 @@ provider response
 版本并不是为了让系统接受任意历史包袱。它的目的在于把“谁可以升级、谁还在使用旧协议、何时可下线”变成可观测决策。发布前先扫描 consumer registry 和流量中的版本分布，而不是假设所有客户端同步更新。
 
 ## 五、Provider adapter：把供应商差异挡在边界外
+
+兼容需说明方向：生产者输出集合 P 必须属于消费者接受集合 C。新增枚举扩大 P，旧消费者可能不接受；新生产者总返回某字段则收紧 P，未必破坏旧消费者。请求方向不同，服务器新增必填输入会拒绝旧请求。历史响应也必须单独回放。
+
+Python 3 标准库构造检查，存为 `compat.py` 后运行 `python compat.py`；不替代完整 Schema 校验：
+
+```python
+accepted = {"high", "low"}
+outputs = {"high", "low", "urgent"}
+assert not outputs.issubset(accepted)
+history = [{"intent": "refund"}, {"intent": "refund", "priority": "high"}]
+assert sum("priority" not in response for response in history) == 1
+print(sorted(outputs - accepted))
+```
+
+[JSON Schema 官方对象说明](https://json-schema.org/understanding-json-schema/reference/object) 的 `required/additionalProperties` 只约束形状，不替你判定发布方向和单位；实际读取官方仓库相应片段，未验证消费者SDK。文中 `confidence=0.72` 未经分布校准，不代表72%正确概率，不得用作退款授权。
 
 多模型系统里，主模型、备用模型和供应商 SDK 往往对 tool call、JSON mode、拒答、content filter、stream usage、停止原因有不同表达。adapter 的职责是：
 
@@ -185,7 +200,7 @@ design contract -> add tolerant consumers -> dual-write / adapter support
 - 语义断言失败，如币种/尺度/证据/审批标记不一致；
 - 回滚时间、灰度前后质量/成本/风险门禁变化。
 
-发布门禁不应只要求“新模型离线得分更高”。高风险工作流还要要求：所有必需消费者通过契约回放、主备模型均通过输出验证、降级路径不会扩大权限、关键 terminal event 和审计字段完整，且失败可以无损回滚。
+发布门禁不应只要求“新模型离线得分更高”。高风险工作流还要要求消费者契约回放、主备输出验证、降级权限不扩大及终态审计完整；回滚适配器与恢复已持久化数据/外部副作用分别设计，不承诺无损。
 
 ## 十、系统设计题：设计一个多模型客服平台的响应兼容层
 
@@ -234,6 +249,8 @@ fallback 进入前要验证该模型具备所需能力，如 JSON/工具调用/�
 使用 consumer registry 找到依赖方，运行其契约样例、历史 trace 和流式回放；Shadow 记录新旧 canonical 输出 diff，Canary 监控按消费者划分的解析失败、未知枚举、业务门禁和投诉率。保留旧 adapter/manifest，直到旧版本流量和弃用字段读取下降到预设阈值。
 
 ## 十二、60 秒项目讲法
+
+以下为设计表达示例，不是已完成项目证明。恢复旧 adapter 不会撤销已发送邮件或新语义数据；需补偿、读取兼容或前向修复，不能承诺无损回滚。
 
 “我们没有让业务服务直接消费不同模型厂商的响应，而是在网关后建立 versioned canonical output contract。它除了 JSON schema，还定义状态机、错误分类、置信度尺度、单位、来源、降级和审批标签。每个 Provider adapter 负责将原始响应归一化并做输出验证，fallback 不满足约束就返回安全失败而非自由文本。对于流式接口，我们用带序号、重放和 terminal 语义的领域事件，并在 run 开始时固定 contract version。发布时先让消费者支持新版本，再双写、影子回放和小流量灰度；用客户端解析失败、未知枚举、语义断言和旧版本流量监控弃用过程。这样模型切换或 Prompt 迭代不会静默破坏前端、工作流和高风险决策。”
 

@@ -1,8 +1,6 @@
 ---
 title: Agent 自动化与后台编排生产设计：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  面试官说“给 Agent 加一个定时任务或多 Agent 并发”，真正想考的不是会不会写 cron
-  表达式，而是：一次运行是继承当前会话还是新建上下文？多个任务如何避免同时改同一份状态？任务失败、超时、重复触发和取消时，谁负责把结果可靠地送回？本页把四类运行时的公开自动化能力抽象成一套可落地的调度与
+description: 以参考设计区分 job、run、session 与外部效果，推演调度去重、并发租约、取消、漏跑和可靠投递；产品链接不作为已核版本合约。
 level: L2
 roles:
   - 应用开发
@@ -11,7 +9,7 @@ classification: inferred
 ---
 # Agent 自动化与后台编排生产设计：Claude Code / Codex / OpenClaw / Hermes
 
-> 面试官说“给 Agent 加一个定时任务或多 Agent 并发”，真正想考的不是会不会写 cron 表达式，而是：一次运行是继承当前会话还是新建上下文？多个任务如何避免同时改同一份状态？任务失败、超时、重复触发和取消时，谁负责把结果可靠地送回？本页把四类运行时的公开自动化能力抽象成一套可落地的调度与编排模型。
+> 设计 Agent 定时任务或多 Agent 并发时，可以沿会话继承、资源冲突、触发去重、取消和结果投递展开口述。本页提供一套企业控制面的参考设计，并保留四类产品作为待按版本验证的导航；不声称这些产品均实现了该设计，也不推测面试官的固定考察意图。
 
 > 任务在远程 Node、云端 sandbox 或本地机器执行时的网络和身份边界，见 [远程与云端 Agent 生产运行手册](/interview/remote-agent-operations-playbook)。变更如何走向 PR 与 CI，见 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)。
 
@@ -19,11 +17,11 @@ classification: inferred
 
 ## 怎么用这页
 
-产品能力会随着版本变化，本页只引用公开文档中可观察的行为，不猜测闭源系统内部实现。面试时先讲任务语义，再讲状态、资源和副作用的控制，最后用具体产品举例。不要把“有后台按钮”误答成“具备生产级调度”。
+先讲任务语义，再讲状态、资源和副作用的控制。文中 job/run/session、租约和投递协议是参考设计；产品链接用于发现验证入口，未逐版本核验的行为不得作为上线合约或实做证据。不要把“有后台按钮”误答成“具备生产级调度”。
 
 ## 30 秒总答法
 
-> 我把 Agent 自动化分为前台同步 turn、子 Agent、后台 detached run、定时任务和事件触发五类。它们的差异必须体现在上下文继承、身份/权限、资源预算、结果投递与取消语义上。控制面持久化 job、run、session、lease 和 tool effect；执行器只领取有时限的任务。需要独立分析的工作使用 fresh session 和最小能力，需要连续工作的工作流才显式绑定 persistent session。调度器要有幂等触发、并发额度、分布式锁、超时、重试、死信和可靠投递。Claude Code 的子 Agent 与 Routines、Codex 的 worktree 和 Automations、OpenClaw 的 cron/heartbeat 会话模式、Hermes 的 background session/cron 都能映射到这个模型。最终交付不是一条“执行成功”消息，而是带证据、可审阅、可取消、可追溯的运行记录。
+> 我先区分前台 turn、子任务、后台 run、定时和事件触发，再明确上下文、身份、预算、取消和投递语义。在我的参考方案中，控制面分别持久化 job、run、session、lease 和 tool effect；执行器按租约领取任务，外部效果用业务键对账，结果与投递分开恢复。独立任务默认 fresh，连续任务显式声明 persistent。产品选型时逐项验证固定版本、执行地点和停机/取消行为，而不凭功能名认定兼容。交付以任务验收、effect 回执和投递记录为依据，不以一句“执行成功”为依据。
 
 ## 一、先给任务取对名字
 
@@ -54,6 +52,8 @@ Run: 一次具体执行尝试，拥有执行器、lease、预算和结果
 `job_id` 是定义，`run_id` 是一次尝试，`session_id` 是上下文容器，`execution_id` 是实际 runner 的实例。一个 job 可以有多个 run；一次 run 可以因 worker 失联而产生多个 execution；不能拿 session ID 作为去重键或权限凭证。
 
 ## 二、四类 Runtime 的公开能力如何映射
+
+本节保留产品选型线索，本轮未逐项验证四个产品的当前调度、session 和取消行为；以下链接不是版本合约。特别不要假设“删除 job 会杀掉全部进程”。交付应附产品版本、运行位置、关机/断网实验、取消实验和投递回执。OpenAI 自动化文档本轮返回 403，未绕过权限。
 
 | Runtime | 子 Agent / 并行 | 定时与后台 | 面试中应抽象出的亮点 |
 | --- | --- | --- | --- |
@@ -152,14 +152,16 @@ PLANNED -> ADMITTED -> QUEUED -> CLAIMED -> RUNNING -> WAITING_APPROVAL
 }
 ```
 
-worker 仅在 lease 有效时调用工具；控制面在心跳丢失后等待租约失效，再决定是否重试。这样旧 worker 即使网络稍后恢复，也没有资格继续写入。对外部写操作必须以 `tool_effect.idempotency_key` 查询结果，不能因为 lease 过期就盲目再执行。
+worker 仅在 lease 有效时调用工具；但 TTL 只代表控制面不再承认所有权，不能阻止暂停后恢复的旧 worker 写入。发放单调递增 fencing token，并由网关/资源服务原子拒绝旧 token；目标不支持时通过受控执行代理串行化提交。已发送请求仍需按 effect key 对账，不能因 lease 过期盲目重跑。
+
+容量例子：假设每小时 120 次任务、平均执行 90 秒，均匀到达时平均在途量是 `120/3600 × 90 = 3`，不是并发上限。整点突发、尾延迟、重试与下游限流决定峰值和排队；成本计入所有 attempt 的输入/输出 token、执行器秒数和工具费用。
 
 ### 重试策略应按失败分类
 
 | 失败类型 | 样例 | 是否自动重试 | 处理 |
 | --- | --- | --- | --- |
 | 瞬时基础设施 | runner 被抢占、DNS 超时 | 有界指数退避 | 新 execution，保留同一 run |
-| 可恢复依赖 | package registry 限流 | 有界退避 + 熔断 | 切换镜像/等待窗口 |
+| 可恢复依赖 | package registry 限流 | 有界退避 + 熔断 | 遵守 Retry-After 与组织源策略；403/授权拒绝不按限流处理，不换源绕过 |
 | 模型/上下文 | 输出不合 schema、预算耗尽 | 不直接原样重试 | 缩小任务或进入人工 review |
 | 策略拒绝 | 没有写入权限、审批过期 | 否 | 重新授权或结束 |
 | 副作用未知 | 部署请求已发送但未收到回执 | 否 | 查询外部系统，人工仲裁 |
@@ -241,7 +243,9 @@ run reaches terminal state
 | 高风险告警 | 指定 on-call + incident system | 升级路径、确认回执、重复抑制 |
 | 静默巡检 | 内部 result store | 仅在有变化/越阈值时外发 |
 
-对于 scheduled run，`scheduled_at + job_revision + target` 可构成稳定 dedupe key。修改 schedule、prompt、能力或投递目标时递增 job revision，避免旧配置的延迟 run 在新配置下继续执行。
+对于 scheduled run，记录 job revision 能避免执行时偷偷读取新配置，但它不必是业务去重键的一部分。假设同一份“某日日报”在改提示词后被补调度，两次 revision 仍对应一个业务窗口：用 `(job_id, business_window, target)` 标识应交付的结果，revision 标识执行快照；仅在业务明确要求重发时增加 generation。否则改配置本身可能制造重复邮件。
+
+调度窗口需定义时区、夏令时跳过/重复时刻、关机漏跑的 skip/catch-up/coalesce 策略。UTC 的 `scheduled_at` 只是实例时间，不等于业务上的“某地每天 09:00”。只持久化下一次触发时刻而不存规则与窗口，无法解释漏跑。以上是控制面设计建议，不是四个 Runtime 的默认能力。
 
 ## 八、取消、暂停与超时：三者语义不同
 
@@ -250,7 +254,7 @@ run reaches terminal state
 | Pause job | 停止未来触发 | 可选等待当前 run；不等同于 kill |
 | Cancel run | 请求停止这一次工作 | 取消子任务、撤销 lease、清理工具句柄 |
 | Timeout | 预算/时限耗尽 | 强制进入终止流程并核对 effect |
-| Delete job | 删除定义 | 同时取消 in-flight run，并保留审计记录 |
+| Delete job | 禁止未来调度并删除或墓碑化定义 | 是否取消 in-flight run 必须由 API 合约明确；保留审计，不能默认删除即 kill |
 
 取消要从根向叶传播：阻止新的 claim，向运行中的子 Agent 和工具发送 cooperative cancel，超时后强制终止进程或容器，撤销凭证和 network proxy session，最后冻结 trace。若某个外部 effect 状态未知，终态应为 `CANCELLED_WITH_UNKNOWN_EFFECT`，而不是伪装成正常取消。
 
@@ -304,7 +308,9 @@ run reaches terminal state
 
 ### Q4：定时任务的“成功率”应该怎么算？
 
-> 至少拆成四层：按时创建 run 的 trigger success、runner 正常结束的 execution success、任务验收条件满足的 outcome success、目标渠道已确认收到的 delivery success。Claude Code Routines 的基础设施成功不等于任务目标成功正是这个区分的现实例子。报警应看每层的失败率和 P95 延迟，而非一个绿灯。
+> 至少拆成四层：按时创建 run 的 trigger success、runner 正常结束的 execution success、任务验收条件满足的 outcome success、目标渠道已确认收到的 delivery success。产品绿灯的具体语义须查固定版本，不能直接当作业务成功。报警应看每层失败率与延迟，而非一个绿灯；服务端 ack 也不证明人已阅读。
+
+**构造口述例子**：应触发 100 个业务窗口，95 个创建 run，90 个执行结束，80 个满足验收，75 个投递获渠道确认。端到端确认率是 `75/100`，不是挑选已运行样本算 `75/90`；后者是条件投递率。L1 要能区分这两个分母，L2 要说明漏跑、审批等待、重复 attempt 是否计入，L3 要披露窗口截止时间、样本筛选及置信区间。这些数值只作定义演示，没有实测含义。
 
 ### Q5：如何给多 Agent 设置成本上限？
 

@@ -1,6 +1,6 @@
 ---
 title: LLM 多地域灾备与状态连续性：从模型切换到可恢复运行
-description: LLM 多地域灾备与状态连续性：从模型切换到可恢复运行：原理、设计取舍与面试准备。
+description: 按 RTO/RPO 盘点身份、审批、工具回执、会话与索引状态，设计合规地域恢复、单写者隔离和未知副作用对账，避免把模型切换误当全链路灾备。
 level: L2
 roles:
   - 应用开发
@@ -27,6 +27,10 @@ classification: inferred
 
 不同对象的目标不同。模型生成的临时 token 可以容忍丢失；已审批的外发文档、工具执行回执、计费账本和合规审计通常要求近似零 RPO。把所有数据放在同一个复制策略中，既贵又无法说明风险取舍。
 
+**L1：RPO=0 不是“复制很快”。** 必须说明对哪些已确认事实、在哪种故障假设下不丢数据，以及写入何时向用户确认；若确认后才异步复制，主区失去时仍有丢失窗口。同步/共识也有延迟与可用性代价，无法跨合法地域取得 quorum 时可能必须停止写入。外部支付成功而本地回执未记录仍是未知副作用，即使数据库自身 RPO=0，也不能据此认为没有付款。
+
+表中 5/15 分钟、零/5 分钟均是教学目标，不是任何系统已达到的成绩。RTO 从约定的业务中断时点到该能力恢复并通过验证计时，不从工程师点击按钮才算。只读恢复、全部功能恢复和积压清理分别报告；“网关 200”不代表审批、检索或工具已可用。
+
 ## 二、盘点状态：LLM 应用不只有数据库
 
 恢复设计的第一步是建立状态目录，明确每类状态的 owner、复制模式、恢复顺序和幂等语义：
@@ -49,7 +53,7 @@ artifacts, approvals, audit evidence, evaluation and billing data
 ```json
 {
   "run_id": "run_01",
-  "home_region": "ap-southeast-1",
+  "home_region": "cn-north-1",
   "tenant_region_policy": "cn-only",
   "release_manifest": "sha256:...",
   "state_schema_version": 7,
@@ -60,6 +64,8 @@ artifacts, approvals, audit evidence, evaluation and billing data
 ```
 
 `release_manifest` 必须固定模型路由、Prompt、工具 schema、索引 generation 和策略版本。否则在备用地域恢复一个旧任务时，会悄悄换成新 Prompt/新工具，既无法复现，也可能改变已经开始的业务流程。
+
+上例只是归属记录，不证明所列地区/服务可用；home region 必须属于 tenant 的允许集合，原示例把境外 region 与 `cn-only` 放在一起是矛盾。恢复 worker 校验 manifest 内容哈希、可信发布者、state schema 与合法制品位置，不执行 checkpoint 里任意 URL/脚本；历史授权过期或撤销后不能因“旧任务已批准”继续越权。模型供应商不能锁 revision 时，显式标为重生成而非确定复现。
 
 ## 三、故障域优先于部署形态
 
@@ -87,6 +93,8 @@ process / node -> zone -> region -> cloud account -> provider -> identity/DNS/co
 
 按租户、数据驻留或业务域固定地域，跨区只复制匿名指标、模型制品或加密备份。它降低了数据合规和跨区冲突复杂度，但需要接受某个地域故障时该分区的服务降级，或准备同一合规边界内的备用区域。
 
+加密不自动豁免驻留限制，向量、摘要、审计与训练后模型也可能含敏感信息。这里的“跨区”只在已经授权的地域集合内；没有合法备区的租户在地域故障时应停服务或人工处理，不以恢复率绕过政策。密钥与身份服务也要有合法可用的恢复路径，否则复制了密文仍无法读。
+
 没有通用最优解。选择取决于 RTO/RPO、写路径、成本、法规和团队的演练能力；最危险的是宣称多活，却无法解释同一 Agent run 或同一审批单在双写时谁拥有最终决定权。
 
 ## 五、恢复顺序：先控制风险，再恢复体验
@@ -103,6 +111,8 @@ process / node -> zone -> region -> cloud account -> provider -> identity/DNS/co
 
 用户体验应有明确状态：`temporarily_unavailable`、`migrating`、`resuming`、`completed_after_failover`、`needs_manual_review`。不要将恢复中的请求静默重置成一段新对话，否则用户会重复下达有副作用的指令。
 
+**L2 的硬门禁顺序**：先确立新写入 epoch 并让旧写者失去提交资格，再恢复当前撤权/审批/账本，最后重放工作；绝不在 effect 账本或 ACL 尚未追平时先消费队列。备份恢复先应用删除 tombstone 与撤销记录；仅还原业务快照容易把已删除文档和过期批准复活。控制面不可用时使用预签策略只限显式允许的低风险路径，必须核有效期与撤销上界；高风险写入不能靠陈旧策略继续。
+
 ## 六、会话、流式与 Agent run 如何续命
 
 ### 会话与记忆
@@ -111,7 +121,7 @@ process / node -> zone -> region -> cloud account -> provider -> identity/DNS/co
 
 ### 流式生成
 
-模型 token 流无法精确从 GPU 的中间状态迁移。正确做法是持久化可见事件、最后安全 checkpoint、Prompt manifest 和已确认的工具结果；恢复后要么从最后稳定段落重新生成并以新 epoch 续流，要么以最终制品方式完成。事件携带 `run_id`、序号和 `recovery_epoch`，客户端去重并能显示“恢复后输出”。
+普通模型 API 和一般服务部署没有可用的跨地域中间 GPU 状态迁移契约，不能承诺逐 token 精确续算；特殊实现另行验证。持久化用户可见事件、最后安全 checkpoint、Prompt manifest 和已确认工具结果；恢复后重新生成的内容以新 epoch、明确替换范围或新结果呈现，不把两次文本无标记拼接。客户端以 `(run_id, recovery_epoch, seq)` 去重；旧 epoch 的迟到帧不再追加。持久日志能重放已保存文本，不代表恢复原模型内部 KV 或采样状态。
 
 ### Agent 与副作用
 
@@ -130,7 +140,7 @@ RAG 的灾备常被低估。源对象、ACL、删除墓碑、chunk、embedding�
 
 - 复制源文档版本、ACL 与删除/撤权事件的顺序，撤权优先级高于索引可用性；
 - 索引按 immutable generation 发布，查询只命中“数据与 ACL 都已就绪”的 generation；
-- 备用区未追平时可降级到受限旧 generation，并向结果标明数据截至时间；
+- 备用区未追平时，只在当前 ACL/删除状态可验证且业务允许旧知识时服务旧 generation，并标明数据截至时间；freshness 标签不能替代授权；
 - embedding 模型升级或跨区重建必须与 generation、源版本和权限规则绑定；
 - 数据驻留禁止跨境时，不能为了恢复率把原始文档或向量复制到不合规地域。
 
@@ -151,6 +161,10 @@ RAG 的灾备常被低估。源对象、ACL、删除墓碑、chunk、embedding�
 
 不要用“最后写入者获胜”处理审批、工具执行或知识权限。跨区恢复发生分区脑裂时，必须有明确的 fencing token 或 lease，确保同一 run 在任一时刻只有一个地域可以提交副作用。DNS 切换不是 fencing；旧地域可能仍能访问部分依赖。
 
+租约到期也不是隔离完成证明：旧 worker 可能暂停后继续运行。受信写入目标检查单调 fencing token，并拒绝旧 epoch；如果下游不支持 token，需稳定业务幂等键、权限吊销/写网关隔离和对账，不能只靠本地锁保证只有一次付款。epoch 的分配本身需单一权威或 quorum，不能让双区各自给自己加一。[etcd v3.6 故障说明](https://etcd.io/docs/v3.6/op-guide/failures/)实读了多数故障无法写、分区多数侧可用的语义；若 quorum 与主区一起丢失，灾备编排也可能失去写权，不应强行双主恢复。
+
+产品的“跨区强一致”也要读具体模式。[DynamoDB global tables 官方说明](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html)区分异步 MREC 与 MRSC：不能用 MREC 的单区强读推断跨区 RPO=0；区域支持与服务限制需另外核查。无论数据库模式如何，外部副作用和本地 effect 记录仍是跨系统一致性问题。
+
 ## 九、演练不是一次故障转移按钮
 
 Runbook 至少包含失效判定、授权人、切流步骤、冻结名单、数据一致性检查、回切条件、沟通模板和复盘归档。演练场景不应只关停一个 Pod，应覆盖：
@@ -163,6 +177,10 @@ Runbook 至少包含失效判定、授权人、切流步骤、冻结名单、数
 - 故障恢复后回切，验证重复任务、补偿、日志顺序和计费归因。
 
 每次演练要量化实际 RTO/RPO、未完成 run 数、重复 effect 拦截数、数据差异、人工介入时长和用户可见错误。演练产生的缺口应进入回归集和发布门禁；没有演练证据的 RTO 只是愿望。
+
+**L3：用独立事实量测丢失，不用最大时间戳自证。** 构造 10:00 故障，已确认源事件最后到 09:59:59，而备区连续可恢复游标只到 09:59:30，则恢复点距故障时刻 30 秒；源/备游标差 29 秒是另一种复制落后口径，不能混写成同一个 RPO。还要报告窗口内已确认但缺失的 ID/数量，不能用一条迟到的最新事件掩盖中间缺口。审批、账本、会话各算各的游标与 RPO，不能取整体平均。
+
+构造故障检测 60 秒、决策/隔离 30 秒、状态恢复 120 秒，之后模型预热 90 秒与索引验证 150 秒可并行，则关键路径约为 60+30+120+max(90,150)=360 秒，尚未包括积压清理；若步骤实际有依赖，必须按真实路径调整。恢复成功率分母是需恢复的全部合法 run，unknown/转人工不能算成功。回切前先对账双区事件、撤销与费用，确认旧区不会重放旧 outbox，再切写权和分级放量；“主区健康”本身不是回切条件。
 
 ## 十、系统设计题：设计跨地域企业 Agent 平台
 
@@ -214,3 +232,5 @@ fallback 是在当前应用路径中替换模型供应商，解决调用级可�
 “我们把灾备设计成状态连续性问题，而不是简单换模型。首先按问答、草稿、审批、外部写操作、RAG 索引和审计分别定义 RTO/RPO 与数据驻留边界。每个 Agent run 固定 release manifest、home region、checkpoint、pending effect 和 recovery epoch；写操作通过 outbox、全局幂等键和业务回执对账，切换时有 fencing 防止双地域重复提交。RAG 使用带 ACL 和删除事件的 immutable generation，备用区未追平时只读降级并明确数据新鲜度。故障时先冻结高风险副作用，再恢复身份策略、状态、索引与队列，最后分级放量。我们定期演练区域隔离、复制延迟和在途任务恢复，直接用实际 RTO/RPO、未知 effect 数和撤权一致性来验收。”
 
 这套讲法能表明你理解 LLM 应用在真实故障中最难恢复的不是模型，而是状态、权限和业务后果。
+
+实读边界：[AWS DR 规划](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/plan-for-disaster-recovery-dr.html)读取了按业务定 RTO/RPO、全工作负载恢复与演练/配置漂移要求；另实读上述 etcd 分区与 DynamoDB 模式片段。未部署多地域系统或执行演练，时间均为构造。数据驻留需按实际合同/辖区复核，不提供法律认证，其他站内引用仅供继续阅读。

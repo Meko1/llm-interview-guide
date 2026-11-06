@@ -14,6 +14,9 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
   ignoreDeadLinks: false,
+  markdown: {
+    math: true
+  },
 
   // SEO：生成 sitemap.xml，便于搜索引擎收录
   sitemap: {
@@ -21,6 +24,7 @@ export default defineConfig({
   },
 
   head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${BASE}atlas-mark.svg` }],
     ['meta', { name: 'theme-color', content: '#101b29' }],
     ['meta', { name: 'keywords', content: '大模型,LLM,面试,八股文,Transformer,Attention,RAG,Agent,MCP,微调,LoRA,RLHF,DeepSeek,推理优化,多模态,大模型面试题' }],
     ['meta', { name: 'author', content: 'Meko1' }],
@@ -51,9 +55,9 @@ export default defineConfig({
       provider: 'local',
       options: {
         translations: {
-          button: { buttonText: '搜索文档', buttonAriaLabel: '搜索文档' },
+          button: { buttonText: '搜索文档', buttonAriaLabel: '搜索文档，首次打开需要加载全文索引' },
           modal: {
-            noResultsText: '无法找到相关结果',
+            noResultsText: '未找到匹配，请缩短为核心术语或关键词',
             resetButtonTitle: '清除查询条件',
             footer: {
               selectText: '选择',

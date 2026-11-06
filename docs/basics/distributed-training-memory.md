@@ -1,8 +1,7 @@
 ---
 title: 分布式训练与显存账本
 description: >-
-  我会先列显存账本：权重、梯度、Adam 状态、激活和通信缓冲。DDP 只分数据，状态仍复制；状态放不下时用 ZeRO/FSDP，激活放不下时用
-  checkpoint、长度治理或序列并行，单层放不下再上 TP。选型后我会用 tokens/s、通信等待和显存峰值做 profile 验证，并把 check
+  按权重、梯度、优化器、激活和缓冲定位容量瓶颈，选择并行策略，并用吞吐扩展效率核验多卡收益。
 level: L1
 roles:
   - 在校生
@@ -24,6 +23,8 @@ classification: inferred
 
 混合精度 AdamW 下，每个参数往往仍对应十几 bytes 的训练状态：低精度权重只是其中一部分。故“权重能放进显存”不等于“模型能训练”。长上下文时激活和注意力中间量又会迅速成为主导。
 
+构造一种账本：BF16 权重 2 字节、BF16 梯度 2 字节、FP32 主副本 4 字节、两份 FP32 Adam 状态 8 字节，共 16 字节/参数。70 亿参数约 112 GB（约 104.3 GiB），还未含激活和缓冲。这不是所有 AMP 实现的固定布局：原生 autocast 可能保留 FP32 参数，优化器也可能使用不同状态精度，必须从实际张量核算。
+
 ## 二、先区分三种容量问题
 
 | 放不下的对象 | 优先手段 | 代价 |
@@ -44,6 +45,8 @@ $$B_{global}=B_{micro}\times N_{DP}\times N_{accumulation}$$
 
 梯度累积可模拟较大 batch，但不等价于免费扩卡：每次更新更慢、调度步数语义不同，通信与随机性也不同。
 
+这里的 $N_{DP}$ 是数据并行副本数，不是总 GPU 数。构造配置：8 卡、TP=2、PP=1，则 DP=4；每副本 micro batch=2、累积=8，全局为 64 条样本，不是 128。若各卡有效 token 数不同，本地平均 loss 再做 DDP 平均也不自动等于全局 token 平均。
+
 ## 四、ZeRO/FSDP 与模型并行
 
 ZeRO-1 切 optimizer state；ZeRO-2 再切 gradient；ZeRO-3 再切参数。FSDP 是按模块按需 gather 参数、完成计算后重新分片的常见实现。它们优先解决“数据并行下每卡重复保存状态”。
@@ -58,7 +61,9 @@ Tensor Parallel 在一层矩阵内部切分，例如按 attention head 或 MLP �
 
 至少拆分 `compute`、all-reduce/collective、dataloader、pipeline idle 和显存峰值。一个简单扩展效率是：
 
-$$E=\frac{\text{单卡吞吐}\times\text{卡数}}{\text{多卡实际吞吐}}$$
+$$E=\frac{\text{多卡实际吞吐}}{\text{单卡吞吐}\times\text{卡数}}$$
+
+构造例子：单卡 1000 tokens/s，4 卡合计 3000 tokens/s，则加速比为 3，扩展效率为 75%。原式的倒数是相对理想吞吐的开销比，不应命名为效率。比较时固定模型、长度分布、精度、全局 batch 和计时范围；若单卡根本放不下，选择能运行的多卡基线并明确它的卡数，不能编造单卡吞吐。
 
 卡数翻倍但吞吐只增 30%，常见原因是通信不能与反向重叠、每卡 batch 太小、数据加载慢、stage 负载不均或跨节点拓扑差。profile 后再调策略，比继续堆卡有效。
 
@@ -76,6 +81,15 @@ ZeRO-3 在数据并行组内分片参数、梯度和 optimizer state，重点解
 
 因为计算没有覆盖通信，或每卡工作太少。还可能是数据供给、拓扑和流水线气泡问题。要用 profiler 分出等待时间，而不是凭总利用率猜测。
 
+<details>
+<summary>自测：ZeRO-3 分片权重后，为什么前向仍可能 OOM？</summary>
+
+计算某个模块前可能要临时聚合其参数，还会保留激活、通信缓冲和工作区。稳态分片大小不等于峰值；先看峰值所在算子和 gather 时机，再决定分片粒度、micro batch、checkpoint 或 TP。
+
+</details>
+
 ## 八、面试回答模板
 
 > 我会先列显存账本：权重、梯度、Adam 状态、激活和通信缓冲。DDP 只分数据，状态仍复制；状态放不下时用 ZeRO/FSDP，激活放不下时用 checkpoint、长度治理或序列并行，单层放不下再上 TP。选型后我会用 tokens/s、通信等待和显存峰值做 profile 验证，并把 checkpoint 的模型、optimizer、scheduler 和数据状态一起保存，保证可恢复。
+
+依据：[ZeRO 论文](https://arxiv.org/abs/1910.02054)、[PyTorch DDP 设计说明](https://docs.pytorch.org/docs/stable/notes/ddp.html)。后者注明其设计叙述基于早期版本，当前 bucket、分片和通信配置应核对安装版本，不直接复制历史实现细节。

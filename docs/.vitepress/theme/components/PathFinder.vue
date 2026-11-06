@@ -8,6 +8,7 @@ withDefaults(defineProps<{ headingLevel?: 2 | 3 }>(), { headingLevel: 3 })
 const target = ref('application')
 const foundation = ref('api')
 const time = ref('steady')
+const capabilityLink = computed(() => '/capability-map?role=' + target.value + '&foundation=' + foundation.value)
 const recommendation = computed(() => target.value === 'infra'
   ? { title: '推理与 Infra', link: '/paths/infra', output: '交付：容量估算与压测报告' }
   : paths.find(path => path.id === target.value) || paths[2])
@@ -54,6 +55,7 @@ const pace = computed(() => ({ sprint: '两周内冲刺：先完成核心复述�
         <component :is="`h${headingLevel}`" class="finder-result-title">{{ recommendation.title }}</component>
         <p>{{ recommendation.output }}。{{ pace }}</p>
         <a :href="withBase(startingPoint.link)">{{ startingPoint.title }} →</a>
+        <a class="finder-capability-link" :href="withBase(capabilityLink)">用情境自查核对起点与前置 →</a>
       </div>
       <a class="guide-button" :href="withBase(recommendation.link)">进入推荐路线 →</a>
     </div>

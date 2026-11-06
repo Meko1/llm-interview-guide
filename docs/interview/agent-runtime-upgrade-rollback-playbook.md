@@ -1,9 +1,6 @@
 ---
 title: Agent Runtime 升级、兼容性与回滚：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  Agent Runtime 的升级绝不只是 npm update 或拉一个新镜像。它可能改变模型行为、指令加载、工具
-  schema、sandbox、网络、OAuth、Plugin ABI、memory/session
-  格式和审批默认值。生产面试要能解释：怎样在不丢身份、不放宽权限、不污染状态的前提下
+description: 将 Runtime 升级视为兼容闭包与状态迁移，设计有效配置比较、隔离灰度、回滚约束和外部效果对账。
 level: L2
 roles:
   - 应用开发
@@ -35,6 +32,8 @@ classification: inferred
 | 外部 effect | PR、邮件、工单、部署、账单 | 不能用 rollback 假装不存在 |
 
 可审计的 release manifest 示例：
+
+下方版本号、ABI 和 release ID 均为构造占位，不声称对应真实产品发布。实施时换成实际读取的 release/tag、二进制 digest 与实测兼容组合。
 
 ```json
 {
@@ -96,13 +95,17 @@ diff -> expected / reviewed / forbidden
 
 ### 2. runtime rollback 不等于 state rollback
 
-对状态迁移采用 `expand -> dual-read -> backfill -> cutover -> contract`：旧新版本在一段窗口都能读，先添加新字段，验证回填，再切换读路径，最后才删除旧字段。若做不到双读，至少保留可恢复原始快照和明确的 downgrade 约束。不可逆 schema migration 必须有明确 change ticket 和手工恢复步骤。
+状态兼容允许时采用 `expand -> dual-read -> backfill -> cutover -> contract`；不是所有 Runtime 状态目录都支持双读/双写。先证明格式与写者兼容，不能把两个版本同时指向一份可变 session/SQLite 目录来假装迁移。做不到时停止写入、导出一致快照，在隔离副本导入并原子切换 owner；不可逆迁移声明 downgrade 不可用及人工恢复步骤。
+
+回滚旧快照不能复活已撤销凭证、已删除记忆或已完成 effect。恢复后先重放当前撤销/删除账本、更新 credential reference 并对账；轮换过的 refresh token 不从备份继续使用。L1 说清二进制与状态回滚，L2 标出一致快照、写者 fence 和切换窗口，L3 用迁移中断、旧版本拒读、新版本回滚及撤销传播演练给证据，不以“备份存在”代替恢复验证。
 
 ## 五、四类 Runtime 的升级映射
 
+原链接保留作产品导航，更新命令、最低版本、渠道延迟、自动备份和恢复默认未逐版本核验。下方行为必须查固定版本后再写运行手册；安全修复的最低兼容版本约束不能被“回滚旧版”自动忽略。
+
 ### Claude Code：渠道、最低版本与受管策略
 
-Claude Code 支持 `latest` 与 `stable` 自动更新渠道，后者通常延迟约一周以跳过重大回归；组织可用 managed settings 统一渠道。`minimumVersion` 只设下限，防止改到 stable 后降回更低版本；CLI 也支持 `claude install <version>`、`claude update`。这适合企业将“最新试验组”和“稳定生产组”分开，而不是让每台开发机自行漂移。[Claude Code Advanced setup](https://code.claude.com/docs/en/setup) [Claude Code CLI reference](https://code.claude.com/docs/en/cli-usage)
+更新渠道、最低版本和指定版本安装应以固定版本的 [Claude Code setup](https://code.claude.com/docs/en/setup) 与 [CLI reference](https://code.claude.com/docs/en/cli-usage)验证。不保留“约一周”这种未核时效断言；企业明确试验组、生产批准版本及安全下限，不把渠道名当稳定性保证。
 
 升级 gate 不只测聊天质量：要重新核对 managed permission rules、sandbox/network、MCP/Hook、Skill 与 `CLAUDE.md` 的实际解析结果。若新版本修复安全问题可设 minimumVersion 强制下限；若出现回归，通过受管 release channel/特定版本安装回退，并保留每次 Agent run 的版本证据。
 

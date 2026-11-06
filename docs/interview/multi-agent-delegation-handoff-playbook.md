@@ -2,7 +2,7 @@
 title: 多 Agent 委派与 Handoff 控制平面：Claude Code / Codex / OpenClaw / Hermes
 description: >-
   多 Agent 不是“多开几个聊天窗口”。它是一个有身份、能力、预算、资源租约、副作用和最终责任的分布式任务系统。面试中最容易失分的回答是：把任务分给几个
-  Agent，最后汇总。真正需要讲清的是谁仍然拥有控制权，交接何时生效，子任务失联后谁停止副作用，多份结论冲突时谁裁决，以及如何证明最终交付确实发
+  Agent，最后汇总。需要讲清控制权、交接激活、孤儿任务止写、冲突仲裁与可验证交付，而非依赖子Agent自述。
 level: L2
 roles:
   - 应用开发
@@ -133,6 +133,10 @@ REJECTED / EXPIRED                     ACTIVATING
 
 ## 六、Fan-out 与 Fan-in：并行不是把答案拼起来
 
+ACK丢失不等于子方未激活。构造parent fence=18、子方激活19、ACK在网络中丢失：TTL后不能直接重新赋18给parent，否则两方都可能写。控制面查询19的状态，回收时再升至20，旧19被写网关拒绝；如第三方不支持围栏且可绕过网关，此不变量尚不能成立，应限制为只读或人工接管。“两阶段”是候选业务协议，不是数据库2PC，也不能让外部effect事务性回滚。
+
+预算须在spawn时分配而非结束后汇总：总30,000 token，父方保留6,000，四子各6,000正好耗尽，不能再给第五子6,000。每层最多3子、深度3，最坏总节点为 `1+3+9+27=40`，不是3个；并发上限、累计子数与深度应分别限制。L1明确自己的write_paths和产物；L2在ACK丢失和超预算时保持唯一有效owner；L3检验激活/恢复/迟到写的状态反例，所有数字为构造值。
+
 ### Fan-out 准入
 
 并发前先检查任务是否独立。可并行的维度是只读研究、互不重叠的模块或有明确 resource lock 的步骤；数据库迁移、同一文件大范围重构、共享速率限制和同一客户工单往往应串行化或使用 coordinator。
@@ -183,15 +187,17 @@ parent cancel
 
 定期扫描满足任一条件的 run：父任务终止但 child 仍 `ACTIVE`；lease 已过期；连续 N 个 heartbeat 缺失；worker 注册消失；使用旧 `owner_revision` 提交 effect；超出 deadline/budget。检测器不是直接删除 session，而是：
 
-1. 将状态标记为 `SUSPECT_ORPHAN` 并冻结新的 capability grant；
-2. 查询外部系统与 outbox，确认 effect 是否已发生；
-3. 令旧 lease 失效，并用 fencing 拒绝迟到写入；
-4. 由 reconciler 回收 container、worktree、浏览器、临时凭证和锁；
-5. 将 trace、最后 heartbeat、退出码、artifact digest 和 effect 对账结果写入 evidence bundle。
+1. 标记 `SUSPECT_ORPHAN`，停止新dispatch与新grant；同时在写准入/保护资源撤销旧owner的有效写权限，并确认fence传播屏障；
+2. 旧调用若已准入或提交，记为IN_FLIGHT/UNKNOWN；发送协作取消并隔离仍运行的写进程，但不能用取消回执假定外部动作未完成；
+3. 待在途调用终结后查询下游/outbox/业务幂等回执，或把无法终结的状态交显式人工处置；不能先查一遍再撤权，否则旧worker可能在查询后提交新效果；
+4. 无活跃文件写进程且证据已保存后再回收container、worktree、浏览器、临时凭证与锁；无法证明停止时隔离，不把目录交给替代worker；
+5. 保存trace、最后heartbeat、退出码、artifact digest、撤权确认与effect对账状态。存在UNKNOWN时保留隔离和待处理状态，不报“全部清理成功”。
 
 “取消成功”必须至少证明：不再接收任务、所有有效写 lease 已撤销、长进程已退出或被隔离、关键 effect 已对账。对不可逆操作，补偿动作也要按新任务和新审批建模，不能让 cleanup Agent 静默执行。
 
 ## 八、四类 Runtime 的实现映射
+
+以下是原稿的产品能力索引，不是全表已核验。本轮未读取Claude、OpenClaw和OpenAI页面正文，链接保留为linked_only；实际默认工具、沙箱及停止语义须按固定版本逐项核查。
 
 | Runtime | 公开能力 | 生产控制面应怎样使用 |
 | --- | --- | --- |
@@ -204,7 +210,7 @@ Claude Code 的 [Run agents in parallel](https://code.claude.com/docs/en/agents)
 
 [OpenClaw Sub-agents](https://docs.openclaw.ai/tools/subagents) 给出了非常可借鉴的防失控机制：按深度收紧 tool policy、限制 active children、默认隔离 session、通过 announce 链返回结果，并在停止 orchestrator 时级联停止子任务。不要把这些运行时限制误解为自动业务正确性，仍需 idempotency 和 effect reconciliation。
 
-[Hermes Delegation](https://hermes-agent.nousresearch.com/docs/user-guide/features/delegation) 说明 child Agent 使用 fresh conversation、受限 toolset 和独立 terminal，只将最终摘要返回父方；并行批次默认最多三个并发 worker，且 parent 中断会取消 active children。对于长生命周期业务任务，这一事实正说明要将 durable job/lease 放到运行时之外的控制平面。
+[Hermes Delegation](https://hermes-agent.nousresearch.com/docs/user-guide/features/delegation) 对应的官方仓库本轮实读前72行说明fresh conversation、继承工具访问和独立terminal；隔离上下文不等于默认最小权限。该滚动片段列出并行默认10且可配置，原稿“三个”的默认已不能作为通用事实。片段还区分队列接收completion与真正完成回复，以及崩溃后的至少一次投递；返回status=completed也可带schema_valid=false。父方必须核验schema、产物及effect，不根据completed单字段验收；固定部署版本和取消行为仍待实测。
 
 ## 九、企业 Coding Agent 系统设计题
 

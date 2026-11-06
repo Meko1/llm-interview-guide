@@ -1,9 +1,7 @@
 ---
 title: 强化学习基础（面向 LLM）
 description: >-
-  RLHF、DPO、GRPO、RLVR……大模型对齐和推理训练的术语全部来自强化学习。很多候选人会背"PPO
-  有四个模型"，但被追问"策略梯度怎么推""为什么要 clip"就卡壳。本文从 MDP 讲到
-  GRPO，目标是让你有能力推导而不只是背诵——这是算法岗和应用岗拉开差距的地方。
+  从有限时域策略梯度推导 baseline、GAE 与 PPO clip，复算组内优势；区分旧策略、参考策略、反馈来源和 GRPO 的采样资源边界。
 level: L3
 roles:
   - 算法研究
@@ -12,152 +10,138 @@ classification: inferred
 ---
 # 强化学习基础（面向 LLM）
 
-> RLHF、DPO、GRPO、RLVR……大模型对齐和推理训练的术语全部来自强化学习。很多候选人会背"PPO 有四个模型"，但被追问"策略梯度怎么推""为什么要 clip"就卡壳。本文从 MDP 讲到 GRPO，目标是让你**有能力推导而不只是背诵**——这是算法岗和应用岗拉开差距的地方。
+先分清四件事：**优化的回报、数据来自谁、优势怎样估计、更新如何约束**。PPO/GRPO 是优化方法，RLHF/RLVR 是反馈来源，DPO 是基于偏好与正则化最优策略关系的目标；它们不全是同一个维度的算法名。
 
 ## 一、把 LLM 生成对应到强化学习
 
-强化学习的基本框架是马尔可夫决策过程（MDP），五元组 $(S, A, P, R, \gamma)$：
+有限回答可以视为有限时域决策问题：
 
-| RL 概念 | 一般含义 | 在 LLM 中对应 |
+| 概念 | 纯文本生成 | 工具交互的扩展 |
 | --- | --- | --- |
-| 状态 $s_t$ | 环境当前情况 | prompt + 已生成的 token 序列 |
-| 动作 $a_t$ | 智能体的选择 | **生成下一个 token**（动作空间 = 词表） |
-| 策略 $\pi(a\|s)$ | 状态到动作的映射 | 语言模型本身（输出的概率分布） |
-| 状态转移 $P$ | 环境如何变化 | 确定性：新状态 = 旧序列拼上新 token |
-| 奖励 $r_t$ | 环境反馈 | 通常**稀疏**：整条回答结束后才有一个分数 |
-| 回报 $G_t$ | 折扣累积奖励 $\sum \gamma^k r_{t+k}$ | LLM 场景常取 $\gamma=1$ |
+| 状态 | prompt + 已生成前缀 | 观测历史；真实环境状态未必完全可见 |
+| 动作 | 策略采样的 token | 工具调用由生成 token 表达，执行后获得观测 |
+| 转移 | 拼接 token，可确定 | 工具/用户/外部系统可能随机或变化 |
+| 奖励 | 终局分数，可加逐 token KL | 终局成功、过程反馈、违规/成本项 |
+| 终止 | EOS、长度/时间上限 | 环境成功/失败或预算耗尽 |
 
-两个 LLM 特有的性质，决定了后面所有算法的设计：
+只有纯文本拼接场景才能说转移确定；[Agentic RL](/advanced/agentic-rl) 需另外处理工具观测，不把环境提供的 token 当策略动作。终局奖励稀疏并不意味着必须有 critic，REINFORCE 也能训练，只是方差通常更难控制。
 
-1. **奖励稀疏且在末尾**：奖励模型只对完整回答打分，中间每个 token 没有即时奖励 → 需要价值函数/优势估计把"功劳"分配到每个 token（信用分配问题）。
-2. **环境转移是确定的**：没有随机环境，"探索"完全来自采样的随机性 → 温度、采样策略直接影响 RL 训练效果。
+有限时域可取 $\gamma=1$，避免早期动作被人为折扣；这是一种目标选择，不是所有 LLM 任务的规则。若要控制长响应成本，应明确长度/资源惩罚，而不是悄悄改变回报口径。
 
 ## 二、两大流派：基于价值 vs 基于策略
 
-| | 基于价值（Value-based） | 基于策略（Policy-based） |
+| 方法族 | 学什么 | LLM 中的取舍 |
 | --- | --- | --- |
-| 思路 | 学 $Q(s,a)$，选 Q 最大的动作 | 直接学策略 $\pi_\theta(a\|s)$ |
-| 代表 | Q-learning、DQN | REINFORCE、PPO |
-| 动作空间 | 适合小而离散 | 任意（大离散/连续都行） |
-| LLM 适用性 | 差（词表 15 万 + 序列组合爆炸） | **好——LLM 本身就是个策略** |
+| Value-based | $Q(s,a)$ 与动作选择 | 巨大动作空间和长序列使直接优化有挑战，不是数学上不能用 |
+| Policy-based | $\pi_\theta(a\mid s)$ | 自回归模型天然输出策略概率 |
+| Actor-Critic | 策略 + 价值估计 | 减方差但增加估计误差和训练资源 |
 
-LLM 的 RL 训练几乎全用策略梯度流派，因为语言模型天然就是一个参数化策略 $\pi_\theta(\text{token} | \text{context})$。
+比较时要问价值网络是否共享骨干、是否另占设备、rollout 是否主导开销，不由名字推算显存比例。
 
 ## 三、策略梯度：从 REINFORCE 到优势函数
 
 ### 策略梯度定理
 
-目标：最大化期望回报 $J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}[R(\tau)]$。核心结论（策略梯度定理）：
+以下推导用有限时域、$\gamma=1$、环境与奖励不显式依赖 $\theta$ 的设定：
 
-$$\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}\Big[\sum_t \nabla_\theta \log \pi_\theta(a_t|s_t) \cdot G_t\Big]$$
+$$p_\theta(\tau)=p(s_0)\prod_t\pi_\theta(a_t\mid s_t)P(s_{t+1}\mid s_t,a_t),$$
+$$\nabla J=\sum_\tau R(\tau)\nabla p_\theta(\tau)
+=\mathbb E\left[R(\tau)\sum_t\nabla\log\pi_\theta(a_t\mid s_t)\right].$$
 
-**直观理解**：回报高的轨迹，提高其中每个动作的概率；回报低的轨迹，降低概率。$\log \pi$ 的梯度指明"如何调参数能让这个动作更可能"，回报 $G_t$ 决定"调多大、往哪个方向"。
-
-这就是 **REINFORCE** 算法：采样轨迹 → 算回报 → 加权更新对数概率。
+动作无法影响此前奖励，因此可用未来回报 $G_t=\sum_{u\ge t}r_u$ 替换整轨迹回报。这是 likelihood-ratio 估计，不需要对离散采样动作求导。若回报包含可微参数化正则项，须另说明直接梯度或 surrogate 的处理，不能把上述固定奖励推导照搬。
 
 ### 问题：方差太大
 
-REINFORCE 的致命缺陷是**梯度方差大**：回报的绝对值大小会剧烈波动（同一个好动作，在好轨迹里被强化、坏轨迹里被惩罚）。两个标准解法：
+状态 baseline 在策略梯度权重中视为固定（stop-gradient），且不能依赖所采样动作：
 
-**1. 减 baseline**：给回报减去一个与动作无关的基准 $b(s)$，不改变梯度期望但显著降方差：
+$$\mathbb E_{a\sim\pi}[b(s)\nabla\log\pi(a\mid s)]
+=b(s)\sum_a\nabla\pi(a\mid s)=0.$$
 
-$$\nabla_\theta J = \mathbb{E}\big[\nabla_\theta \log \pi_\theta(a|s) \cdot (G_t - b(s_t))\big]$$
+baseline 不改变期望不等于任意 baseline 都降低方差；估计质量、尺度和相关性重要。$A(s,a)=Q(s,a)-V(s)$ 表示相对状态平均的收益。
 
-最常用的 baseline 是状态价值 $V(s)$，此时权重变成**优势函数**：
+构造一状态、两动作，令 $\pi(A)=p=\sigma(\theta)$，$R(A)=1,R(B)=0$，在 $p=0.5$ 处：$\partial_\theta\log\pi(A)=0.5$、$\partial_\theta\log\pi(B)=-0.5$。无 baseline 的梯度样本是 0.5 或 0，均值 0.25；减 $b=0.5$ 后两个梯度样本均为 0.25，期望不变且本例方差为零。**单条奖励为正不意味着比 baseline 好**。
 
-$$A(s_t, a_t) = Q(s_t, a_t) - V(s_t)$$
+GAE 用 TD 残差折中偏差/方差：
 
-直观含义："这个动作比该状态下的平均水平好多少"。比平均好 → 强化；比平均差 → 抑制。**绝对回报变相对优势，是理解 PPO/GRPO 的钥匙。**
+$$\delta_t=r_t+\gamma(1-d_t)V(s_{t+1})-V(s_t),\qquad
+\hat A_t=\delta_t+\gamma\lambda(1-d_t)\hat A_{t+1}.$$
 
-**2. Actor-Critic**：再训练一个价值网络（Critic）来估计 $V(s)$，与策略网络（Actor）协同更新。实践中用 **GAE**（广义优势估计）在偏差与方差之间折中地估计优势。
+$d_t$ 表示该步真正终止，$\lambda$ 控制传播。终止和仅被时间上限截断是否 bootstrap，需要按任务约定，错 mask 会把下一段价值污染本段回报。
 
 ## 四、PPO：让策略更新不要太猛
 
 ### 动机
 
-策略梯度是**同策略（on-policy）**的：数据必须来自当前策略，更新一步后旧数据就"过期"了，样本效率低。想重复利用一批数据多更新几步，就要用重要性采样修正：
+[PPO 原论文](https://arxiv.org/abs/1707.06347) 使用交互采样和 surrogate 多轮 minibatch 更新。令旧策略采样 token 的概率已保存：
 
-$$r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}$$
+$$r_t(\theta)=\frac{\pi_\theta(a_t\mid s_t)}{\pi_{old}(a_t\mid s_t)},$$
+$$L^{clip}=\mathbb E_t\min\big[r_t\hat A_t,\mathrm{clip}(r_t,1-\epsilon,1+\epsilon)\hat A_t\big].$$
 
-但 $r_t$ 偏离 1 太远时，修正会失真、训练会崩。TRPO 用 KL 约束硬性限制更新幅度（求解复杂），**PPO 用 clip 把约束做进目标函数**，简单有效：
+优势和旧 log-prob 固定，最大化此目标；代码最小化时取负号。ratio 修正该状态上的动作分布，并不完整修正长序列的状态访问分布，PPO 仍是近同策略更新，不是可任意复用陈旧数据的无偏算法。
 
-$$L^{CLIP}(\theta) = \mathbb{E}_t\Big[\min\big(r_t(\theta) A_t,\ \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) A_t\big)\Big]$$
+| 构造：$\epsilon=0.2$ | 未裁剪项 | 裁剪项 | 取 min |
+| --- | ---: | ---: | ---: |
+| $\hat A=2,r=1.5$ | 3 | 2.4 | 2.4 |
+| $\hat A=-2,r=0.5$ | -1 | -1.6 | -1.6 |
+| $\hat A=-2,r=1.5$ | -3 | -2.4 | -3 |
 
-**clip 的直观解释**：优势为正时，概率比超过 $1+\epsilon$ 就不再有收益（防止过度强化）；优势为负时，概率比低于 $1-\epsilon$ 就不再有收益（防止过度打压）。取 min 保证目标是悲观（保守）估计。
+clip 在有利方向过度变化时让该项饱和，但**不是把所有概率更新硬夹在区间，也不保证全局 KL 上界**。其他样本/参数共享仍可改变该动作概率。需监控实际 KL、clip fraction、熵与回报。
 
 ### PPO 在 RLHF 中的完整形态
 
-$$r_{total} = r_{RM}(x, y) - \beta \cdot KL\big(\pi_\theta \| \pi_{ref}\big)$$
+一种常见目标为：
 
-四个模型的角色（详细流程见 [RLHF / DPO 对齐](/finetuning/rlhf)）：
+$$J=\mathbb E_{y\sim\pi_\theta}[R(x,y)]-\beta\,D_{KL}(\pi_\theta(\cdot\mid x)\|\pi_{ref}(\cdot\mid x)).$$
 
-| 模型 | 角色 | 是否更新 |
-| --- | --- | --- |
-| Actor（策略模型） | 被训练的 LLM | ✅ |
-| Critic（价值模型） | 估计每个 token 位置的价值，算优势 | ✅ |
-| Reward Model | 对完整回答打分 | ❄️ 冻结 |
-| Reference Model | SFT 模型，算 KL 防偏移 | ❄️ 冻结 |
+旧策略 $\pi_{old}$ 是当前 rollout 快照；参考策略 $\pi_{ref}$ 是正则化参照，可能固定或按训练设计刷新。KL 估计还要分清逐 token、序列、求和或平均，单样本 log-ratio 可以为负，期望 KL 才非负。
 
-KL 惩罚的作用：防止策略为了刷高奖励而偏离初始模型太远（**reward hacking**：输出乱码、重复套话骗过 RM）。
+Actor 更新策略，critic 估计价值；RM 可被规则 verifier 替代；reference 可使用共享/卸载等实现。所谓“四个模型”是逻辑角色示例，不是四份等大权重的硬性规定。KL 能约束偏移，但不修复奖励漏洞、不保证安全。
 
 ## 五、GRPO：用"组内对比"干掉 Critic
 
-PPO 的最大工程负担是 Critic——又一个和 Actor 同规模的模型要训练、要占显存，且 token 级价值很难估准。DeepSeek 提出的 **GRPO（组相对策略优化）** 的思路：
+[DeepSeekMath 第 4.1 节](https://arxiv.org/html/2402.03300v3) 从同问题的组内奖励估计优势，无需单独 critic。终局监督常写为：
 
-> 同一个 prompt 采样一组（G 个）回答，用**组内相对好坏**直接当优势，不再需要价值网络。
+$$\hat A_i=\frac{r_i-\bar r}{\mathrm{std}(\mathbf r)+\varepsilon},$$
 
-$$A_i = \frac{r_i - \text{mean}(r_1,...,r_G)}{\text{std}(r_1,...,r_G)}$$
+并广播到该回答的 token；原论文还讨论过程监督，不应把 GRPO 定义成只能接终局奖励。
 
-| | PPO | GRPO |
-| --- | --- | --- |
-| 优势估计 | Critic + GAE（token 级） | 组内奖励标准化（回答级） |
-| 显存 | 4 个模型 | **去掉 Critic**，约省 1/4~1/3 |
-| 适用场景 | 通用 RLHF | 奖励可靠的场景（数学/代码可验证任务）尤其好用 |
+构造组奖励 $(0,0,1,1)$，使用**总体**标准差为 0.5，得到 $(-1,-1,1,1)$；若框架用样本标准差，幅度不同，必须记录 `correction/ddof`。全 1 组的 std 为零，安全处理后奖励优势为零，**KL/其他 loss 仍可能有梯度**，不能说整个训练完全没有更新。
 
-GRPO 本质上是"以采样换估计"：多采几条回答，用统计量代替学出来的价值函数。这与数学/代码任务的 **RLVR（可验证奖励强化学习）** 天然契合——答案对错可以程序判定，奖励无噪声，组内对比就足够准（R1 的训练正是 GRPO + 规则奖励，见 [DeepSeek 专题](/models/deepseek)）。
+GRPO 以多样本生成换基线估计，省去 critic 未必省总算力；组大小、长响应、rollout 并发与权重管理决定总账。程序奖励也有解析漏洞、测试覆盖不足和噪声，不是“可验证所以无噪声”。
 
 ## 六、高频概念辨析
 
-**on-policy vs off-policy**：数据是否必须来自当前策略。PPO 名义上 on-policy（用 clip 容忍小幅 off-policy）；DQN 是 off-policy。LLM 训练里"旧策略采样、新策略多步更新"的程度越深，越需要重要性修正。
-
-**为什么 DPO 不算强化学习？** DPO 没有"采样—奖励—更新"的在线循环，它把最优策略与奖励函数的解析关系代入偏好模型，直接在离线偏好数据上做监督学习。优点是简单稳定，缺点是受限于离线数据的分布（无法探索新回答）。
-
-**探索与利用（exploration vs exploitation）**：LLM RL 中探索靠采样温度与多样性。GRPO 一组内如果所有回答都错（或都对），组内优势全为 0，没有学习信号——所以训练时要控制题目难度与采样多样性，这是实践中的真实痛点。
-
-**奖励黑客（reward hacking）**：策略找到奖励函数的漏洞而非真正变好。例：RM 偏好长回答 → 模型疯狂变长；格式奖励设计不当 → 只学格式不学推理。对策：KL 约束、奖励模型迭代、过程奖励与结果奖励结合。
+- **on-policy/off-policy**：看行为策略与目标策略关系，以及算法是否支持这种偏差；PPO 的少量旧数据更新不等于一般 off-policy。
+- **DPO 与 RL**：常见 DPO 在离线偏好对上直接优化分类目标，避免 PPO 式在线 rollout；数据也可由外部循环刷新，不能说永远无法获得新回答。
+- **探索**：温度和组大小影响候选多样性，也影响采样策略与训练 log-prob 的一致性。top-p/截断后概率口径必须明确。
+- **reward hacking**：优化代理而不是真实目标。应保留独立隐藏测试、安全失败集与人工抽检，不由奖励上升自证正确。
 
 ## 七、GRPO 变体家族（2025 RL 前沿）
 
-GRPO 之后，2025 年涌现了一批改进变体，核心都是解决 GRPO 的痛点（组内全对/全错无信号、clip 粒度粗、KL 约束可能限制探索）：
+保留旧标题作为索引，不作“当前最前沿”排名。详细已核机制见 [对齐算法谱系](/finetuning/frontier-alignment)。
 
-| 方法 | 核心改进 | 解决 GRPO 什么痛点 |
+| 名称 | 应追问的机制 | 勿混淆 |
 | --- | --- | --- |
-| **GRPO** | 组内相对优势，去掉 Critic | PPO 的 Critic 太贵太不准 |
-| **DAPO** | 解耦 clip（upper/lower 分开调）+ 动态采样（去掉全对/全错样本）+ token 级 PG + **去掉 KL** | 全对/全错无信号；clip 过粗限制探索；KL 约束阻碍推理能力涌现 |
-| **Dr.GRPO** | 去掉 GRPO 中的长度偏差（标准化 per-token 优势） | 短回答和长回答的梯度贡献不均 |
-| **VAPO** | 引入价值模型做 token 级优势估计（回到 PPO 思路但更精细） | GRPO 的粗粒度优势对长 CoT 不够准 |
-| **GSPO** | 序列级重要性采样（而非 token 级） | token 级 IS 在长序列下方差大 |
+| DAPO | 非对称 clip、有效组采样、token 分母、超长奖励整形 | token 分母不等于步骤级奖励 |
+| Dr.GRPO | 长度分母与奖励 std 缩放的偏差 | 不是“标准化 per-token 优势” |
+| VAPO | 价值辅助优势及对应训练设计 | 不是无 critic 的同义词 |
+| GSPO | 序列级重要性比率的定义 | 不是随便把逐 token ratio 平均 |
 
-> 面试要点：DAPO 是最激进的——**去掉 KL 约束**是一个反直觉的选择，理由是推理任务中 KL 会限制模型"跳出" SFT 模型的分布去探索新的推理路径。这挑战了"KL 是 RLHF 必需品"的传统认知。详见 [推理模型与慢思考](/advanced/reasoning-models)。
-
-**开源 RLVR 生态**：Tulu 3（AllenAI）、SimpleRL、Open-R1 等项目公开复现了 RLVR 训练推理模型的全流程，降低了进入门槛。verl、TRL、OpenRLHF 是主流 RL 训练框架。详见 [Agentic RL](/advanced/agentic-rl)。
+这些变体的全文与框架版本本页未逐一重核；表是复查问题，不是性能比较。verl、TRL、OpenRLHF、Open-R1 等仅为实现入口，复现需固定提交、采样参数和 loss 口径。
 
 ## 高频追问
 
-**Q：策略梯度里为什么是 $\nabla \log \pi$ 而不是 $\nabla \pi$？**
-来自对数导数技巧：$\nabla_\theta \mathbb{E}_{\pi}[R] = \mathbb{E}_{\pi}[R \nabla_\theta \log \pi]$。期望对 $\theta$ 求导时，分布本身依赖 $\theta$，用 $\nabla p = p \nabla \log p$ 变换后才能写成"在当前策略下采样估计"的形式——这是整个策略梯度可计算的根基。
+**baseline 能对动作求梯度吗？** 在该策略梯度估计器中 baseline/优势应 stop-gradient；训练 critic 用另一项 loss。否则新增梯度不再由零期望论证覆盖。
 
-**Q：减 baseline 为什么不改变梯度的期望？**
-$\mathbb{E}_{a \sim \pi}[\nabla \log \pi(a|s) \cdot b(s)] = b(s) \nabla \mathbb{E}_{a \sim \pi}[1] = b(s) \cdot \nabla 1 = 0$。只要 baseline 不依赖动作，这一项期望恒为零，只影响方差不影响方向。
+**clip 和 KL 重复吗？** 参照与目的不同，但二者都不是质量保证。前者优化 surrogate 的局部稳定，后者约束相对 reference 的偏移。
 
-**Q：PPO 的 clip 和 KL 惩罚是不是重复了？**
-作用对象不同：clip 限制的是**相对于上一轮策略 $\pi_{old}$** 的单步更新幅度（优化稳定性）；KL 惩罚约束的是**相对于参考模型 $\pi_{ref}$（SFT 模型）** 的累计偏移（防止 reward hacking、保持语言质量）。一个管"步子别太大"，一个管"别走太远"。
+**GRPO 的平均回报上涨为什么不代表推理变好？** 可能数据过滤更容易、长度偏好、解析器被利用或测试泄漏。固定验证题、总采样预算和独立 verifier 后再比较。
 
-**Q：GRPO 组内全对或全错怎么办？**
-优势全为 0，该 prompt 本轮无梯度贡献。实践对策：动态筛选难度合适的题目（通过率在中间区间）、增大组大小 G、提高采样温度增加多样性。这也是为什么 GRPO 训练对数据难度分布很敏感。
+<details>
+<summary>自测：所有组都全对，GRPO 必然什么都不更新吗？</summary>
 
-**Q：为什么 LLM 的 RL 一般把 $\gamma$ 设为 1？**
-回答长度有限（几百到几千 token），不存在无限期回报发散问题；且奖励在末尾，折扣会让早期 token 的信用被人为衰减，与"开头的思路决定整条推理质量"的直觉矛盾。
+奖励优势为零不等于总梯度为零：KL、熵或其他辅助项仍可能更新。还应检查 std 零值处理是否产生 NaN；动态采样会继续生成并增加成本。
 
-**Q：Critic 在 PPO 里到底估计什么？为什么说它难训？**
-估计每个 token 位置的状态价值 $V(s_t)$ ——"从这里继续生成，期望最终能拿多少奖励"。难点：奖励只有末尾一个标量，要回传到几百个位置；回答质量的评估本身高度非线性。Critic 估不准 → 优势失真 → 训练不稳定，这正是 GRPO 用统计替代它的动机。
+</details>
+
+证据范围：实际读取 PPO/GAE 摘要和 DeepSeekMath v3 的 PPO、终局/过程监督、GRPO 附录公式摘录。本文推导与算例是教学构造，未运行策略训练；变体索引未全部重核。

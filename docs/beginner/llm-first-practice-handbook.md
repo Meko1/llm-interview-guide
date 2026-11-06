@@ -141,7 +141,9 @@ Prompt 不是神秘咒语，而是一份给协作者的任务说明。一个好 
 总成本 = 单次成本 × 请求量 + 重试/工具/检索/人工复核成本
 ```
 
-如果一个客服系统每天 1 万次请求，每次携带 8 千 token 历史和 2 千 token 检索，但实际回答只用到 3 段资料，那么优化检索、压缩历史和缓存稳定前缀，通常比换一个“更便宜模型”更有效。成本问题必须同时看质量：把上下文删到无法回答，成本降低并不是成功。
+这里的单价必须换成「每 token」；若报价按百万 token，乘完还需除以一百万。缓存命中、推理 token、工具和批处理的收费口径需查供应商说明。
+
+构造账本：每天 1 万次请求，每次输入 1 万 token、输出 500 token；假设输入每百万 token 2 元、输出 8 元，则每天模型调用费为 `100 × 2 + 5 × 8 = 240 元`，未含重试和其他费用。这不是任何供应商的报价。如果输入减半且质量不变，模型费降为 140 元；若造成重试或人工复核增加，节约可能被抵消。
 
 ## 五、模型为什么会“幻觉”，以及如何正确处理它
 
@@ -183,11 +185,7 @@ RAG（检索增强生成）不是“把 PDF 丢进向量库”。它是一条数
 
 ### 一个新手可以理解的 RAG 质量公式
 
-```text
-回答质量 ≈ 资料质量 × 解析质量 × 切分质量 × 检索质量 × 重排质量 × 生成约束
-```
-
-其中任何一项为零，最终回答都可能失败。原始文档过期、扫描件没有 OCR、切分把问题和答案拆散、检索只找到相似但不相关的段落、模型没有引用约束，都会造成“看起来接了知识库，实际仍在胡答”。
+这个标题下的「公式」只应作链路直觉，不是可计算的质量乘法。资料、解析、切分、检索、重排与生成约束相互依赖，不能把各自分数直接相乘。更有用的是保存每层证据：原文位置、解析文本、检索候选、最终上下文、答案及引用。原文正确但未被检索到，和检索正确但答案误读，需要不同修复。
 
 ### RAG 的三个必做测试
 
@@ -237,7 +235,7 @@ Agent：目标 -> 计划 -> 选择工具 -> 观察结果 -> 调整计划 -> 完�
 5. **加入必要的 RAG 或工具**：只有在样例证明知识不足或需要查询权威数据时才增加组件。
 6. **评测、灰度、观察**：版本变更前后对同一批样例比较；上线先小流量，记录失败并回灌。
 
-下面是一个与模型厂商无关的伪代码结构：
+下面是与厂商无关的结构示意，不是可运行 SDK 示例；接入前需具备 Python/HTTP 基础、可用账号和服务端密钥，模型名、端点与结构化输出支持以所选服务的官方文档为准：
 
 ```text
 request -> authenticate -> redact/validate input
@@ -246,10 +244,35 @@ request -> authenticate -> redact/validate input
         -> validate structured output
         -> optional tool request -> server-side authorization
         -> save trace with sensitive fields redacted
-        -> return answer + evidence + confidence/limitations
+        -> return answer + evidence + limitations
 ```
 
-这里最重要的不是调用 SDK 的哪一行，而是边界：输入先校验、检索先鉴权、输出先验证、外部动作再授权、日志要脱敏、版本需要可回放。这样你的项目从第一天起就有生产化的骨架。
+这里最重要的不是 SDK 的哪一行，而是边界。不要返回模型自报的「90% 置信度」冒充已校准的正确率。重试要有次数与总时间预算；写操作超时后先查询实际状态，不能盲目重发。
+
+**先在本地完成输出校验。** 以下仅需 Python 3 标准库，无模型调用、无外部写入。把模型原始响应放入 `response_text`，故意改成缺字段、负金额或多余字段，观察失败路径。
+
+```python
+import json
+from decimal import Decimal, InvalidOperation
+
+response_text = '{"category":"travel","amount":"780.00"}'
+payload = json.loads(response_text)
+if not isinstance(payload, dict) or set(payload) != {"category", "amount"}:
+    raise ValueError("输出字段不匹配")
+if payload["category"] not in {"travel", "office"}:
+    raise ValueError("未知分类")
+if not isinstance(payload["amount"], str):
+    raise ValueError("金额必须是十进制字符串")
+try:
+    amount = Decimal(payload["amount"])
+except InvalidOperation as error:
+    raise ValueError("金额不能解析") from error
+if not amount.is_finite() or amount < 0:
+    raise ValueError("金额超出范围")
+print(payload["category"], amount)
+```
+
+字段合法只说明结构满足约束，不证明 780 元有证据，也不代表用户获准报销。业务规则和权限是后续独立检查。
 
 ## 九、评测：不要用“感觉不错”替代质量标准
 
@@ -317,7 +340,7 @@ LLM 输出具有一定随机性，且不同任务对好坏的定义不同。评�
 
 ## 十二、30 天学习与实践路线
 
-下面路线面向有基本计算机使用能力的新手。你不必一天学完；重点是每周产出一个能验证的工件。
+下面是节奏建议，不是 30 天就业或上线承诺。调用 API 和编写校验程序需要基础编程能力；不具备时可先用表格手动记录样例，再补 Python。数量仅是起步规模，重点是工件能核查且覆盖失败边界。
 
 ### 第 1 周：建立直觉与验证习惯
 
@@ -378,7 +401,14 @@ LLM 输出具有一定随机性，且不同任务对好坏的定义不同。评�
 9. 什么情况下固定工作流比 Agent 更合适？
 10. 发现模型可能泄露敏感内容时，第一批处置动作是什么？
 
-能清楚回答这些问题，就已经具备继续深入的地基。接下来按你的方向选择：
+<details>
+<summary>自测核对：JSON 合法、引用存在、工具返回成功，为什么任务仍可能失败？</summary>
+
+JSON 可能含错误事实，引用可能不支持结论，工具可能只接受了异步请求而未完成操作。分别检查业务不变量、引用原句、最终状态与用户授权。可以故意构造这三类反例验证系统，而不是只看正常样例。
+
+</details>
+
+这些口述题应配合前面的工件验证，不能据此自动判定掌握。接下来按你的方向选择：
 
 - 想理解底层：进入 [大模型基础总览](/basics/overview)、[Transformer](/basics/transformer) 与 [训练与微调](/finetuning/finetuning)。
 - 想做知识库：进入 [RAG 基础](/rag/rag-basics) 与 [向量检索](/advanced/vector-search)。
@@ -556,3 +586,5 @@ LLM 输出具有一定随机性，且不同任务对好坏的定义不同。评�
 这个作业完成后，你不仅有一个 demo，还有一份可讲的工程故事：为什么选 RAG、如何处理证据和权限、如何评测、最难的 bad case 是什么、下一步会怎样改进。它比“我调用过某某 API”更能体现能力。
 
 > 最后的提醒：不要把“会用一个模型”当作终点。真正可迁移的能力是把模糊目标变成可验证任务，把模型输出接入正确的数据和工具边界，并持续用证据证明系统值得信任。
+
+基础机制与风险参考：[Hugging Face 分词说明](https://huggingface.co/docs/transformers/tokenizer_summary)、[GPT-2 历史模型卡](https://github.com/openai/gpt-2/blob/master/model_card.md)。本页账本、作业规模及校验程序是教学构造，不是供应商报价或真实上线记录。

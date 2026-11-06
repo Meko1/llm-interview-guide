@@ -1,8 +1,6 @@
 ---
 title: Agent 外部副作用事务与补偿：幂等、SAGA、对账与人工接管面试手册
-description: >-
-  Agent
-  最危险的失败不是答错一句话，而是网络超时后重复付款、重复建单、把错误版本部署到生产，或把“已经发生但暂时查不到”的动作当作失败重试。本页讨论如何把模型产生的工具意图收敛为可审计、可恢复的业务事务。
+description: 用业务幂等键、UNKNOWN 状态、权威回执和 SAGA 补偿处理跨系统写入，避免超时重投与新计划造成重复效果。
 level: L2
 roles:
   - 应用开发
@@ -83,9 +81,9 @@ deploy:catalog:release_2026_07_15:prod
 ticket:create:customer_42:outage_105
 ```
 
-同一 key 必须绑定同一参数 digest。若调用者想把退款金额从 500 改到 800、把部署 SHA 从 `a1b2` 改到 `c3d4`，那是新意图，需要新 revision、重新授权和新 key，不能复用旧 key。
+同一 key 必须绑定同一参数 digest。金额或 SHA 变化先产生候选新意图，但必须先查旧 effect 是否发生：旧退款为 UNKNOWN 时，不能仅换 revision/key 再退一次。已退 500 后要追加到 800，应由业务规则算剩余可退额并审批增量 300，而不是新建一笔 800。模型重新措辞不能自动改变业务幂等范围。
 
-Stripe 的官方 API 文档是一个直观例子：其幂等层会保存同一 key 的首次状态码和 body，并校验后续请求参数；但只有 endpoint 真正开始执行后才会保存结果。因此“参数校验失败或并发冲突”仍可能需要安全重试，不能把所有错误视为已有结果。[Stripe Idempotent Requests](https://docs.stripe.com/api/idempotent_requests)
+[Stripe Idempotent Requests](https://docs.stripe.com/api/idempotent_requests) 保留为提供方合约学习入口，本轮页面不可访问，不据此保证具体状态码、缓存时长或哪些失败可重投。接入时固定 API 版本，核对 key 的保留窗、参数冲突和首次执行定义；保留窗到期后仍 UNKNOWN 的高风险效果进入对账，不自动生成新 key。
 
 ### 本地 Effect Ledger
 
@@ -113,7 +111,7 @@ PREPARED -> DISPATCHING -> IN_PROGRESS -> CONFIRMED
                                       COMPENSATED / COMPENSATION_FAILED
 ```
 
-- `NOT_STARTED`：确定下游没有收到，可在当前有效授权下重新提交。
+- `NOT_STARTED`：具有可靠的未提交证据，例如执行器尚未发送；普通查询“暂时找不到”不能推出该状态，可能是异步入账或查询最终一致。
 - `IN_PROGRESS`：下游已接受但未终态，等待或查询，禁止并发再发。
 - `UNKNOWN`：连接中断、provider 不可查或 receipt 不一致；默认冻结并对账。
 - `CONFIRMED`：有可验证 receipt，不等于整个业务 SAGA 已结束。
@@ -204,7 +202,7 @@ def approval_then_execute(state):
     return {"receipt": create_ticket(state["command"]).result()}
 ```
 
-这里 `interrupt` 在 effect 之前；实际 Gateway 仍负责幂等、授权和 ledger，不能把这些不变量留在 Python node 里。
+这里 `interrupt` 在 effect 之前；示意代码缺少 imports、类型定义、checkpointer 与服务实现，不是可直接运行例程。实际 Gateway 仍负责幂等、授权和 ledger，不能把这些不变量留在 Python node 里。上面的 LangGraph 恢复语义须在固定版本验证，本轮仅保留原链接而未获得正文。
 
 ### Claude Code、Codex、OpenClaw、Hermes：统一走 Effect Gateway
 

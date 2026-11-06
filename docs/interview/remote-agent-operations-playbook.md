@@ -1,9 +1,6 @@
 ---
 title: 远程与云端 Agent 生产运行手册：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  面试里问“怎样把 Agent 放到云端或远程机器上运行”时，不能只回答“套一层 WebSocket、加 SSH 或部署
-  Docker”。真正的难点是明确：谁拥有任务状态，谁能调度执行器，远端设备凭什么被信任，断网后能否安全继续，以及怎样一键停止已经拿到工具权限的运行。本页把
-  Claude Code、
+description: 以参考架构区分远程控制、云端执行与节点接入，设计任务状态、租约、资源侧隔离、权限撤销与未知副作用对账，并明确产品文档核验边界。
 level: L2
 roles:
   - 应用开发
@@ -28,7 +25,7 @@ classification: inferred
 
 ## 30 秒总答法
 
-> 我会把远程 Agent 设计为“控制面管理任务和策略，执行面只领取带租约的工作，身份面把用户、设备、工作区和凭证绑定”的系统。远程 UI 只能接管一个执行会话，不能自然获得机器权限；云端任务在隔离环境中运行，也不能自动访问本地网络；远程节点即使完成配对，也要再经过能力和命令审批。任务状态必须持久化在控制面，流式连接只是传输层。遇到断网时执行器停在安全检查点，恢复后凭 execution lease 继续；遇到风险事件则按入口封禁、任务取消、进程终止、令牌撤销和证据保全五步执行 kill switch。这样既能解释 Claude Code 的远程控制和云端模式、Codex 的隔离任务，也能解释 OpenClaw Gateway/Node 与 Hermes Gateway/终端后端的差异。
+> 我会把远程 Agent 设计为“控制面管理任务和策略，执行面只领取带租约的工作，身份面把用户、设备、工作区和凭证绑定”的系统。远程 UI 只能接管一个执行会话，不能自然获得机器权限；云端任务在隔离环境中运行，也不能自动访问本地网络；远程节点即使完成配对，也要再经过能力和命令审批。任务状态需要一个明确的持久化权威（本地 Runtime 或云端控制面），流式连接只是传输层。遇到控制链路失联时按任务类别处理：只读工作可在有效租约内继续；写操作需在资源侧校验租约与 fence，恢复先对账而非盲重跑；遇到风险事件则按入口封禁、任务取消、进程终止、令牌撤销和证据保全五步执行 kill switch。这是通用参考方案，不代表任何列举产品已实现这些安全与恢复保证。
 
 ## 一、先分清四个常被混淆的概念
 
@@ -38,6 +35,8 @@ classification: inferred
 | 云端委派任务 | 云端任务控制面与任务容器 | 隔离云容器 | 以为能直接访问开发者笔记本或内网 |
 | Gateway + Node | Gateway 持有会话、策略、路由 | 被调用的 Node 或工具后端 | 把 Node 当成独立控制面，导致双写状态 |
 | 消息 Gateway + 终端后端 | Gateway 持有渠道与会话 | local、容器、SSH 等后端 | 把聊天平台的用户身份直接当作 shell 权限 |
+
+状态的单一权威是逻辑约束，可采用副本和高可用部署，不等于必须由单进程/单机保存全部状态；执行器可留本地缓存或审计缓冲，但不能独立提交冲突的任务终态。
 
 一句话区分：**远程控制改变的是操作者所在地，云端委派改变的是执行器所在地，节点接入增加的是一个受策略控制的能力端点。**
 
@@ -80,17 +79,17 @@ tests, patch       paired node / SSH / container / browser
   "network_policy": "deny_by_default",
   "lease_expires_at": "2026-07-14T10:00:00Z",
   "approval_policy": "pr_required",
-  "idempotency_key": "issue-842-retry-1"
+  "idempotency_key": "issue-842-operation-v1"
 }
 ```
 
-`task_id` 用于业务追踪，`session_id` 用于上下文选择，`execution_id` 标识一次尝试，`lease` 防止失联 worker 永久占用权限。四者不能互相替代。
+`task_id` 用于业务追踪，`session_id` 用于上下文选择，`execution_id` 标识一次尝试，`lease` 防止失联 worker 永久占用权限。四者不能互相替代。上述字段为构造契约；同一业务操作重试应复用幂等键，新的 execution_id 不应变成新的业务幂等键。
 
 ## 二、四类产品带来的架构启发
 
 ### 1. Claude Code：远程控制与远程执行必须分开叙述
 
-[Claude Code Remote Control 官方文档](https://code.claude.com/docs/en/remote-control) 描述的是让 Web 或移动端连接到本机正在运行的 Claude Code 会话。代码、MCP、工具和项目配置仍留在本地机器；远端只是观察和控制该本地会话。文档同时给出 server mode：可以配置 `same-dir`、`worktree` 或 `session` 的会话派生策略，并设置容量和沙箱选项。
+[Claude Code Remote Control 官方文档](https://code.claude.com/docs/en/remote-control) 是产品入口，本轮公开页面返回 403，未重试或绕过。下表仅用“远程控制既有执行器”作为设计情境，不确认当前 CLI 参数、server mode、会话派生或容量选项；实施前需由维护者按锁定版本核对。
 
 这带来两个工程结论：
 
@@ -101,11 +100,11 @@ tests, patch       paired node / SSH / container / browser
 | 团队开启远程控制 | 工作区级开关 + RBAC + 可信设备 | 控制入口本身就是高权限操作入口 |
 | 网络或睡眠恢复 | 会话重连，不将 UI 断线视为任务失败 | 任务实际状态归本地 Runtime 所有 |
 
-官方 Web 文档还把 `--remote` 的云端会话与 `--remote-control` 区分开：前者改变执行位置，后者不改变。面试中若能主动说出这点，说明你没有把“远程”当成一个模糊词。
+应分别确认控制入口与执行位置，不能从“远程”一词推断代码、凭证或网络位于哪里。未核版本的 CLI flag 不作为面试事实。
 
 ### 2. Codex：把云端 Agent 当作隔离的短生命周期执行单元
 
-Codex 的公开资料将 cloud task 描述为在带有代码与环境的隔离 sandbox 中后台运行，结果可以被审阅、导出或转为 PR；[OpenAI 的 Codex 说明](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan) 也说明 cloud-delegated 与本地客户端是不同执行路径。Codex 安全文档说明云端容器默认网络受限，网络能力应按项目和允许的域名、HTTP 方法谨慎授予，而不是在 prompt 中写一句“不要访问危险网站”。参见 [Codex Security](https://deploymentsafety.openai.com/gpt-5-2-codex/cybersecurity)。
+[OpenAI Codex Cloud 说明](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan) 和 [云端网络配置入口](https://developers.openai.com/codex/cloud/internet-access) 仅供后续核对。后者本轮返回 403；原安全研究报告不能替代配置文档。以下是企业云任务的参考安全目标，不断言 Codex 当前默认网络策略、PR 权限或任务恢复保证。
 
 因此，企业里一个云端 Coding Agent 的最低任务边界应包括：
 
@@ -117,11 +116,11 @@ Codex 的公开资料将 cloud task 描述为在带有代码与环境的隔离 s
 | 密钥 | 短时、任务绑定、不可读回、环境结束即回收 | 长期 PAT 写进仓库或 prompt |
 | 变更出口 | patch/分支/PR，加测试证据与人审 | 直接向默认分支推送 |
 
-Codex 的价值不只在“云端跑得更久”，而在于使每次执行都能被看作一份可复现的实验：输入快照、工具轨迹、测试结果和 diff 一起归档。这样线上问题才能回答“哪个环境、哪个指令、哪个依赖版本生成了这行代码”。
+参考云执行平台可通过版本固定与证据采集提高复现能力，但隔离本身不保证确定性：输入快照、工具轨迹、测试结果和 diff 一起归档。这样线上问题才能回答“哪个环境、哪个指令、哪个依赖版本生成了这行代码”。
 
 ### 3. OpenClaw：Gateway 是状态与策略的唯一控制点
 
-[OpenClaw Remote Access](https://docs.openclaw.ai/gateway/remote) 明确 Gateway 负责会话、认证档案、渠道和状态，Node 只是连接到 Gateway 的外围执行端。其默认 WebSocket 绑定到 loopback；远程接入应使用 SSH 隧道、Tailscale Serve 或可信 LAN/tailnet 绑定，非 loopback 绑定需要有效认证。这个模型特别适合解释“为什么一个聊天 Agent 也需要控制平面”。
+[OpenClaw Remote Access](https://docs.openclaw.ai/gateway/remote) 明确 Gateway 负责会话、认证档案、渠道和状态，Node 只是连接到 Gateway 的外围执行端。本轮读取官方仓库 remote.md 前 6000 字符，确认其中描述 loopback 默认绑定、SSH/tailnet 拓扑和 Gateway/Node 命令流；这是滚动文档摘录，不是对任意部署认证配置的证明。这个模型特别适合解释“为什么一个聊天 Agent 也需要控制平面”。
 
 远程命令流可描述为：
 
@@ -132,7 +131,7 @@ Telegram / WebChat -> Gateway -> Agent decision -> node.invoke
 
 这条流中，Node 不接收第三方渠道消息，也不自行决定任务归属。Gateway 既是会话 source of truth，也是策略执行点。多节点或多频道时，绝不能让每个 Node 各自维护一份 session history，否则重连、撤销与审计都会分叉。
 
-[Gateway-owned pairing](https://docs.openclaw.ai/gateway/pairing) 还提示了一个非常实用的安全分层：设备先进入待审批状态，审批后取得令牌；节点声明的命令面仍要经过 Gateway 全局命令策略和节点侧执行审批。也就是说：
+[Gateway-owned pairing](https://docs.openclaw.ai/gateway/pairing) 本轮仅链接。下面是建议的分层授权流程，不把特定产品的配对令牌、全局策略与节点审批行为当作已核事实：
 
 ```text
 device identity -> pairing approval -> token -> declared capability
@@ -143,7 +142,7 @@ device identity -> pairing approval -> token -> declared capability
 
 ### 4. Hermes：把消息入口、会话持久化与终端后端拆开
 
-[Hermes Messaging Gateway 文档](https://hermes-agent.nousresearch.com/docs/user-guide/messaging) 将 Gateway 定义为长期运行的后台进程，负责消息平台连接、会话、定时任务和投递；它提供 allowlist/pairing、繁忙输入的 interrupt/queue/steer 策略，以及隔离的 background 会话。其 [终端后端与工具文档](https://hermes-agent.nousresearch.com/docs/user-guide/tools) 列出本地、Docker、SSH 等不同执行后端。
+[Hermes Messaging Gateway 文档](https://hermes-agent.nousresearch.com/docs/user-guide/messaging) 与 [工具文档](https://hermes-agent.nousresearch.com/docs/user-guide/tools) 保留为阅读入口。本轮尝试官方 messaging.md 路径返回 404，未换路径规避；不确认具体后端列表、繁忙输入模式或隔离保证。以下把“消息接入”和“命令执行”分离，是参考方案而非产品行为清单。
 
 工程上应实现以下解耦：
 
@@ -174,7 +173,7 @@ CREATED -> AUTHORIZED -> QUEUED -> CLAIMED -> RUNNING -> WAITING_APPROVAL
 | 状态 | 允许的动作 | 关键持久化字段 | 失败处理 |
 | --- | --- | --- | --- |
 | `AUTHORIZED` | 排队、取消 | policy revision, capability grant | 策略更新后重新校验 |
-| `CLAIMED` | 启动执行器 | worker ID, lease ID, lease expiry | 租约失效则重新入队 |
+| `CLAIMED` | 启动执行器 | worker ID, lease ID, lease expiry | 租约失效先对账，再决定入队 |
 | `RUNNING` | 工具调用、写 checkpoint | execution ID, step, tool idempotency key | worker 心跳超时后进入恢复判定 |
 | `WAITING_APPROVAL` | 展示计划、批准、拒绝 | approval payload hash, approver | 审批过期则取消能力 |
 | `PAUSED` | 续租、迁移、取消 | durable checkpoint, open resources | 不重放不可幂等外部写 |
@@ -204,7 +203,7 @@ issue new lease with bounded TTL and allowed capabilities
 | 会话路由 | 上下文属于哪条对话 | `session_id`、channel thread | 归档/重置会话 |
 | 能力授权 | 这次任务可做什么 | `repo.write`、`node.camera`、`deploy.stage` | 过期 lease、撤销 grant、deny policy |
 
-面试陷阱：`session_id` 只能告诉系统“把哪段历史拿出来”，不能证明“这个人有权读取或执行”。OpenClaw 的安全文档也特别强调 session key 是路由/上下文选择而非用户认证；这是一条可推广到所有 Agent 的原则。
+面试陷阱：`session_id` 只能告诉系统“把哪段历史拿出来”，不能证明“这个人有权读取或执行”。在本参考设计中，session key 只做路由；未经核验的产品安全行为不能替代自己的鉴权检查。
 
 推荐为每个敏感工具请求生成完整的权限元组：
 
@@ -227,7 +226,7 @@ issue new lease with bounded TTL and allowed capabilities
 | 常驻 Gateway | loopback + Tailscale Serve 或受控反向代理 | 只依赖 IP 白名单且不认证 |
 | 移动 Node | TLS 终止 + 显式配对 + token rotation | 因为在内网就自动信任所有设备 |
 
-[OpenClaw Network](https://docs.openclaw.ai/network) 的 loopback-first 原则值得直接借鉴：非 loopback bind 必须配置认证路径。对于移动节点，发现协议只能提供“在哪里”，不能证明“你是谁”；mDNS、二维码、tailnet IP 都不应替代配对确认。
+[OpenClaw Network](https://docs.openclaw.ai/network) 本轮仅链接；本文建议非 loopback 入口强制认证。对于移动节点，发现协议只能提供“在哪里”，不能证明“你是谁”；mDNS、二维码、tailnet IP 都不应替代配对确认。
 
 ### 出口：任务容器能访问什么
 
@@ -301,7 +300,7 @@ node declares capability
 | --- | --- | --- |
 | `Task` | task ID、主体、workspace、intent、状态 | 不存可复用长密钥 |
 | `Execution` | execution ID、image SHA、commit SHA、lease | 每次重试新 execution ID |
-| `Device` | device key、posture、capability digest、last seen | 设备删除立即失去新 lease |
+| `Device` | device key、posture、capability digest、last seen | 撤销后拒绝新 lease；存量凭证按撤销传播与TTL失效 |
 | `Grant` | capability、resource selector、expiry、policy revision | 最小权限、短期、可撤销 |
 | `ToolEffect` | idempotency key、external reference、effect state | 未确认副作用禁止自动重放 |
 | `AuditEvent` | actor、decision、input hash、output ref、trace ID | 追加写、权限隔离 |
@@ -348,11 +347,35 @@ node declares capability
 
 ## 延伸阅读
 
-- [Claude Code Remote Control](https://code.claude.com/docs/en/remote-control)：本地执行器的远程控制、server mode 与会话派生策略。
+- [Claude Code Remote Control](https://code.claude.com/docs/en/remote-control)：仅链接；403，当前参数与派生策略待核。
 - [Claude Code on the web](https://code.claude.com/docs/en/claude-code-on-the-web)：云端会话与 remote control 的区别。
 - [OpenAI Codex Cloud 说明](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan)：cloud task、隔离 sandbox 与审阅/PR 流程。
-- [Codex Agent Sandbox and Network Access](https://deploymentsafety.openai.com/gpt-5-2-codex/cybersecurity)：云端隔离、默认网络边界及允许列表风险。
+- [Codex Agent Sandbox and Network Access](https://deploymentsafety.openai.com/gpt-5-2-codex/cybersecurity)：安全研究报告阅读入口，仅链接；不能据此确认云端配置默认值。
 - [OpenClaw Remote Access](https://docs.openclaw.ai/gateway/remote)：Gateway、Node、SSH/Tailnet 与远程命令流。
 - [OpenClaw Gateway-owned pairing](https://docs.openclaw.ai/gateway/pairing)：设备配对、令牌旋转、命令面审批。
-- [Hermes Messaging Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/messaging)：消息入口、会话、繁忙输入和后台任务。
-- [Hermes Tools and Toolsets](https://hermes-agent.nousresearch.com/docs/user-guide/tools)：本地、Docker、SSH 等终端后端。
+- [Hermes Messaging Gateway](https://hermes-agent.nousresearch.com/docs/user-guide/messaging)：仅链接；本轮对应仓库路径404，功能细节待核。
+- [Hermes Tools and Toolsets](https://hermes-agent.nousresearch.com/docs/user-guide/tools)：终端后端阅读入口，具体支持范围待核。
+
+## 租约失效不是资源侧停机：分层验证
+
+claim 时需原子 CAS 任务版本并递增 epoch；历史伪代码示意不包含完整并发控制。资源服务需要在写入点校验单调递增的 fencing epoch，或在同一可信代理内原子检查授权并执行。只在 worker 领取任务时检查 TTL，无法阻止暂停后复活的旧进程。若某 SaaS API 不支持 fence，也不能宣称 exactly-once；改用代理、资源侧幂等或人工对账。
+
+构造时序：旧 worker 持有 epoch=7，租约失效后新 worker 获得 epoch=8；旧请求即使晚到也必须被资源侧拒绝。单独使用 expiry 还受时钟偏差和检查位置影响。若授权缓存最多滞留 5 秒、请求最长 30 秒，撤销后的在途风险窗口可达约 35 秒（假设请求在缓存过期前已通过授权）；这不是立即停机保证。付款等不可逆动作应缩小窗口或在提交点再次校验。
+
+<details>
+<summary>L1：UI 断网后怎么办？</summary>
+
+重连只补订阅持久事件；用 task/execution ID 查询真实状态。构造验证：丢弃末尾成功事件，重新连接后从存储恢复成功结果，不重复执行工具。UI 连接结束不能作为任务失败或取消证据。
+</details>
+
+<details>
+<summary>L2：怎样验证 kill switch？</summary>
+
+在 mocked executor 上分别注入断链、子进程忽略取消、凭证缓存滞留和外部回执丢失。核对新任务被拒、进程/子进程停止、旧 token 拒绝、未知副作用进入对账。记录入口到资源提交点的撤销延迟，而不只记录取消接口返回 200。
+</details>
+
+<details>
+<summary>L3：如何检验双 worker 不会双写？</summary>
+
+构造并发 claim/CAS、租约过期后旧 worker 复活、审批后参数被改、epoch=7 请求晚于 epoch=8 到达的时序。断言至多一个当前 epoch 被提交；外部 API 缺少原子 fence 时明确无法证明这一不变量。复现实验固定镜像/commit/策略版，不把固定 seed 当分布式确定性。
+</details>

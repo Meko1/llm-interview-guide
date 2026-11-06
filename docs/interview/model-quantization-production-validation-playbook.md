@@ -33,6 +33,16 @@ classification: inferred
 
 ## 三、发布制品与对照实验
 
+### 从位宽到显存，再到任务损失
+
+构造7B参数模型：纯权重BF16为 `7e9 × 2 = 14e9` 字节（约13.04 GiB），INT4 packed为3.5e9字节（约3.26 GiB）。若每128权重带2字节scale，另加 `7e9/128 × 2 ≈ 109.4 MB`；这仍不含zero-point、未量化层、kernel workspace和KV。不是“显存降到四分之一”保证，尤其KV主导长会话时收益有限。
+
+[AWQ官方实现README](https://github.com/mit-han-lab/llm-awq) 实读功能列表区分低位权重、4-bit Linear及CUDA kernel；权重格式可加载不证明当前GPU走加速算子。该README展示的特定设备速度不外推到本系统，本文没有复现其基准。KV精度、权重精度和激活精度应分别记录。
+
+量化误差可以从工具门禁放大：基线给0.501、候选0.499，阈值0.5就改变分支；两者文字答案几乎相同也可能业务不同。未经校准的模型置信度不能直接授权写动作。非劣比较宜按同样本配对：构造200题中20条由成功变失败、8条由失败变成功，净差为 `(8-20)/200=-6` 个百分点，不等于单凭平均分能通过。CI和容忍阈值须预先定义，不能看完结果再改；没有样本量论证不宣称统计显著。
+
+L1核实际kernel和精度而非文件名；L2把权重/KV容量收益和失败重试成本一起预算；L3设计固定校准集与独立长尾测试，隔离量化算法和引擎变化。以上计算非部署实测。
+
 ```text
 base model digest + quant method/config + calibration dataset hash
 + weight/KV precision + engine/hardware + prompt/tool/index versions
@@ -72,6 +82,8 @@ base model digest + quant method/config + calibration dataset hash
 按任务、语言、长度、工具/JSON、RAG 引用和安全切片评测；线上 shadow 与灰度监控 schema、工具成功、用户纠错和 fallback。平均分不变也可能掩盖关键长尾失败。
 
 ## 六、项目讲法模板
+
+这段是设计表达，不是已实施与提速成绩；回到FP基线还必须确认更大权重有容量，不能在INT4满载时无准备地全量切换。
 
 > 我们将量化版作为带完整 manifest 的模型制品发布，固定算法、校准数据、权重/KV 精度、引擎和硬件。离线在真实长度与并发下对比 FP 基线的任务质量、工具 JSON、长上下文、TTFT/TPOT、显存和 SLA goodput；灰度按稳定用户分桶，监控 OOM、fallback 和每成功任务成本。达到停止规则立即回滚到稳定精度，因此量化从“跑分优化”变成可验证的生产容量优化。
 

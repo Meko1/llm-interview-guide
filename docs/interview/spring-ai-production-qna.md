@@ -1,9 +1,6 @@
 ---
 title: Spring AI / Java AI 生产化高频问答
-description: >-
-  Spring AI 面试的重点不是“会不会调用 ChatClient”，而是 Java/Spring 生产系统如何把 LLM
-  接入已有权限、审计、SSE、限流、配置、微服务和运维体系。工程总览见 Spring AI 基础与面试题，应用全链路见 LLM
-  应用开发实战，完整系统设计回答见 Java /
+description: 解释Spring AI应用抽象与Java生产治理的分工，覆盖流式取消和阻塞、权限上下文、结构化转换边界、工具幂等、预算与可验证上线门禁。
 level: L2
 roles:
   - 应用开发
@@ -16,6 +13,8 @@ classification: inferred
 
 ## 怎么用这页
 
+本文是参考问答，历史“高频”标题不代表招聘题频统计。产品API应锁定版本；框架抽象不自动提供业务审批、限流、计费、权限或完整trace。下面项目模板均为构造方案，不是个人上线记录。
+
 遇到 Spring AI / Java AI 岗位题，可以按这条线回答：
 
 1. **定位**：Spring AI 是 Spring 生态里的 LLM 抽象层，不只是少写 HTTP。
@@ -26,7 +25,7 @@ classification: inferred
 
 可复述版本：
 
-> 我会把 Spring AI 放在 AI Service 层，统一封装模型、Prompt、RAG、Tool Calling 和流式输出。业务请求先进认证和租户上下文，再进入 AI 编排；RAG 检索带 ACL，工具调用走后端鉴权，SSE 有超时和断开处理，全链路记录 prompt_version、model、token、tool_calls、retrieved_docs 和 cost。
+> 我会把 Spring AI 放在 AI Service 层，统一封装模型、Prompt、RAG、Tool Calling 和流式输出。业务请求先进认证和租户上下文，再进入 AI 编排；RAG 检索带 ACL，工具调用走后端鉴权，SSE 有超时和断开处理，全链路关联 prompt_version、model、token、tool_calls、retrieved_docs 的脱敏引用和 cost；原始prompt/文档不默认写日志。
 
 ## 追问链一：Spring AI 相比自己封装 HTTP 有什么收益
 
@@ -34,16 +33,16 @@ classification: inferred
 
 标准答法：
 
-> 自己封装 HTTP 可以跑 demo，但生产里会重复处理模型差异、prompt 模板、结构化输出、流式返回、Embedding、VectorStore、Tool Calling、RAG Advisor、观测和配置。Spring AI 的价值是把这些能力纳入 Spring 的 Bean、配置、拦截器、监控和微服务治理体系。
+> 直接 SDK/HTTP 也可用于生产；是否使用框架取决于适配复用与升级成本。自行封装需明确承担模型差异、prompt 模板、结构化输出、流式返回、Embedding、VectorStore、Tool Calling、RAG Advisor、观测和配置。Spring AI 的价值是把这些能力纳入 Spring 的 Bean、配置、拦截器、监控和微服务治理体系。
 
 | 能力 | 自己封装 HTTP 的问题 | Spring AI 的价值 |
 | --- | --- | --- |
 | 模型调用 | 各家 API 格式不同 | 统一 ChatClient / Model 抽象 |
-| Prompt | 模板散落在业务代码 | 模板化、版本化、可复用 |
+| Prompt | 模板散落在业务代码 | 模板化与复用入口；版本账本需应用实现 |
 | RAG | Embedding / VectorStore 自己拼 | 统一检索组件和 Advisor |
-| 流式输出 | SSE、取消、异常各处实现 | 统一封装和服务层治理 |
+| 流式输出 | SSE、取消、异常各处实现 | 提供流式调用入口；取消和资源治理需服务实现 |
 | Tool Calling | 工具 schema 和执行分散 | 可统一暴露 Java 方法和业务工具 |
-| 观测 | 不知道 token、延迟、prompt 版本 | 全链路 trace 和成本拆账 |
+| 观测 | 不知道 token、延迟、prompt 版本 | 提供观测接入点；trace连通性和成本账本需验证 |
 
 反面回答：
 
@@ -62,7 +61,7 @@ classification: inferred
 | 事件 | 含义 |
 | --- | --- |
 | `message_start` | 返回 request_id、model、trace_id |
-| `delta` | 增量 token |
+| `delta` | 增量文本片段；不保证等于一个token |
 | `tool_call` | 可选，展示工具调用状态 |
 | `warning` | 降级、引用不足、部分失败 |
 | `error` | 上游超时、审核失败、权限拒绝 |
@@ -70,9 +69,9 @@ classification: inferred
 
 ### 关键处理
 
-- 客户端断开：取消上游模型请求，释放连接和线程。
-- 上游超时：发送结构化 error 事件，记录 partial response。
-- 内容审核失败：停止继续输出，返回安全提示和审计日志。
+- 客户端断开：尝试取消上游订阅/连接并释放本地资源；取消是否停止供应商生成和计费需核对，不保证立即生效。
+- 上游超时：连接尚可写时发送结构化error并终止；响应头提交后不能改HTTP状态码，失联时只记服务端终态与partial response。
+- 内容审核失败：停止后续输出；已经发送的字节无法撤回。强安全场景需在发送前缓冲审核，权衡TTFT与存储上限。
 - 代理缓冲：Nginx / 网关关闭响应缓冲，保持心跳。
 - 日志：不要只记录最后答案，至少记录摘要、token、错误码和 trace_id。
 
@@ -81,12 +80,12 @@ classification: inferred
 | 方式 | 适合 | 风险 |
 | --- | --- | --- |
 | 同步 Servlet | 低并发、实现简单 | 上游慢会占住业务线程 |
-| 异步线程池 / `SseEmitter` | 中等并发、迁移成本低 | 需要独立线程池、超时和 backpressure |
-| WebFlux | 高并发流式、响应式链路 | 团队学习成本和调试复杂度更高 |
+| 异步线程池 / `SseEmitter` | 中等并发、迁移成本低 | 需要独立线程池、超时和有界缓冲；SSE单向传输不天然有应用级backpressure |
+| WebFlux | 高并发流式、响应式链路 | 事件循环不可阻塞；工具/SDK/JDBC是否阻塞须逐段核查 |
 
 可复述：
 
-> 如果只是内部低并发助手，SseEmitter 足够；如果是高并发 C 端聊天，应该考虑 WebFlux 或独立流式网关。无论哪种方式，都要做超时、限流、断开取消和熔断。
+> 内部低并发助手可评估SseEmitter；高连接数可评估WebFlux或独立流式网关，但不能从并发高低直接推出框架选择。无论哪种方式，都要做超时、限流、断开取消和熔断。
 
 ## 追问链三：慢模型如何不拖垮 Java 微服务
 
@@ -104,11 +103,11 @@ classification: inferred
 | 成本失控 | 用户/租户预算、最大 token、缓存 |
 | 长连接过多 | SSE 连接上限、心跳、超时清理 |
 
-Java 落地时可以用 Resilience4j / Sentinel / 网关限流组合治理：`timeout` 控制单次等待，`bulkhead` 隔离线程池或信号量，`rate limiter` 控制租户速率，`circuit breaker` 在上游持续失败时快速失败。429 和网络抖动可以带退避重试；鉴权失败、权限拒绝、内容审核失败、结构化校验后的业务非法参数不要盲目重试。
+Java 落地时可以用 Resilience4j / Sentinel / 网关限流组合治理：`timeout` 控制单次等待，`bulkhead` 隔离线程池或信号量，`rate limiter` 控制租户速率，`circuit breaker` 在上游持续失败时快速失败。429/暂态错误仅在供应商重试语义、总deadline、剩余预算和幂等边界允许时带抖动退避，尊重Retry-After；已开始输出或已经调用写工具的请求不能整链盲重试。鉴权失败、权限拒绝、内容审核失败、结构化校验后的业务非法参数不要盲目重试。
 
 项目表达：
 
-> 我们把 AI 调用放到独立的 `ai-executor` 和模型网关后面，设置 P95 超时、最大并发、队列长度和租户配额。模型异常时降级为知识库搜索、标准 FAQ 或转人工，不影响核心交易服务。
+> 参考方案把 AI 调用放到独立的 `ai-executor` 和模型网关后面，设置单请求deadline、P95 SLO、最大并发、队列长度和租户配额。模型异常时降级为知识库搜索、标准 FAQ 或转人工，不影响核心交易服务。
 
 ## 追问链四：Spring AI RAG 权限怎么做
 
@@ -174,20 +173,22 @@ login user
 
 > 模型只提出工具调用意图，真正执行仍然是 Java 服务端的业务 API，必须按普通生产接口做鉴权、事务、幂等和审计。
 
+不要只在调用ChatClient之前校验工具：框架可能按注册配置自动调用工具方法，授权/审批门禁必须置于ToolCallback或领域服务的真实执行入口，并确保恢复、自动重试和其他协议入口无法绕过。
+
 ## 追问链六：结构化输出和业务校验
 
 **面试官：模型返回 JSON 偶发不合法，Java 后端怎么处理？**
 
 标准答法：
 
-> 不能只靠 prompt 说“请返回 JSON”。优先用模型侧 JSON / schema 约束或 Spring AI 的结构化输出转换；后端用 DTO + Bean Validation 做二次校验；解析失败可以重试一次，关键字段不合法则拒绝或转人工。
+> 不能只靠 prompt 说“请返回 JSON”。区分供应商原生schema约束与Spring AI文本converter：后者给格式提示再转换，官方明确是best effort，不保证模型遵循schema；后端用 DTO + Bean Validation 做二次校验；解析失败可以重试一次，关键字段不合法则拒绝或转人工。
 
 处理顺序：
 
 1. Prompt 明确输出 schema 和示例。
-2. 使用结构化输出 / converter / JSON mode。
+2. 按锁定版本/模型能力选原生schema约束；converter与JSON mode不等价，需验证支持的schema子集。
 3. 后端解析到 DTO。
-4. Bean Validation 校验字段范围。
+4. 显式调用Bean Validation校验字段范围，再查业务事实、账户归属和资源权限；DTO反序列化不会自动执行这些校验。
 5. 失败时有限重试或降级。
 6. 记录 bad case 到评估集。
 
@@ -287,17 +288,19 @@ Web/App
 ### 上线门禁
 
 - 制度问答 golden set 准确率达标。
-- 跨租户/跨用户数据泄露 = 0。
-- 高危写操作未确认执行 = 0。
+- 在列明样本/攻击集上观察到跨租户泄漏0次；发现一次即阻断，不把样本零事件当全局保证。
+- 未确认写操作在负例集上0次，且资源侧授权不变量经过检查；不是模型拒绝概率保证。
 - SSE 中断和上游超时有结构化错误。
 - P95 延迟和单问成本达标。
 - bad case 能回放到 prompt、文档和工具。
 
 ## 项目讲法模板
 
+以下均为参考/mocked项目表达，未实际实施时使用“方案计划”；只在有可追溯证据时改为自己的经历。
+
 ### 模板一：政企知识库问答
 
-> 我们用 Spring AI 接入政企制度知识库。文档入库时写入部门和角色元数据，查询时按登录用户生成 ACL filter。模型调用走企业模型网关，ChatClient 统一设置 prompt_version 和模型参数。回答必须带引用，引用文档二次校验权限。上线前用制度问答 golden set、跨部门越权集和拒答集做回归。
+> 参考方案用 Spring AI 接入政企制度知识库。文档入库时写入部门和角色元数据，查询时按登录用户生成 ACL filter。模型调用走企业模型网关，应用层记录prompt_version，并通过ChatClient设置支持的模型参数。回答必须带引用，引用文档二次校验权限。上线前用制度问答 golden set、跨部门越权集和拒答集做回归。
 
 ### 模板二：银行客服 Agent
 
@@ -335,3 +338,29 @@ Web/App
 - [模型网关与多模型路由](/engineering/llm-gateway)
 - [Agent 工具安全与权限边界](/agent/tool-safety)
 - [框架与智能工作流高频问答](/interview/framework-workflow-qna)
+
+## 异步链路的上下文与资源验证
+
+[Spring AI Structured Output Converter](https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html) 本轮实读best-effort/BeanOutputConverter片段；[ChatClient](https://docs.spring.io/spring-ai/reference/api/chatclient.html) 实读stream与阻塞注意事项。它们是滚动参考页面，不代表项目依赖的固定版本；不据此承诺所有调用全异步或所有span天然连通。
+
+租户身份应以已认证的不可变上下文传入检索与工具服务，不能让模型补tenant_id。Servlet ThreadLocal不会自动安全跨线程或进入Reactor链，使用显式参数或经过验证的上下文传播；清理线程复用残留，并避免无边界的MDC user标签造成高基数指标。
+
+构造容量算例：500条流每条最多缓存64 KiB，仅缓冲上界就是31.25 MiB；不含连接、DTO、JSON累积和框架开销。若一次事件超过上限、客户端极慢或需要聚合完整JSON，应有拒绝/超时/安全暂存策略，不能无限collect。WebFlux中的阻塞工具隔离到有界执行器也仍要限制排队，而不是无限开线程。
+
+<details>
+<summary>L1：SSE中途异常能否再返回HTTP 500？</summary>
+
+响应已经提交时不能改状态码；连接可写则发应用error并标终态，不再发正常message_end；连接不可写则留审计结果，客户端可用request_id查询状态。mocked验证正常、断网、审核失败三条路径，不把断流当成功。
+</details>
+
+<details>
+<summary>L2：如何定位“用了WebFlux仍耗尽线程”？</summary>
+
+先测事件循环、工具/数据库线程、连接池和队列等待，找阻塞SDK、JDBC或`.block()`。用慢工具与慢消费者负载证明并发上限、缓冲上限、取消回收和核心业务bulkhead有效；分别报告TTFT、终态延迟、P95、拒绝率与总尝试成本。
+</details>
+
+<details>
+<summary>L3：converter回归和安全零事件怎么评估？</summary>
+
+固定模型/依赖/schema，区分原生schema成功率、解析成功率、字段语义与权限正确率；拒答/截断也计入分母。1000个独立同分布样本中零事件，仅能用rule-of-three粗估95%单侧概率上界约0.3%；对相关/自适应攻击样本不能套这个结论，更不能证明无越权。
+</details>

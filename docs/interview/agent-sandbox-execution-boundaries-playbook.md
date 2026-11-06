@@ -1,9 +1,6 @@
 ---
 title: Agent 沙箱、执行准入与逃逸处置：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  “在 Docker
-  里跑”不是沙箱设计的完整答案。生产面试真正要讲清：谁能请求执行、代码实际在哪台机器运行、能读写哪些路径、能访问哪些域名、携带什么身份、何时需要批准、无法被隔离时是否
-  fail-closed，以及越过边界后如何留下可追溯证据。
+description: 比较工作区、容器、VM、远程执行与工具网关的边界，讨论秘密隔离、网络出口、进程回收和可验证拒绝。
 level: L2
 roles:
   - 应用开发
@@ -103,9 +100,15 @@ admitted -> sandboxed -> boundary_blocked -> promotion_requested
 | L3 受限 host | 读取诊断、访问构建节点 | command digest、host-local allowlist、审批 |
 | L4 特权/不可逆 | 生产部署、删库、改权限 | 双人/变更单、后端鉴权、可回滚与 effect 对账 |
 
-审批服务应审批“冻结计划”，而不是一个自然语言意图：canonical command AST/digest、解释器、cwd、resolved path、环境引用、target host、网络目的地和有效 TTL。OpenClaw 的 node approval 会保存 canonical execution plan，参数、cwd、agent 或 session 改变后转发应因 mismatch 拒绝，这是很好的实现参照。[OpenClaw Exec approvals](https://docs.openclaw.ai/tools/exec-approvals)
+审批服务应审批冻结的 argv/解释器、cwd、工件与环境 digest、目标 host、读写与网络范围及 TTL。不要声称“解析 shell AST 就能看清全部效果”：解释器、脚本、子进程、动态下载和符号链接仍可能绕开语义检查，需 OS/网关强制边界。[OpenClaw 原审批入口](https://docs.openclaw.ai/tools/exec-approvals)仅作待按版本核对的实现导航。
+
+实际读取的 [Docker 安全说明](https://docs.docker.com/engine/security/)区分 namespace/cgroup、daemon 攻击面、capability 和内核加固；容器不等同独立内核。执行不可信代码时，按后果选择容器、额外沙箱或 VM，并明确宿主 socket/privileged 等禁止项。非 root 也不自动阻止出网或读取已挂载秘密。
+
+**练习：只批准 `npm test` 就安全了吗？** L1 应想到仓库测试脚本本身也是代码；L2 冻结代码/lockfile、限制子进程/文件/网络并只提供测试凭证，不因命令名叫 test 就获准 host 执行；L3 用符号链接、恶意 PATH、测试脚本出网和容器残留做可观察拒绝实验。日志写“sandboxed”只是声明，需 mount/network/credential 与实际拒绝证据。
 
 ## 七、四种 Runtime 的可复述映射
+
+产品默认读取范围、Bash/内置工具边界、fallback 和命令开关未逐版本核验，原链接保留为验证入口。前文 contract 是企业参考设计，不是某产品配置；不要把示例 `memory_mb`、预算或 failIfUnavailable 名称当跨运行时标准。
 
 ### Claude Code：OS sandbox 与权限规则互补
 

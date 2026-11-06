@@ -5,13 +5,15 @@ level: L4
 roles:
   - 算法研究
   - Infra
-classification: reviewed
+classification: inferred
 ---
 # 前沿阅读与贡献判断
 
 L4 不是「刚更新」的标签，也不是比 L3 多背几个模型名。它描述的是评价新工作贡献的阅读目标，不对站内旧材料的时效背书。前置要求是能理解相关方向的基线、推导与实验设置。
 
 <PathJourney />
+
+先从 [一手资料阅读地图](/advanced/primary-source-reading) 选择一个具体问题，区分作者论文、官方实现与工程经验；阅读范围和未验证条件必须留下记录。
 
 ## 一张论文卡，六个问题
 

@@ -1,8 +1,7 @@
 ---
 title: 大模型基础篇岗位要求总纲
 description: >-
-  这页把 Boss/JD
-  里反复出现的技术词，翻译成面试准备清单。目标不是把每个框架都学成源码专家，而是能回答：它解决什么问题、生产里怎么用、和相邻技术怎么取舍、项目里怎么讲。
+  把目标岗位描述中的技术词转成可验证能力与项目证据，区分明确要求、解释性假设和待确认事项；不把框架名、题量或教程经历当岗位达标证明。
 level: L2
 roles:
   - 应用开发
@@ -11,21 +10,25 @@ classification: inferred
 ---
 # 大模型基础篇岗位要求总纲
 
-> 这页把 Boss/JD 里反复出现的技术词，翻译成面试准备清单。目标不是把每个框架都学成源码专家，而是能回答：它解决什么问题、生产里怎么用、和相邻技术怎么取舍、项目里怎么讲。
+> **目标是把一份真实 JD 翻译成准备计划，不是推断所有公司的招聘标准。** 本页未建立招聘平台的代表性抽样，旧“高频”标题作为导航保留；下文矩阵和题目是练习建议，不是真题认证、频率统计或就业承诺。
+
+先保存目标 JD 的链接、访问日期与明确句子，再分三栏：**写明的要求**、**你推测的约束**、**待招聘方确认事项**。“熟悉 LangGraph”不自动要求某种 checkpoint 存储；“有 RAG 经验”也不自动要求训练 embedding 模型。
 
 面试前需要一问一答速刷时，配合 [大模型基础篇高频问答加厚版](./foundation-qna) 使用；如果目标岗位写了 Spring AI、LangChain、LangGraph、Dify、智能工作流或 Function Calling，继续刷 [框架与智能工作流高频问答](./framework-workflow-qna)；如果写了 RAG、Memory、Agent 评测、安全合规或企业知识库，继续刷 [RAG、Memory 与评测安全高频问答](./rag-memory-eval-qna)；如果写了推理部署、vLLM、SGLang、量化、压测、GPU 或成本治理，继续刷 [推理部署与成本治理高频问答](./inference-cost-qna)；如果写了 SFT、LoRA、QLoRA、RLHF、DPO、MaaS 或模型网关，继续刷 [微调与模型平台高频问答](./finetuning-platform-qna)。
 
 ## 面试先背这几句话
 
-- 大模型基础篇已经不只考 Transformer 原理，更考 **LLM 应用工程化**：模型接入、RAG、Agent、工具调用、评估、成本、安全。
-- Boss/JD 写 Spring AI、LangChain、LangGraph、Dify，本质是在考候选人是否能把“调模型”做成可维护的业务系统。
+不要逐字背成个人经历。以下是组织回答的思路，须用能核实的实现与证据填充：
+
+- 应用和工程岗位可准备模型接入、评估、成本与安全；训练研究岗位则另补损失、实验与系统，不把所有岗位合成一张必修清单。
+- 框架名是实现线索：先解释问题，再比较直接 SDK/HTTP 与框架的成本、行为和升级边界，不替招聘方断言其“真正想考”。
 - RAG、Agent、Workflow、Function Calling 不是互斥概念。真实项目常见组合是：Workflow 控主流程，Agent 处理不确定子任务，RAG 提供知识，Function Calling 连接业务系统。
-- 微调、RAG、Prompt、长上下文要会选型：知识更新和权限优先 RAG，风格/格式/领域行为优先 SFT/LoRA，偏好和安全行为优先 RLHF/DPO。
-- 可上线的大模型系统必须能解释效果、成本、延迟、安全和失败恢复；只会做 demo 很容易被追问打穿。
+- Prompt、检索、长上下文和微调可组合，但先测基线：格式错误可能应由程序/schema 校验解决；RAG 不自动保证权限，偏好对齐不等于执行端安全。
+- 区分方案、模拟链路、练习已运行、实验结果和真实上线；效果、成本、延迟、安全与恢复需要分别验收，框架名不是交付证明。
 
 ## Boss/JD 高频技能矩阵
 
-| 技能词 | 岗位真正想考 | 面试常问 | 站内补课 |
+| 技能词 | 可转成的能力问题（待岗位确认） | 练习追问 | 站内补课 |
 | --- | --- | --- | --- |
 | Spring AI | Java 团队如何接入 LLM 能力 | 为什么不用自己封装 HTTP？如何做 SSE、权限、审计？ | [Spring AI 基础与面试题](/engineering/spring-ai) |
 | LangChain | LLM 应用编排抽象 | Chain、Runnable、Retriever、Tool 怎么分工？ | [LangChain 与应用框架](/engineering/langchain) |
@@ -68,13 +71,13 @@ classification: inferred
 
 1. LangChain 的 Model、Prompt Template、Output Parser、Retriever、Tool 分别负责什么？
 2. LCEL / Runnable 的价值是什么？什么时候不用框架更好？
-3. LangChain 和 LlamaIndex 最大差异是什么？
+3. 在固定任务上比较 LangChain、LlamaIndex 与直接 SDK 的抽象、数据接入、调试和升级成本。
 4. 框架升级导致行为变化，你怎么隔离风险？
 5. 生产环境如何做 trace、dataset 和 prompt 回归？
 
 ### 3. LangGraph 状态图 Agent
 
-1. 为什么 Agent 工程从 Chain 走向 Graph？
+1. 什么任务需要显式状态图？何时简单调用或固定工作流更合适？
 2. State、Node、Edge、Conditional Edge 怎么解释？
 3. Checkpoint、interrupt、human-in-the-loop 解决什么问题？
 4. LangGraph 如何防止 ReAct 自由循环失控？
@@ -99,7 +102,7 @@ classification: inferred
 ### 6. Dify 与低代码工作流
 
 1. Dify 的 Chatflow、Workflow、Knowledge、Tool 怎么分工？
-2. 低代码平台适合 PoC，为什么复杂生产链路常要代码化？
+2. 低代码和代码服务分别满足哪些部署、恢复与治理约束？什么条件下才需要迁移？
 3. Dify 工作流如何做版本管理、灰度、评估和成本统计？
 4. Dify、Coze、n8n、LangGraph、自研代码如何取舍？
 5. 如何把一个 Dify PoC 迁移为 Spring AI 或 LangGraph 服务？
@@ -108,7 +111,7 @@ classification: inferred
 
 1. Workflow 和 Agent 的本质区别是什么？
 2. Prompt Chaining、Routing、Parallelization、Orchestrator-Workers、Evaluator-Optimizer 怎么记？
-3. 为什么“能用 Workflow 就别上 Agent”？
+3. 何时固定工作流更可控，何时需要模型决定下一步？怎样用同预算基线证明收益？
 4. 评估-优化循环什么时候有效，什么时候会浪费钱？
 5. 业务流程中哪些节点必须程序化校验？
 
@@ -130,7 +133,7 @@ classification: inferred
 
 ### 10. RLHF / DPO / 偏好优化
 
-1. RLHF 为什么要 Reward Model？PPO 在这里做什么？
+1. 经典 RM+PPO 路线中各模型负责什么？为什么它不是全部 RLHF 的定义？
 2. DPO 如何绕过显式奖励模型和在线 RL？
 3. 偏好数据如何采集，如何避免标注偏差？
 4. 安全对齐和过度拒绝如何平衡？
@@ -158,32 +161,55 @@ classification: inferred
 2. 工具调用准确率怎么拆指标？
 3. Prompt Injection、工具越权、数据泄露分别怎么防？
 4. 高危动作如何做人工确认、沙箱和审计？
-5. 如何证明一次 prompt 或模型升级没有让 Agent 变差？
+5. 如何用冻结回归与高风险切片识别退化？测试没发现退化与全分布保证有什么区别？
 
 ## 项目讲法模板
 
-面试里不要说“我用了某某框架”。按下面 7 句讲：
+可以提框架，但要解释职责与限制。按下面 7 类证据讲，缺失项明确说未完成：
 
 1. **业务目标**：这个系统服务谁，解决什么高频痛点。
 2. **输入输出**：用户输入是什么，最终产物是什么。
 3. **主链路**：Workflow、RAG、Agent、Tool Calling 分别在哪一步。
 4. **关键取舍**：为什么不用另一种方案，比如为什么 RAG 而不是微调，为什么 LangGraph 而不是自由 ReAct。
-5. **可靠性**：超时、重试、降级、人工确认、权限隔离怎么做。
-6. **评估指标**：准确率、召回率、任务成功率、P95 延迟、单次成本至少讲两个。
-7. **复盘迭代**：线上 bad case 怎么回流，下一步怎么优化。
+5. **可靠性**：超时、取消、未知提交、恢复时重新核权；哪个动作可重试，哪个须先对账。
+6. **评估证据**：定义样本、分子/分母与计时边界；逻辑任务和重试次数分开；报告高风险错误、覆盖、延迟及成本。
+7. **复盘迭代**：一次真实失败或构造故障如何定位与回归；没有线上经历就讲练习限制。
 
-可直接复述的版本：
+**可填写的证据卡，不是可复制的上线经历**：
 
-> 我做的不是单轮聊天，而是一个可上线的 LLM 应用。主流程用 Workflow 固定住，知识问题走 RAG，涉及外部系统的动作通过 Function Calling 调工具，不确定的多步任务再交给 Agent。为了上线，我做了权限过滤、引用溯源、工具参数校验、超时重试、人工确认和 trace 回放。评估上同时看任务成功率、检索命中率、延迟、token 成本和高危动作拦截率。
+~~~text
+任务 / 允许用户 / 成功终态：
+我的职责与实践状态（方案 / 模拟 / 已运行 / 上线）：
+数据、模型、提示、代码版本：
+直接实现基线与选择框架的理由：
+权限、引用、参数校验与未知提交处理：
+冻结样本、指标分母、延迟边界与成本组成：
+一次失败、修复后回归与剩余风险：
+~~~
+
+**构造练习**：知识助手引用了已撤销政策，工具又创建了重复工单。先分开诊断证据版本与外部写入，再追查索引/缓存更新、业务幂等键和提交未知恢复；不能只换模型或写“不要出错”。练习日志不是线上日志，未测过的数值不能写成个人指标。
 
 ## 4 周基础篇补齐路线
 
-| 周次 | 目标 | 每天动作 | 产出 |
+四周是安排示例，不是岗位达标保证。按目标选一条主分支，其余保留待补，不用每日题数代替验收。
+
+| 周次 | 目标 | 建议动作 | 可核产出 |
 | --- | --- | --- | --- |
-| 第 1 周 | 补 LLM 应用共同底座 | Prompt、结构化输出、RAG、Function Calling 各刷 10 题 | 一张“用户输入到模型输出”的链路图 |
-| 第 2 周 | 补 Agent 与 Workflow | ReAct、LangGraph、Dify、MCP、评测各刷 8 题 | 一个 Agent 任务平台系统设计答案 |
-| 第 3 周 | 补 Java 与平台治理 | Spring AI、MaaS、模型网关、LLMOps、成本治理 | 一个 Java + Spring AI 项目讲法 |
-| 第 4 周 | 补微调与安全 | SFT、LoRA、QLoRA、RLHF、DPO、安全合规 | 一份面试前速查稿和 2 个项目故事 |
+| 第 1 周 | 对齐 JD 与缺口 | 选任务，口述 token/证据/结构化结果并跑最小基线 | 要求—证据—待确认事项表 |
+| 第 2 周 | 补主分支 | RAG 或工具工作流，加入无权限/无证据/超时负例 | 链路图、错误样例和断言 |
+| 第 3 周 | 补工程或研究约束 | 工程测负载/成本/恢复；研究写数据划分/同预算对照 | 带单位、环境和限制的记录 |
+| 第 4 周 | 模拟追问与修订 | 解释替代方案、故障与未验证项，只补相关微调/前沿 | 不虚构经历的项目证据卡 |
+
+<details>
+<summary>L1 / L2 / L3 如何回答同一个“RAG 答错了”？</summary>
+
+- **L1**：从原文、索引、召回、上下文和答案逐层找丢失/误用证据的位置，展示可复查文档指针。
+- **L2**：加入版本、租户 ACL、缓存、超时、增量更新与发布门禁；投诉数不是准确率的分母。
+- **L3**：固定问题和证据做对照；按问题组划分数据，避免同源变体泄漏并报告不确定性。
+
+层级是能力深度，不是回答越长越高级；站内分级也不是职称或薪资标准。
+
+</details>
 
 ## 站内学习路径
 
@@ -194,3 +220,7 @@ classification: inferred
 - 推理部署与成本：[推理优化与部署](/inference/inference-optimization) -> [推理框架对比](/inference/serving-frameworks) -> [推理性能压测](/inference/inference-benchmark) -> [推理部署与成本治理高频问答](./inference-cost-qna)
 - 微调与对齐：[微调范式](/finetuning/finetuning) -> [LoRA / QLoRA](/finetuning/lora) -> [RLHF / DPO](/finetuning/rlhf)
 - 平台治理：[MaaS 平台与模型服务治理](/engineering/maas-platform) -> [模型网关](/engineering/llm-gateway) -> [LLMOps](/engineering/llmops)
+
+## 资料性质与待核范围
+
+本页为岗位描述解读与练习设计，没有招聘频率、薪资或教育效果实证，不用培训广告定义能力。具体机制沿站内专题核对原论文、官方文档与版本。JD 未写明硬件、框架版本、SLA 或权限边界时应向对方确认，不能自动填造。

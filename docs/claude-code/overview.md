@@ -1,9 +1,6 @@
 ---
 title: Claude Code 功能总览
-description: >-
-  Claude Code 是 Anthropic 推出的终端原生编程 Agent（terminal-native agentic coding
-  system）：直接跑在你的项目目录里，能读写文件、执行命令、跑测试、提交 Git，把「让 AI 帮我改代码」从补全升级成「让 AI
-  自主完成一个工程任务」。
+description: 理解 Claude Code 的任务循环、运行形态、项目上下文与权限边界，并用可验证的小任务判断它是否适合你的工作流。
 level: L1
 roles:
   - 应用开发
@@ -14,17 +11,17 @@ classification: inferred
 
 > Claude Code 是 Anthropic 推出的**终端原生编程 Agent**（terminal-native agentic coding system）：直接跑在你的项目目录里，能读写文件、执行命令、跑测试、提交 Git，把「让 AI 帮我改代码」从补全升级成「让 AI 自主完成一个工程任务」。本块系统介绍它的功能、代码架构与底层机制。通用编程 Agent 原理见 [编程 Agent 底层架构与机制](/engineering/coding-agent-internals)。
 
-> 说明：本块内容综合自 Claude Code 官方文档与社区逆向分析白皮书（如 ccb.agent-aura.top）。核心机制（agentic loop、工具、上下文压缩、权限、MCP、Hooks、Skills、子 Agent 等）是公开可观察的行为；个别内部实现细节（具体文件名、内部 flag 等）来自社区逆向，可能随版本变化，仅供理解原理参考。
+> 版本边界：本页依据 2026-11-05 读取的[官方总览](https://code.claude.com/docs/en/overview)与[运行原理](https://code.claude.com/docs/en/how-claude-code-works)整理，不代表已在本机验证每项能力。CLI、IDE、桌面和网页会话的环境与权限不应混为一谈；部署前记录 `claude --version`、运行形态、认证方式和生效配置。
 
 ## 一、它是什么？一句话定位
 
 | 维度 | Claude Code |
 | --- | --- |
-| 形态 | 终端 CLI（也有 IDE 扩展、SDK） |
+| 形态 | 终端、IDE、桌面应用与浏览器；Agent SDK 用于自建应用 |
 | 本质 | 自主 agentic loop 驱动的编程 Agent |
-| 权限 | 在本地进程运行，有真实文件系统和 shell 访问权 |
+| 权限 | 取决于运行环境、权限模式、组织策略与可用工具 |
 | 与补全的区别 | 不是「补下一行」，而是「自主完成多步任务」 |
-| 与云端 Chat 的区别 | 直接操作你的真实代码库，不是隔离沙箱里的玩具 |
+| 与云端 Chat 的区别 | 可通过工具操作工作区；本地和云端工作区的隔离方式不同 |
 
 核心理念：**把强模型放进一个能真正动手的循环里**——看代码、改代码、跑测试、看结果、再改，直到任务完成。
 
@@ -36,12 +33,12 @@ classification: inferred
 
 ### 2. 工具系统
 
-内置一套文件/命令/搜索工具（社区统计 50+ 个），让模型能真正操作环境：
+内置工具覆盖文件、命令、搜索与任务编排；工具数量和名称会变化，以[官方工具表](https://code.claude.com/docs/en/tools-reference)和会话实际暴露的能力为准：
 
 - **文件**：Read / Edit / Write（精确「旧文本→新文本」替换，而非整文件覆盖）
 - **命令**：Bash（跑测试、git、构建、装依赖）
 - **搜索**：Grep / Glob（基于 ripgrep 的快速代码检索）
-- **任务**：TodoWrite / Task（待办与子任务管理）
+- **任务**：任务跟踪与 Agent 委派（不要将旧版 Task 名称当成固定接口）
 
 ### 3. 项目记忆（CLAUDE.md）
 
@@ -49,11 +46,11 @@ classification: inferred
 
 ### 4. 计划模式（Plan Mode）
 
-「先看后做」的安全机制：让 Claude 先调研、给出方案，**你确认后再动手改代码**，避免它一上来就乱改。适合复杂或高风险任务。
+用于调研与方案审阅，限制源码编辑。它不是整个进程的只读沙箱，也不等于已完成技术评审；切到执行前应明确允许的路径、副作用和验收命令。
 
 ### 5. 子 Agent / 并行（Subagents）
 
-复杂任务可派生子 Agent（Task 工具），各自维护独立上下文并行处理子任务、只回传结论——避免主上下文被塞爆（上下文隔离，见 [上下文工程](/agent/context-engineering)）。
+复杂任务可委派给独立上下文的子 Agent，返回摘要与证据。上下文隔离不自动隔离文件系统，也不免除主任务的整合与验证责任，见[子 Agent](/claude-code/subagents)。
 
 ### 6. 扩展能力：MCP / Hooks / Skills / Slash Commands
 
@@ -97,10 +94,10 @@ Claude Code：
 ## 高频追问
 
 **Q：Claude Code 和 Copilot 有什么本质区别？**
-Copilot 主要是「补全下一段代码」，低延迟、零摩擦但被动；Claude Code 是「自主 agentic loop」——能跨多文件读、改、跑测试、迭代，自主完成一个完整工程任务。一个是「副驾驶补字」，一个是「自主完成工单」。
+应比较具体模式而不是品牌：内联补全服务于局部编辑；Agent 模式执行多步工具循环。其他产品也可能提供 Agent 能力。选型应测同一个任务的正确性、审查成本、权限控制与费用，不能从名称推断谁能完成工单。
 
 **Q：它真的能跑命令、改我的文件吗？安全吗？**
-能——它运行在本地进程、有真实 shell 和文件访问权，所以能跑测试、提交 Git。安全靠权限模型（Allow/Ask/Deny）、Plan Mode（先看后做）、沙箱等多层机制；高危操作会询问你（见 [核心机制 - 权限](/claude-code/mechanisms)）。
+能，但是否询问取决于[权限配置](https://code.claude.com/docs/en/permissions)，不能承诺危险操作总会弹窗。初次使用先在无生产凭据的工作区执行一个小任务：限定文件、要求展示 diff、记录验证命令及退出码，并检查拒绝操作是否真的没有副作用。
 
 **Q：CLAUDE.md 是干什么的？**
 项目级记忆文件，存放项目约定、命令、风格等，每次会话自动注入上下文，让 Claude 持续「记得」你的项目规矩，相当于给 Agent 的持久化项目说明书（持久记忆，见 [Agent 记忆](/agent/agent-memory)）。

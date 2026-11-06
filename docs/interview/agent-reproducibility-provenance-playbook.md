@@ -1,9 +1,6 @@
 ---
 title: Agent 可复现运行与配置溯源：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  “模型没变，为什么今天改坏了代码？”通常不是一个纯模型问题。实际一次 Agent run
-  同时受项目指令、路径规则、自动记忆、Skill、MCP/插件、模型/推理配置、权限、工作区、环境变量、检索索引和外部工具版本影响。只保存聊天
-  transcript 无法说明当时哪些配置真正生效；只保存 Git
+description: 以运行 manifest 记录有效配置、实际使用来源和环境，区分哈希完整性、可信出处、历史回放与行为复现。
 level: L2
 roles:
   - 应用开发
@@ -36,6 +33,8 @@ classification: inferred
 | External state | repo SHA、索引版本、feature flag、API 版本 | 代码/知识库/下游资源已经变化 |
 
 配置闭包不是让你永久存储密钥或全部私有文本。原则是：**保存不可变引用、摘要、digest、版本和访问日志；原始敏感工件放在受控 vault，按需要读取。**
+
+digest 检测内容是否相同，不证明作者、批准者或内容正确。实际读取的 [SLSA Provenance v1.0](https://slsa.dev/spec/v1.0/provenance)描述构建如何产生 artifact 的 provenance；将其思路用于 Agent manifest 是本页参考设计，并非“Agent 已符合 SLSA”。签名仍要验证 signer、信任根、对象 digest 与撤销状态。
 
 ## 二、运行 manifest：可查询的事实来源
 
@@ -72,6 +71,8 @@ run_manifest:
 
 其中 `effective_digest` 比“记录有哪些文件”更关键：它代表按加载顺序、path scope、import、裁剪和策略过滤后，真正进入 Agent 上下文的解析结果。每次 tool call 再带 `manifest_digest`、`tool_schema_digest`、`policy_revision`，观测系统才能解释一次差异来自模型、配置还是外部状态。
 
+示例 runtime `0.x`、模型名和配置字段是占位，不是已验证产品版本。manifest 摘要不等于可重建输入：只有 hash 没有原文/可读引用时，能比对却无法 context replay。敏感内容不能保留时如实标记 replayability；不能为复现目标突破保留或删除限制。
+
 ## 三、解析、固定、执行、对账四步
 
 ```text
@@ -98,6 +99,8 @@ execute with pinned refs -> emit actual-use events -> reconcile artifacts/effect
 完成时将最终 diff、测试报告、artifact digest、effect ID、实际模型/工具版本与 manifest 关联。失败 run 也要保留其闭包，否则团队只能用“模型不稳定”解释回归。
 
 ## 四、四类 Runtime 的配置差异
+
+这些产品加载、共享目录和截断行为未逐版本核验，保留为验证导航。企业 resolver 需从实际加载事件取得顺序，不依据本页模拟所有产品的优先级。
 
 ### Claude Code：CLAUDE.md 是上下文，不是强制策略
 
@@ -167,6 +170,8 @@ execute with pinned refs -> emit actual-use events -> reconcile artifacts/effect
 5. 将 manifest diff、测试证据、policy decision 和最终 effect 纳入 incident bundle，避免只在聊天里猜“模型抽风”。
 
 ### 高频追问
+
+**Q：固定所有配置就能输出逐字相同吗？** L1 应区分 trace 回看与重新请求模型；L2 披露模型服务可用版本、随机性、外部状态和并发输入，比较不变量/产物而非逐字文本；L3 用多次重复与配对单因素实验估计漂移，不把 temperature=0 或相同 digest 当作确定性证明。无法恢复旧服务版本时，只能解释历史证据，不能声称完全复现。
 
 **Q：是否要把 prompt 和所有工具输出永久存下来？** 不需要，也不安全。保存 digest、摘要、来源、数据分类、访问日志和受控 vault 引用；仅在经批准的调查中读取高敏原文。可复现性不是无限制采集。
 

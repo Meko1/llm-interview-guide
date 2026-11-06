@@ -1,8 +1,7 @@
 ---
 title: 自回归训练：Teacher Forcing 与标签构造
 description: >-
-  自回归训练中我会把可见性和监督分开：causal/padding mask 决定 token 能看见什么，labels 与 loss mask
-  决定哪些位置参与交叉熵。Teacher Forcing 让完整真实前缀已知，所以训练能并行；推理则把模型输出回填，必须顺序生成，这也带来 exposure
+  从 token 到 labels、可见性和有效监督位置，检查 Teacher Forcing、单次 shift、EOS 与样本拼接的训练边界。
 level: L1
 roles:
   - 在校生
@@ -30,13 +29,13 @@ labels:    [我, 喜欢, 学习, LLM, EOS]
 
 $$L=-\frac{1}{N}\sum_{t\in\mathcal V}\log p_\theta(x_{t+1}\mid x_{\leq t})$$
 
-`mathcal V` 是有效监督位置集合。实际框架中常把完整序列同时传给模型，再在 loss 内部做 shift；也可能在 data collator 中预先右移。两种方式都可以，但必须只做一次 shift。标签错位一位，是“loss 能算但模型学不会”的经典故障。
+$\mathcal V$ 是有效监督位置集合，$N=|\mathcal V|$。图中使用提前对齐的标签；另一种约定是 `labels = input_ids`，由损失函数比较当前位置与后一位置。二者只能选一种，不能对已对齐标签再 shift。`-100` 是损失忽略值，不是合法输入 token ID。
 
 ## 二、Teacher Forcing 为什么训练可并行
 
 训练时位置 `t` 的前缀使用**真实 token**，不是模型上一步采样结果。这称为 Teacher Forcing。配合 causal mask，一次前向即可并行得到全部位置的 logits：可见性受限于下三角 mask，计算本身仍由矩阵乘并行完成。
 
-推理时没有真实未来 token，模型输出的新 token 必须回填为下一步输入，因此生成不可并行。这就是同一个概率分解在训练和推理中呈现不同执行形态的原因。
+推理时下一 token 有数据依赖，普通 decode 逐步生成。投机解码等方案可以批量验证候选，但不消除目标模型的因果分解。这就是同一个概率分解在训练和推理中呈现不同执行形态的原因。
 
 ### Exposure Bias：为什么训练 loss 很低仍可能多轮跑偏
 
@@ -54,21 +53,36 @@ $$L=-\frac{1}{N}\sum_{t\in\mathcal V}\log p_\theta(x_{t+1}\mid x_{\leq t})$$
 
 ## 四、EOS、轮次边界与文档拼接
 
-EOS 同时承担“文本结束”的训练信号和推理停止候选。训练语料拼接时应在文档边界保留 EOS 或等价边界标记；否则模型可能把一篇文档结尾和下一篇开头当成真实连续语境。高吞吐预训练常将多个短样本 pack 到同一长度桶，此时还要用 block-diagonal 或 segment-aware mask 防止跨样本注意力泄漏。
+EOS 或轮次结束标记提供停止信号；聊天模板可能另用 EOT，两者不能任意替换。连续文本预训练可以选择让拼接文档相互可见；若 SFT 或评测要求独立样本，则必须隔离跨样本注意力，并处理边界监督与 position IDs。插入 EOS 只标记边界，不会自动隔断 attention。
 
 不要机械地把所有截断样本末尾都补 EOS。若原始样本因长度上限被截断，伪造 EOS 会教会模型在中途结束；应区分自然结束、窗口切分和补齐 token。
 
 ## 五、最小训练循环的语义
 
+以下是 PyTorch 接口片段，不是完整训练脚本：已构建 `model` 与 `optimizer`；假设模型返回 `[B,T,V]` 的原始 logits、内部没有算 loss，且 `labels` 与 `input_ids` 等长但尚未 shift，至少有一个有效目标。若用 Hugging Face 模型对象，需取 `.logits`；若直接传 `labels` 使用其内部 loss，则不要再做下面的 shift。
+
 ```python
 optimizer.zero_grad(set_to_none=True)
 logits = model(input_ids, attention_mask=attention_mask)
-loss = cross_entropy(logits[:, :-1], labels[:, 1:], ignore_index=-100)
+shift_logits = logits[:, :-1, :].contiguous()
+shift_labels = labels[:, 1:].contiguous()
+loss = torch.nn.functional.cross_entropy(
+    shift_logits.reshape(-1, shift_logits.size(-1)),
+    shift_labels.reshape(-1),
+    ignore_index=-100,
+)
 loss.backward()
 optimizer.step()
 ```
 
-真实框架可能在模型内部 shift labels，AMP 下还会有 loss scaling，分布式下会做梯度同步；但语义不变。`zero_grad`、`backward`、`step` 缺任何一个都不是“训练慢”，而是根本没有正确更新。
+`cross_entropy` 的类别轴必须正确：不能把 `[B,T,V]` 原样传入却让接口把 T 当类别数。AMP 是否需要 scaler 取决于精度；梯度累积则把 `zero_grad` 与 `step` 放在整个累积窗口的边界。全忽略标签的 batch 应跳过或采用明确的零损失策略，不能把 NaN 当作模型不稳定。
+
+<details>
+<summary>自测：用户问题不计 loss，为什么模型还能使用它回答？</summary>
+
+`ignore_index` 只去掉该位置作为预测目标的直接损失，不删除输入，也不屏蔽 attention。用户输入的表示仍影响回答位置，回答损失仍可通过这个上下文路径反传。打印「输入位置、可见 key、目标位置、是否计 loss」四列能发现两类 mask 被混用。
+
+</details>
 
 ## 六、面试高频问答
 
@@ -87,3 +101,5 @@ causal mask 约束前向可见性，保证位置不能使用未来 token；label
 ## 七、面试回答模板
 
 > 自回归训练中我会把可见性和监督分开：causal/padding mask 决定 token 能看见什么，labels 与 loss mask 决定哪些位置参与交叉熵。Teacher Forcing 让完整真实前缀已知，所以训练能并行；推理则把模型输出回填，必须顺序生成，这也带来 exposure bias。排查时我会先做短样本逐 token 对齐和单 batch 过拟合，防止 shift、EOS 或模板掩码错误被误判为模型能力问题。
+
+实现参考：[Transformers 因果 LM 损失](https://github.com/huggingface/transformers/blob/main/src/transformers/loss/loss_utils.py)、[PyTorch CrossEntropyLoss](https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html)。不同版本的 shift 写法可不同，核对位置语义比复制切片更可靠。

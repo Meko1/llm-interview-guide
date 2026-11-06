@@ -118,7 +118,7 @@ $$\text{MultiHead}=\text{Concat}(\text{head}_1,...,\text{head}_h)W^O,\quad \text
 
 ## 四、KV Cache：长上下文的瓶颈之源
 
-自回归生成时，每生成一个新 token 都要重新计算所有历史 token 的 K、V，非常浪费。**KV Cache** 把历史 token 的 K、V 缓存下来，每步只算新 token 的 Q 与历史 K/V 的注意力，大幅加速推理。
+若不使用缓存，自回归生成会重复处理历史前缀。**KV Cache** 保存各层历史 K、V；新位置仍要计算自己的 Q、K、V，随后用新 Q 读取包含历史和当前位置的 KV。缓存省的是重复投影与前缀计算，不是取消对历史 KV 的读取。
 
 代价：**KV Cache 显存随「序列长度 × 层数 × 头数 × 头维度 × batch」线性增长**，成为长上下文/高并发推理的主要瓶颈。这直接催生了下面对「头」做共享/压缩的一系列变体。详见 [推理优化](/inference/inference-optimization)、[长上下文](/basics/long-context)。
 
@@ -126,16 +126,18 @@ $$\text{MultiHead}=\text{Concat}(\text{head}_1,...,\text{head}_h)W^O,\quad \text
 
 | 方案 | K/V 头数 | KV Cache | 质量 | 代表模型 |
 | --- | --- | --- | --- | --- |
-| **MHA**（多头） | 每个 Q 头各有独立 K/V | 最大 | 最好 | 原始 Transformer、GPT-2 |
-| **MQA**（多查询） | 所有 Q 头**共享 1 组** K/V | 最小 | 略降 | PaLM、Falcon |
-| **GQA**（分组查询） | Q 头**分组**，组内共享 K/V | 折中 | 接近 MHA | LLaMA 2/3、Qwen |
-| **MLA**（多头潜在） | 把 KV **低秩压缩**成潜向量再缓存 | 很小 | 近乎无损 | DeepSeek 系列 |
+| **MHA**（多头） | 每个 Q 头各有独立 K/V | 同维度下随 Q 头数增长 | 作为比较基线 | 原始 Transformer、GPT-2 |
+| **MQA**（多查询） | 所有 Q 头**共享 1 组** K/V | 同维度下最少 KV 头 | 可能有质量损失 | 部分 PaLM、Falcon 配置 |
+| **GQA**（分组查询） | Q 头**分组**，组内共享 K/V | 取决于 KV 组数 | 需同预算评测 | 部分 LLaMA、Qwen 配置 |
+| **MLA**（多头潜在） | 缓存联合潜表示及位置部分 | 按潜维度和位置维度计算 | 不可与不同训练模型直接排序 | DeepSeek-V2 等 |
 
-- **MQA**：所有查询头共享同一组 K/V，KV Cache 缩小 h 倍，但质量有损。
-- **GQA**：折中——把 Q 头分成 g 组，每组共享一组 K/V（g=1 即 MQA，g=h 即 MHA）。**几乎不掉点的同时显著降 KV Cache，是当前主流**。
-- **MLA**：DeepSeek 提出，把 K、V **联合低秩压缩**成一个小的潜在向量，缓存这个潜向量、用时上投影还原。比 GQA 省得更多且质量更好，详见 [DeepSeek 专题](/models/deepseek)。
+- **MQA**：若头维度、层数和精度相同，KV 项可比 MHA 少 h 倍；这不包含权重与其他显存。
+- **GQA**：把 Q 头分成 g 组（g=1 即 MQA，g=h 即 MHA）。[GQA 论文](https://arxiv.org/abs/2305.13245)报告特定 uptraining 设置下接近 MHA 的质量，不代表任何模型随意合并 KV 都无损。
+- **MLA**：[DeepSeek-V2](https://arxiv.org/abs/2405.04434)联合压缩 KV，并处理位置分支；高效实现可把部分上投影吸收到查询和输出侧。不能只按「先解压所有 KV」理解其部署收益，详见 [DeepSeek 专题](/models/deepseek)。
 
-**为什么只共享/压缩 K/V，不动 Q？** 推理瓶颈在 KV Cache 的显存与带宽；Q 不需要缓存，共享 Q 无收益且损害表达力。
+构造账本：32 层、8 个 KV 头、每头 128 维、BF16 每元素 2 字节，每 token KV 为 `2 × 32 × 8 × 128 × 2 = 131072 字节 = 128 KiB`。8192 token 单序列约 1 GiB；若改为 32 个 KV 头，则约 4 GiB。未含分页浪费、权重、激活与工作区；MLA 需另用其配置公式。
+
+**为什么主要共享/压缩 K/V？** 历史 Q 通常不需要缓存，KV 则随序列累积。改变 Q 投影也可能节省计算或参数，但不能同样减少历史缓存，且需验证表达能力。
 
 ## 六、FlashAttention：让注意力又快又省
 
@@ -147,7 +149,7 @@ $$\text{MultiHead}=\text{Concat}(\text{head}_1,...,\text{head}_h)W^O,\quad \text
 
 - **滑动窗口注意力**：每个 token 只关注最近 W 个（Mistral），多层叠加扩大有效感受野。
 - **稀疏注意力**：只算部分注意力对（局部 + 少量全局），如 Longformer、BigBird。
-- **线性注意力 / SSM**：用 O(n) 机制替代 softmax 注意力，如 [Mamba](/advanced/state-space-models)。
+- **线性注意力**：改变核与归一化形式，见 [线性注意力](/basics/linear-attention)；**SSM** 是另一类状态模型，如 [Mamba](/advanced/state-space-models)，不能直接把两者叫作同一算法。
 - **StreamingLLM / Attention Sink**：保留开头几个「汇聚点」token 的 KV + 最近窗口，稳定处理超长流式输入。
 
 ## 八、交叉注意力（Cross-Attention）
@@ -164,7 +166,7 @@ $$\text{MultiHead}=\text{Concat}(\text{head}_1,...,\text{head}_h)W^O,\quad \text
 
 **Q：MHA、MQA、GQA、MLA 的区别？** MHA 每个 Q 头有独立 KV；MQA 共享一组 KV；GQA 按组共享；MLA 使用共享压缩表示与位置部分。缓存大小可按结构核算，质量比较必须控制数据、训练与任务，不直接排序为「最好」或「无损」。
 
-**Q：为什么 MQA/GQA 只共享 K/V？** 推理瓶颈是 KV Cache 显存与带宽，Q 不缓存；共享 Q 无收益且损害表达力。
+**Q：为什么 MQA/GQA 主要共享 K/V？** 历史 KV 是累计缓存；Q 只服务当前查询。改变 Q 也可能影响计算量，但不是同一种缓存优化。
 
 **Q：KV Cache 是什么？为什么是长上下文瓶颈？** 缓存历史 token 的 K、V 避免重算，加速自回归生成；但显存随序列长度线性增长，长上下文/高并发下成为主要瓶颈。对策：GQA/MQA/MLA、KV 量化、PagedAttention。
 

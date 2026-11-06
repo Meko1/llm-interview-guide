@@ -15,7 +15,7 @@ const sectionLink = (folder: string) => articles.find(page => page.folder === fo
   <main id="guide-home" class="atlas-home">
     <section class="atlas-hero" aria-labelledby="home-title">
       <div class="hero-inner">
-        <div class="hero-heading"><h1 id="home-title">看见原理。<br />建立你的<span>能力坐标。</span></h1><p>从理解一个 token，到构建一个可靠系统。<br />在大模型能力地图中，找到下一步。</p><div class="hero-actions"><a class="atlas-primary" :href="withBase('/paths/')">找到我的学习路径<AtlasIcon /></a><a class="atlas-secondary" :href="withBase('/catalog')">探索全部知识<AtlasIcon name="expand" /></a></div><div class="hero-context"><span>{{ articles.length }} 篇知识文章</span><span>{{ sections.length }} 个知识板块</span><a :href="withBase('/reading-guide')">L0–L4 分层阅读<AtlasIcon name="expand" :size="14" /></a></div></div>
+        <div class="hero-heading"><h1 id="home-title">看见原理。<br />建立你的<span>能力坐标。</span></h1><p>从理解一个 token，到构建一个可靠系统。<br />在大模型能力地图中，找到下一步。</p><div class="hero-actions"><a class="atlas-primary" :href="withBase('/capability-map')">定位我的能力起点<AtlasIcon /></a><a class="atlas-secondary" :href="withBase('/catalog')">探索全部知识<AtlasIcon name="expand" /></a></div><div class="hero-context"><span>{{ articles.length }} 篇知识文章</span><span>{{ sections.length }} 个知识板块</span><a :href="withBase('/reading-guide')">L0–L4 分层阅读<AtlasIcon name="expand" :size="14" /></a></div></div>
         <CapabilityMap />
       </div>
       <div class="hero-bottom"><span>不止于答案，更在于为什么。</span><span>选择地图节点，沿着问题深入。</span></div>

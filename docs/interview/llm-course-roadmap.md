@@ -1,8 +1,7 @@
 ---
 title: LLM Course 中文版路线图（Maxime Labonne）
 description: >-
-  本页是对 Maxime Labonne 开源项目 mlabonne/llm-course（GitHub 80k+
-  Star）的中文翻译与整理。原项目是一份广受欢迎的大模型学习路线图，配有大量 Colab Notebook 与精选资源。
+  本页按 Maxime Labonne 开源项目 mlabonne/llm-course 整理中文学习路线，保留原资源入口，并区分译文、本站工程补充与尚未验证的实验材料。
 level: L2
 roles:
   - 应用开发
@@ -11,19 +10,23 @@ classification: inferred
 ---
 # LLM Course 中文版路线图（Maxime Labonne）
 
-> 本页是对 Maxime Labonne 开源项目 [**mlabonne/llm-course**](https://github.com/mlabonne/llm-course)（GitHub 80k+ Star）的**中文翻译与整理**。原项目是一份广受欢迎的大模型学习路线图，配有大量 Colab Notebook 与精选资源。
+> 本页是对 Maxime Labonne 开源项目 [**mlabonne/llm-course**](https://github.com/mlabonne/llm-course)的**中文整理与带注释改编**，保留原课程的三条路线和资源入口。Stars、免费算力配额与第三方链接会变化，不作为质量或可运行性证明。
 >
-> 📌 **版权声明**：原项目基于 [Apache License 2.0](https://github.com/mlabonne/llm-course/blob/main/LICENSE) 开源。本页为中文译本，遵循该许可证再分发，**著作权归原作者 Maxime Labonne 所有**。译文在忠实原意的基础上做了少量本地化，并补充了指向本站对应章节的链接，方便中文读者深入。原始英文版本请访问 [mlabonne/llm-course](https://github.com/mlabonne/llm-course)。
+> 📌 **来源与改编声明**：原课程由 Maxime Labonne 创作，仓库提供 [Apache License 2.0 全文](https://github.com/mlabonne/llm-course/blob/main/LICENSE)。本页保留作者署名；本站在 2026-11-05 对中文整理作了技术纠偏，并加入标为“本站补充”的能力检查与工程边界，不代表原作者逐条认可。再分发仍须核对许可证全文与适用通知，不能把一条署名理解为已完成全部许可义务。原文请访问 [mlabonne/llm-course](https://github.com/mlabonne/llm-course)。
 >
 > 想要本站自己的转型路线，请看 [大模型学习路线](/interview/learning-path)；想要更全的资源清单，看 [学习资源汇总](/interview/resources)。
 
 整个课程分为三大部分：
 
 1. 🧩 **LLM 基础（LLM Fundamentals）**：可选部分，覆盖数学、Python、神经网络等基础知识。
-2. 🧑‍🔬 **LLM 科学家（The LLM Scientist）**：聚焦如何用最新技术训练出尽可能强的大模型。
+2. 🧑‍🔬 **LLM 科学家（The LLM Scientist）**：聚焦模型训练、后训练、评估与研究方法。
 3. 👷 **LLM 工程师（The LLM Engineer）**：聚焦如何构建并部署基于大模型的应用。
 
 > 原作者基于本课程合著了《[LLM Engineer's Handbook](https://packt.link/a/9781836200079)》，一本从设计到部署、端到端讲解大模型应用的实战书。课程永久免费。
+
+“课程免费”是原 README 的声明，不包含 GPU、云存储、API 与书籍免费。这里实读了原 README 的结构、工具和 SFT 片段及 LICENSE 的再分发条款；没有逐个运行 Notebook，也未核验所有外部资源。后文资源列表默认是入口，不是推荐排名或实验复现证据。
+
+**本站补充：按证据选路线，不按目录打卡。** L1 先做一个小型可复现 RAG/工具应用，能解释输入、证据、输出和一次失败；L2 在它上面给出 ACL、预算、延迟分位数、恢复与发布门禁；L3 才要求固定训练与评测配置、做等预算消融和统计比较。工程师无需先预训练模型；科学家也不能用 loss 下降替代部署任务的改善。
 
 ---
 
@@ -48,8 +51,8 @@ classification: inferred
 
 | Notebook | 说明 | 文章 |
 | --- | --- | --- |
-| 用 Unsloth 微调 Llama 3.1 | 在 Colab 中极致高效地做有监督微调 | [Article](https://mlabonne.github.io/blog/posts/2024-07-29_Finetune_Llama31.html) |
-| 用 ORPO 微调 Llama 3 | 用 ORPO 在单阶段内更便宜更快地微调 | [Article](https://mlabonne.github.io/blog/posts/2024-04-19_Fine_tune_Llama_3_with_ORPO.html) |
+| 用 Unsloth 微调 Llama 3.1 | Colab 有监督微调示例，运行条件待核 | [Article](https://mlabonne.github.io/blog/posts/2024-07-29_Finetune_Llama31.html) |
+| 用 ORPO 微调 Llama 3 | ORPO 单阶段后训练示例，不保证相对成本与质量 | [Article](https://mlabonne.github.io/blog/posts/2024-04-19_Fine_tune_Llama_3_with_ORPO.html) |
 | 用 DPO 微调 Mistral-7b | 用 DPO 提升有监督微调模型的表现 | [Article](https://mlabonne.github.io/blog/posts/Fine_tune_Mistral_7b_with_DPO.html) |
 | 用 QLoRA 微调 Mistral-7b | 在免费 Colab 中用 TRL 微调 Mistral-7b | — |
 | 用 Axolotl 微调 CodeLlama | SOTA 微调工具的端到端指南 | [Article](https://mlabonne.github.io/blog/posts/A_Beginners_Guide_to_LLM_Finetuning.html) |
@@ -62,7 +65,7 @@ classification: inferred
 | 量化入门 | 用 8-bit 量化优化大模型 | [Article](https://mlabonne.github.io/blog/posts/Introduction_to_Weight_Quantization.html) |
 | 用 GPTQ 做 4-bit 量化 | 量化开源大模型，使其能在消费级硬件运行 | [Article](https://mlabonne.github.io/blog/4bit_quantization/) |
 | 用 GGUF 与 llama.cpp 量化 | 量化 Llama 2 并上传 GGUF 版本到 HF Hub | [Article](https://mlabonne.github.io/blog/posts/Quantize_Llama_2_models_using_ggml.html) |
-| ExLlamaV2：最快的推理库 | 量化并运行 EXL2 模型 | [Article](https://mlabonne.github.io/blog/posts/ExLlamaV2_The_Fastest_Library_to_Run%C2%A0LLMs.html) |
+| ExLlamaV2 推理示例 | 量化并运行 EXL2 模型；不作跨硬件速度排名 | [Article](https://mlabonne.github.io/blog/posts/ExLlamaV2_The_Fastest_Library_to_Run%C2%A0LLMs.html) |
 
 ### 其他（Other）
 
@@ -70,7 +73,7 @@ classification: inferred
 | --- | --- | --- |
 | 用 MergeKit 合并大模型 | 无需 GPU，轻松创建自己的模型 | [Article](https://mlabonne.github.io/blog/posts/2024-01-08_Merge_LLMs_with_mergekit%20copy.html) |
 | 用 MergeKit 创建 MoE | 把多个专家合并成一个 frankenMoE | [Article](https://mlabonne.github.io/blog/posts/2024-03-28_Create_Mixture_of_Experts_with_MergeKit.html) |
-| 用 abliteration 给模型去审查 | 无需重训练的「去审查」微调 | [Article](https://mlabonne.github.io/blog/posts/2024-06-04_Uncensor_any_LLM_with_abliteration.html) |
+| 用 abliteration 修改拒答行为 | 模型干预教程入口；不等于经过验证的安全或能力提升 | [Article](https://mlabonne.github.io/blog/posts/2024-06-04_Uncensor_any_LLM_with_abliteration.html) |
 | 用知识图谱增强 ChatGPT | 用知识图谱补强 ChatGPT 的回答 | [Article](https://mlabonne.github.io/blog/posts/Article_Improve_ChatGPT_with_Knowledge_Graphs.html) |
 | 大模型的解码策略 | 从 beam search 到 nucleus sampling 的文本生成指南 | [Article](https://mlabonne.github.io/blog/posts/2022-06-07-Decoding_strategies.html) |
 
@@ -79,6 +82,8 @@ classification: inferred
 ## 🧩 第一部分：LLM 基础（LLM Fundamentals）
 
 本部分介绍数学、Python 和神经网络的必备知识。**可选**——你不一定要从这里开始，按需查阅即可。
+
+**本站补充：基础检查要落到单位。** 构造 100 个请求中 80 个成功、其中成功请求均值 2 秒：这不是“全部请求平均 2 秒”，失败和超时必须单独记录。向量相似度也不是正确概率；置信区间的独立单元应是案件/会话，不是同一个问题重复生成的次数。能讲清这些分母，比背完整概率术语表更直接支撑 L2 评测设计。
 
 > 💡 本站对应：[大模型必备数学基础](/beginner/math-basics)、[大模型零基础入门](/beginner/getting-started)。
 
@@ -137,7 +142,7 @@ Python 凭借其可读性、一致性和强大的数据科学生态，尤其适�
 
 NLP 是连接人类语言与机器理解的人工智能分支，在翻译、情感分析、聊天机器人等众多应用中扮演关键角色。
 
-- **文本预处理**：学习分词、词干提取（stemming）、词形还原（lemmatization）、停用词去除等预处理步骤。
+- **文本预处理**：了解传统 NLP 的分词、词干提取、词形还原与停用词去除；不要默认把这些操作用于现代 LLM 输入，它们可能删除否定词、改变代码或破坏模型原生 tokenizer 的分布。
 - **特征提取技术**：将文本转换为机器学习算法可理解的格式。核心方法包括词袋（BoW）、TF-IDF、n-gram。
 - **词嵌入（Word Embeddings）**：让语义相近的词拥有相近表示。核心方法包括 Word2Vec、GloVe、FastText。
 - **循环神经网络（RNN）**：理解处理序列数据的 RNN，以及能学习长期依赖的两个变体 LSTM 与 GRU。
@@ -155,7 +160,7 @@ NLP 是连接人类语言与机器理解的人工智能分支，在翻译、情�
 
 ## 🧑‍🔬 第二部分：LLM 科学家（The LLM Scientist）
 
-本部分聚焦如何用最新技术训练出尽可能强的大模型。
+本部分聚焦模型训练与改进；“更强”必须指定任务、评测集、成本与比较基线，而非只追逐技术名称。
 
 > 💡 本站对应：[Transformer 架构详解](/basics/transformer)、[预训练目标与数据](/pretraining/pretrain)、[微调范式（SFT/PEFT）](/finetuning/finetuning)、[RLHF / DPO 对齐](/finetuning/rlhf)、[模型评估与幻觉](/evaluation/evaluation)。
 
@@ -180,7 +185,7 @@ NLP 是连接人类语言与机器理解的人工智能分支，在翻译、情�
 
 预训练计算密集且昂贵。虽然不是本课程重点，但理解模型如何预训练（尤其是数据与参数层面）很重要。爱好者也能用 <1B 的小模型小规模做预训练。
 
-- **数据准备**：预训练需要海量数据集（如 Llama 3.1 训练了 15 万亿 token），需要精心整理、清洗、去重和分词。现代预训练流水线会用复杂的过滤来去除低质或问题内容。
+- **数据准备**：大规模预训练需要整理、清洗、去重和分词。模型报告中的 token 数须区分原始语料、过滤后语料与实际训练曝光量；小规模教学实验不应套用厂商训练规模。
 - **分布式训练**：组合不同并行策略——数据并行（DP）、流水线并行（PP）、张量并行（TP），需要在 GPU 集群间做优化的网络通信与内存管理。
 - **训练优化**：使用带 warmup 的自适应学习率、梯度裁剪、归一化来防止爆炸；混合精度训练提升内存效率；现代优化器（AdamW、Lion）配合调好的超参。
 - **监控**：用仪表盘跟踪关键指标（loss、梯度、GPU 状态），为分布式训练问题做定向日志，做性能 profiling 找出计算与通信瓶颈。
@@ -215,12 +220,18 @@ NLP 是连接人类语言与机器理解的人工智能分支，在翻译、情�
 
 ### 4. 有监督微调（SFT）
 
-SFT 把基座模型变成能回答问题、遵循指令的有用助手。这个过程中模型学会组织答案、重新激活预训练学到的部分知识。注入全新知识是可能的但很表面：无法用它学会一门全新语言。**始终把数据质量放在参数优化之上**。
+SFT 用示范样本训练目标行为，帮助模型组织答案与遵循任务指令。数据质量、覆盖与训练配置共同决定效果；不能从“监督微调”这个名字推断学到了多少新知识。
+
+**本站纠偏**：原 README 的 SFT 段把学习全新语言作了绝对限制，本页不将其采纳为普遍定理。知识与语言适应取决于数据规模、基座能力、tokenizer、更新参数与训练预算；对频繁变化的事实先考虑检索，不是因为 SFT 在逻辑上不可能学到新知识。评测应同时检查目标任务改善与原能力退化。
 
 - **训练技术**：全量微调更新所有参数但算力消耗大。参数高效微调（PEFT）如 LoRA、QLoRA 通过只训练少量适配器参数、冻结基座权重来降低显存。QLoRA 把 4-bit 量化与 LoRA 结合进一步降显存。这些都已在主流框架 [TRL](https://huggingface.co/docs/trl/en/index)、[Unsloth](https://docs.unsloth.ai/)、[Axolotl](https://axolotl.ai/) 中实现。
-- **训练参数**：关键参数包括带调度器的学习率、batch size、梯度累积、epoch 数、优化器（如 8-bit AdamW）、权重衰减、warmup 步数。LoRA 还引入三个参数：秩 rank（通常 16-128）、alpha（rank 的 1-2 倍）、目标模块。
+- **训练参数**：记录学习率、每设备 batch size、梯度累积、epoch、优化器、权重衰减与 warmup。LoRA 的 rank、alpha、目标模块需要联动验证；原教程的 rank/alpha 范围不是所有模型的推荐默认值。
 - **分布式训练**：用 DeepSpeed 或 FSDP 跨多 GPU 扩展。DeepSpeed 提供三个 ZeRO 优化阶段，通过状态分片逐级提升内存效率。两者都支持梯度检查点。
 - **监控**：跟踪 loss 曲线、学习率调度、梯度范数等，警惕 loss 突刺、梯度爆炸、性能退化等常见问题。
+
+**本站补充：一个可复算的训练预算。** 构造 2 个数据并行副本、每副本 micro-batch=2、梯度累积=8，则完整更新的全局 batch 为 2 × 2 × 8 = 32 个序列；不是 32 个 token，也不能用 TP 卡数再乘一次。10,240 个序列训练一轮、忽略尾批差异时有 320 次更新；packing 或不等长序列会改变每步有效 token 与 mask 分母。L1 应先检查 chat template 与只计算哪些 token 的 loss；L2 要能说明显存中权重、激活、优化器状态和 KV 的区别；L3 固定有效训练 token 与算力预算比较配置，而不是只比较 epoch。
+
+Notebook 中断后先确认 checkpoint 是否含模型/adapter、优化器、调度器、随机状态和数据游标；只恢复权重属于 warm start，不能声称从相同步数精确续训。记录基座 revision、依赖版本、数据哈希与 seed；云盘留下的私有样本、输出和凭证按同一数据保留策略清理。
 
 📚 参考：
 
@@ -231,12 +242,12 @@ SFT 把基座模型变成能回答问题、遵循指令的有用助手。这个�
 
 ### 5. 偏好对齐（Preference Alignment）
 
-偏好对齐是后训练流水线的第二阶段，旨在让生成答案对齐人类偏好。它最初用于调整语气、降低毒性与幻觉，如今也越来越多地用于提升性能与有用性。与 SFT 不同，偏好对齐算法很多，这里聚焦三个最重要的：DPO、GRPO、PPO。
+偏好对齐是后训练的一类方法，不一定是固定“第二阶段”。本页选取 DPO、GRPO、PPO 作为不同目标与采样方式的入口，不给算法重要性排名，也不承诺对齐一定降低幻觉。
 
-- **拒绝采样**：对每个提示，用训练中的模型生成多个回答并打分，推断出被选/被拒答案。这能创造 on-policy 数据（两个回答都来自被训练模型），提升对齐稳定性。
-- **[直接偏好优化（DPO）](https://arxiv.org/abs/2305.18290)**：直接优化策略，使被选回答的似然高于被拒回答。无需奖励建模，比 RL 更省算力，但质量略逊。非常适合做聊天模型。
+- **拒绝采样**：对每个提示生成多个回答，再按明确评分规则筛选。数据只相对于生成时的策略 on-policy；策略更新后旧样本不能因为“同一模型名”而继续算当前策略样本，稳定性仍须验证。
+- **[直接偏好优化（DPO）](https://arxiv.org/html/2305.18290)**：标准 DPO 使用成对偏好数据与参考策略，通过分类式目标更新策略，不要求训练中在线 rollout。实际读取原论文 Eq. (7)，优化的是相对参考策略的偏好 log-ratio，不保证最终被选答案的绝对概率高于被拒答案；摘要报告其特定实验可匹配或优于 PPO，不能概括为“比 RL 质量略逊”。
 - **奖励模型**：用人类反馈训练奖励模型来预测人类偏好等指标。可借助 [TRL](https://huggingface.co/docs/trl/en/index)、[verl](https://github.com/volcengine/verl)、[OpenRLHF](https://github.com/OpenRLHF/OpenRLHF) 做可扩展训练。
-- **强化学习**：[GRPO](https://arxiv.org/abs/2402.03300)、[PPO](https://arxiv.org/abs/1707.06347) 等 RL 技术迭代更新策略以最大化奖励，同时不偏离初始行为太远。它们可用奖励模型或奖励函数打分，计算昂贵且需仔细调超参（学习率、batch size、clip range）。**非常适合做推理模型**。
+- **强化学习**：[GRPO](https://arxiv.org/abs/2402.03300)、[PPO](https://arxiv.org/abs/1707.06347) 使用采样与奖励更新策略；这里仅提供原论文入口。奖励能否验证、rollout 成本、KL/clip 配置与 reward hacking 决定其适用性，不能仅凭算法名承诺“推理更强”。
 
 📚 参考：
 
@@ -253,7 +264,7 @@ SFT 把基座模型变成能回答问题、遵循指令的有用助手。这个�
 
 - **自动化基准**：用精选数据集和指标（如 MMLU）在特定任务上评测模型。对具体任务有效，但难以衡量抽象与创造能力，也容易受数据污染影响。
 - **人类评估**：由人类对模型提问并打分，从「凭感觉（vibe check）」到带明确规范的系统化标注，再到大规模社区投票（arena）。更适合主观任务，对事实准确性的可靠性较低。
-- **基于模型的评估**：用裁判模型和奖励模型评估输出。与人类偏好高度相关，但存在偏向自身输出、打分不一致的问题。
+- **基于模型的评估**：用裁判模型或奖励模型评分；与人工的一致性须按任务、rubric 和切片校准，不从模型强弱直接推出可靠性。
 - **反馈信号**：分析错误模式以定位具体弱点，如遵循复杂指令的局限、缺乏特定知识、易受对抗提示攻击等，可通过更好的数据生成与训练参数改进。
 
 📚 参考：
@@ -270,8 +281,8 @@ SFT 把基座模型变成能回答问题、遵循指令的有用助手。这个�
 
 - **基础技术**：了解不同精度（FP32、FP16、INT8 等），掌握 absmax 与 zero-point 的朴素量化。
 - **GGUF 与 llama.cpp**：最初为 CPU 设计的 [llama.cpp](https://github.com/ggerganov/llama.cpp) 与 GGUF 格式，已成为在消费级硬件运行大模型最流行的工具，支持在单文件中存储特殊 token、词表和元数据。
-- **GPTQ 与 AWQ**：[GPTQ](https://arxiv.org/abs/2210.17323)/[EXL2](https://github.com/turboderp/exllamav2) 和 [AWQ](https://arxiv.org/abs/2306.00978) 引入逐层校准，在极低位宽下仍保持性能，通过动态缩放、选择性跳过或重定中心最重的参数来减少灾难性离群值。
-- **SmoothQuant 与 ZeroQuant**：量化友好的变换（SmoothQuant）和基于编译器的优化（ZeroQuant）在量化前缓解离群值，并通过算子融合与数据流优化降低硬件开销。
+- **GPTQ 与 AWQ**：[GPTQ](https://arxiv.org/abs/2210.17323)、[EXL2](https://github.com/turboderp/exllamav2) 和 [AWQ](https://arxiv.org/abs/2306.00978) 是不同方法或格式，不能用同一段“保留重要参数”解释全部实现。校准分布、层覆盖、位宽与运行 kernel 需分别核查，低位宽不保证质量不变或推理更快。
+- **SmoothQuant 与 ZeroQuant**：作为权重/激活量化的进一步阅读入口；具体变换与系统优化须按原论文和部署实现区分，本页不把它们归成同一种技术。
 
 📚 参考：
 
@@ -286,10 +297,10 @@ SFT 把基座模型变成能回答问题、遵循指令的有用助手。这个�
 
 这里是一些没归入其他类别的值得关注的话题。有些是成熟技术（模型合并、多模态），有些更具实验性（可解释性、test-time compute），是大量研究论文的焦点。
 
-- **模型合并（Model merging）**：合并已训练模型已成为无需微调即可创建高性能模型的流行方式。流行库 [mergekit](https://github.com/cg123/mergekit) 实现了 SLERP、[DARE](https://arxiv.org/abs/2311.03099)、[TIES](https://arxiv.org/abs/2311.03099) 等主流合并方法。
-- **多模态模型**：[CLIP](https://openai.com/research/clip)、[Stable Diffusion](https://stability.ai/stable-image)、[LLaVA](https://llava-vl.github.io/) 等模型用统一嵌入空间处理多种输入（文本、图像、音频），解锁文生图等强大应用。
-- **可解释性（Interpretability）**：稀疏自编码器（SAE）等机制可解释性技术在揭示大模型内部工作机制上取得显著进展，并衍生出 abliteration 等无需训练就能修改模型行为的技术。
-- **Test-time compute**：用 RL 训练的推理模型可以通过在推理时扩大算力预算进一步提升，涉及多次调用、MCTS 或过程奖励模型（PRM）等专用模型。带精确打分的迭代步骤能显著提升复杂推理任务的表现。
+- **模型合并（Model merging）**：[mergekit](https://github.com/cg123/mergekit)提供模型合并工具；[DARE](https://arxiv.org/abs/2311.03099)与[TIES](https://arxiv.org/abs/2306.01708)是不同论文，旧页错误地把两者链到同一篇。实读 TIES 摘要可见其处理冗余参数与符号冲突，但不据摘要外推合并后必然优于原模型；具体兼容与任务效果要回归。
+- **多模态模型**：[CLIP](https://openai.com/research/clip)、[Stable Diffusion](https://stability.ai/stable-image)、[LLaVA](https://llava-vl.github.io/)分别提供表征、生成与视觉语言任务入口；不能因为都涉及图像，就概括成同一架构或都支持音频。
+- **可解释性（Interpretability）**：SAE 与 abliteration 是不同研究方向；本文没有验证它们之间的因果派生关系。改变拒答行为不等于获得可靠解释，更不等于移除风险。
+- **Test-time compute**：重复采样、搜索、验证器与过程奖励等是扩展推理预算的路径；收益依任务和评分器而定，错误验证器可能放大错误。比较时须固定总推理 token/时间预算，不以某个榜单单次胜出外推整体能力。
 
 📚 参考：
 
@@ -298,7 +309,7 @@ SFT 把基座模型变成能回答问题、遵循指令的有用助手。这个�
 - [Large Multimodal Models](https://huyenchip.com/2023/10/10/multimodal.html) by Chip Huyen：多模态系统概览及该领域近期历史。
 - [用 abliteration 给大模型去审查](https://huggingface.co/blog/mlabonne/abliteration) by Maxime Labonne：可解释性技术修改模型风格的直接应用。
 - [SAE 的直观解释](https://adamkarvonen.github.io/machine_learning/2024/06/11/sae-intuitions.html) by Adam Karvonen：SAE 如何工作及其对可解释性的意义。
-- [Scaling test-time compute](https://huggingface.co/spaces/HuggingFaceH4/blogpost-scaling-test-time-compute) by Beeching 等：用 3B 模型在 MATH-500 上超越 Llama 3.1 70B 的教程与实验。
+- [Scaling test-time compute](https://huggingface.co/spaces/HuggingFaceH4/blogpost-scaling-test-time-compute) by Beeching 等：教程与实验入口；本页未读取实验配置，不转述模型胜负数字。
 
 ---
 
@@ -317,6 +328,8 @@ SFT 把基座模型变成能回答问题、遵循指令的有用助手。这个�
 - **提示工程**：常见技术包括 zero-shot、few-shot、思维链（CoT）、ReAct。大模型上效果更好，但也能适配到小模型。
 - **结构化输出**：很多任务需要结构化输出（严格模板或 JSON）。[Outlines](https://github.com/outlines-dev/outlines) 等库可引导生成遵循给定结构，部分 API 也原生支持基于 JSON schema 的结构化输出。
 
+**本站补充：运行 Notebook 前的信任边界。** 固定来源 revision，检查 shell 安装命令、远程代码加载与数据上传位置；不把生产凭证放入共享 Colab，也不把结构化 JSON 视为事实或权限验证。学习用合成/公开授权数据，费用限额与清理步骤先于运行。此页列出的工具未在本轮安装或执行。
+
 📚 参考：
 
 - [用 LM Studio 本地运行大模型](https://www.kdnuggets.com/run-an-llm-locally-with-lm-studio) by Nisha Arya：LM Studio 简明指南。
@@ -331,7 +344,7 @@ SFT 把基座模型变成能回答问题、遵循指令的有用助手。这个�
 - **文档摄取**：文档加载器能处理多种格式（PDF、JSON、HTML、Markdown 等），也能直接从数据库和 API（GitHub、Reddit、Google Drive 等）取数据。
 - **文档切分**：文本切分器把文档拆成更小、语义完整的片段。相比按固定字符数切分，常常按标题或递归切分（带额外元数据）更好。
 - **嵌入模型**：把文本转成向量表示。针对任务挑选合适模型能显著提升语义检索与 RAG 的效果。
-- **向量数据库**：[Chroma](https://www.trychroma.com/)、[Pinecone](https://www.pinecone.io/)、[Milvus](https://milvus.io/)、[FAISS](https://faiss.ai/)、[Annoy](https://github.com/spotify/annoy) 等用于存储嵌入向量，基于向量相似度高效检索与查询「最相似」的数据。
+- **向量存储与索引**：[Chroma](https://www.trychroma.com/)、[Pinecone](https://www.pinecone.io/)、[Milvus](https://milvus.io/)与索引库[FAISS](https://faiss.ai/)、[Annoy](https://github.com/spotify/annoy)不是同一层产品。索引库不自动提供完整数据库的租户、事务、持久化与审计能力。
 
 📚 参考：
 
@@ -363,6 +376,8 @@ RAG 让大模型从数据库检索上下文文档来提升答案准确性，是�
 真实应用可能需要复杂流水线，包括 SQL 或图数据库，以及自动选择相关工具和 API。这些进阶技术能改进基线方案并提供额外能力。
 
 - **查询构造**：传统数据库中的结构化数据需要 SQL、Cypher、元数据等特定查询语言。可用查询构造把用户指令直接翻译成查询去访问数据。
+
+**本站补充：生成查询不是授权。** Text-to-SQL 练习先用只读账户、表/列白名单、参数化与资源限额；检索材料和工具返回中的指令均不可信。L1 交付至少含“查错表、找不到证据、越权数据”三个失败案例；L2 把 tenant/ACL 检查放在实际执行边界；L3 用冻结问题集分别测召回与最终回答，不把一次漂亮 demo 当总体准确率。
 - **工具（Tools）**：Agent 通过自动选择最相关的工具来增强大模型。工具可以简单如用 Google 或 Wikipedia，也可复杂如 Python 解释器或 Jira。
 - **后处理**：处理喂给大模型的输入的最后一步，用重排（re-ranking）、[RAG-fusion](https://github.com/Raudaschl/rag-fusion)、分类等提升检索文档的相关性与多样性。
 - **以编程方式优化 LLM**：[DSPy](https://github.com/stanfordnlp/dspy) 等框架让你基于自动评估以编程方式优化提示和权重。
@@ -395,9 +410,9 @@ LLM Agent 能基于对环境的推理采取行动，自主完成任务，通常�
 
 文本生成成本高，需要昂贵硬件。除量化外，还有多种技术可最大化吞吐、降低推理成本。
 
-- **Flash Attention**：优化注意力机制，把复杂度从二次降到线性，同时加速训练与推理。
+- **Flash Attention**：通过分块和 IO-aware 计算避免物化完整注意力矩阵、减少 HBM 读写；标准稠密注意力的成对计算仍为序列长度的二次量级，不是把数学运算变为线性。[原论文摘要](https://arxiv.org/abs/2205.14135)实际读取到的是 exact attention 与 IO 优化，不把其特定配置加速比移植到其他 GPU。
 - **KV 缓存**：理解键值缓存，以及 [Multi-Query Attention（MQA）](https://arxiv.org/abs/1911.02150) 和 [Grouped-Query Attention（GQA）](https://arxiv.org/abs/2305.13245) 带来的改进。
-- **投机解码（Speculative decoding）**：用小模型生成草稿，再由大模型审核，加速文本生成。EAGLE-3 是特别流行的方案。
+- **投机解码（Speculative decoding）**：用草稿与目标模型验证流程尝试加速生成；接受率、草稿成本、batch 与上下文决定净收益。EAGLE-3 作为论文入口，不作流行度或统一速度承诺。
 
 📚 参考：
 
@@ -405,14 +420,14 @@ LLM Agent 能基于对环境的推理采取行动，自主完成任务，通常�
 - [LLM 推理](https://www.databricks.com/blog/llm-inference-performance-engineering-best-practices) by Databricks：生产环境优化大模型推理的最佳实践。
 - [优化大模型速度与内存](https://huggingface.co/docs/transformers/main/en/llm_tutorial_optimization) by Hugging Face：量化、Flash Attention、架构创新三大优化技术。
 - [Assisted Generation](https://huggingface.co/blog/assisted-generation) by Hugging Face：HF 版投机解码，含实现代码。
-- [EAGLE-3 论文](https://arxiv.org/abs/2503.01840)：介绍 EAGLE-3，报告最高 6.5× 加速。
+- [EAGLE-3 论文](https://arxiv.org/abs/2503.01840)：方法与实验入口；未实读实验表，不保留跨配置加速数字。
 - [Speculators](https://github.com/vllm-project/speculators)：vLLM 出品的投机解码算法构建/评估/存储库。
 
 ### 7. 部署大模型
 
 大规模部署大模型是一项工程壮举，可能需要多个 GPU 集群。其他场景下，demo 和本地应用可以用低得多的复杂度实现。
 
-- **本地部署**：隐私是开源大模型相对私有模型的重要优势。本地 LLM 服务器（[LM Studio](https://lmstudio.ai/)、[Ollama](https://ollama.ai/)、[oobabooga](https://github.com/oobabooga/text-generation-webui)、[kobold.cpp](https://github.com/LostRuins/koboldcpp) 等）利用这一优势驱动本地应用。
+- **本地部署**：自托管有助于控制数据路径，但开源或本地本身不是隐私证明；遥测、日志、模型下载脚本与暴露的服务端口仍须检查。[LM Studio](https://lmstudio.ai/)、[Ollama](https://ollama.ai/)、[oobabooga](https://github.com/oobabooga/text-generation-webui)、[kobold.cpp](https://github.com/LostRuins/koboldcpp)是不同运行入口。
 - **Demo 部署**：[Gradio](https://www.gradio.app/)、[Streamlit](https://docs.streamlit.io/) 等框架适合快速原型与分享 demo，也能轻松托管到 [HF Spaces](https://huggingface.co/spaces) 等。
 - **服务器部署**：大规模部署需要云（参考 [SkyPilot](https://skypilot.readthedocs.io/en/latest/)）或本地基础设施，常用优化的文本生成框架如 [TGI](https://github.com/huggingface/text-generation-inference)、[vLLM](https://github.com/vllm-project/vllm/tree/main) 等。
 - **边缘部署**：受限环境中，[MLC LLM](https://github.com/mlc-ai/mlc-llm)、[mnn-llm](https://github.com/wangzhaode/mnn-llm/blob/master/README_en.md) 等高性能框架可在浏览器、Android、iOS 上部署大模型。
@@ -430,7 +445,7 @@ LLM Agent 能基于对环境的推理采取行动，自主完成任务，通常�
 
 - **提示攻击（Prompt hacking）**：包括提示注入（附加指令劫持模型回答）、数据/提示泄露（套取原始数据或系统提示）、越狱（构造提示绕过安全机制）。
 - **后门（Backdoors）**：攻击可针对训练数据本身——投毒训练数据（如注入虚假信息）或植入后门（推理时改变模型行为的秘密触发器）。
-- **防御措施**：保护大模型应用的最佳方式是针对这些漏洞做测试（如红队演练与 [garak](https://github.com/leondz/garak/) 等检查），并在生产中持续观测（如用 [langfuse](https://github.com/langfuse/langfuse)）。
+- **防御措施**：红队演练与[garak](https://github.com/leondz/garak/)等检查只能覆盖已测攻击面；持续观测也不是预防控制。最小权限、工具执行校验、数据外发约束与人工升级应独立设计，不能把扫描“零发现”解释为无漏洞。
 
 📚 参考：
 
@@ -450,5 +465,5 @@ LLM Agent 能基于对环境的推理采取行动，自主完成任务，通常�
 ---
 
 ::: tip 关于本页
-本页为 [mlabonne/llm-course](https://github.com/mlabonne/llm-course)（Apache-2.0）的中文译本，由 LLMGuide 整理。如发现翻译问题或链接失效，欢迎在 [本站仓库](https://github.com/Meko1/llm-interview-guide) 提 Issue / PR。原始英文与最新更新请以[原项目](https://github.com/mlabonne/llm-course)为准。
+本页为 [mlabonne/llm-course](https://github.com/mlabonne/llm-course)（Apache-2.0）的中文整理与带注释改编，由 LLMGuide 整理；本站补充不作为原作者译文。实读范围为原 README 的部分片段、LICENSE 第 4 条、FlashAttention/DPO/TIES 摘要及 DPO Eq. (7)；其余课程、模型、Notebook 和论文链接仅作继续阅读，未运行、未完成许可审计或全量链接验证。如发现问题，欢迎在 [本站仓库](https://github.com/Meko1/llm-interview-guide) 提 Issue / PR。
 :::

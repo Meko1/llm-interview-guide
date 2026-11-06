@@ -1,9 +1,6 @@
 ---
 title: Agent Tool Contract 工程：Schema 演进、兼容性与验证面试手册
-description: >-
-  Function Calling、MCP 和普通内部 API 的共同难题不是“能否解析
-  JSON”，而是模型、Agent、UI、Gateway、评测集和下游服务在不同版本并存时，是否仍对一次工具调用有相同理解。本页讨论 Tool
-  Contract 如何像生产 API 一样演进。
+description: 围绕工具语义、输入输出、权限和副作用设计版本契约，处理 schema 漂移、旧任务兼容、缓存失效与迁移验证。
 level: L2
 roles:
   - 应用开发
@@ -24,7 +21,7 @@ classification: inferred
 
 ## 二、Tool Contract 不止 inputSchema
 
-MCP Tools 规范将 `inputSchema` 定义为必需的 JSON Schema，并允许提供 `outputSchema` 来描述结构化结果。MCP 的 schema 默认采用 JSON Schema 2020-12；这给了传输层形状，却没有自动定义业务兼容性、权限或弃用策略。[MCP Tools Specification](https://modelcontextprotocol.io/specification/2025-11-25/server/tools)
+本页以 [MCP 2025-11-25 工具规范](https://modelcontextprotocol.io/specification/2025-11-25/server/tools)为目标版本入口；该页面本轮不可访问，不据此保证默认 dialect 或输出兼容行为。企业 schema 显式声明 dialect（例如 JSON Schema 2020-12），分别核对 input/output 与 provider 子集；传输形状不自动定义业务兼容、权限或弃用。
 
 企业 Registry 应在协议 schema 外补齐下列元数据：
 
@@ -103,7 +100,9 @@ outputSchema tool JSON  Pydantic/Zod
 3. **保留原始与标准化版本**：trace 同时保存 model tool call、adapter 输出、canonical command、schema/adapter digest 和 validation error，排障时才能知道问题来自模型、adapter 还是业务服务。
 4. **Runtime 只看到适用工具**：不要把所有版本、已弃用工具和管理员工具塞进同一上下文。可见性由 task manifest、用户权限和 rollout 决定。
 
-OpenAI 的函数工具参数采用 JSON Schema，并提供 `strict` 选项以要求模型遵循定义 schema；但严格模式只支持 JSON Schema 的一个子集。严格生成能降低格式错误，仍不能替代服务端校验、版本适配和业务授权。[OpenAI Function Calling Reference](https://platform.openai.com/docs/api-reference/fine-tuning/event-object)
+实际读取的 [OpenAI Function calling 指南](https://developers.openai.com/api/docs/guides/function-calling)说明函数参数使用 JSON Schema，strict 模式有约束要求；按受支持子集生成，仍由 Gateway 做业务授权和校验。原文误链到 fine-tuning event-object，与 Function Calling 无关，现已更正。SDK/API 和模型版本须在接入时固定，不能用 schema 名称推定所有 provider 支持。
+
+Canonical ID 可以分层命名，但 provider-visible name 由 adapter 映射为该接口接受的名称，保持 ID/version/digest 对应；不要把 `crm.customer.lookup` 或 `create_ticket.v2` 原样假定为通用有效函数名。新增可选字段也须检查旧消费者的 unknown-field 策略，兼容性不是纯字段数量判断。
 
 LangChain 也区分 Pydantic 的自动字段校验与 TypedDict/JSON Schema 的手动校验；这正说明“有类型定义”不等于运行时已经验证。[LangChain Models](https://docs.langchain.com/oss/python/langchain/models)
 
@@ -142,7 +141,7 @@ LangChain 也区分 Pydantic 的自动字段校验与 TypedDict/JSON Schema 的�
 | `RATE_LIMITED` | 限流 | 退避、切只读降级、报告等待 |
 | `REQUIRES_APPROVAL` | 高风险 command 未批准 | 呈现冻结预览，等待批准 |
 | `UNKNOWN_EFFECT` | 下游超时但可能已执行 | 查询/对账，禁止再提交 |
-| `INTERNAL` | 下游未知故障 | 有限重试或人工，错误不泄密 |
+| `INTERNAL` | 下游未知故障 | 先判断是否可能产生 effect；只读或可靠幂等才有界重试，否则对账 |
 
 错误码的改变也属于 Contract 变更。将所有错误折叠成“tool failed”会让模型在错误路径上更容易循环和越权。
 
@@ -219,6 +218,8 @@ announce -> hide from new manifests -> warn old callers -> migrate/replay
 
 ### 追问：Strict schema 是否就能解决兼容问题？
 
+构造例子：`amount=100` 在 v1 是元，在 v2 是分，JSON 与类型都合法，语义相差 100 倍。L1 要追问单位；L2 用新字段/版本、旧审批失效和服务端不变量阻断；L3 的兼容实验要同时验证旧消费者、旧模型计划与 adapter，不能只跑 schema validator。数字是单位演示，不是生产事故指标。
+
 > Strict schema 解决的是模型参数是否符合 provider 支持的 schema 子集。它不能处理旧 tool name、字段语义、权限、错误码、下游 API、UI 解析器和业务默认值，所以仍要 Registry、Gateway、回放和灰度。
 
 ## 九、面试反例
@@ -245,6 +246,6 @@ announce -> hide from new manifests -> warn old callers -> migrate/replay
 ## 延伸阅读
 
 - [MCP Tools Specification](https://modelcontextprotocol.io/specification/2025-11-25/server/tools)：`inputSchema`、`outputSchema`、JSON Schema 与兼容性提醒。
-- [OpenAI Function Calling Reference](https://platform.openai.com/docs/api-reference/fine-tuning/event-object)：函数参数 schema 与 strict 模式边界。
+- [OpenAI Function Calling Guide](https://developers.openai.com/api/docs/guides/function-calling)：函数参数 schema 与 strict 模式边界。
 - [LangChain Tools](https://docs.langchain.com/oss/python/langchain/tools) 和 [Structured Output](https://docs.langchain.com/oss/python/langchain/structured-output)：类型、运行时校验与格式失败处理。
 - [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)、[Function Calling 与 MCP](/agent/function-calling-mcp)：MCP / Function Calling 基础与工具治理。

@@ -1,9 +1,6 @@
 ---
 title: Agent 上下文与记忆生产治理：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  长上下文不是“把更多聊天记录塞给模型”，记忆也不是“让 Agent
-  永远记住一切”。生产系统真正要解决的是：哪些信息每轮必须在场，哪些只可按需检索，哪些允许跨会话保存，哪些必须隔离、过期或删除；当上下文被压缩时，如何保留可验证的任务状态而不是让模型凭摘要猜测。本页将
-  Claude Code、Code
+description: 分离项目指令、任务状态、会话与长期记忆，讨论授权召回、压缩、矛盾更正、删除传播和可验证来源。
 level: L2
 roles:
   - 应用开发
@@ -78,7 +75,7 @@ policy / project instructions
 | `sensitivity` | 是否需要脱敏/禁止持久化 | public、internal、confidential、secret |
 | `budget` | 消耗多少上下文 | token、字符、最大片段数、优先级 |
 
-模型输出无法替代这些标签。把未经验证的网页、Issue 评论或工具输出标为 `untrusted`，意味着它只能作为数据，不得覆盖项目策略、改变授权或触发自动执行。
+模型输出无法替代这些标签。标记 `untrusted` 表达使用约束，不是模型必然遵守的安全保证。[Claude Code 配置排障文档](https://code.claude.com/docs/en/debug-your-config)本轮仅保留导航，未获得可复核正文。这里的工程建议是：context builder 保留来源，资源层独立拒绝越权；即使内容来自 reviewed 文件，也不能覆盖受管安全限制。下文产品加载顺序、命令及固定行数细节未逐版本核验，不作安全合约。
 
 ## 三、项目指令的层级、作用域和冲突
 
@@ -263,6 +260,8 @@ query -> candidate retrieval
       -> model may cite, never silently elevate to fact
 ```
 
+上图只允许在可信检索服务内产生候选；租户、用途、可见性必须先约束索引/查询，再在输出前复核。不能先把所有租户原文交给模型，然后让模型做 visibility filtering。若后置过滤导致 top-k 全被丢弃，应在授权域内补召回或返回不足；不能为了补足 k 放宽 ACL。引用 ID、命中计数和日志也可能泄露文档存在性。
+
 | 检查 | 典型问题 | 失败后行为 |
 | --- | --- | --- |
 | 主体与租户 | 是同一用户/团队吗 | 直接拒绝候选 |
@@ -298,7 +297,7 @@ observation
   "origin": "verified_tool_result",
   "evidence_ref": "ci://run/234/log#redis",
   "scope": {"tenant": "acme", "project": "payments"},
-  "confidence": 0.96,
+  "verification": "observed_in_one_ci_run_not_probability_calibrated",
   "sensitivity": "internal",
   "observed_at": "2026-07-14T10:12:00Z",
   "expires_at": "2026-10-14T00:00:00Z",
@@ -315,7 +314,9 @@ observation
 | token、密码、身份证号、完整聊天原文 | 拒绝持久化或转入受控 vault | 高敏感且通常无必要 |
 | 临时路径、一次性调试输出 | 不写长期记忆 | 容易过期且污染 recall |
 
-写入时还要检测矛盾。如已有“Redis 6”且新证据为“Redis 7”，不要覆盖旧文本而不留来源；应标记 supersedes、更新时间和证据。记忆更新本质是小型知识治理，不是 append-only 聊天摘要。
+写入时还要检测矛盾。如已有“Redis 6”且新证据为“Redis 7”，先查两条证据的 repo/环境/commit：可能是两个分支同时成立，而不是新事实一定 supersedes 旧事实。仅在同一作用域确认替代时记录 supersedes、时间和证据。上例 JSON 是构造记录，不含经校准的置信概率。
+
+**口述练习：用户更正“我现在不用 Java”，如何避免下轮又回忆旧偏好？** L1 应更新偏好且不把旧摘要重新写回；L2 应为被替代记忆及其派生摘要/索引加 tombstone 与用户版本，恢复旧备份时先应用删除/更正账本。L3 的验证集要包含矛盾、撤回、跨分支事实与压缩后再写入；只测召回命中率不能证明更正传播正确。备份不能马上物理擦除时，披露保留和恢复隔离边界，不承诺瞬间遗忘。
 
 ## 七、检索质量与安全的评测
 

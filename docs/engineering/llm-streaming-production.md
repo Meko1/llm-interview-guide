@@ -1,8 +1,6 @@
 ---
 title: LLM 流式应用生产化：从首 Token 到可恢复会话
-description: >-
-  我会把流式聊天设计成事件驱动的可恢复状态机，而不是模型 chunk 的透传。外部用幂等 POST 创建消息、SSE 接收带序号事件、独立接口取消；内部用
-  stream_id 追踪排队、生成、工具、完成和失败。断线和取消分开处理，短期 buffer 支持按序重放，慢客户端使用有界缓冲和微批聚合。工具调
+description: 用事件协议治理 LLM 流式生成的完成、取消、断线续传和背压，区分可展示内容、工具执行与费用结算。
 level: L2
 roles:
   - 后端转型
@@ -36,7 +34,7 @@ classification: inferred
 | --- | --- | --- | --- |
 | SSE | 服务端单向持续推送聊天文本 | 浏览器原生支持、HTTP 语义简单、自动重连友好 | 客户端上行仍走普通 HTTP；二进制不方便 |
 | WebSocket | 双向实时协作、语音、频繁中断控制 | 全双工、事件统一 | 网关、心跳、重连和状态治理更复杂 |
-| HTTP chunked | 服务间转发或简单下载式流 | 实现直接 | 浏览器事件语义、重连 cursor 需要自己补 |
+| 普通 HTTP 响应体流 | 服务间转发或简单 fetch 流 | 实现直接 | 事件帧与重连 cursor 自行定义；chunked 是 HTTP/1.1 传输机制，不是与 SSE 同层的应用协议 |
 
 典型聊天产品优先选 **SSE + 独立取消接口**：发送消息用 `POST /messages`，服务器返回 `stream_id`；前端用 `GET /streams/{stream_id}` 接收事件；停止时调用 `POST /streams/{stream_id}/cancel`。这样鉴权、审计和重试与普通 HTTP 更一致。真正需要客户端持续上行事件时再使用 WebSocket。
 
@@ -64,6 +62,8 @@ data: {"finish_reason":"stop","usage":{"input_tokens":812,"output_tokens":265}}
 
 `stream_id` 关联一次生成，`message_id` 表示持久化的会话消息，`seq` 或 SSE `id` 支撑断线续传。事件应是追加式：前端只需按序应用，而不是等待一次“最终 JSON”。对 tool call 参数 delta，必须先缓冲、完成 schema 校验后才真正执行，不能收到半截 JSON 就调用支付、发信或写库。
 
+上面是自定义事件示意，不是供应商原始协议。所有需要重放的业务事件都应带同一流内的序号，心跳可不占序号。按本轮读取的[WHATWG SSE 规范](https://html.spec.whatwg.org/multipage/server-sent-events.html)，流采用 UTF-8 和 `text/event-stream`，事件以空行分隔，`id` 支持 Last-Event-ID。原生 EventSource 的重连不替服务端保存历史，也不自动提供任意 Bearer header；认证与 fetch-based 流方案需另行设计。
+
 ## 四、流式状态机：生命周期必须可追踪
 
 ```text
@@ -77,6 +77,8 @@ created -> queued -> connecting -> generating -> tool_waiting
 每次状态转换写入 `stream_id`、时间、原因、上游 request id 与 trace id。状态机的价值是防止并发竞态：例如用户取消与模型恰好完成同时发生，最终状态只能按明确规则落在 `cancelled` 或 `completed`，不能既计费成功又向用户显示“已取消”。
 
 推荐策略：一旦已经持久化 `message.completed`，完成状态优先；在此之前收到有效取消，取消优先，并记录已生成 token 数。对外错误码还要区分“用户主动停止”“客户端断连”“上游超时”“内容安全拦截”和“服务内部故障”。
+
+完成与取消应通过同一持久化 CAS 竞争终态；这是建议的业务规则。取消可以仍产生供应商费用，UI 的 cancelled 与账本的 settled/unknown 是两个维度，不能把“计费成功”与“用户停止”视为逻辑矛盾。
 
 ## 五、取消不是关闭浏览器标签那么简单
 
@@ -95,13 +97,15 @@ created -> queued -> connecting -> generating -> tool_waiting
 
 事件存储不一定要永久保存每个 token。常见折中是：Redis Stream/内存 ring buffer 保留短窗口用于重连；最终完整消息和审计摘要落数据库。窗口过期时返回明确的“无法续传”，前端改为获取已持久化的最终/部分消息，而不是静默从头重复生成。
 
+重放到实时流的交接要无缝：先确定高水位 H，回放 `(after_seq, H]`，再订阅 H 之后事件；或先订阅后回放并去重。客户端按 seq 丢弃重复事件，发现缺口主动补读。只说“读 buffer 再连 live”会留下交接窗口丢事件。
+
 ## 七、背压、排队与慢客户端
 
 上游模型可能每秒产生 token，前端也可能因弱网或后台标签页消费很慢。如果应用无限制累积 delta，就会出现单个连接占满内存、拖垮 event loop 的问题。
 
 背压策略从轻到重：
 
-1. 小窗口聚合：按 20 至 100ms 或若干 token 合并再发，降低 frame 和 DOM 更新次数。
+1. 小窗口聚合：按时间或字节合并再发；20 至 100ms 仅为待压测的候选参数，不是实测最佳值。
 2. 有界缓冲：每个 stream 限制未发送字节数，超过阈值暂停上游读取或转为持久化。
 3. 并发与队列：按租户/用户限制 in-flight stream，排队请求提供排队位置或快速失败。
 4. 慢客户端策略：超过心跳/写超时则断开下行，保留任务供短期恢复，或在预算策略下显式取消。

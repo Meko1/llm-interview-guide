@@ -1,15 +1,15 @@
 ---
-title: 分岗位面试真题
-description: 高频面试题速记 是考点速查卡；本文按岗位方向整理更接近真实面试的题目，包括开放题、场景设计题和手撕题，并标注答案所在章节。建议先自测、答不上来再点链接。
+title: 分岗位面试练习题
+description: 按算法、应用与推理工程岗位组织自编练习题，给出技术前提、分层参考思路和可复算验证，不宣称真实面试来源或题目出现频率。
 level: L2
 roles:
   - 应用开发
   - 后端转型
 classification: inferred
 ---
-# 分岗位面试真题
+# 分岗位面试练习题 {#分岗位面试真题}
 
-> [高频面试题速记](/interview/high-frequency) 是考点速查卡；本文按**岗位方向**整理更接近真实面试的题目，包括开放题、场景设计题和手撕题，并标注答案所在章节。建议先自测、答不上来再点链接。
+> 本页是编辑整理的自编练习题，未提供公司、面试时间、授权记录或题频统计，不作为“真题”证据。旧 URL 与标题锚点保留。[考点速查卡](/interview/high-frequency) 可用于查漏；先独立作答，再阅读链接。
 
 ## 怎么用这份题库？
 
@@ -28,8 +28,8 @@ classification: inferred
 3. 为什么现代大模型用 RMSNorm + Pre-Norm + SwiGLU？各自的好处？→ [归一化与激活](/basics/normalization)
 4. RoPE 为什么能表达相对位置？如何扩展到长上下文？→ [位置编码](/basics/position-encoding)
 5. MoE 的负载均衡问题怎么解决？DeepSeekMoE 有何创新？→ [MoE](/basics/moe) / [DeepSeek](/models/deepseek)
-6. LoRA 为什么有效（低秩假设）？r 和 α 怎么设？为什么不增加推理延迟？→ [LoRA](/finetuning/lora)
-7. RLHF 完整流程？PPO 为什么要 4 个模型？DPO 如何简化？→ [RLHF/DPO](/finetuning/rlhf)
+6. LoRA 的低秩更新假设何时有效？r 和 α 怎么设？合并权重与动态 adapter 的推理开销有何不同？→ [LoRA](/finetuning/lora)
+7. RLHF 完整流程？PPO 对齐中的策略、参考策略、奖励模型与价值估计各做什么？哪些参数可以共享？DPO 如何简化？→ [RLHF/DPO](/finetuning/rlhf)
 8. GRPO 相比 PPO 的改进？为什么适合推理模型训练？→ [DeepSeek](/models/deepseek) / [推理模型](/advanced/reasoning-models)
 9. Adam 和 AdamW 的区别？为什么需要学习率 warmup？→ [训练深入](/advanced/training-internals)
 10. FlashAttention 是近似算法吗？为什么又快又省显存？→ [FlashAttention 深入](/advanced/flash-attention)
@@ -69,17 +69,17 @@ classification: inferred
 
 偏推理优化、部署、性能、成本。
 
-1. Prefill 和 Decode 阶段的区别？为什么 decode 是 memory-bound？→ [推理优化](/inference/inference-optimization)
+1. Prefill 和 Decode 阶段的区别？低 batch 的 decode 为什么常受内存带宽限制？大 batch 或通信开销何时改变瓶颈？→ [推理优化](/inference/inference-optimization)
 2. KV Cache 是什么？为什么是长上下文瓶颈？怎么优化？→ [推理优化](/inference/inference-optimization) / [长上下文](/basics/long-context)
 3. vLLM 的 PagedAttention 原理？连续批处理为什么能提吞吐？→ [推理优化](/inference/inference-optimization)
-4. 量化方法有哪些（GPTQ/AWQ/GGUF）？分别适合什么场景？→ [推理优化](/inference/inference-optimization)
-5. 投机解码为什么不掉精度？→ [推理优化](/inference/inference-optimization)
+4. GPTQ/AWQ 等量化方法与 GGUF 存储格式是什么关系？分别适合什么场景？→ [推理优化](/inference/inference-optimization)
+5. 精确投机采样怎样保持目标分布？为什么不保证同 seed 的输出逐 token 相同？→ [推理优化](/inference/inference-optimization)
 6. TTFT、TPOT、吞吐怎么权衡？如何降低 TTFT？→ [推理优化](/inference/inference-optimization)
 7. 训练一个 7B 模型大概需要多少显存？怎么估算？→ [分布式训练](/pretraining/distributed-training)
 8. DP、TP、PP 怎么选？ZeRO 三个阶段分别分片什么？→ [分布式训练](/pretraining/distributed-training)
 9. 混合精度训练 FP16 和 BF16 怎么选？loss scaling 干嘛的？→ [训练深入](/advanced/training-internals)
 10. 怎么降低大模型服务的成本？→ [LLM 应用开发实战](/engineering/llm-app-dev)
-11. output token 为什么比 input token 贵？→ [推理优化](/inference/inference-optimization)
+11. 输入与输出 token 的计算路径有什么差异？为什么计价仍需核对具体供应商和缓存规则？→ [推理优化](/inference/inference-optimization)
 
 ---
 
@@ -109,7 +109,7 @@ classification: inferred
 
 ## 手撕 / 编码题
 
-算法岗常考，准备时建议能手写核心逻辑。
+本节训练核心逻辑实现能力，不推断任何岗位的出题频率。
 
 1. 用 NumPy/PyTorch 实现 **Self-Attention**（含缩放、mask、softmax）。
 2. 实现 **Multi-Head Attention** 的拆分与拼接。
@@ -119,13 +119,13 @@ classification: inferred
 6. 实现 **交叉熵损失** 或一个简化的 **beam search**。
 7. 给定 logits，实现带 **重复惩罚** 的采样。
 8. 实现 **RoPE** 的旋转操作（进阶）。
-9. 实现 **Self-Consistency wrapper**：并发采样、答案归一化、多数投票、置信度提前停止。→ [手撕代码题解集](/interview/coding-problems)
+9. 实现 **Self-Consistency wrapper**：并发采样、答案归一化、多数投票、投票阈值提前停止（票数比例不是校准置信度）。→ [手撕代码题解集](/interview/coding-problems)
 
 > 准备建议：手撕题重在「能写出核心逻辑 + 讲清每步在干嘛」，先吃透 [Attention](/basics/attention) 和 [解码采样](/basics/decoding) 的公式。
 
 ## 基础篇 12 类高频追问
 
-> 这组题覆盖 Boss/JD 里最常出现的基础篇技能词。完整准备路径见 [大模型基础篇岗位要求总纲](./foundation-requirements)。
+> 历史标题中的“高频”不代表统计结论；本组按基础技能组织练习，未做招聘样本频率调查。完整准备路径见 [大模型基础篇岗位要求总纲](./foundation-requirements)。
 
 1. **Spring AI / Java AI**：Spring AI 相比自己封装 HTTP 有什么收益？Java 服务如何做 SSE、超时、限流、审计和权限隔离？→ [Spring AI / Java AI 生产化高频问答](./spring-ai-production-qna)
 2. **LangChain**：Model、Prompt Template、Output Parser、Retriever、Tool、Runnable 分别解决什么问题？什么时候不用框架更好？→ [LangChain 与应用框架](../engineering/langchain)
@@ -142,7 +142,7 @@ classification: inferred
 
 ## 2026 岗位驱动追问
 
-> 这组题来自 2026 年 LLM 应用、Agent、RAG/Memory、Java AI、AI Infra 类 JD 的共性要求。完整能力地图见 [2026 大模型岗位能力地图](./job-market-2026)。
+> 本组按 LLM 应用、Agent、RAG/Memory、Java AI、AI Infra 的工程职责编写，未核验特定 2026 年 JD 样本或来源频率。完整能力地图见 [2026 大模型岗位能力地图](./job-market-2026)。
 
 ### LLM 应用开发 / Java AI
 
@@ -253,4 +253,33 @@ classification: inferred
 4. 你怎么跟进大模型领域的最新进展？→ [学习资源汇总](/interview/resources)
 5. 为什么从原岗位转向（或选择）大模型方向？
 
-> 项目题的关键：**量化结果 + 体现工程权衡 + 展示持续学习**。别只罗列功能，要讲清「为什么这么做」。
+> 项目题的关键：**可追溯证据 + 工程权衡 + 诚实边界**。别只罗列功能，要讲清「为什么这么做」。
+
+## 分层作答与可验证边界
+
+以下是参考练习，不是标准答案或真实项目记录。自建 Demo、构造案例必须明确标注；没有实测就报告验证计划，不填写上线提升百分比。
+
+<details>
+<summary>L1：为什么 schema 合法仍不能直接执行工具？</summary>
+
+schema 只检查字段类型与结构；账号是否属于当前用户、金额是否超限、审批是否覆盖本次参数，必须由可信服务检查。先解析，再验证身份/资源权限，再决定执行。构造验证：相同合法 JSON 分别用租户 A/B 调用，B 必须被拒绝且不能产生业务副作用。网络超时与权限拒绝分开，403 不靠换工具绕过。
+</details>
+
+<details>
+<summary>L2：10 万注册用户能推出多少 GPU 吗？</summary>
+
+不能。先问活跃比例、峰值到达率、长度分布、SLO 和模型配置。构造算例：稳定到达率 20 请求/秒、平均系统内停留 5 秒，Little 定律给平均在途数 `L = λW = 100`；不是最大并发，不能推出 P99 或 GPU 数。若同配置实测容量为 25 请求/秒，平均利用率约 80%，仍需突发/长尾压测确定排队与拒绝策略。失败模式是把注册人数当 QPS，或把平均值当尾延迟承诺。
+</details>
+
+<details>
+<summary>L3：LoRA 和投机解码各有什么数学边界？</summary>
+
+LoRA 以 `ΔW = (α/r)BA` 参数化更新，秩至多 r，不证明所有任务的最优更新都低秩。构造单层 `W ∈ R^(4096×4096)`、r=8 时，A/B 共 `8×(4096+4096)=65,536` 参数，相比原层 16,777,216 参数约 0.391%；不是整模型显存降幅。合并到兼容冻结权重时可消去额外分支，动态切换、量化误差和 kernel 开销需另测。
+
+精确投机采样用 draft q 提议 x，以 `min(1,p(x)/q(x))` 接受，拒绝后从归一化的 `(p-q)_+` 重采样。构造 `p=(0.6,0.4)`、`q=(0.8,0.2)`：第一类接受概率 0.75、第二类 1，拒绝质量 0.2 补到第二类，最终仍为 p。前提是概率和残差分布正确计算；近似验证不能直接继承分布保证。验证应比较分布、质量与吞吐，不要求同 seed 字符串完全相同。
+</details>
+
+### 本页技术出处与阅读范围
+
+- [Microsoft LoRA 官方实现](https://github.com/microsoft/LoRA)：本轮读取 README 的低秩参数化摘录；尺寸为构造值，未跑模型。
+- [ICML 2023 精确投机解码论文](https://proceedings.mlr.press/v202/leviathan23a.html)：本轮读取论文摘要，分布推导供练习，未复现论文实验。

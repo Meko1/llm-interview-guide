@@ -1,8 +1,6 @@
 ---
 title: 跨运行时 Agent 扩展生产治理：Skills、Plugins、MCP 与 Hooks
-description: >-
-  Skill 不是“把一段 prompt 保存起来”。它是一个可发现的过程工件，通常同时改变模型的上下文、可调用工具、脚本依赖和外部系统接入方式。本文把
-  Claude Code、Codex、OpenClaw、Hermes 的公开能力抽象成一套企业可落地的 Skill 生命周期。Coding Agent
+description: 按代码供应链治理 Skill、Plugin、MCP 与 Hook，区分安装、加载、授权和业务执行，设计版本准入与撤销。
 level: L2
 roles:
   - 应用开发
@@ -11,7 +9,7 @@ classification: inferred
 ---
 # 跨运行时 Agent 扩展生产治理：Skills、Plugins、MCP 与 Hooks
 
-> Skill 不是“把一段 prompt 保存起来”。它是一个可发现的过程工件，通常同时改变模型的上下文、可调用工具、脚本依赖和外部系统接入方式。本文把 Claude Code、Codex、OpenClaw、Hermes 的公开能力抽象成一套企业可落地的 Skill 生命周期。Coding Agent 的完整交付链见 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)，MCP 工具服务的生产治理见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。
+> Skill 是可发现的过程工件，可能包含指令、参考与脚本；加载 Skill 不等于授予工具权限。本页提供企业扩展生命周期的参考设计，保留四产品作待按版本验证的导航，不宣称它们都有相同治理能力。交付链见 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)，工具服务见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。
 
 ## 怎么用这页
 
@@ -43,6 +41,8 @@ classification: inferred
 | 特有亮点 | Skill 可在 fork 子 Agent 中运行并绑定 Hook | 与项目指令、权限和任务工作流结合 | allowlist、加载 gating、Workshop 提案审批 | `/learn`、条件 fallback、安全的延迟配置 |
 
 这张表只抽象公开能力，不能据此推断各产品内部实现相同。产品更新很快，真正可移植的是“核心描述 + 平台适配层 + 外部策略”三层设计。
+
+本轮实际读取的 [Agent Skills 格式说明](https://agentskills.io/specification)定义 `SKILL.md` 的 frontmatter 和正文，`allowed-tools` 属于实验性可选字段；它不保证任一 Runtime 将其作为强制授权。表内 discovery、Workshop、自动触发与目录优先级未逐版本核验；迁移测试分别验证“发现了、加载了、允许调用了、业务执行了”。
 
 ## 三、推荐的跨运行时目录与边界
 
@@ -110,6 +110,8 @@ capability:
 ```
 
 Manifest 与代码包必须一起签名并在运行时解析。模型看到的是适量的 Skill 说明；Runner 看到的是经过策略计算后的工具、网络和短期凭证；审计系统看到的是 `capability_id + version + package_hash`。三者不要互相代替。
+
+示例 `cosign:verified` 不是已执行验签。执行器应保存校验对象、signer/trust-root、结果与撤销检查；签名只能证明来源/完整性，不能证明脚本安全。包解压拒绝路径穿越和不允许的 symlink，引用/动态脚本也绑定包 digest；不让安装时已审代码在执行时从未审 URL 换成另一份。
 
 ### 来源证明与依赖锁定
 
@@ -276,6 +278,8 @@ Hermes 也支持从本地资料、网页或既有操作中生成候选 Skill；�
 > 每个任务在启动时绑定 `skill_id + version + package_hash`，运行中只使用该不可变快照；新版本先进入 canary。紧急撤销时，控制面可阻断新任务和短期 token 续租，已运行任务按风险级别取消、降级为只读或允许在受限时间内完成。这样既能复现历史行为，也能快速止血。
 
 ### 追问：Agent 自动发现了一个好流程，如何上线？
+
+L1 用只读候选 Skill 演示输入与输出边界；L2 检查依赖、网络、脚本和租户 scope 的实际差异，再按质量非劣/成本目标与安全红线判断，不要求所有指标同时严格变好；L3 比较同一任务集的触发、错误、成本与安全，不把被挑中的成功轨迹当普遍收益。任何候选都不能自行扩大权限。
 
 > 先作为 candidate proposal 保存来源轨迹、差异、依赖、声明权限和评测建议；静态扫描后在无真实密钥的 sandbox 回放；owner 批准后用测试 Agent 灰度。只有质量、安全与成本都优于基线，才将其提升为某个受限作用域的可见 Skill。永远不允许它直接修改全局 Skill、Hook 或生产权限。
 

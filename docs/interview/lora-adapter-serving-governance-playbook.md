@@ -61,6 +61,10 @@ adapter 参数少于全量模型，但多 adapter 同时驻留仍会占 GPU/CPU 
 
 ## 六、合并、量化与兼容性
 
+先算一层：对4096×4096线性权重，rank=16的LoRA有 `16 × (4096+4096)=131,072` 个参数；BF16每参数2字节，纯A/B为262,144字节即256 KiB。若32层各适配q/v两矩阵，总计16 MiB；8个adapter是128 MiB。此构造不含bias、modules_to_save、临时buffer、CPU副本和KV，不能直接当GPU容量承诺。QLoRA的4-bit通常指训练时冻结base，不代表LoRA矩阵也存4-bit。量化base merge还可能涉及反量化/再量化误差，须分别回归。
+
+[vLLM官方LoRA文档](https://docs.vllm.ai/en/latest/features/lora/) 实读请求示例与动态加载警告：模型需实现SupportsLoRA；运行时加载/卸载管理面存在风险，除隔离且完全可信环境外不应直接用于生产。业务请求可选择已批准adapter，不等于允许用户上传路径或调用管理端点。制品校验、管理面认证和下载allowlist先于热加载；这不是开一个环境变量就完成多租户服务。
+
 离线 merge 可以简化在线加载，但会失去灵活路由且需要为每个组合保存完整权重；动态挂载更灵活，但引擎、量化格式和目标模块必须兼容。QLoRA 常用于低资源训练，不等于在线一定只能量化服务。上线前分别验证：输出格式、工具调用、长上下文、吞吐、显存、领域集、通用集和安全集。
 
 ## 七、评测、灰度与回滚
@@ -114,6 +118,8 @@ tenant + isolation domain + base model + adapter digest
 先固定 base、tokenizer、Prompt、数据切片和评测版本，比较 adapter 与基线的领域/通用/安全指标；再看路由是否选错、加载是否失败、量化/模板是否变更，最后决定回滚、修复数据还是重新训练。
 
 ## 九、项目讲法模板
+
+使用下面设计模板时只声称实际做过的部分。L1检查base digest、目标模块及tokenizer；L2用驻留字节、冷加载和KV预算决定共享或专属池；L3在同base/同数据下对照merge、动态LoRA与量化路径的数值及质量差异。本文未部署vLLM或跑adapter基准。
 
 > 我们将 LoRA 制品纳入模型注册表，校验其 base model、tokenizer、量化与评测报告，并以 manifest 绑定线上 Prompt、参数和路由策略。推理服务在同一基础模型上受控热加载 adapter，按租户与任务路由，同时用显存预算和缓存上限保护 KV Cache。新版本先通过领域、通用、安全和延迟门禁，再灰度；trace 记录实际 adapter，出现退化可一键回到稳定 manifest。这让低成本微调真正变成可运营能力。
 

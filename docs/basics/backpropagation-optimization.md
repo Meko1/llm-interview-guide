@@ -1,8 +1,7 @@
 ---
 title: 反向传播、自动微分与参数更新
 description: >-
-  我会把训练理解为计算图上的闭环：前向得到 logits，loss 定义误差，backward 用链式法则把误差传到可训练参数，optimizer
-  根据梯度和状态更新参数。排障时我不只看 loss，还检查参数是否在 optimizer 参数组、grad 是否有限、step 后权重差是否非零，并用单 b
+  分清计算梯度与更新权重，检查冻结路径、梯度累积的归一化、AMP 跳步与完整训练状态。
 level: L1
 roles:
   - 在校生
@@ -40,13 +39,30 @@ batch -> forward -> loss -> backward -> gradient sync/accumulate -> optimizer.st
 4. 分布式场景在适当时机同步梯度；梯度累积场景跨多个 micro batch 相加。
 5. `step` 根据 optimizer state 更新参数，随后清理或置空梯度。
 
-梯度默认是累积的。因此忘记 `zero_grad` 会把上一个 step 的梯度混进当前更新；梯度累积则是有意地延后清理，并在更新前按累积次数正确归一化。
+梯度默认累积到叶子张量 `.grad`。有意累积时，只在更新窗口边界清理；按累积次数除 loss 仅适用于各 micro batch 权重相同。若有效 token 数不同，要用各批 token 损失和除以窗口总有效 token 数，否则短样本会被过度加权。
+
+可复算反例：两批分别有 1 和 9 个有效 token，平均损失为 2 和 0。平均两个 batch 得 1，但全 token 平均为 0.2；两者定义了不同目标。分布式训练还需考虑默认梯度平均，不能在每卡独立归一化后假定全局 token 权重相同。
 
 ## 三、冻结、LoRA 与“为什么参数没有更新”
 
 全参微调中大部分参数都参与梯度计算。PEFT/LoRA 通常冻结底座，仅让低秩矩阵可训练：前向仍会经过底座，反向只需要为可训练路径保留必要梯度。检查某个参数是否更新至少要看三件事：`requires_grad` 是否为真、是否被放入 optimizer 的参数组、其梯度是否非零且没有被 overflow/clip 处理掉。
 
-常见错误包括：构建 optimizer 后才解冻参数；对 LoRA 包装前后引用了不同参数对象；把模型置为 `eval()` 后误以为参数自动冻结；只保存了权重却丢失 optimizer state。它们都可能导致 loss 看似变化很小或恢复后突然抖动。
+若 optimizer 只收集了当时可训练参数，之后解冻的参数需加入参数组；若本来就包含全部参数，解冻本身不构成错误。还要排查包装前后的参数对象、误把 `eval()` 当冻结、以及恢复时丢失 optimizer state。
+
+**最小观察实验。** 以下仅需安装 PyTorch，可在 CPU 运行；不是 LLM 训练。`w=0` 时梯度为 -6，`backward()` 后权重仍是 0，学习率 0.1 的 `step()` 才把它改为约 0.6。
+
+```python
+import torch
+
+weight = torch.nn.Parameter(torch.tensor(0.0))
+optimizer = torch.optim.SGD([weight], lr=0.1)
+optimizer.zero_grad(set_to_none=True)
+loss = (weight - 3).square()
+loss.backward()
+print(weight.item(), weight.grad.item())
+optimizer.step()
+print(weight.item())
+```
 
 ## 四、为什么深层网络需要残差与归一化
 
@@ -62,7 +78,7 @@ $$\frac{\partial L}{\partial\theta_i}\approx\frac{L(\theta_i+\epsilon)-L(\theta_
 
 ## 五、训练状态为什么是完整状态
 
-可恢复训练至少包含模型权重、optimizer 的动量/二阶矩、scheduler 当前步数、随机数状态、数据游标和混合精度 scaler。只恢复权重会使下一步的学习率和 AdamW 状态突变，常表现为 loss 尖刺；数据游标不一致还会破坏可复现性和采样分布。
+可恢复训练需保存权重、optimizer 状态、scheduler 步数、随机数状态、数据游标，以及使用 GradScaler 时的 scaler 状态。FP16 通常需要 loss scaling，BF16 通常不需要；autocast 也不意味着所有算子和参数都改为低精度。AMP 累积窗口内应保持相同 scale，累积完后 unscale、裁剪、step，再 update；非有限梯度可导致跳步，此时 scheduler 不应冒充完成了一次正常更新。
 
 ## 六、面试高频问答
 
@@ -76,7 +92,14 @@ $$\frac{\partial L}{\partial\theta_i}\approx\frac{L(\theta_i+\epsilon)-L(\theta_
 
 ### Q3：梯度为零一定说明参数冻结吗？
 
-不一定。也可能是 ReLU/门控饱和、loss mask 没覆盖、低精度下溢、裁剪/overflow 跳步，或当前 batch 恰好不触发该路径。应结合 `requires_grad`、参数组、grad norm 和数据路径判断。
+不一定。先区分 `.grad is None`、全零、非有限以及「梯度非零但权重未变」。路径未参与、mask、饱和、下溢可影响梯度；overflow 通常触发跳步，不等于把梯度自动变成零。冻结参数也可能保留冻结前残余 grad，改训练状态时要清理。
+
+<details>
+<summary>自测：为什么不应每个 micro batch 都调用 scaler.update()？</summary>
+
+不同 scale 的梯度不能直接相加后统一 unscale。scale、溢出检查和更新要与有效 batch 对齐；窗口结束前也不应提前把已有 grad unscale 后继续累积缩放梯度。
+
+</details>
 
 ### Q4：为什么要先检查单 batch 过拟合？
 
@@ -85,3 +108,5 @@ $$\frac{\partial L}{\partial\theta_i}\approx\frac{L(\theta_i+\epsilon)-L(\theta_
 ## 七、面试回答模板
 
 > 我会把训练理解为计算图上的闭环：前向得到 logits，loss 定义误差，backward 用链式法则把误差传到可训练参数，optimizer 根据梯度和状态更新参数。排障时我不只看 loss，还检查参数是否在 optimizer 参数组、grad 是否有限、step 后权重差是否非零，并用单 batch 过拟合先验证标签和反传。恢复训练则必须恢复 optimizer、scheduler 和数据状态，而不是只加载模型权重。
+
+实现边界参考：[PyTorch AMP 梯度累积](https://docs.pytorch.org/docs/stable/notes/amp_examples.html#gradient-accumulation)。具体 API 写法随版本变化，优先核对 scale 与 step 的语义。

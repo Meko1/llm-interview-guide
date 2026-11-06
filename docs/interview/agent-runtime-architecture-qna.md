@@ -1,8 +1,6 @@
 ---
 title: 智能体运行时架构高频问答：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  面试问 Claude Code、Codex、OpenClaw 或 Hermes 时，最差的回答是复述产品功能。更有区分度的回答是：把它们视为不同取向的
-  Agent Runtime，比较任务循环、上下文、工具执行、隔离、记忆、调度和评测如何协作。编程 Agent 的通用机制见 编程 Agent 底层架
+description: 用任务状态、上下文、模型路由、工具执行和审计解释 Agent Runtime，区分工作区隔离、执行安全与业务授权。
 level: L2
 roles:
   - 应用开发
@@ -77,7 +75,7 @@ Claude Code 的公开子 Agent 文档强调：子 Agent 有独立上下文窗口
 
 ### Hooks 为什么比 prompt 更可靠
 
-公开 Hook 机制可以在 `PreToolUse`、`PermissionRequest`、`PostToolUse` 等事件上 allow、deny、ask、defer 或改写输入。它体现了一个通用原则：
+前置 Hook 是否能 deny、ask 或修改输入要看产品与事件合约；`PostToolUse` 已在执行之后，不能泛称三种事件都能阻断。产品细节未逐版本核验。可迁移的参考原则是：
 
 ```text
 model intent -> deterministic hook / policy -> tool executor -> normalized result -> model observation
@@ -176,6 +174,8 @@ RECEIVED
 
 worktree 解决的是并发文件冲突与可回收修改；容器/VM 解决的是进程、网络和文件系统暴露；Tool Gateway 解决的是业务身份、资源权限和审计。面试里把这三种隔离说清楚，通常比单纯说“Docker 沙箱”成熟得多。
 
+worktree 不是访问控制边界：同一进程身份仍可能读写其他目录、共享 Git 元数据或访问同一外部数据库。文件 ownership、独立凭证和资源端策略需另外实施。任务 YAML 是参考契约而非某产品可加载配置，其步骤/token/时间预算是构造值。
+
 ## 九、子 Agent 与多 Agent：不要只追求并行
 
 合理的分工应使每个 worker 有明确输入、工具边界、输出契约和完成条件：
@@ -204,6 +204,8 @@ worktree 解决的是并发文件冲突与可回收修改；容器/VM 解决的�
 改 prompt、模型、skill、工具 schema 或 sandbox 策略后，都应在固定轨迹集上回放，并把事故样本变成回归用例。
 
 ## 十一、系统设计题：实现一个企业级 Coding Agent 平台
+
+从小方案开始口述：L1 用一个只读工具、一个受限 patch 工具和结构化任务状态说明谁做什么；L2 再解释并发冲突、恢复、预算与外部效果；L3 若比较四 Runtime，要固定版本、工具集、仓库与数据域，不以产品功能表推导成功率或安全优势。控制面模块齐全并不意味着必须全部拆成微服务。
 
 **题目**：设计一个给研发团队使用的 Coding Agent，支持 IDE/CLI/Slack 入口、并行子 Agent、修改代码、跑测试、创建 PR；要求项目隔离、审计、成本控制和可回滚。
 

@@ -1,9 +1,6 @@
 ---
 title: 企业 Connector 增量同步与撤权：把外部知识安全地带进 LLM
-description: >-
-  我会把 Connector 分成凭证控制面和数据同步面。数据面以稳定 source id、revision、ACL 快照和 cursor
-  建模，Webhook 触发增量、Delta API 保证可恢复、周期性对账发现漏事件；cursor
-  只在对象处理可重放后推进。内容更新创建不可变版本并原子发布，权
+description: 用稳定对象身份、增量游标与版本发布同步企业知识，重点处理重复事件、撤权优先级、派生资产血缘和对账验收。
 level: L2
 roles:
   - 后端转型
@@ -46,14 +43,19 @@ connector instance + tenant + source scope
 
 cursor 代表“我已安全消费到的变化位置”，应只在相关对象**已经持久化并可重放**后提交。若先推进 cursor 再处理，worker 崩溃会永久丢变化；若处理完却未提交，则重放会发生，因此下游必须幂等。
 
+需要区分**获取游标**与**发布水位**。获取游标可在整页事件及 outbox 同事务落盘后推进，不必等待所有对象完成 embedding；发布水位只统计已发布版本。否则一个大附件或隔离对象会阻塞所有增量。单一游标方案则必须明确隔离失败对象如何持久化并补偿。
+
 对于仅支持 `modified_time` 的 API，使用重叠窗口：下一次从 `last_watermark - overlap` 开始抓，再按 `(source_object_id, revision/etag)` 去重。不能完全依赖本地时间，因为外部系统写入延迟、分页排序和时钟差都会制造漏洞。
 
 ```text
-fetch changes -> persist event -> enqueue object sync
--> complete object revision + ACL -> advance cursor atomically
+fetch page -> transaction(events + outbox + next cursor)
+-> publish outbox -> replayable object workers -> publish revision
+-> update publication watermark separately
 ```
 
 “原子”通常通过 outbox/事务记录实现：同步状态与待投递事件一起持久化，后台可靠投递到队列，避免数据库成功但消息丢失。
+
+以本轮读取的[Microsoft Graph delta 文档](https://learn.microsoft.com/en-us/graph/delta-query-overview)为例：有 `nextLink` 时继续分页，即使当前页为空；取得 `deltaLink` 后才结束本轮。变化可能重放，同一对象可能出现在不同页，重置响应可能要求全量重建。这些是该 API 的语义，不应套用为所有 SaaS 都支持 Delta 或完整历史日志。
 
 ## 四、对象状态机：删除与权限不是普通更新
 
@@ -74,6 +76,8 @@ discovered -> fetching -> normalized -> indexed -> published
 Connector 拉取的文档应携带源系统的访问控制快照，例如 owner、group、share link、空间/目录继承关系和 policy version。解析出的页面、chunk、embedding、摘要、缩略图和缓存都继承同一资产/ACL 血缘。
 
 检索时执行：`tenant filter -> source policy/ACL filter -> recall -> rerank -> evidence validation`。权限过滤必须在召回前或受服务端强制的查询阶段完成，不能先全库召回再让模型“不要引用无权限内容”。引用 UI 同样要重查权限，避免文件名、页码或摘要泄露。
+
+“当前权限”还需要可实现的来源：在线 ACL 服务、撤权 deny-overlay 或受控快照。若源权限只能异步得知，就必须声明最大撤权滞后与故障策略，不能承诺实时一致。权限收紧可先阻断；放宽只有验证后再启用。缓存键包含租户、主体/权限域、文档 revision 与 policy epoch，引用访问时再检查撤权。
 
 高权限共享盘、公开链接和外部协作者是常见边界案例。Connector 需要明确是同步“当前用户可见内容”“管理员可见内容”还是“组织共享空间内容”，并把这个选择写入实例策略，不能由模型猜测。
 
@@ -126,6 +130,13 @@ Adapter 变更也应有 release manifest：connector 版本、字段映射、解
 
 周期性对账不能省：随机抽取源系统对象和索引对象，比对 revision、ACL、删除状态和可引用性。对账发现的漏同步、幽灵文档和越权样本应进入 regression suite。
 
+<details>
+<summary>故障验收：落盘后、投递前 worker 崩溃</summary>
+
+重启后 outbox 应重新投递，同一对象 revision 不能产生两个 active 版本。再注入“旧更新晚于撤权到达”，确认旧事件不能重新开放可见性；撤权延迟分别量测事件获取、在线阻断与物理清理，不能只报索引删除完成时间。
+
+</details>
+
 ## 十、系统设计题回答框架
 
 题目：“设计一个企业知识助手，连接 Google Drive、Confluence 和 Slack，要求内容分钟级更新、权限实时生效。”
@@ -170,4 +181,4 @@ Connector 传播 ACL 变更并撤销索引可见性，但在线检索仍要以�
 
 ## 十二、60 秒收束回答
 
-> 我会把 Connector 分成凭证控制面和数据同步面。数据面以稳定 source id、revision、ACL 快照和 cursor 建模，Webhook 触发增量、Delta API 保证可恢复、周期性对账发现漏事件；cursor 只在对象处理可重放后推进。内容更新创建不可变版本并原子发布，权限收紧和删除则先阻断在线检索、缓存与引用，再清理派生产物。所有 chunk、embedding 和证据继承源 ACL，检索与引用展示都重新校验当前权限。最后用 source lag、撤权传播、ACL mismatch、429 和单位文档成本持续运营，并把 Connector/解析器升级作为可回滚发布处理。
+> 设计重点是把获取进度、发布进度和权限时效分开。事件持久化后可重放，游标失效可重建，版本发布不能覆盖更新的撤权状态；对当前权限无法实时获知的来源，明确滞后与安全降级。以上是建议架构，不是已测生产 SLA。

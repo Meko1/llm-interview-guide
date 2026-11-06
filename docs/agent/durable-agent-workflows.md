@@ -115,6 +115,14 @@ Temporal 更像面向分布式业务流程的耐久工作流平台。它的核�
 
 ## 六、版本演进：最容易被忽略的生产题
 
+### 恢复测试必须击中「外部成功、本地未保存」窗口
+
+假设报告发布服务已经提交，但 worker 在保存 checkpoint 前崩溃。恢复时同一写节点会再次出现，只有业务服务持久化的 operation_id、参数摘要与原回执才能识别已发布；仅在 State 里保存 `published=true` 来不及覆盖这个窗口。幂等键还需定义有效期、同键异参和并发冲突行为。
+
+至少注入四种故障：外部调用前崩溃、提交后回执丢失、checkpoint 后重启、恢复时审批/权限已失效。观察外部副作用次数和任务终态，不只观察流程最终是否返回 `succeeded`。无法查询且不支持幂等的写操作，结果未知时暂停人工核对，不尝试新键。
+
+一次任务内部的重放算恢复；从干净环境重复整个任务才算独立 trial。恢复成功率、重复副作用率、未知结果率与完成成本要分别报告。状态图固定版本用于复现，**当前授权与删除策略仍要实时核验**，不能让旧授权快照复活已撤权资料。
+
 假设一个审批任务已等待三天，此时团队发布了新图、新 Prompt 和新 Tool Schema。如何保证它恢复后不会走到错误分支？
 
 1. 每个 run 固定 `workflow_version`、`prompt_version`、`tool_schema_version` 和策略版本。
@@ -170,6 +178,8 @@ Case Workflow (Temporal/耐久协调)
 当主要困难是跨服务长事务、可靠定时/重试、审批等待、版本演进和业务 SLA 时。若主要困难是 Agent 的上下文、工具循环与状态图，LangGraph 更自然；两者可以组合但要避免双重重试和双重权威状态。
 
 ## 十、官方资料与延伸阅读
+
+本轮尝试读取 LangGraph 官方 Interrupts 文档超时，旧仓库文档路径返回 404；未实读下列当前 API 文档或运行框架。Interrupt 的重入、异常与顺序规则以及 Temporal 版本机制需按锁定版本补核，本文代码为类型示意，不是可直接执行的完整程序。
 
 - [LangGraph 概览](https://docs.langchain.com/oss/python/langgraph/overview)
 - [LangGraph Interrupts 与人工协作](https://docs.langchain.com/oss/python/langgraph/interrupts)

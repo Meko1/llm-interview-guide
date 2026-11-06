@@ -1,0 +1,54 @@
+{
+  "checkedAt": "2026-11-06T03:18:21.769Z",
+  "articles": 242,
+  "articleHashMismatches": [],
+  "originalHeadingIds": 4281,
+  "missingOriginalHeadingIds": [],
+  "mathContainers": 563,
+  "mathErrorPages": [],
+  "gitDiffCheckExit": 0,
+  "build": {
+    "checkPassed": true,
+    "buildPassed": true,
+    "metadataPages": 254,
+    "sourcePages": 276,
+    "htmlPages": 277,
+    "searchRegressionPassed": true,
+    "searchQueries": 7,
+    "bodyOnlyQueries": 2
+  },
+  "browser": {
+    "capturedAt": "2026-11-06T03:07:14.518Z",
+    "pageCases": 485,
+    "pageIssues": 0,
+    "searchViewportCases": 3,
+    "searchQueryCases": 21
+  },
+  "search": {
+    "chunk": "@localSearchIndexroot.Mow8BZJj.js",
+    "chunkBytes": 6366787,
+    "jsonBytes": 6366754,
+    "documents": 4545,
+    "terms": 97008,
+    "gzipBytesDiagnosticOnly": 1789774,
+    "brotliBytesDiagnosticOnly": 1228507,
+    "optimizedRuntimeShipped": false,
+    "sha256": "42e604fbce081302ab53dfca6d991c65b1b85997b414ce9700d937fa8386f90a"
+  },
+  "dependencies": {
+    "baselineDate": "2026-11-05",
+    "baselineFindings": 8,
+    "afterFindings": 3,
+    "afterHigh": 1,
+    "afterModerate": 2,
+    "afterCritical": 0,
+    "installedPackagesVerified": 185,
+    "lockMismatches": 0,
+    "vueCrProbePassed": true
+  },
+  "publication": {
+    "committed": false,
+    "pushed": false,
+    "deployed": false
+  }
+}

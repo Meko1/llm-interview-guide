@@ -60,6 +60,10 @@ classification: inferred
 
 能力变化要版本化。供应商升级模型或废弃参数时，先更新契约测试与回归集，再允许进入路由池。
 
+**L1：内部 token 数不是跨供应商的通用长度。** 示例的 `context_tokens=48000` 必须注明按谁的 tokenizer 计算；adapter 对各候选重新计算输入，并为 system、工具 schema、图像等预留空间与输出额度。同样支持 JSON schema，不代表支持相同关键字、strict 子集、拒绝或截断终态；同样叫 tool calling，也不代表调用 ID、并行工具和参数 delta 可直接转发。内部消息保留角色与工具结果关联，按 provider 渲染，不把整段历史拼成一个 user 文本绕开差异。
+
+`tenant_id/data_residency/required` 是受信网关派生或校验的约束，不接受用户自报低风险。候选过滤应覆盖 endpoint 所在地区、实际处理与保留承诺及数据外发审批，单纯域名或代理地区不证明驻留。模型列出的工具调用只是一项请求，实际执行仍逐次授权；adapter 不能因备用模型不兼容就去掉校验器。
+
 ## 四、路由决策顺序
 
 ```text
@@ -80,12 +84,16 @@ request -> tenant/data policy -> required capability filter
 | DNS/连接失败 | 短暂重试后熔断 | 可以 |
 | 429/配额不足 | 尊重 Retry-After、排队或切换 | 可以，受租户预算约束 |
 | 上游 5xx | 有界重试、熔断 | 可以 |
-| 请求超时且未收到字节 | 重试或切换 | 通常可以 |
+| 请求超时且未收到字节 | 持久化未知 attempt；区分推理与工具副作用 | 无副作用推理可有界切换，不保证免重复费用 |
 | 已收到部分流 | 停止并报告中断，建议用户重试 | 不做静默切换 |
 | 400/schema 不兼容 | 修复适配器或降级能力 | 不应盲目重试 |
 | 内容审核拒绝 | 保留拒绝语义 | 不能用备用模型绕过 |
 
 重试必须有上限、退避和全局预算。盲目“重试 + fallback”会放大流量并制造多次计费。每一次尝试都要记录 attempt 序号和原因。
+
+没有响应字节不代表上游未处理：主调用可能已完成并收费，只是回包丢失。连接建立前确定失败与提交后超时要区分；401/403 配置/授权错误应修配置或闭锁，不反复换 key，内容拒绝也不能当可用性故障。解析错误可做一次有界修复，但必须记录原输出，不能把错误字段补成看似成功的结果。
+
+一个端到端 deadline 覆盖排队、主尝试、退避与备用，给下一跳的只是剩余预算，不是重新开始计时。SDK、网关与工作流若各最多 3 次尝试，最坏是 3³=27 次下游调用，不是 9 次；尽量由一层统筹预算。jitter 分散同时重试，不能制造额外容量。按逻辑请求预设最大总 attempt/token/金额，失败与备用费用都归同一 run。
 
 ## 六、幂等与副作用：切换时最容易出事故的地方
 
@@ -99,6 +107,10 @@ planned -> authorized -> tool_started -> tool_committed -> observed -> completed
 - provider 切换前先读取工具状态；`tool_started` 不代表可安全再次执行。
 - 对不可逆动作要求事务、补偿或人工确认；自动 fallback 只恢复未提交的推理步骤。
 - 所有批准与授权绑定到具体任务、参数摘要和过期时间，不能被备用模型复用为泛化权限。
+
+**L2：只选一个结果提交者。** 持久化 attempt 状态与结果引用，对 run 的提交用 CAS：主尝试迟到成功与备用成功竞争时，仅一个结果成为用户可见终态；另一结果保留计量与诊断，不能触发第二轮工具。取消 loser 是尽力操作，不是费用/副作用撤销证明。跨 provider 的 idempotency key 没有自动共享语义，只能用本地账本关联；工具下单等由下游业务幂等守护，不能只靠模型返回的 tool_call_id。
+
+若主模型已经创建订单、但回答超时，备用可基于已确认的订单状态解释结果，不可重新规划“再创建一次”。`tool_started` 未查清时进入恢复/人工队列；恢复输入由受信运行账本构造，不从未经验证的半截模型文本推断动作成功。
 
 ## 七、流式响应与会话连续性
 
@@ -122,6 +134,8 @@ planned -> authorized -> tool_started -> tool_committed -> observed -> completed
 
 熔断范围要合理：可按 provider、region、model deployment 或租户配额拆分。把一个模型的 429 当作“整个供应商全挂”会造成不必要的级联切换。
 
+备路由必须有自己的准入上限。构造主路由流量 100 请求/秒、备用经验证容量 30 请求/秒且已承担 10，则故障时仅余 20 请求/秒可接，不能将 100 全转过去；剩余 80 按优先级排队、异步或拒绝。half-open 探针用授权的低风险输入，不复制敏感生产上下文；探针成功只证明该能力切片恢复，不证明长上下文/工具任务全部恢复。多实例网关的探针与恢复速率也需全局上限，避免每个实例都独立放量。
+
 ## 九、质量一致性：备用路径也要有门禁
 
 不能只以“返回了文本”判定 fallback 成功。为每个任务等级定义最低质量契约：
@@ -135,6 +149,10 @@ planned -> authorized -> tool_started -> tool_committed -> observed -> completed
 | 代码生成 | 构建/测试通过率、安全扫描 |
 
 备用模型只在通过对应离线评测、成本边界和安全策略后才进入候选池。灰度时单独看 fallback traffic，不能把它混在主模型平均指标里掩盖退化。
+
+**L3：一致性应定义为契约等价，不是文本相同。** 在相同授权证据集上配对比较字段准确率、任务结果、安全拦截与拒绝行为；不要求两个模型措辞一致。故障流量常更长、更难或来自特定租户，直接拿 fallback 组与普通主组均值比较有选择偏差。使用同切片回放或授权的只读 shadow，并限制额外费用与外发；有副作用工具用 sandbox/stub，不能把评测变成第二次真实执行。
+
+构造 1,000 个逻辑请求中 100 个进入 fallback，80 个通过业务校验：fallback 恢复率=80/100=80%，不是主+备总 attempt 的成功率。整体还需以全部 1,000 个请求算联合 SLO 成功率，保留主/备都失败及超时；每成功任务成本包括被丢弃的迟到尝试。不应按独立性公式 `1−(1−A)(1−B)` 承诺可用性，因为两家可能共享云网络、认证、代理或同一个故障网关。
 
 ## 十、数据驻留、隐私与账单
 
@@ -177,10 +195,12 @@ input/output/cached tokens, price version, latency, outcome
 
 **Q：多供应商如何避免重复扣费？**
 
-为每次业务请求建立 run 和 attempt，使用幂等键；仅在尚未收到可确认结果且错误可重试时发起下一 attempt；记录每个 provider 的 usage 与价格。工具副作用由业务幂等键和状态机去重，不能只靠 API 重试语义。
+不能普遍保证不重复收费。为业务请求建立 run 与 attempt，尽量取消不再需要的调用并对账；仅在可安全重试且预算允许时下一次尝试。没有跨厂商共享的幂等契约时，两家真实执行都可能收费。工具副作用由业务幂等键与状态机去重，费用按所有 attempt 计量，而不是只计最终采用的文本。
 
 ## 十三、项目讲法模板
 
 > 我们将多供应商接入统一到模型网关，业务只提交内部请求契约。网关先按数据驻留、上下文窗口、工具/JSON/视觉能力和质量门槛过滤候选，再按实时健康、延迟与成本排序。每个 run 固定路由与 fallback 链；错误按 429、网络、超时、协议不兼容和内容拒绝分别处理，熔断和重试都有预算。流式中断不静默拼接备用模型，工具写操作通过幂等键与执行状态机保护。我们用备用路径的结构化有效率、RAG 引用质量、Agent 安全和失败成本做独立门禁，并定期故障演练。
 
 继续学习：[大模型网关](/engineering/llm-gateway)、[Agent 模型路由与能力治理](/interview/agent-model-routing-capability-playbook)、[MaaS 平台生产实践](/interview/maas-production-qna)、[LLM 推理容量与弹性伸缩设计](/interview/llm-inference-capacity-autoscaling-playbook)、[LLM 流式输出与会话恢复设计](/interview/llm-streaming-session-resilience-playbook)。
+
+主源：[AWS Builders' Library 的 timeout/retry/backoff/jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/)实读了超时不证明副作用未发生、多层重试放大与 token bucket；[Azure Circuit Breaker](https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)实读 half-open 和异常分类注意事项。本文未测试任何具体 provider 的 API 兼容、驻留或价格，数字为构造，恢复协议是工程设计而非实测可用性报告。

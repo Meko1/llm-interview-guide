@@ -2,11 +2,11 @@
 
 由 npm run catalog 重建；数字可从 inventory.csv 复算。知识文章不含首页、路径页、目录页与 docs/superpowers 设计文档。保留旧 URL。
 
-- 知识文章：233
-- 清单 Markdown 页面：244
+- 知识文章：242
+- 清单 Markdown 页面：254
 - 缺少 frontmatter 的知识文章：0
-- 无外部引用链接的知识文章：183
-- 初次自动分级、待人工核实：228
+- 无外部引用链接的知识文章：11
+- 初次自动分级、待人工核实：237
 - 无效站内路径或资源链接：0（不含锚点语义）
 
 ## 板块
@@ -15,42 +15,42 @@
 | --- | --- |
 | 入门与数学 | 7 |
 | 模型原理 | 19 |
-| 预训练 | 7 |
+| 预训练 | 9 |
 | 微调与对齐 | 9 |
 | Prompt 工程 | 7 |
-| RAG 检索 | 11 |
-| Agent 工程 | 17 |
-| 推理与部署 | 11 |
-| 评估与安全 | 2 |
+| RAG 检索 | 12 |
+| Agent 工程 | 18 |
+| 推理与部署 | 13 |
+| 评估与安全 | 3 |
 | 工程实战 | 24 |
-| 面试专题 | 89 |
-| 研究与前沿 | 12 |
+| 面试专题 | 90 |
+| 研究与前沿 | 13 |
 | 模型专题 | 6 |
 | 多模态 | 5 |
 | 开发工具 | 7 |
 
 ## 优先精读候选（短文粗筛，不是深度评分）
 
-- basics/tokenizer.md：机械字符数 1690，是否扩写需人工判断。
-- beginner/getting-started.md：机械字符数 1814，是否扩写需人工判断。
-- basics/moe.md：机械字符数 1954，是否扩写需人工判断。
-- beginner/math-basics.md：机械字符数 1969，是否扩写需人工判断。
-- basics/distributed-training-memory.md：机械字符数 1997，是否扩写需人工判断。
-- advanced/state-space-models.md：机械字符数 2013，是否扩写需人工判断。
-- beginner/llm-capabilities.md：机械字符数 2013，是否扩写需人工判断。
-- rag/multimodal-rag.md：机械字符数 2040，是否扩写需人工判断。
-- advanced/vector-search.md：机械字符数 2084，是否扩写需人工判断。
-- basics/long-context.md：机械字符数 2119，是否扩写需人工判断。
-- advanced/flash-attention.md：机械字符数 2120，是否扩写需人工判断。
-- finetuning/frontier-alignment.md：机械字符数 2125，是否扩写需人工判断。
-- rag/embedding-vectordb.md：机械字符数 2164，是否扩写需人工判断。
-- rag/graphrag.md：机械字符数 2174，是否扩写需人工判断。
-- agent/multi-agent.md：机械字符数 2195，是否扩写需人工判断。
-- engineering/coding-agent.md：机械字符数 2209，是否扩写需人工判断。
-- agent/deep-research.md：机械字符数 2234，是否扩写需人工判断。
-- basics/autoregressive-training.md：机械字符数 2238，是否扩写需人工判断。
-- basics/backpropagation-optimization.md：机械字符数 2251，是否扩写需人工判断。
-- advanced/safety.md：机械字符数 2259，是否扩写需人工判断。
+- evaluation/evaluation.md：机械字符数 583，是否扩写需人工判断。
+- advanced/vector-search.md：机械字符数 975，是否扩写需人工判断。
+- advanced/training-internals.md：机械字符数 1372，是否扩写需人工判断。
+- finetuning/model-merging.md：机械字符数 1475，是否扩写需人工判断。
+- inference/speculative-sampling-proof.md：机械字符数 2253，是否扩写需人工判断。
+- engineering/coding-agent.md：机械字符数 2302，是否扩写需人工判断。
+- basics/model-architecture-landscape.md：机械字符数 2399，是否扩写需人工判断。
+- models/slm.md：机械字符数 2424，是否扩写需人工判断。
+- beginner/getting-started.md：机械字符数 2425，是否扩写需人工判断。
+- claude-code/architecture.md：机械字符数 2434，是否扩写需人工判断。
+- basics/logits-loss.md：机械字符数 2466，是否扩写需人工判断。
+- beginner/llm-capabilities.md：机械字符数 2515，是否扩写需人工判断。
+- rag/multimodal-rag.md：机械字符数 2613，是否扩写需人工判断。
+- claude-code/overview.md：机械字符数 2635，是否扩写需人工判断。
+- multimodal/multimodal.md：机械字符数 2643，是否扩写需人工判断。
+- multimodal/speech.md：机械字符数 2648，是否扩写需人工判断。
+- engineering/llmops.md：机械字符数 2665，是否扩写需人工判断。
+- basics/llm-lifecycle-dataflow.md：机械字符数 2692，是否扩写需人工判断。
+- basics/moe.md：机械字符数 2700，是否扩写需人工判断。
+- claude-code/extensibility.md：机械字符数 2712，是否扩写需人工判断。
 
 ## 同构标题组
 

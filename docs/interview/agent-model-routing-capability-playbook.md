@@ -1,9 +1,6 @@
 ---
 title: Agent 模型路由、降级与能力契约：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  企业模型网关解决“请求该发给哪个模型服务”；Agent Runtime 还要回答“当前 session、子
-  Agent、计划阶段、工具循环、压缩、视觉和审批各自用谁，主模型失败时能否切换，以及切换后还是否有资格执行动作”。只把备用 URL
-  写进配置，会把一个可用性问题变成质量、成本和安全事故。
+description: 按能力、数据域和预算设计模型选择与受控降级，处理授权拒绝、工具循环断流和副作用未知，避免静默语义漂移。
 level: L2
 roles:
   - 应用开发
@@ -27,7 +24,7 @@ classification: inferred
 | 网关层 | provider/region/endpoint | 同模型跨区域、限流、合规 | 只看单价/延迟 |
 | Runtime 主循环 | 本次 session 或 run 主模型 | coding、research、operations | 每个 turn 随机切换 |
 | 子任务/辅助 | 压缩、视觉、审批、检索摘要 | 小模型做 title，大模型做计划 | 所有节点都用同一贵模型 |
-| 故障恢复 | profile rotation、fallback、strict fail | 429 先换同 provider key，再换模型 | 用户明确指定模型却静默换掉 |
+| 故障恢复 | 合约允许的 failover、strict fail | 尊重 Retry-After 和共享额度，候选重验 | 轮换 key 绕配额或静默换用户 pin |
 
 这四层要有一份共同的 `model_selection_record`，否则账单看到的是 provider，Agent trace 却不知道为什么某一步突然失去工具调用或输出 JSON 的能力。
 
@@ -72,7 +69,7 @@ admission -> selected(primary, profile) -> running
 
 1. **Resolve。** 先处理 policy allowlist、用户/任务 override、model snapshot、数据地域和必需能力。
 2. **Try primary。** session 尽量 stick 到同模型/profile，保留上下文缓存和一致性。
-3. **Rotate credential。** 若同 provider 有多个合法 auth profile，先按冷却、额度、主体和租户规则轮换；不得跨用户/租户借用 token。
+3. **Credential boundary。** 授权拒绝、模型服务 token refresh 403、账单限制与共享配额不能靠换 key 绕开。只有提供方合约及组织政策明确允许的正常 failover 才选择其他凭证，仍共享限流与预算；不跨用户/租户借 token，不重复刷新失败令牌。
 4. **Classify failure。** 429、overload、可重试 timeout、永久 auth、billing、context overflow、schema/安全拒绝的响应不同。context overflow 不是“换小模型”的理由，应先压缩/拆任务。
 5. **Evaluate fallback。** 对候选做 capability、数据域、成本、工具/输出 schema 和风险 recheck。
 6. **Transition。** 记录失败原因、旧/新模型、profile、选择来源。对于写操作，旧 plan 必须失效并重新 prepare/approve。
@@ -84,12 +81,14 @@ admission -> selected(primary, profile) -> running
 | 普通摘要/只读研究 | 可，候选能力相容 | 仍记录 route reason |
 | 用户明确 pin 的模型/profile | 默认否 | 返回失败或请求用户改选 |
 | cron/后台任务 | 可按 job 独立定义 | 配置 `fallbacks: []` 表示 strict |
-| 结构化写工具 | 仅完全 schema/tool 等价时 | 否则只生成草稿或人工审查 |
+| 结构化写工具 | 能力验证通过仍须重新 prepare/批准 | JSON Schema 相同不代表规划与语义等价 |
 | 高敏数据/区域限制 | 仅同政策域候选 | 不因 5xx 跨域 |
 | 上下文超限 | 通常否 | 先压缩、检索、拆分或 checkpoint |
 | 安全拒绝/内容策略 | 否 | 不能使用弱模型绕过限制 |
 
 “Fallback 成功”应有两个指标：provider response 成功和业务 contract 成功。后者包含 JSON 解析、工具参数、权限、最终 effect 与用户体验；只看 HTTP 200 会掩盖大量事故。
+
+**切换发生在工具循环中怎么办？** 假设主模型已发出 create-ticket 但断流，不能给备用模型一个“失败请重试”的摘要。先查 effect ledger，把已确认/UNKNOWN 操作作为不可变状态，再按备用接口重建 tool call/result 配对与新的预算；备用模型只可提出下一步，不能重解释旧批准。L1 区分请求失败和副作用未知；L2 比较包含排队、重试、验证的端到端成本而非 token 单价；L3 以固定任务和环境快照做按 route 配对评测，不把供应商成功率等同业务等价。
 
 ## 五、主模型、辅助模型与子 Agent 的分工
 
@@ -107,6 +106,8 @@ admission -> selected(primary, profile) -> running
 辅助模型的输出依然是不可信 input。压缩模型不能改变审批状态，风险分类模型不能取代业务授权；它们只是控制面建议或受 schema 约束的中间工件。
 
 ## 六、四类 Runtime 映射
+
+保留原产品入口，但本轮未逐版本核验 model picker、fallback、profile cooldown、effort 等具体行为。前文状态机是企业设计而非通用标准；`provider-a/*`、`context>=128k` 等均为示例标识/约束，不是模型规格或可直接加载配置。
 
 ### Claude Code：model alias、effort 与子 Agent 覆盖
 

@@ -49,8 +49,8 @@ MCP Server 向外提供三类能力，这是**最高频的考点**：
 
 | 原语 | 说明 | 类比 | 由谁控制 |
 | --- | --- | --- | --- |
-| **Tools（工具）** | 可被模型调用的函数，**有副作用**（写库、发请求、下单） | POST 接口 | 模型驱动（model-controlled） |
-| **Resources（资源）** | 可读取的数据/文件，**无副作用** | GET 接口 | 应用驱动（app-controlled） |
+| **Tools（工具）** | 提供查询、计算或写入的能力，可能有副作用 | 可调用能力 | 模型驱动（model-controlled） |
+| **Resources（资源）** | 可读取的数据/文件，仍可能包含敏感资料与不可信内容 | 上下文资料 | 应用驱动（app-controlled） |
 | **Prompts（提示模板）** | 预定义的提示词/工作流模板，供用户主动选用 | 斜杠命令 | 用户驱动（user-controlled） |
 
 「由谁控制」是理解 MCP 设计哲学的关键：
@@ -62,7 +62,7 @@ MCP Server 向外提供三类能力，这是**最高频的考点**：
 此外还有两个**反向能力**（Server → Client 方向）：
 
 - **Sampling**：Server 反过来请求 Host 的 LLM 帮它做一次补全。好处是 Server 自身也能「借用」模型能力，同时把模型调用权、成本、安全管控留在 Host 侧。
-- **Roots**：Client 告知 Server 它能操作的文件系统根目录范围，是一种边界约束。
+- **Roots**：Client 暴露文件系统根目录信息；协议声明本身不是操作系统沙箱，访问控制与路径检查仍需实际执行。
 - （新版还有 **Elicitation**：Server 请求 Host 向用户索取额外输入。）
 
 ## 四、通信：JSON-RPC 2.0
@@ -186,9 +186,19 @@ MCP 让模型能连接真实系统，安全边界至关重要：
 
 ## 十一、高频追问
 
+### 能力协商不是授权协商
+
+假设 Host 发现一个 `read_contract` 工具。`tools/list` 成功只说明服务宣告能力；schema 合法也不证明用户有权读取合同。Server 应验证可信凭据、租户、对象 ACL 与出站限制，不能相信模型参数中的主体或工具元数据自报「只读、安全」。工具描述和返回内容都可能携带注入。
+
+Roots 指定项目目录后，仍需规范化路径、解析实际目标并阻断越界；符号链接、父目录跳转和进程已有的其他权限不会因收到 roots 自动消失。stdio 子进程默认继承哪些环境与凭据也要检查，不能把本地传输等同隔离。
+
+调用恢复保存请求关联 ID、逻辑 operation_id、协议/schema 版本和业务回执。连接重建后重新发现能力并核验版本，任务状态不要仅存连接会话；写超时先查业务状态，协议 JSON-RPC ID 不保证业务幂等。
+
+验收分协议兼容、工具正确、授权合规和恢复可靠四层；重复试验重置业务环境，检查重复副作用。依据：[2025-11-25 Roots](https://modelcontextprotocol.io/specification/2025-11-25/client/roots)、[同版 Tools](https://modelcontextprotocol.io/specification/2025-11-25/server/tools)，本轮实读 Roots 全部正文及 Tools 概述/发现段落；其他版本传输、鉴权和生态支持未实读核查。日期是所选规范版本，不是「最新版本」声明。
+
 **Q：MCP 和 Function Calling 是一回事吗？** 不是。Function Calling 是模型层能力（输出调用意图）；MCP 是应用集成层协议（统一工具的提供、发现、调用）。MCP 内部仍借助模型的 FC 来发起调用，二者不同层次、互补。
 
-**Q：MCP 的三大原语？分别由谁控制？** Tools（模型驱动，有副作用的函数）、Resources（应用驱动，可读数据，无副作用）、Prompts（用户驱动，预定义模板）。区分「谁控制」是理解 MCP 的关键。
+**Q：MCP 的三大原语？分别由谁控制？** Tools 通常模型驱动，Resources 应用驱动，Prompts 用户驱动，这是交互定位，不是执行授权；Tools 可只读或写入，资源读取也必须鉴权。
 
 **Q：MCP 用什么通信协议和传输？** 消息格式是 JSON-RPC 2.0（请求/响应/通知）；传输有 stdio（本地子进程）和 Streamable HTTP（远程，早期是 HTTP+SSE）。协议与传输解耦。
 

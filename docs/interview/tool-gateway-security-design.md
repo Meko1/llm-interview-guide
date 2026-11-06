@@ -1,8 +1,6 @@
 ---
 title: 企业 Tool Gateway 安全执行系统设计面试题
-description: >-
-  这页回答一个很容易被问深的问题：模型已经选好了工具和参数，企业系统凭什么允许它触达订单、退款、邮件、工单、数据库或生产资源？核心答案是：模型只生成调用意图，Tool
-  Gateway 才拥有受策略约束的执行权。 Function Calling 基础见 Function Calling 与 MCP，风
+description: 将模型调用意图转为受控业务动作，设计可信身份、ABAC义务、最小凭证、参数绑定审批、原子幂等、未知副作用对账、撤销窗口与可追溯审计。
 level: L2
 roles:
   - 应用开发
@@ -15,17 +13,19 @@ classification: inferred
 
 ## 怎么用这页
 
+本页为参考系统设计；所有身份样例、审批状态、JSON和项目模板均为构造，不是产品默认能力或个人上线实测。
+
 面对 Tool Calling、MCP、Agent 安全或企业 Java AI 岗位，不要直接从“我会写一个工具函数”开始。按下面的顺序回答：
 
-1. **定义边界**：模型提议 action，网关做最终授权和执行。
+1. **定义边界**：模型提议 action，网关做策略执行，资源服务在提交点复核授权。
 2. **说明身份**：谁请求、以谁的权限、为了什么目的、能碰哪些租户和资源。
-3. **说明凭证**：模型、prompt、工具 schema 和 MCP Server 都拿不到长期高权限密钥。
+3. **说明凭证**：模型、prompt与工具schema不接触密钥；可信业务后端/凭证代理可持有受隔离管理的凭证，第三方MCP不获万能共享密钥。
 4. **说明写操作**：prepare、预览、审批、commit、幂等、撤销和审计必须拆开。
 5. **说明止血**：策略拒绝、凭证撤销、工具下线、会话终止和证据回溯都要在控制面完成。
 
 ## 30 秒总答法
 
-> 我会把 Tool Gateway 设计为 Agent 到真实业务资源之间的 Policy Enforcement Point。Host 把已经验证的用户、租户、会话和任务上下文传给 Gateway；模型输出的 `tool_name + arguments` 先经过 schema、业务语义和策略校验，再由策略中心根据 subject、action、resource、tenant、purpose、risk 和环境上下文给出 allow、deny、脱敏、限流、沙箱或 require_approval 等决定。Gateway 只为允许的单次调用换取短期、最小 scope 的下游凭证，并把写操作拆成 prepare/approval/commit。业务服务仍会二次鉴权，所有策略版本、审批证据、凭证 jti、参数摘要、结果摘要和 trace_id 进入不可抵赖审计。这样模型没有直接数据库或高权限 API 权限，越权、重放和凭证泄露都能被收敛、撤销和追溯。
+> 我会把 Tool Gateway 设计为 Agent 到真实业务资源之间的 Policy Enforcement Point。Host 把已经验证的用户、租户、会话和任务上下文传给 Gateway；模型输出的 `tool_name + arguments` 先经过 schema、业务语义和策略校验，再由策略中心根据 subject、action、resource、tenant、purpose、risk 和环境上下文给出 allow、deny、脱敏、限流、沙箱或 require_approval 等决定。Gateway 只为允许的单次调用换取短期、最小 scope 的下游凭证，并把写操作拆成 prepare/approval/commit。业务服务仍会二次鉴权，所有策略版本、审批证据、凭证 jti、参数摘要、结果摘要和 trace_id 进入访问受控、追加写且可验证完整性的审计；普通trace/hash本身不构成不可抵赖证明。这是最小权限和可追溯目标，不保证所有越权、重放或泄露都已被消除；旁路、资源侧授权和撤销传播仍需验证。
 
 ## 一、Tool Gateway 不是普通 API 转发层
 
@@ -87,7 +87,7 @@ action=refund.prepare
 resource=order:O-123
 ```
 
-Gateway 在策略通过后，向凭证代理申请只可访问 `refund.prepare`、仅面向 `refund-api`、只属于该租户、有效期数分钟的 token。下游服务验证签名、`aud`、`exp`、`scope`、`tenant`、`jti`，并基于订单资源再做一次授权。
+Gateway 在策略通过后，向凭证代理申请只可访问 `refund.prepare`、仅面向 `refund-api`、只属于该租户、有效期数分钟的 token。下游按明确凭证profile检查可信issuer/密钥、算法allowlist、签名、aud、有效时间与业务scope/tenant，并核订单资源。scope/tenant属于本方案约定，不是任意JWT通用强制字段；jti只是标识，重放检测还需原子状态或绑定机制。
 
 ### 为什么不能让模型带 `user_id` 直接调用
 
@@ -156,7 +156,7 @@ requested
 
 ### 幂等与补偿
 
-写工具必须让调用方传入或由 Gateway 生成幂等键。业务服务以 `tenant + tool + idempotency_key` 做去重，并返回第一次执行结果。跨多个业务系统的长事务不要假装成数据库事务：用 Saga、Outbox 和补偿动作，并在模型侧清楚返回 `pending`、`succeeded`、`failed` 或 `compensation_required`。
+写工具必须让调用方传入或由 Gateway 生成幂等键。业务服务以 `tenant + tool + idempotency_key` 做去重，同时绑定规范化payload hash，重复同key不同payload返回冲突。去重记录与本地业务写需同事务提交；跨外部服务不能只凭Gateway查key就保证仅执行一次。跨多个业务系统的长事务不要假装成数据库事务：按业务采用Saga/Outbox及明确补偿；Outbox通常是至少一次投递，消费者仍需幂等，补偿不等于撤回所有现实影响，并在模型侧清楚返回 `pending`、`succeeded`、`failed` 或 `compensation_required`，以及回执丢失时的`unknown_effect`。状态未知先对账，不自动用新幂等键重放。
 
 ## 七、凭证隔离、密钥代理与紧急撤销
 
@@ -166,9 +166,9 @@ requested
 
 1. 工具注册表声明需要的下游资源和最大 scope。
 2. Gateway 通过策略后向 Credential Broker 兑换短期凭证。
-3. 凭证绑定 `audience`、`tenant`、`scope`、`tool_id`、`jti` 与很短的 TTL。
-4. 下游服务验证并保留 `jti`、请求哈希、trace_id，支持重放检测。
-5. 发生风险时由控制面吊销 token 家族、冻结工具版本、终止会话并撤掉可见工具集。
+3. 凭证按本方案profile绑定audience、tenant、scope、tool_id、jti和短TTL；签发方与验证方共同配置，不能仅把这些字段写到prompt。
+4. 下游服务验证并关联jti、请求hash和trace；若要求单次提交，还需原子消费/业务幂等记录，保留日志本身不防重放。
+5. 发生风险时按实际支持的撤销/denylist/introspection机制拒绝凭证，冻结工具并停止新执行；离线自包含token无法仅靠控制面字段立即撤销，存量请求仍需对账。
 
 对于第三方 MCP Server，优先使用每个 Server 独立的租户隔离凭证和出站代理；无法确认来源、无法做资源级审计、无法限制 scope 的 Server 不应进入生产工具目录。
 
@@ -218,7 +218,7 @@ requested
 1. **先分级**：订单查询为敏感读，工单草稿为普通写，退款和外发邮件为高危写。
 2. **再拆面**：数据面包括 Host、Gateway、业务 API/MCP Server；控制面包括 Registry、IAM/Policy、Credential Broker、Approval、Audit 和 Kill Switch。
 3. **再讲主链路**：用户登录上下文进入 Host；Host 用策略裁剪工具；模型只给出候选调用；Gateway 校验 schema 与 ABAC；允许后签发短期凭证；业务服务二次鉴权；结果脱敏后回到模型；写操作进入 approval 状态机。
-4. **最后讲异常**：策略超时默认拒绝高危写；凭证服务不可用时降级为只读；审计不可用时阻断高危工具或写入本地 Outbox；第三方 Server 不健康时从目录摘除。
+4. **最后讲异常**：策略超时默认拒绝高危写；凭证服务不可用时只允许已有有效最小权限凭证支持的只读路径，否则拒绝；审计不可用时阻断高危提交，或保证业务状态与可靠Outbox同事务落盘，不能best-effort写日志后仍执行；第三方 Server 不健康时从目录摘除。
 
 ### 退款申请的示例链路
 
@@ -235,7 +235,9 @@ refund-api -> idempotent commit + outbox audit event
 
 ## 十二、项目讲法模板
 
-> 在企业客服 Agent 中，我们没有让模型直连订单和退款服务，而是在 Spring AI 编排层和业务 API 之间放置 Tool Gateway。每个工具在 Registry 中维护 owner、schema、风险级别和允许的业务域。Gateway 从认证上下文取得用户与租户，结合工具动作、订单归属和用途调用策略中心；通过后才从凭证代理换取面向单个下游 API 的短期 token。退款、邮件等写操作先生成不可变预览和 `approval_id`，确认时再校验参数哈希、资源版本与幂等键。我们把策略版本、审批记录、凭证 jti 和 trace 串起来，出现问题可以一键冻结工具并回溯影响范围。这样既保留了 Agent 的自然语言入口，也没有把企业权限边界交给模型。
+以下是参考方案，只有实际实施并有证据时才改为个人经历。
+
+> 在参考企业客服 Agent 中，方案不让模型直连订单和退款服务，而是在 Spring AI 编排层和业务 API 之间放置 Tool Gateway。每个工具在 Registry 中维护 owner、schema、风险级别和允许的业务域。Gateway 从认证上下文取得用户与租户，结合工具动作、订单归属和用途调用策略中心；通过后才从凭证代理换取面向单个下游 API 的短期 token。退款、邮件等写操作先生成不可变预览和 `approval_id`，确认时再校验参数哈希、资源版本与幂等键。方案把策略版本、审批记录、凭证 jti 和 trace 串起来，出现问题计划以冻结新执行、资源侧撤销和证据回溯处置风险；不承诺一键撤回外部副作用。这样既保留了 Agent 的自然语言入口，也没有把企业权限边界交给模型。
 
 ## 十三、反面回答清单
 
@@ -257,7 +259,7 @@ refund-api -> idempotent commit + outbox audit event
 
 **Q：Agent 自己的后台定时任务怎么授权？** 用明确的 workload identity，绑定任务 owner、租户、目的和允许时间窗，不能伪造成人类用户；高危动作仍应进入审批或变更流程。
 
-**Q：怎么防止同一确认链接被重复提交？** 确认令牌一次性使用，绑定 action hash 和版本；commit 用幂等键；服务端保持确认状态机并拒绝过期或已消费 token。
+**Q：怎么防止同一确认链接被重复提交？** 确认令牌绑定action hash和版本；首次授权消费、状态迁移与本地效果需原子处理。相同主体/key/payload的重复提交应查询已记录结果，而非再次执行；过期令牌不得授权新动作。若提交途中外部效果未知，转对账而非“重新批准再重跑”。
 
 **Q：为什么下游服务还要二次鉴权？** Gateway 是集中控制点，但业务服务最了解资源归属、状态机和额度；双层防御避免 Gateway bug、旁路调用或 token 被误用扩大影响。
 
@@ -278,3 +280,35 @@ refund-api -> idempotent commit + outbox audit event
 - [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)
 - [Java / Spring AI 生产架构系统设计面试题](/interview/java-ai-production-architecture-system-design)
 - [企业 AI 安全、合规与审计控制面系统设计面试题](/interview/enterprise-ai-governance-audit-system-design)
+
+## 授权不是一次检查：失败注入与边界
+
+### 提交、重放与审计证据
+
+[HTTP RFC 9110 §9.2.2](https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2) 本轮实读幂等方法摘录，非幂等请求不能仅因超时自动重试；[§13.1.1 If-Match](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1) 的强ETag条件写用于避免丢失更新，但须业务API实际支持。
+
+[OAuth Token Exchange RFC 8693](https://www.rfc-editor.org/rfc/rfc8693.html) 与 [JWT RFC 7519](https://www.rfc-editor.org/rfc/rfc7519.html) 本轮仅链接，读取TLS失败，未确认实现符合性。本文的subject/actor、短TTL与jti是设计profile，不能暗示JWT天然单次、可即时撤销或自动完成用户委托。
+
+构造审批时序：用户确认“给A退100元”，期间订单owner/版本变更，commit必须拒绝旧快照；同key改成1000元须冲突，不新建第二次退款。若网关先写“key已执行”再调退款API，崩溃可能漏执行；先调API再写key可能重复执行。要求资源侧原子幂等，或用外部reference查询/人工仲裁；单凭Gateway内存缓存不能证明exactly-once。
+
+构造撤销窗口：在线撤销检查缓存最多5秒、获准请求最长30秒，若只在入口检查，存量请求风险可持续约35秒；离线token剩余TTL120秒、允许时钟偏差5秒、在途30秒时，保守窗口可达155秒。前提是各上限真实强制，且窗口从撤销请求起计；高危写应在资源提交点重新验证，不能以短token替代即时撤销机制。
+
+参数哈希需统一规范化方法与版本，绑定所有影响字段（收件人、金额、币种、资源版、用途），不是仅hash自然语言摘要。审计应独立权限、可靠持久化、校验链/签名和保留策略；追加写日志有助追溯，不自动具备法律上的不可抵赖性。
+
+<details>
+<summary>L1：工具schema合法、jti存在，为何仍可拒绝？</summary>
+
+schema不证明订单归属或审批，jti不证明未重放。可信服务核身份、issuer/aud/有效时间、资源ACL、业务状态和参数绑定；拒绝不能让模型换工具绕过。mocked负例包括模型伪造tenant/admin和同key不同payload。
+</details>
+
+<details>
+<summary>L2：怎样验证prepare/commit与撤销？</summary>
+
+注入审批后参数/资源版本变化、100个并发相同key提交、回执丢失、策略/凭证/审计故障和取消失效。断言新动作被阻断、同payload效果至多一次、未知效果可对账；低风险只读降级仍需有效权限，不能因为凭证服务坏了就匿名调用。
+</details>
+
+<details>
+<summary>L3：哪些不变量只能在资源侧证明？</summary>
+
+授权版本检查、确认令牌消费、幂等payload记录与领域状态更新需要事务/CAS或服务明确支持的等价机制。跨服务故障时只能陈述各环节原子性、至少一次传输及幂等假设，不能把Saga/Outbox当exactly-once证明。保留失败时序与剩余风险，测试零事故也不是全局安全证明。
+</details>

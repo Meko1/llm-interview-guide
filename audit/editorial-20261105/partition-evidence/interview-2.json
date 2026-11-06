@@ -1,0 +1,672 @@
+{
+  "evidenceRole": "Completed tail partition; entries merged into canonical receipt, not duplicate coverage",
+  "group": "interview-2",
+  "scope": "inventory-order last10 only; separate tail receipt; canonical interview-2.json unchanged",
+  "date": "2026-11-05",
+  "status": "complete",
+  "completed": 10,
+  "total": 10,
+  "validation": {
+    "npmChecksBuildsTests": "not_run_user_restriction",
+    "experiments": "not_run",
+    "classificationReviewedAt": "unchanged",
+    "method": "Read-only Python checks against start-of-task baseline; scoped git diff --check; no npm/build/new test files",
+    "oldHeadingCount": 205,
+    "preservedDiagramCount": 18,
+    "utf8": "valid_no_replacement_chars",
+    "fencesAndJsonExamples": "passed",
+    "gitDiffCheck": "passed_only_CRLF_warnings",
+    "scope": "only assigned 10 article paths and this NEW tail receipt were written; canonical receipt/inventory/styles/catalog/config/report not written",
+    "sourceAccessFailures": "Redis keyspace and Claude streaming HTTP403 not retried/bypassed; Gemini webpage TLS unread; other accessible primary excerpts used",
+    "sourceReviewMeaning": "verified means the specific cited excerpts were actually read, not whole paper/implementation or human technical review"
+  },
+  "entries": [
+    {
+      "path": "docs/interview/llm-as-judge-calibration-playbook.md",
+      "status": "edited",
+      "summary": "补正类混淆矩阵和漏放/误杀分母、配对冲突与簇抽样、证据不等于现实、Judge注入/外发边界、缺失评分闭锁及恢复去重。",
+      "sources": [
+        "https://arxiv.org/html/2306.05685",
+        "https://raw.githubusercontent.com/lm-sys/FastChat/main/fastchat/llm_judge/README.md"
+      ],
+      "sourceReview": "verified",
+      "sourceReadDetails": [
+        {
+          "url": "https://arxiv.org/html/2306.05685",
+          "status": "verified",
+          "read": "HTTP 200；实际读取v4摘要与引言可见片段；位置/冗长/自我偏好/推理局限及人工偏好一致性，不是安全门禁实验",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "including position, verbosity, and self-enhancement biases"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/lm-sys/FastChat/main/fastchat/llm_judge/README.md",
+          "status": "verified",
+          "read": "HTTP 200；实际读取MT-Bench单答评分、pairwise-baseline/all和Agreement Computation说明",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "we recommend single-answer grading as the default mode."
+        }
+      ],
+      "openIssues": [
+        "未运行Judge、未复现论文或计算真实业务置信区间；100案件矩阵为构造。",
+        "人工参考不是绝对真值；未核审各切片标注。其余站内链接仅阅读入口。"
+      ],
+      "fullRead": true,
+      "originalSha256": "ebe7f2b45fb91ef2f7a656b70bfd0a981d6054a27fb584aa817ff81b86521597",
+      "sha256": "15923af832aad17c7925dd8bc9ca09eed6de03e97233da28e935cdf0d0eb049a",
+      "preserved": {
+        "articlePath": true,
+        "allOriginalHeadings": true,
+        "diagrams": true,
+        "classificationReviewedAt": true
+      },
+      "linkedOnlySources": [],
+      "sourceReadCoverage": "Only sourceReadDetails entries with status verified were read; linkedOnlySources are unverified reading links, not evidence."
+    },
+    {
+      "path": "docs/interview/llm-cache-correctness-semantic-cache-playbook.md",
+      "status": "edited",
+      "summary": "修复截断描述及不安全规范化/草稿必省成本断言；补撤权epoch慢写竞态、新文档不在反向依赖、分层命中分母与净收益、隔离singleflight和恢复闭锁。",
+      "sources": [
+        "https://raw.githubusercontent.com/vllm-project/vllm/main/docs/design/prefix_caching.md",
+        "https://redis.io/docs/latest/develop/use/keyspace-notifications/"
+      ],
+      "sourceReview": "verified",
+      "sourceReadDetails": [
+        {
+          "url": "https://raw.githubusercontent.com/vllm-project/vllm/main/docs/design/prefix_caching.md",
+          "status": "verified",
+          "read": "HTTP 200；实读父block/token/extra hashes、LoRA及多模态身份、hash算法注意事项和cache_salt隔离片段",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "By including a `cache_salt` in the request"
+        },
+        {
+          "url": "https://redis.io/docs/latest/develop/use/keyspace-notifications/",
+          "status": "linked_only",
+          "read": "HTTP 403；未重试或绕过，未实读，不据其作新增技术断言",
+          "method": "urllib HTTPS"
+        }
+      ],
+      "openIssues": [
+        "vLLM main可变，未核部署版本；salt不替代授权。Redis来源403，正文不依赖其未读内容。",
+        "未运行缓存、负载或删除实验；命中/成本算例为构造。"
+      ],
+      "fullRead": true,
+      "originalSha256": "afa8dc3faaaee62fa5547cc3b6e1272571dcb9b95196946673babdb6cd419bfa",
+      "sha256": "5e05ccde424bacaaad2d96ec447cc4ed12e0a5ea1212502661dea005f9e35dbd",
+      "preserved": {
+        "articlePath": true,
+        "allOriginalHeadings": true,
+        "diagrams": true,
+        "classificationReviewedAt": true
+      },
+      "linkedOnlySources": [],
+      "sourceReadCoverage": "Only sourceReadDetails entries with status verified were read; linkedOnlySources are unverified reading links, not evidence."
+    },
+    {
+      "path": "docs/interview/llm-course-roadmap.md",
+      "status": "edited",
+      "summary": "全文顺序分段读取454行；区分译文与本站改编、移除Stars/加速与算法优劣外推，纠正FlashAttention二次算术、DPO目标、SFT语言绝对论、TIES错链、多模态泛化；补训练分母/续训与Notebook边界、L1/L2/L3产出。",
+      "sources": [
+        "https://raw.githubusercontent.com/mlabonne/llm-course/main/README.md",
+        "https://raw.githubusercontent.com/mlabonne/llm-course/main/LICENSE",
+        "https://arxiv.org/abs/2205.14135",
+        "https://arxiv.org/abs/2305.18290",
+        "https://arxiv.org/html/2305.18290",
+        "https://arxiv.org/abs/2306.01708"
+      ],
+      "sourceReview": "verified",
+      "sourceReadDetails": [
+        {
+          "url": "https://raw.githubusercontent.com/mlabonne/llm-course/main/README.md",
+          "status": "verified",
+          "read": "HTTP 200；实际读取三路线、课程免费声明、工具列表及Supervised Fine-Tuning片段，不是全部外链审阅",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "The LLM course is divided into three parts:"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/mlabonne/llm-course/main/LICENSE",
+          "status": "verified",
+          "read": "HTTP 200；实读Apache-2.0标题/定义片段与第4条再分发要求；不构成许可审计",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "You must cause any modified files to carry prominent notices"
+        },
+        {
+          "url": "https://arxiv.org/abs/2205.14135",
+          "status": "verified",
+          "read": "HTTP 200；仅实读摘要，exact attention与IO-aware tiling，不转述实验速度",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "IO-aware exact attention algorithm"
+        },
+        {
+          "url": "https://arxiv.org/abs/2305.18290",
+          "status": "verified",
+          "read": "HTTP 200；仅实读摘要，分类式DPO目标和特定实验不支持质量普遍逊于PPO",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "only a simple classification loss"
+        },
+        {
+          "url": "https://arxiv.org/html/2305.18290",
+          "status": "verified",
+          "read": "HTTP 200；补充实读Eq.(7) DPO策略/参考log-ratio及随后梯度解释片段，未复现实验",
+          "method": "urllib HTTPS",
+          "excerpt": "we fit an implicit reward using an alternative parameterization"
+        },
+        {
+          "url": "https://arxiv.org/abs/2306.01708",
+          "status": "verified",
+          "read": "HTTP 200；补充实读TIES摘要的冗余参数、符号冲突与TRIM/ELECT SIGN/MERGE步骤，仅核纠错链接与摘要",
+          "method": "urllib HTTPS",
+          "excerpt": "TRIM, ELECT SIGN & MERGE (TIES-Merging)"
+        }
+      ],
+      "openIssues": [
+        "课程其余Notebook/书籍/网页/论文默认linked_only；未运行、未安装依赖、未核所有许可证和第三方服务。",
+        "TIES摘要和DPO Eq.(7)已补读；GRPO/PPO/GPTQ/AWQ/EAGLE等仅提供入口，不保留未经核实的实验数值。",
+        "32序列batch与320次更新是构造，未训练或恢复checkpoint。"
+      ],
+      "fullRead": true,
+      "originalSha256": "9c1139bd2d7ab9b97d8e9886b8c7ff5144bf02e2a7e68be0333d9c1a38ebb911",
+      "sha256": "ea4fd0f186e1aec25c4644d6f022500e956a49a99951379a73e43d99d8f478d2",
+      "preserved": {
+        "articlePath": true,
+        "allOriginalHeadings": true,
+        "diagrams": true,
+        "classificationReviewedAt": true
+      },
+      "linkedOnlySources": [
+        "https://a2a-protocol.org/",
+        "https://adamkarvonen.github.io/machine_learning/2024/06/11/sae-intuitions.html",
+        "https://allenai.org/olmo",
+        "https://arxiv.org/abs/1707.06347",
+        "https://arxiv.org/abs/1911.02150",
+        "https://arxiv.org/abs/2210.17323",
+        "https://arxiv.org/abs/2305.13245",
+        "https://arxiv.org/abs/2306.00978",
+        "https://arxiv.org/abs/2311.03099",
+        "https://arxiv.org/abs/2402.03300",
+        "https://arxiv.org/abs/2406.00770",
+        "https://arxiv.org/abs/2407.20018",
+        "https://arxiv.org/abs/2503.01840",
+        "https://axolotl-ai-cloud.github.io/axolotl/",
+        "https://axolotl.ai/",
+        "https://bbycroft.net/llm",
+        "https://blog.langchain.dev/applying-openai-rag/",
+        "https://blog.langchain.dev/query-construction/",
+        "https://cloud.google.com/vertex-ai/docs/generative-ai/learn/overview",
+        "https://colah.github.io/posts/2015-08-Understanding-LSTMs/",
+        "https://course.fast.ai/",
+        "https://distilabel.argilla.io/dev/sections/pipeline_samples/",
+        "https://docs.anthropic.com/claude/reference/getting-started-with-the-api",
+        "https://docs.crewai.com/introduction",
+        "https://docs.llamaindex.ai/en/stable/",
+        "https://docs.llamaindex.ai/en/stable/getting_started/concepts.html",
+        "https://docs.llamaindex.ai/en/stable/use_cases/agents/",
+        "https://docs.ragas.io/en/stable/concepts/metrics/index.html",
+        "https://docs.streamlit.io/",
+        "https://docs.streamlit.io/knowledge-base/tutorials/build-conversational-apps",
+        "https://docs.unsloth.ai/",
+        "https://dottxt-ai.github.io/outlines/latest/quickstart/",
+        "https://dspy-docs.vercel.app/docs/building-blocks/solving_your_task",
+        "https://faiss.ai/",
+        "https://github.com/EleutherAI/lm-evaluation-harness",
+        "https://github.com/LostRuins/koboldcpp",
+        "https://github.com/Meko1/llm-interview-guide",
+        "https://github.com/MinishLab/semhash",
+        "https://github.com/NVIDIA/NeMo-Curator",
+        "https://github.com/OpenRLHF/OpenRLHF",
+        "https://github.com/Raudaschl/rag-fusion",
+        "https://github.com/cg123/mergekit",
+        "https://github.com/confident-ai/deepeval",
+        "https://github.com/explodinggradients/ragas/tree/main",
+        "https://github.com/ggerganov/llama.cpp",
+        "https://github.com/huggingface/lighteval",
+        "https://github.com/huggingface/nanotron",
+        "https://github.com/huggingface/text-generation-inference",
+        "https://github.com/jthack/PIPE",
+        "https://github.com/leondz/garak/",
+        "https://github.com/merveenoyan/smol-vision",
+        "https://github.com/microsoft/autogen",
+        "https://github.com/milanm/DevOps-Roadmap",
+        "https://github.com/mit-han-lab/smoothquant/blob/main/examples/smoothquant_llama_demo.ipynb",
+        "https://github.com/mlabonne/llm-autoeval",
+        "https://github.com/mlabonne/llm-datasets",
+        "https://github.com/mlc-ai/mlc-llm",
+        "https://github.com/oobabooga/text-generation-webui",
+        "https://github.com/outlines-dev/outlines",
+        "https://github.com/spotify/annoy",
+        "https://github.com/stanfordnlp/dspy",
+        "https://github.com/turboderp/exllamav2",
+        "https://github.com/vllm-project/speculators",
+        "https://github.com/vllm-project/vllm/tree/main",
+        "https://github.com/volcengine/verl",
+        "https://github.com/wangzhaode/mnn-llm/blob/master/README_en.md",
+        "https://google.github.io/adk-docs/",
+        "https://hamel.dev/notes/llm/inference/03_inference.html",
+        "https://huggingface.co/blog/assisted-generation",
+        "https://huggingface.co/blog/mlabonne/abliteration",
+        "https://huggingface.co/blog/mlabonne/sft-llama3",
+        "https://huggingface.co/blog/pref-tuning",
+        "https://huggingface.co/blog/rlhf",
+        "https://huggingface.co/blog/sagemaker-huggingface-llm",
+        "https://huggingface.co/docs/transformers/main/en/chat_templating",
+        "https://huggingface.co/docs/transformers/main/en/llm_tutorial_optimization",
+        "https://huggingface.co/docs/transformers/main/en/perf_infer_gpu_one",
+        "https://huggingface.co/docs/trl/en/index",
+        "https://huggingface.co/inference-api",
+        "https://huggingface.co/learn/agents-course/unit0/introduction",
+        "https://huggingface.co/learn/llm-course/en/chapter12/5",
+        "https://huggingface.co/models",
+        "https://huggingface.co/spaces",
+        "https://huggingface.co/spaces/HuggingFaceFW/blogpost-fineweb-v1",
+        "https://huggingface.co/spaces/HuggingFaceH4/blogpost-scaling-test-time-compute",
+        "https://huggingface.co/spaces/OpenEvals/evaluation-guidebook",
+        "https://huggingface.co/spaces/argilla/synthetic-data-generator",
+        "https://huggingface.co/spaces/mteb/leaderboard",
+        "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard",
+        "https://huyenchip.com/2023/10/10/multimodal.html",
+        "https://immersivemath.com/ila/learnmore.html",
+        "https://jaketae.github.io/study/pytorch-rnn/",
+        "https://jakevdp.github.io/PythonDataScienceHandbook/",
+        "https://jalammar.github.io/illustrated-word2vec/",
+        "https://langchain-ai.github.io/langgraph/concepts/why-langgraph/",
+        "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/red-teaming",
+        "https://lena-voita.github.io/nlp_course/word_embeddings.html",
+        "https://lightning.ai/pages/community/lora-insights/",
+        "https://lilianweng.github.io/posts/2018-06-24-attention/",
+        "https://lilianweng.github.io/posts/2023-06-23-agent/",
+        "https://llava-vl.github.io/",
+        "https://llmsecurity.net/",
+        "https://lmarena.ai/",
+        "https://lmql.ai/docs/language/overview.html",
+        "https://lmstudio.ai/",
+        "https://magazine.sebastianraschka.com/p/llm-training-rlhf-and-its-alternatives",
+        "https://medium.com/friendliai/understanding-activation-aware-weight-quantization-awq-boosting-inference-serving-efficiency-in-10bb0faf63a8",
+        "https://milvus.io/",
+        "https://mlabonne.github.io/blog/4bit_quantization/",
+        "https://mlabonne.github.io/blog/posts/2022-06-07-Decoding_strategies.html",
+        "https://mlabonne.github.io/blog/posts/2023-06-07-Decoding_strategies.html",
+        "https://mlabonne.github.io/blog/posts/2024-01-08_Merge_LLMs_with_mergekit%20copy.html",
+        "https://mlabonne.github.io/blog/posts/2024-01-08_Merge_LLMs_with_mergekit.html",
+        "https://mlabonne.github.io/blog/posts/2024-03-28_Create_Mixture_of_Experts_with_MergeKit.html",
+        "https://mlabonne.github.io/blog/posts/2024-04-19_Fine_tune_Llama_3_with_ORPO.html",
+        "https://mlabonne.github.io/blog/posts/2024-06-04_Uncensor_any_LLM_with_abliteration.html",
+        "https://mlabonne.github.io/blog/posts/2024-07-29_Finetune_Llama31.html",
+        "https://mlabonne.github.io/blog/posts/4_bit_Quantization_with_GPTQ.html",
+        "https://mlabonne.github.io/blog/posts/A_Beginners_Guide_to_LLM_Finetuning.html",
+        "https://mlabonne.github.io/blog/posts/Article_Improve_ChatGPT_with_Knowledge_Graphs.html",
+        "https://mlabonne.github.io/blog/posts/ExLlamaV2_The_Fastest_Library_to_Run%C2%A0LLMs.html",
+        "https://mlabonne.github.io/blog/posts/Fine_Tune_Your_Own_Llama_2_Model_in_a_Colab_Notebook.html",
+        "https://mlabonne.github.io/blog/posts/Fine_tune_Mistral_7b_with_DPO.html",
+        "https://mlabonne.github.io/blog/posts/Introduction_to_Weight_Quantization.html",
+        "https://mlabonne.github.io/blog/posts/Quantize_Llama_2_models_using_ggml.html",
+        "https://modelcontextprotocol.io/",
+        "https://modelcontextprotocol.io/introduction",
+        "https://ollama.ai/",
+        "https://openai.com/research/clip",
+        "https://openai.github.io/openai-agents-python/",
+        "https://openrouter.ai/",
+        "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+        "https://packt.link/a/9781836200079",
+        "https://parlance-labs.com/education/",
+        "https://platform.claude.com/docs/en/agent-sdk/overview",
+        "https://platform.openai.com/",
+        "https://python.langchain.com/docs/get_started/introduction",
+        "https://python.langchain.com/docs/how_to/#text-splitters",
+        "https://python.langchain.com/docs/how_to/chatbots_memory/",
+        "https://python.langchain.com/docs/tutorials/rag/",
+        "https://python.langchain.com/docs/tutorials/sql_qa/",
+        "https://realpython.com/",
+        "https://realpython.com/natural-language-processing-spacy-python/",
+        "https://seeing-theory.brown.edu/",
+        "https://skypilot.readthedocs.io/en/latest/",
+        "https://stability.ai/stable-image",
+        "https://twitter.com/llm_sec",
+        "https://wandb.ai/alexander-vishnevskiy/dpo/reports/TRL-Original-DPO--Vmlldzo1NjI4MTc4",
+        "https://www.andrew.cmu.edu/course/11-667/lectures/W10L2%20Scaling%20Up%20Parallel%20Training.pdf",
+        "https://www.databricks.com/blog/llm-inference-performance-engineering-best-practices",
+        "https://www.datacamp.com/blog/the-top-5-vector-databases",
+        "https://www.deepspeed.ai/tutorials/model-compression/",
+        "https://www.gradio.app/",
+        "https://www.kaggle.com/learn-guide/natural-language-processing",
+        "https://www.kdnuggets.com/run-an-llm-locally-with-lm-studio",
+        "https://www.khanacademy.org/math/calculus-1",
+        "https://www.khanacademy.org/math/linear-algebra",
+        "https://www.khanacademy.org/math/statistics-probability",
+        "https://www.langchain.com/langgraph",
+        "https://www.llm360.ai/",
+        "https://www.philschmid.de/",
+        "https://www.pinecone.io/",
+        "https://www.pinecone.io/learn/series/langchain/langchain-agents/",
+        "https://www.pinecone.io/learn/series/langchain/langchain-retrieval-augmentation/",
+        "https://www.promptingguide.ai/",
+        "https://www.sbert.net/",
+        "https://www.together.ai/",
+        "https://www.together.ai/blog/redpajama-data-v2",
+        "https://www.trychroma.com/",
+        "https://www.udacity.com/course/intro-to-machine-learning--ud120",
+        "https://www.youtube.com/playlist?list=PLqnslRFeH2UrcDBWF5mfPGpqQDSta6VK4",
+        "https://www.youtube.com/watch?v=VyWAvY2CF9c",
+        "https://www.youtube.com/watch?v=aircAruvnKk",
+        "https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab",
+        "https://www.youtube.com/watch?v=kCc8FmEb1nY",
+        "https://www.youtube.com/watch?v=qBigTkBLU6g&list=PLblh5JKOoLUK0FLuzwntyYI10UQFUhsY9",
+        "https://www.youtube.com/watch?v=rfscVS0vtbw",
+        "https://www.youtube.com/watch?v=wjZofJX0v4M",
+        "https://www.youtube.com/watch?v=zduSFxRajkE",
+        "https://youtu.be/i_LwzRVP7bg"
+      ],
+      "sourceReadCoverage": "Only sourceReadDetails entries with status verified were read; linkedOnlySources are unverified reading links, not evidence."
+    },
+    {
+      "path": "docs/interview/llm-data-feedback-operations-playbook.md",
+      "status": "edited",
+      "summary": "补用途授权/脱敏边界、候选状态epoch与回流去重、反馈抽样偏差、同条件偏好对、按泛化目标拆分、撤销下游权重与备份恢复。",
+      "sources": [
+        "https://raw.githubusercontent.com/huggingface/trl/main/docs/source/dpo_trainer.md",
+        "https://raw.githubusercontent.com/huggingface/hub-docs/main/docs/hub/datasets-cards.md"
+      ],
+      "sourceReview": "verified",
+      "sourceReadDetails": [
+        {
+          "url": "https://raw.githubusercontent.com/huggingface/trl/main/docs/source/dpo_trainer.md",
+          "status": "verified",
+          "read": "HTTP 200；实读Expected dataset type and format、preference显式prompt/chosen/rejected及conversational template片段",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "DPO requires a [preference](dataset_formats#preference) dataset."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/huggingface/hub-docs/main/docs/hub/datasets-cards.md",
+          "status": "verified",
+          "read": "HTTP 200；实读Dataset Cards用途/偏差说明及license/language等metadata段",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "information about any potential biases within the dataset"
+        }
+      ],
+      "openIssues": [
+        "未标注、训练或执行删除/unlearning；数据授权与保留需依合同/司法辖区复核。",
+        "400点踩/120失败是构造；其余链接linked_only，格式符合不等于偏好正确。"
+      ],
+      "fullRead": true,
+      "originalSha256": "5b7a041f66b5ecd82bdba1eb524f5527296a00d058bcc3c6f43b9d3f97c7bf04",
+      "sha256": "03d566681d1fa18ce9de2cc54930ac5c5add4f188613050999d598a343dfc38a",
+      "preserved": {
+        "articlePath": true,
+        "allOriginalHeadings": true,
+        "diagrams": true,
+        "classificationReviewedAt": true
+      },
+      "linkedOnlySources": [],
+      "sourceReadCoverage": "Only sourceReadDetails entries with status verified were read; linkedOnlySources are unverified reading links, not evidence."
+    },
+    {
+      "path": "docs/interview/llm-finops-metering-budget-control-plane.md",
+      "status": "edited",
+      "summary": "修复描述、重复事件反向冲销错误、严格上界与预测混淆；补缓存计量金额算例、原子去重结算、未知消耗不释放、层级预算及账期对账与成功任务成本分母。",
+      "sources": [
+        "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html",
+        "https://platform.claude.com/docs/en/build-with-claude/streaming"
+      ],
+      "sourceReview": "verified",
+      "sourceReadDetails": [
+        {
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html",
+          "status": "verified",
+          "read": "HTTP 200；实读dual-write Intent、duplicate/idempotency、order与rollback注意事项",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "make the consuming service idempotent by tracking the processed messages."
+        },
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/streaming",
+          "status": "linked_only",
+          "read": "HTTP 403；未重试/绕过，未实读，正文不推断该API计量规则",
+          "method": "urllib HTTPS"
+        }
+      ],
+      "openIssues": [
+        "所有价格、阈值与金额为构造；未接供应商账单或预算系统，无财务认证。",
+        "cached_input_tokens采用本文契约，非供应商通用规则；外部调用不能由outbox证明exactly-once。"
+      ],
+      "fullRead": true,
+      "originalSha256": "5ed3c36f1060ee06b1c54dc5d45331b5c7db1460dbf36afa70c7d86215873d96",
+      "sha256": "a4620f481eba4cca165cb419f3c5ea1c0473a791bedc39066945a4d9b6bc9881",
+      "preserved": {
+        "articlePath": true,
+        "allOriginalHeadings": true,
+        "diagrams": true,
+        "classificationReviewedAt": true
+      },
+      "linkedOnlySources": [],
+      "sourceReadCoverage": "Only sourceReadDetails entries with status verified were read; linkedOnlySources are unverified reading links, not evidence."
+    },
+    {
+      "path": "docs/interview/llm-human-approval-exception-handoff-playbook.md",
+      "status": "edited",
+      "summary": "修复描述，补金额/币种绑定、hash非授权、订单版本原子写、撤销与未知结果、同revision双人批准、业务幂等键、LangGraph恢复重复执行、部分成功补偿及审批分母/排队算例。",
+      "sources": [
+        "https://docs.langchain.com/oss/python/langgraph/interrupts",
+        "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/saga-orchestration.html"
+      ],
+      "sourceReview": "verified",
+      "sourceReadDetails": [
+        {
+          "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+          "status": "verified",
+          "read": "HTTP 200；实读same thread_id、node restarts、interrupt前side effects idempotent和persistent checkpointer片段",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "The node restarts from the beginning of the node"
+        },
+        {
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/saga-orchestration.html",
+          "status": "verified",
+          "read": "HTTP 200；实读Issues中idempotency、transaction isolation、compensation复杂度和T3失败示例",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "Saga lacks transaction isolation."
+        }
+      ],
+      "openIssues": [
+        "未部署审批/支付/恢复演练；1000动作与6件每分钟是构造，非SLA承诺。",
+        "框架暂停不证明企业授权；下游幂等保留期和fencing能力需实际契约验证；其余站内来源linked_only。"
+      ],
+      "fullRead": true,
+      "originalSha256": "008b4a7abb0ab0b04eaea0f0fc9d7411dd070098ecda0b3248e5529671445480",
+      "sha256": "20aee8313695800f902497953d19645cec4d4b676a01d91eb9cc0e06a1e62834",
+      "preserved": {
+        "articlePath": true,
+        "allOriginalHeadings": true,
+        "diagrams": true,
+        "classificationReviewedAt": true
+      },
+      "linkedOnlySources": [],
+      "sourceReadCoverage": "Only sourceReadDetails entries with status verified were read; linkedOnlySources are unverified reading links, not evidence."
+    },
+    {
+      "path": "docs/interview/llm-inference-capacity-autoscaling-playbook.md",
+      "status": "edited",
+      "summary": "纠正输入输出token合算、TPOT/ITL、联合SLO与副本卡数；补KV头字节算例、冷启动积压、Ready容量和网关准入、开放到达/协调遗漏验证边界。",
+      "sources": [
+        "https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/",
+        "https://raw.githubusercontent.com/vllm-project/vllm/main/docs/design/metrics.md",
+        "https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/v1/kv_cache_interface.py"
+      ],
+      "sourceReview": "verified",
+      "sourceReadDetails": [
+        {
+          "url": "https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/",
+          "status": "verified",
+          "read": "HTTP 200；实读Algorithm details指标比例、missing/not-ready metrics及stabilization片段",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "the largest of the desired replica counts is chosen"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/vllm-project/vllm/main/docs/design/metrics.md",
+          "status": "verified",
+          "read": "HTTP 200；实读TPOT/ITL区别、KV pool fraction与拒绝计量片段",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "Fraction of used KV cache blocks (0–1)."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/vllm-project/vllm/main/vllm/v1/kv_cache_interface.py",
+          "status": "verified",
+          "read": "HTTP 200；实读FullAttentionSpec max_memory_usage及AttentionSpec head/dtype/page_size相关源码片段",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "return self.num_heads * self.num_states * self.state_content_size_bytes"
+        }
+      ],
+      "openIssues": [
+        "未压测/扩缩容/OOM演练；28卡、KV和960积压为构造，非硬件成绩。",
+        "vLLM main可变，TP/PP复制与特殊架构不能直接套逻辑KV公式；实际exporter需核单位；其他链接linked_only。"
+      ],
+      "fullRead": true,
+      "originalSha256": "dbd3a2660c6ea54ebd583af1e9b9fc9ee8fd886486295b920da3beee51ef4484",
+      "sha256": "a303db78d2c94da857cb91487d3e86e2bedd408e5e90348d008779d93be589b3",
+      "preserved": {
+        "articlePath": true,
+        "allOriginalHeadings": true,
+        "diagrams": true,
+        "classificationReviewedAt": true
+      },
+      "linkedOnlySources": [],
+      "sourceReadCoverage": "Only sourceReadDetails entries with status verified were read; linkedOnlySources are unverified reading links, not evidence."
+    },
+    {
+      "path": "docs/interview/llm-multi-provider-failover-playbook.md",
+      "status": "edited",
+      "summary": "补每provider tokenizer/schema差异、数据政策非域名判断、提交后未知超时、全局deadline/27次重试放大、单结果CAS和真实多attempt费用；补备用余量、切片质量/恢复分母。",
+      "sources": [
+        "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/",
+        "https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker"
+      ],
+      "sourceReview": "verified",
+      "sourceReadDetails": [
+        {
+          "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/",
+          "status": "verified",
+          "read": "HTTP 200；实读超时与副作用、多层重试放大、backoff/jitter与token bucket片段",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "A timeout or failure doesn't necessarily mean that side effects haven't happened."
+        },
+        {
+          "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker",
+          "status": "verified",
+          "read": "HTTP 200；实读Half-Open恢复探针与Exception handling/Types of exceptions注意事项",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "A limited number of requests from the application are allowed to pass through"
+        }
+      ],
+      "openIssues": [
+        "未接provider/测试兼容、价格或驻留，无实测可用性；100rps/80%恢复等为构造。",
+        "跨provider幂等不共享，无法普遍避免重复收费；其余站内链接linked_only。"
+      ],
+      "fullRead": true,
+      "originalSha256": "a6aaed47806ff89a6efe6c97617dd331c2318537d306b2e64a88776abae3b959",
+      "sha256": "03936d378c372c5ddd4a21dbec544d180e1a07e5361603c5a416baa4d97474ee",
+      "preserved": {
+        "articlePath": true,
+        "allOriginalHeadings": true,
+        "diagrams": true,
+        "classificationReviewedAt": true
+      },
+      "linkedOnlySources": [],
+      "sourceReadCoverage": "Only sourceReadDetails entries with status verified were read; linkedOnlySources are unverified reading links, not evidence."
+    },
+    {
+      "path": "docs/interview/llm-multi-region-disaster-recovery-playbook.md",
+      "status": "edited",
+      "summary": "补RPO确认边界与RTO能力口径、修cn-only归属示例、checkpoint信任/撤权优先、加密非驻留豁免、流事件epoch非KV精确迁移、fencing下游强制、关键路径与连续游标对账及回切。",
+      "sources": [
+        "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/plan-for-disaster-recovery-dr.html",
+        "https://etcd.io/docs/v3.6/op-guide/failures/",
+        "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html"
+      ],
+      "sourceReview": "verified",
+      "sourceReadDetails": [
+        {
+          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/plan-for-disaster-recovery-dr.html",
+          "status": "verified",
+          "read": "HTTP 200；实读业务RTO/RPO、DR全工作负载、测试与配置漂移要求",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "Set these based on business needs."
+        },
+        {
+          "url": "https://etcd.io/docs/v3.6/op-guide/failures/",
+          "status": "verified",
+          "read": "HTTP 200；实读Leader/Majority failure与Network partition多数侧可用、已提交写与未提交写区别",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "The majority side becomes the available cluster and the minority side is unavailable."
+        },
+        {
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/V2globaltables_HowItWorks.html",
+          "status": "verified",
+          "read": "HTTP 200；实读Consistency modes、MREC异步/LWW、MREC与MRSC RPO区别；未读取所有地区限制",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "asynchronously replicated to all other replicas"
+        }
+      ],
+      "openIssues": [
+        "未部署多地域或演练；恢复点距故障30秒、源备游标差29秒和360秒关键路径为构造、非实际RPO/RTO。",
+        "DynamoDB模式/地域支持需部署时复核；etcd引用v3.6非最新承诺；驻留按合同/辖区复核。",
+        "epoch只有下游强制才隔离旧写者；数据库零RPO不保证外部effect一致；其他站内来源linked_only。"
+      ],
+      "fullRead": true,
+      "originalSha256": "9ffcb5a060fb1efa3e7f6c182e4050774f497af8fdff3dffebdddd9a2d56f4a7",
+      "sha256": "898528aa7196ff14e8539c45f5d0794f897985b9a1eb3933fc67e029d1c2b9e3",
+      "preserved": {
+        "articlePath": true,
+        "allOriginalHeadings": true,
+        "diagrams": true,
+        "classificationReviewedAt": true
+      },
+      "linkedOnlySources": [],
+      "sourceReadCoverage": "Only sourceReadDetails entries with status verified were read; linkedOnlySources are unverified reading links, not evidence."
+    },
+    {
+      "path": "docs/interview/llm-offline-batch-job-orchestration-playbook.md",
+      "status": "edited",
+      "summary": "修复描述；补快照非永久授权、logical/attempt/submission身份、唯一winner和未知提交查询、key集合完整性、token/并发预算算例、线性化发布、取消generation与真实计费、完成/放大/单位成功成本分母；纠正重复抑制免重复费用。",
+      "sources": [
+        "https://kubernetes.io/docs/concepts/workloads/controllers/job/",
+        "https://raw.githubusercontent.com/googleapis/python-genai/main/README.md",
+        "https://ai.google.dev/gemini-api/docs/batch-api"
+      ],
+      "sourceReview": "verified",
+      "sourceReadDetails": [
+        {
+          "url": "https://kubernetes.io/docs/concepts/workloads/controllers/job/",
+          "status": "verified",
+          "read": "HTTP 200；实读单parallelism/completions也可重复启动、backoffLimit/podFailurePolicy与successPolicy片段",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "the same program may sometimes be started twice."
+        },
+        {
+          "url": "https://raw.githubusercontent.com/googleapis/python-genai/main/README.md",
+          "status": "verified",
+          "read": "HTTP 200；实读Batch Prediction的key/JSONL、upload/create、按job.name查询及state轮询示例；未读取完整API契约",
+          "method": "web.run attempted without usable content; actual primary excerpts read with urllib HTTPS",
+          "excerpt": "job = client.batches.get(name=job.name)"
+        },
+        {
+          "url": "https://ai.google.dev/gemini-api/docs/batch-api",
+          "status": "linked_only",
+          "read": "TLS UNEXPECTED_EOF_WHILE_READING；未得到正文，使用其他可访问主源，不推断价格或SLA",
+          "method": "urllib HTTPS"
+        }
+      ],
+      "openIssues": [
+        "未执行批任务、上传私有数据、校验provider折扣/完成时限或演练取消；所有数值为构造。",
+        "Google SDK main的支持说明与示例不能作为完整API契约，Gemini网页TLS不可读；其余站内链接linked_only。",
+        "业务effectively-once限唯一结果提交，不能保证外部调用/计费exactly-once。"
+      ],
+      "fullRead": true,
+      "originalSha256": "22e5135ec8c9edfe7317100d1bd06fc10f23bd26ce1297da3677742ae9b4ab79",
+      "sha256": "fed55b7b68e91ad86df8e9b7dd63d77fd13cb780e1e23d4642e5510e290c5ae1",
+      "preserved": {
+        "articlePath": true,
+        "allOriginalHeadings": true,
+        "diagrams": true,
+        "classificationReviewedAt": true
+      },
+      "linkedOnlySources": [],
+      "sourceReadCoverage": "Only sourceReadDetails entries with status verified were read; linkedOnlySources are unverified reading links, not evidence."
+    }
+  ]
+}

@@ -19,19 +19,19 @@ classification: inferred
 
 | 阶段 | 做什么 | 性能特性 | 决定 |
 | --- | --- | --- | --- |
-| **Prefill（预填充）** | 并行处理整个输入 prompt，算出所有 token 的 KV，生成第 1 个 token | 计算密集（compute-bound） | 首 token 延迟 TTFT |
-| **Decode（解码）** | 逐个生成后续 token，每步只算 1 个新 token | 访存密集（memory-bound） | 每 token 延迟 TPOT、吞吐 |
+| **Prefill（预填充）** | 处理已知输入并建立 KV，供首个 token 采样 | 常偏计算密集；长注意力/小形状需实测 | TTFT 的执行部分，不含全部客户端延迟 |
+| **Decode（解码）** | 标准路径每请求每步处理一个新增 token | 小 batch 常偏访存；也可能受计算/通信限制 | 平均 TPOT、ITL 与达标吞吐 |
 
-**为什么 Decode 是 memory-bound？** 每生成一个 token，都要把**整个模型权重**和 **KV Cache** 从显存读一遍，而实际计算量很小（batch 小时尤甚）。所以瓶颈在**显存带宽**而非算力——这解释了为什么提高 batch、用量化减少访存能提速。
+**为什么小 batch Decode 常偏 memory-bound？** 有效计算难以摊薄权重/KV 访存；更大 batch 可复用权重读取。但 MoE 稀疏激活、cache 层级、kernel 和并行都会改变流量，不能说每个输出 token 必然逐字节读取全部权重和 KV。
 
-> 一个直接推论：**Decode 阶段 GPU 算力大量闲置**，提高并发 batch 能「免费」提升吞吐（在显存允许范围内）。
+> 增大 batch 不是免费收益：可能增加 ITL、排队与 KV 峰值。先制定 [SLO/goodput](/inference/slo-goodput)，再做负载扫描。
 
 ## 二、核心指标
 
 | 指标 | 含义 |
 | --- | --- |
 | **TTFT**（Time To First Token） | 首字延迟，影响体感响应速度，主要由 prefill 决定 |
-| **TPOT / ITL** | 生成每个后续 token 的时间 |
+| **TPOT / ITL** | TPOT 是每请求平均间隔，ITL 是实际间隔分布；chunk 合并需注明可观测性 |
 | **吞吐（Throughput）** | 每秒处理的 token / 请求数 |
 | **延迟 vs 吞吐** | 二者常此消彼长：增大 batch 提吞吐但单请求延迟上升 |
 | **显存占用** | 权重 + KV Cache + 激活 |
@@ -48,7 +48,7 @@ classification: inferred
 
 传统 KV Cache 为每个请求预分配连续大块显存，导致严重的**内部碎片和浪费**（要按最大长度预留）。**PagedAttention** 借鉴操作系统**虚拟内存分页**思想：把 KV Cache 切成固定大小的「块（page）」，按需分配、非连续存储，用块表映射。
 
-收益：几乎消除显存碎片（浪费 <4%）、显存利用率大幅提升 → 能容纳更多并发请求 → 吞吐大增；还支持**前缀共享**（多个请求共用相同 system prompt 的 KV 块，写时复制）。
+收益是按需分块和共享，减少预留与碎片。仍有块尾浪费、元数据和工作区；[PagedAttention 论文](https://arxiv.org/abs/2309.06180)的实验结果不保证自己的服务浪费率或吞吐倍率。相同 token 前缀且模型/模板等计算条件一致时，可复用 KV；文本语义相似不够。
 
 ### 3.3 KV Cache 进一步优化
 
@@ -70,7 +70,7 @@ classification: inferred
 
 按量化对象分：**weight-only**（只量化权重，最常用，降显存为主）vs **weight+activation（W8A8）**（连激活也量化，能用上 INT8 算力进一步提速）。还有 **KV Cache 量化**。
 
-权衡：量化省显存、提速，但可能轻微掉点；**INT4 weight-only 性价比常最高**。
+权衡：权重 payload 变小不保证 kernel 或服务更快；误差可能在特定语言、长上下文或任务中放大。比较对象、格式、group size、校准与 kernel，再按同质量同 SLO 计算成本，不指定 INT4 普遍最优。GGUF 是容器，不是单一量化算法。
 
 ## 五、批处理（Batching）
 
@@ -81,11 +81,11 @@ classification: inferred
 
 用一个小的「**草稿模型**」一次性快速生成多个候选 token，再用大模型**并行验证**一次，接受与大模型分布一致的部分。
 
-**为什么不掉精度？** 大模型对草稿 token 做并行验证，只接受与自己分布一致的 token，最终输出分布与大模型单独解码**完全一致**——是「加速」而非「近似」。草稿越准、接受率越高、收益越大。
+**何时保持目标分布？** 精确 speculative sampling 需要目标 p/草稿 q 的一致条件上下文、接受概率 `min(1,p/q)`，拒绝后从归一化 `(p−q)+` 残差采样，并回滚拒绝后 KV。Greedy 一致性是另一种保证；Medusa/EAGLE 等具体实现需逐项核查，不能由“并行验证”直接推出全部变体无损。见 [投机采样证明](/inference/speculative-sampling-proof)。
 
 变体：**Medusa**（加多个预测头）、**EAGLE / EAGLE-2**（在特征层做草稿，接受率更高）、**Lookahead Decoding**（无需训练，基于 Jacobi 迭代）、**Self-Speculative**（用自身跳层做草稿，免维护小模型）。
 
-> 2025 趋势：投机解码已集成进 vLLM、TensorRT-LLM 等主流框架的标配功能。更前沿的方向是**多 token 预测（Multi-Token Prediction）**——在训练时就让模型学会一次预测多个 token，把"投机"变成原生能力。
+> MTP 可提供草稿能力，不自动保证提速或目标分布。草稿计算、验证宽度、接受长度、额外 KV 与服务调度共同决定收益；当前框架的模型/并行/采样兼容性需按版本支持矩阵核查。
 
 ## 七、算子与并行
 
@@ -103,9 +103,9 @@ classification: inferred
 
 | 框架 | 特点 |
 | --- | --- |
-| **vLLM** | PagedAttention + 连续批处理，高吞吐，最流行的开源服务框架 |
+| **vLLM** | 分块 KV 与动态调度；可作为候选基线，不按流行度定选型 |
 | **SGLang** | RadixAttention（前缀树复用 KV），适合复杂/多轮调用 |
-| **TensorRT-LLM** | NVIDIA 官方，极致性能，部署较重 |
+| **TensorRT-LLM** | NVIDIA 推理工具链；比较构建、kernel 和服务配置 |
 | **TGI** | Hugging Face 的推理服务 |
 | **LMDeploy** | 商汤出品，量化与推理性能强 |
 | **llama.cpp / Ollama** | 端侧、CPU、本地部署，GGUF 量化 |
@@ -114,25 +114,27 @@ classification: inferred
 
 ## 九-一、Prefill/Decode 分离（Disaggregated Serving）
 
-2025 年的重要趋势：把 **Prefill 和 Decode 分到不同 GPU 池**。
+把 **Prefill 和 Decode 分到不同 GPU 池**，是一种减少干扰并独立配置资源的方案，不是所有负载都应启用。
 
 - **动机**：Prefill 是计算密集（吃算力），Decode 是访存密集（吃带宽），混跑在同一 GPU 上会互相干扰——Prefill 抢算力时 Decode 延迟飙升，Decode 占满 KV Cache 时 Prefill 没空间。
 - **做法**：Prefill 节点算完 KV 后，把 KV Cache 传给 Decode 节点继续生成。两个池子各自独立扩缩容、独立优化。
-- **挑战**：KV Cache 跨节点传输的开销（需高速互联如 NVLink/InfiniBand）。
+- **挑战**：KV 传输、布局/精度一致性、接收缓冲和故障重试；分离收益必须覆盖这些开销。[DistServe](https://arxiv.org/abs/2401.09670)报告特定模型与 SLO 下的实验，不能外推成无条件收益。
+
+构造每请求传输 2 GiB KV、有效单向带宽 25 GiB/s，则传输下界 80 ms（未含调度/同步）。若节省的干扰时间不足以抵消传输，分离反而可能降低达标容量。
 
 ## 九-二、MLA：从架构上压缩 KV Cache
 
 **MLA（Multi-head Latent Attention）** 是 DeepSeek-V2/V3 的标志性创新。传统 GQA/MQA 通过减少 KV 头数来压缩，MLA 走了不同路线：把 K、V 投影到一个**低维潜空间向量**，只缓存这个压缩向量，推理时再解压还原。
 
-- **效果**：KV Cache 显存大幅减少（DeepSeek-V3 的 671B 模型推理显存远小于同等规模模型），支持更长上下文和更高并发。
-- **与 GQA 对比**：GQA 是"减少头数"做粗粒度压缩，MLA 是"潜空间投影"做细粒度压缩，压缩率更高但实现更复杂。
+- **效果**：减少特定结构的 KV 存储，不减少全部专家权重；还需缓存解耦位置部分，实际表示按引擎核算。
+- **与 GQA 对比**：GQA 减少 KV 头，MLA 缓存压缩 latent 与位置部分，投影可通过吸收优化避免显式完整解压。比例与质量取决于维度和训练，不能统一排名。
 - 详见 [DeepSeek 专题](/models/deepseek)。
 
 ## 九-三、2025 推理框架格局
 
 | 框架 | 定位 | 2025 进展 |
 | --- | --- | --- |
-| **vLLM** | 开源推理首选 | PagedAttention + 连续批处理 + 前缀缓存 + 投机解码，社区最活跃 |
+| **vLLM** | 通用候选基线 | 分块 KV、批处理、前缀和草稿支持需按版本/模型核对 |
 | **SGLang** | 复杂调用优化 | RadixAttention（前缀树 KV 复用），结构化输出性能强 |
 | **TensorRT-LLM** | NVIDIA 官方 | 极致 GPU 性能，支持 FP4/FP8，部署较重 |
 | **TGI** | HuggingFace 出品 | 模型支持广、易用 |
@@ -148,9 +150,9 @@ classification: inferred
 
 1. **业务目标**：峰值 QPS、平均输入/输出 token、最长上下文、是否流式、P95/P99 TTFT 和 TPOT。
 2. **模型与精度**：模型大小、上下文窗口、FP16/BF16、W4A16、W8A8、FP8、是否需要 LoRA 热加载。
-3. **推理引擎**：vLLM 做默认生产基线，SGLang 用于多轮前缀复用和结构化输出，TensorRT-LLM 用于 NVIDIA 极致性能。
+3. **推理引擎**：按硬件/模型/量化/接口支持筛选 vLLM、SGLang、TensorRT-LLM 等候选，再同负载验证，不预设性能赢家。
 4. **调度策略**：continuous batching、prefix cache、chunked prefill、长短请求隔离、优先级队列、admission control。
-5. **容量估算**：用压测得到单 GPU 在 SLA 下的 goodput，再用 `峰值有效 token/s / 单 GPU goodput * 冗余系数` 估卡数。
+5. **容量估算**：请求需求 RPS 除以同负载单副本请求 goodput（requests/s），得到初始副本估计，再按每副本 GPU 数和冗余计卡数。若用 token/s，分子分母必须同为达标 token 吞吐；多卡副本不能冒充单 GPU。扩容后的调度与流量偏斜仍需复测。
 6. **观测与止血**：TTFT、TPOT、排队时间、KV Cache 占用、GPU 利用率、错误率、每租户成本都要能看见。
 
 常见追问是「P99 突然升高怎么定位」。答题时先拆阶段：
@@ -175,7 +177,7 @@ classification: inferred
 
 **Q：常见量化方法及取舍？** GPTQ（逐层 PTQ）、AWQ（激活感知）、SmoothQuant（W8A8）、GGUF（端侧）、FP8（H100）。weight-only INT4 性价比最高（降显存为主）；W8A8 还能用 INT8 算力提速。代价是可能轻微掉点。
 
-**Q：投机解码为什么不掉精度？** 大模型对草稿模型生成的 token 做并行验证，只接受与自己分布一致的 token，最终输出分布与大模型单独解码一致，是加速而非近似。
+**Q：投机解码何时不改变目标分布？** 使用严格接受/残差采样与正确 KV 回滚时，在数学假设下保持目标分布；近似变体、处理器不一致和数值错误可能破坏保证。
 
 **Q：怎么降低 TTFT？** prefill 优化（chunked prefill）、前缀缓存复用（相同 system prompt）、减少输入长度、张量并行加速 prefill。
 
@@ -189,4 +191,10 @@ classification: inferred
 
 **Q：MLA 和 GQA 有什么区别？** GQA 通过"多个 Q 头共享一组 KV 头"做粗粒度压缩；MLA（DeepSeek-V2/V3）把 KV 投影到低维潜空间，只缓存压缩向量，推理时解压还原。MLA 压缩率更高，但实现更复杂。详见 [DeepSeek 专题](/models/deepseek)。
 
-**Q：vLLM 和 SGLang 怎么选？** vLLM 通用性最强、社区最大，是默认选择。SGLang 的 RadixAttention 在大量前缀复用场景（多轮对话、Agent 多次调用相同 system prompt）更有优势，且结构化输出性能好。
+**Q：vLLM 和 SGLang 怎么选？** 用完整 token 前缀、真实复用率、结构化约束与服务长度分布测试；树/哈希数据结构本身不能保证某引擎命中率或 goodput 更高。
+
+## 优化证据的最小闭环
+
+每次只改一个可归因变量，保存基线/变体的模型与引擎 revision、精度、输入/输出长度、实际到达、缓存状态、成功与 SLO 判定。随机固定 shape 用于机制 benchmark，真实脱敏回放用于服务验收，构造容量算例只作预算。量化、驱逐和语义缓存还要过同一质量门禁；降低生成长度或复用错误答案得来的快不能称优化成功。
+
+前缀语义可核对 [vLLM v0.6.3.post1 APC 说明](https://github.com/vllm-project/vllm/blob/v0.6.3.post1/docs/source/automatic_prefix_caching/apc.rst)，MLA 表示见 [DeepSeek-V3](https://arxiv.org/html/2412.19437v2)。旧“2025”章节标题保留用于原链接，表格不是当前版本完整支持矩阵。

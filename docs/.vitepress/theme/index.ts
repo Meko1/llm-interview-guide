@@ -4,6 +4,8 @@ import './custom.css'
 import './atlas.css'
 import './labs.css'
 import './self-check.css'
+import './capability-planner.css'
+import './editorial.css'
 import { defineAsyncComponent } from 'vue'
 import type { Theme } from 'vitepress'
 

@@ -1,9 +1,7 @@
 ---
 title: 模型架构谱系与选型
 description: >-
-  面试里问“Transformer 有哪些架构”时，不要只报出 BERT、GPT、T5 三个名字。更完整的回答是：先按信息可见性和训练目标划分
-  Encoder-only、Decoder-only、Encoder-Decoder；再解释它们分别擅长表示、生成和条件生成；最后落到今天为什么通用 LLM
-  几
+  从堆栈结构、位置可见性与训练目标三条轴认识 BERT、GPT、T5、FIM 和混合模型，按任务与服务约束选型。
 level: L1
 roles:
   - 在校生
@@ -28,6 +26,8 @@ classification: inferred
 | 混合/状态空间 | Jamba、Mamba 混合 | 视模块而定 | 自回归或混合目标 | 超长序列、低内存 | 工具链和经验尚不如 Transformer 成熟 |
 
 这里的“能看见”不是产品权限，而是 attention mask。它决定了位置 `t` 的 hidden state 是否依赖未来位置。因果 mask 把未来分数置为极小值，因此 softmax 后未来位置的权重为零；双向 mask 则允许 token 同时读左右文。
+
+表中的分类并非互斥：Encoder/Decoder 是堆栈与信息流，FIM 是数据重排目标，MoE/SSM 是内部模块选择。一个模型可以同时是 decoder-only、MoE，并接受 FIM 训练。先说明分类轴，避免把不同层次排成同一排行榜。
 
 ```text
 Encoder:  x1 <-> x2 <-> x3 <-> x4
@@ -60,7 +60,7 @@ Decoder-only 使用联合概率的链式分解：
 
 $$p(x_1,\ldots,x_n)=\prod_{t=1}^{n}p(x_t\mid x_{<t})$$
 
-训练时，整段序列可以并行计算所有位置的 loss；推理时必须按 token 串行采样。这个看似简单的目标拥有极强的统一性：自然语言、代码、JSON、工具调用、图片编码后的离散 token 都可以被写成一个序列。模型只需要继续预测下一个 token，就能把不同任务统一到一个接口。
+训练时可并行计算真实序列的 loss；普通推理逐 token 生成。文本、代码和工具请求可共享序列接口，但多模态输入也可能是连续视觉特征或经 cross-attention 注入，不是所有模型都把图片变成语言词表的离散 token。还需适配训练与输入接口，不能只靠文本目标保证所有模态能力。
 
 ### 3.1 为什么它能同时做问答、翻译和代码
 
@@ -71,6 +71,8 @@ $$p(x_1,\ldots,x_n)=\prod_{t=1}^{n}p(x_t\mid x_{<t})$$
 <user>把 "good morning" 翻成中文</user>
 <assistant>
 ```
+
+这段是角色结构示意，不是可跨模型复用的特殊 token。实际应使用 checkpoint 配套 chat template；手工写这些标签可能被当普通文本。
 
 训练数据中大量的文本模式和指令样本，让模型学会把前缀当作条件。in-context learning 便是这种条件化能力的表现：少量示例不更新参数，却通过当前上下文改变下一 token 分布。它不是严格意义上的梯度学习，也不保证可靠；在生产场景仍要用约束、检索、评估和权限控制来补足。
 
@@ -156,6 +158,15 @@ Transformer 的全注意力对长度为 `n` 的序列会构造或等价处理 `n
 
 **答法：**说明决策、证据和边界。例如：“检索层使用双塔 embedding 保障召回，Top-50 后用 cross-encoder reranker 增强精排；回答层采用 instruct decoder，要求引用 chunk id。我们按查询长度分桶观察 prefill 成本，并在事实问答上降低温度。”这比“我们用了 Transformer 和向量库”更可验证。
 
+这里是构造设计，不是实绩。Top-50 是候选规模而非召回保证，低温不是事实验证；应补实际查询集、Recall@K、引用支持率和成本结果，没有数据就说明尚未测试。
+
+<details>
+<summary>自测：FIM 使用原文后缀，为什么仍可能是因果 decoder？</summary>
+
+后缀被重排到要生成的 middle 之前，属于序列里的已知前缀；模型没有偷看尚未生成的 middle。因果性约束的是模型输入顺序，不是原文件字符位置。
+
+</details>
+
 ## 九、复习清单
 
 - 能在白板上画出三类架构的信息流与 mask。
@@ -165,3 +176,5 @@ Transformer 的全注意力对长度为 `n` 的序列会构造或等价处理 `n
 - 能在“更长上下文、更低延迟、更强精确检索”之间讲清取舍。
 
 下一篇建议阅读 [从数据到回答：LLM 全链路](/basics/llm-lifecycle-dataflow)，把架构放回训练、对齐、推理和应用系统中理解。
+
+一手入口：[BERT](https://arxiv.org/abs/1810.04805)、[T5](https://arxiv.org/abs/1910.10683)、[FIM](https://arxiv.org/abs/2207.14255)、[Jamba](https://arxiv.org/abs/2403.19887)、[聊天模板](https://huggingface.co/docs/transformers/chat_templating)。论文任务范围与配置不能直接外推为架构优劣。

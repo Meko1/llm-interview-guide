@@ -54,6 +54,8 @@ classification: inferred
 
 > “把全部 messages 和工具返回都存进去”不是好答案。短期能跑，长期会造成 checkpoint 膨胀、隐私风险和恢复不稳定。
 
+State 四分法是本文建模建议，不是框架固定字段。业务身份应由可信执行上下文提供并在读取/写入时重验，不能从 checkpoint 中的 `role` 直接授权。只存文档引用会减少体积，但恢复时必须确认引用版本、可见性和删除状态；重新检索的结果不一定与旧状态一致。
+
 ## 追问链二：Checkpoint 与外部副作用
 
 **面试官：Checkpoint 恢复时，外部写操作已经成功了，怎么避免重复扣款、重复发邮件或重复建单？**
@@ -86,13 +88,17 @@ prepare_action
 
 > 不支持幂等的外部系统，不能靠模型“谨慎一点”解决，要靠本系统的 action 状态机兜住。
 
+action 表与单 Worker 只能减少并发，不足以证明 exactly-once。构造窗口：Worker A 已发邮件，未保存 external_id 就崩溃；租约到期后 B 接手，不知道邮件是否已发。即使串行化仍可能重复。若远端没有稳定操作查询/唯一业务键，`unknown` 应暂停并人工对账，不自动重试。只做“执行前查一次”也有检查与写入之间的竞态。
+
 ## 追问链三：Human-in-the-loop 怎么做
 
 **面试官：Human-in-the-loop 在图里怎么设计？用户审批通过后怎么 resume？**
 
 标准答法：
 
-> 人审是一个可恢复的图节点。执行到高危动作前，图先 prepare 动作、保存 checkpoint、创建审批单，然后 interrupt。审批服务通过后，把 approval_id 写回 State，由后端恢复同一个 thread_id，从 commit 节点继续执行。拒绝或超时则走 cancel / revise 分支。
+> 人审需要持久化 checkpointer 和稳定 thread_id。先准备不可变动作及幂等审批单，再在节点中 interrupt；审批后由受权后端用 Command(resume=...) 恢复同一 thread。它不是任意跳到 commit：动态 interrupt 所在节点会从开头重新运行，resume 值成为 interrupt 的返回值，再由代码选择批准/拒绝分支。过期由应用策略处理，不能假设框架会自动超时取消。
+
+[LangGraph 官方 interrupts 文档](https://docs.langchain.com/oss/python/langgraph/interrupts)说明恢复会重跑 interrupt 前代码，并要求此前副作用幂等；不能在宽泛 try/except 中吞掉 interrupt 控制流，也不要随意重排同一节点的 interrupt 调用。示例：`create_approval()` 放在 interrupt 前且每次生成新 ID，刷新恢复就会创建第二张审批单。将动作/审批 ID 持久化并去重，重复 resume 也要核对状态、动作摘要和当前资源授权。
 
 人审页必须展示：
 
@@ -131,6 +137,8 @@ prepare_action
 
 > “部署新版本后所有 checkpoint 都按新图跑”风险很高。节点名、State 字段、条件边语义变了，可能导致老任务恢复到错误分支。
 
+存 graph_version 不等于运行时自动加载旧代码，需要部署路由或保留旧执行器。迁移除字段外还要处理待执行节点、interrupt 顺序、reducer 和工具契约；回放只能复原已保存的状态，不保证供应商随机输出或外部数据相同。[官方 persistence 页面](https://docs.langchain.com/oss/python/langgraph/persistence)本次读取片段区分内存 saver 与持久 saver；内存 checkpoint 不能跨进程重启恢复。
+
 ## 追问链五：工具失败怎么走条件边
 
 **面试官：工具调用失败时，哪些错误应该重试，哪些应该追问用户，哪些必须转人工？**
@@ -143,8 +151,8 @@ prepare_action
 | --- | --- |
 | missing_argument | ask_user |
 | schema_validation_failed | repair_args_once |
-| permission_denied | deny_or_request_approval |
-| timeout | retry_with_backoff / fallback_tool |
+| permission_denied | deny / reauthenticate；审批不创造资源权限 |
+| timeout | 只读在截止内重试；写结果unknown先对账 |
 | business_conflict | refresh_state_then_replan |
 | injection_detected | quarantine_or_human_review |
 | max_steps_exceeded | summarize_and_stop |
@@ -169,6 +177,8 @@ prepare_action
 - `max_task_cost`：按任务类型配置预算。
 - 重复同一工具同一参数超过阈值直接终止。
 
+12/8/2 是配置示例，不是推荐阈值；框架执行步数不等于业务动作数，重试、并行模型与子图都要计入独立预算。预算在发起调用前原子预留，结束后按实际用量结算；只在节点后累加会让并行分支同时超预算。重复查询可能合理，也可能已读取新版本，重复检测需结合目标进展/结果版本，不能仅按参数字符串硬判死循环。
+
 反例：
 
 > “让模型反思一下再继续”不能作为唯一防线。反思可以作为节点，但外层必须有工程硬限制。
@@ -192,6 +202,8 @@ prepare_action
 - 同一订单多次修改。
 - 对同一用户连续发通知。
 - 涉及库存、余额、权限变更的写操作。
+
+Reducer 必须定义冲突与重复处理；简单列表追加会在重放/重复结果时产生重复证据。对独立结果可按稳定 ID 去重，涉及次序的决定不能靠完成快慢覆盖。高风险写默认串行是保守策略，不是“任何写永远不可并行”：真正独立资源在业务原子约束、授权和幂等下可并行，图结构本身不提供这些保证。
 
 ## 追问链八：Trace、评估集和上线门禁
 
@@ -225,7 +237,11 @@ prepare_action
 - 重复副作用数 = 0。
 - P95 延迟、token 成本、工具错误率达标。
 
+expected nodes 命中只验证路径，不证明参数/授权/业务终态正确；允许合法多路径时不要要求唯一轨迹。恢复成功率以所有故障注入任务为分母，包含 unknown、丢失 checkpoint 与过期审批；禁止执行零次只说明这组已运行用例无事件。L1 复原一次 interrupt/resume；L2 解释节点重跑、单 Worker 崩溃窗口和版本路由；L3 设计不同故障点与并行 reducer 重放的等价性验证。本文未执行该演练。
+
 ## 项目讲法模板
+
+以下模板仅作方案口述。真实演示若用内存 saver，就不能宣称跨进程恢复；未对账或未故障注入，也不能宣称无重复副作用。
 
 ### 模板一：投研 Agent
 

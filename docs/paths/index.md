@@ -19,6 +19,8 @@ import PathFinder from '../.vitepress/theme/components/PathFinder.vue'
 
 路径不是课程进度条，也不是就业承诺。每个阶段都应留下一个可演示、可复述、可验证的产出。建议周次可以根据基础调整；不要用读完页面数代替学会。
 
+不确定该从哪一步开始？先进入 [能力定位与情境自查](/capability-map)，查看前置关系、实践任务与证据清单。已有明确目标则继续选择下方路线。
+
 <PathJourney />
 
 <PathFinder :heading-level="2" />

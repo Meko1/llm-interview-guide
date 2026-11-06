@@ -1,0 +1,749 @@
+{
+  "evidenceRole": "Completed tail partition; entries merged into canonical receipt, not duplicate coverage",
+  "group": "interview-3",
+  "ownerScope": "inventory interview-3 entries 21-30; tail-only",
+  "entries": [
+    {
+      "path": "docs/interview/real-questions.md",
+      "status": "edited",
+      "summary": "全文阅读；移除无来源真题/JD频率，修LoRA/PPO/GGUF/decode/投机分布边界；补分层权限反例、Little定律、参数与采样复算。",
+      "sources": [
+        "https://github.com/microsoft/LoRA",
+        "https://raw.githubusercontent.com/microsoft/LoRA/main/README.md",
+        "https://proceedings.mlr.press/v202/leviathan23a.html"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "web工具未返回正文；通过官方公开URL实读LoRA README前5500字符和PMLR摘要约2200字符，不是全文或实验复现。",
+        "最初arxiv web无可读结果，未重试或绕过403/404。",
+        "练习题没有真实面试来源或题频证据。"
+      ],
+      "preservation": {
+        "headings": [
+          "# 分岗位面试真题",
+          "## 怎么用这份题库？",
+          "## 大模型算法 / 研究岗",
+          "## 大模型应用开发岗",
+          "## 大模型工程 / 推理部署岗",
+          "## 系统设计 / 场景题",
+          "### 系统设计专题追问",
+          "## 手撕 / 编码题",
+          "## 基础篇 12 类高频追问",
+          "## 2026 岗位驱动追问",
+          "### LLM 应用开发 / Java AI",
+          "### 框架与智能工作流追问",
+          "### Agent 工程",
+          "### RAG & Memory / AI Search",
+          "### RAG、Memory 与评测安全追问",
+          "### AI Infra / 推理部署",
+          "### 推理部署与成本治理追问",
+          "### 微调与模型平台追问",
+          "### AI Coding / 工具提效",
+          "## 软性 / 项目题"
+        ],
+        "classification": "inferred",
+        "reviewedAt": null,
+        "diagrams": []
+      },
+      "sourceChecks": [
+        {
+          "url": "https://github.com/microsoft/LoRA",
+          "sourceReview": "linked_only",
+          "readEvidence": "实际读取官方raw README前5500字符；该网页本身未读"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/microsoft/LoRA/main/README.md",
+          "sourceReview": "verified",
+          "readEvidence": "README前5500字符：冻结权重、低秩更新与局部实验描述"
+        },
+        {
+          "url": "https://proceedings.mlr.press/v202/leviathan23a.html",
+          "sourceReview": "verified",
+          "readEvidence": "Abstract及引用元数据约2200字符；未读PDF"
+        }
+      ],
+      "remainingReferencesReview": "未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。",
+      "staticValidation": {
+        "oldHeadingIdsPreserved": true,
+        "diagramBlocksPreserved": 0,
+        "classificationPreserved": true,
+        "reviewedAtPreserved": true,
+        "detailsBalanced": true,
+        "utf8Decode": "passed",
+        "contentSha256": "909f340f0ad996c2cf13c31a4feaf3c20b30f38803ff803e8199b71fa2db9747",
+        "runtimeValidation": "not_run"
+      }
+    },
+    {
+      "path": "docs/interview/remote-agent-operations-playbook.md",
+      "status": "edited",
+      "summary": "全文阅读；补全截断摘要；删未核CLI/网络默认/后端保证，区分本地状态权威；修幂等键、CAS/fence和撤销窗口，补分层故障注入。 末轮补核执行入口、逻辑权威或成本/退款口径边界。",
+      "sources": [
+        "https://raw.githubusercontent.com/openclaw/openclaw/main/docs/gateway/remote.md",
+        "https://code.claude.com/docs/en/remote-control",
+        "https://developers.openai.com/codex/cloud/internet-access",
+        "https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/docs/user-guide/messaging.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "仅实读OpenClaw remote.md前6000字符；其余产品文档linked_only。",
+        "Claude Remote Control与OpenAI云网络页面403、Hermes所试仓库路径404，均不重试/绕过；删除对应未经核验的产品保证。",
+        "所有契约、取消协议与时间算例均为参考/mocked设计，未运行产品或验证SaaS fence。"
+      ],
+      "preservation": {
+        "headings": [
+          "# 远程与云端 Agent 生产运行手册：Claude Code / Codex / OpenClaw / Hermes",
+          "## 怎么使用这页",
+          "## 30 秒总答法",
+          "## 一、先分清四个常被混淆的概念",
+          "## 二、四类产品带来的架构启发",
+          "### 1. Claude Code：远程控制与远程执行必须分开叙述",
+          "### 2. Codex：把云端 Agent 当作隔离的短生命周期执行单元",
+          "### 3. OpenClaw：Gateway 是状态与策略的唯一控制点",
+          "### 4. Hermes：把消息入口、会话持久化与终端后端拆开",
+          "## 三、远程 Agent 的生产状态机",
+          "### 断网、重启和重复投递如何处理",
+          "## 四、身份、配对与能力：必须四层拆分",
+          "## 五、网络设计：默认 loopback，远程通道显式化",
+          "### 入口：操作者、Node 与 Gateway 如何连",
+          "### 出口：任务容器能访问什么",
+          "## 六、执行器与 Node 的注册、心跳和隔离",
+          "## 七、远程 kill switch：取消必须是级联动作",
+          "## 八、面试系统设计题：设计一个企业远程 Coding Agent",
+          "### 题目",
+          "### 推荐回答结构",
+          "### 核心数据模型",
+          "### 追问：为什么不让 Gateway 直接 SSH 到所有机器",
+          "### 追问：远程会话恢复时怎样避免重复部署",
+          "## 九、上线前检查表",
+          "### 身份与入口",
+          "### 执行与网络",
+          "### 可靠性与治理",
+          "## 十、常见错误答案与修正",
+          "## 延伸阅读"
+        ],
+        "classification": "inferred",
+        "reviewedAt": null,
+        "diagrams": [
+          "04f4d815582bc304a461d6dbc8d30017f1a4738fd7bd56af50b03285b677ddf0",
+          "cfc0a33b8048c6dbcee1fab1020fd4c557f75b5afe6f89d345fb513b34c2a90a",
+          "ec8d27c5d41a9c74732b6b75f473793f33ee345fa19975b068a3e92bee540064",
+          "84ff50c8b88467fb30e33453a6beaa46832edafc14999d5b0f5d77153af16f79",
+          "a68d556825c089ac65df8fd06e5efeea74143d6a990cf36f5be1b6276fbf0dd9",
+          "6e4c00fe69b17aa307bd02493e72a7434527be2ad66ef553650fc108d186d5a5",
+          "19f468cf45798aef49c99ab1c56f4c4010a331d1a91f75485090d5fa80559513",
+          "70d1753442abed8d79884962cde80191bbffa7506d877f2a7dc44db33f51ec47"
+        ]
+      },
+      "sourceChecks": [
+        {
+          "url": "https://raw.githubusercontent.com/openclaw/openclaw/main/docs/gateway/remote.md",
+          "sourceReview": "verified",
+          "readEvidence": "前6000字符：Gateway权威、loopback、拓扑与命令流"
+        },
+        {
+          "url": "https://code.claude.com/docs/en/remote-control",
+          "sourceReview": "linked_only",
+          "openIssue": "HTTP 403; no retry or evasion"
+        },
+        {
+          "url": "https://developers.openai.com/codex/cloud/internet-access",
+          "sourceReview": "linked_only",
+          "openIssue": "HTTP 403; no retry or evasion"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/NousResearch/hermes-agent/main/website/docs/user-guide/messaging.md",
+          "sourceReview": "linked_only",
+          "openIssue": "HTTP 404; no retry or alternate-path evasion"
+        }
+      ],
+      "remainingReferencesReview": "未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。",
+      "staticValidation": {
+        "oldHeadingIdsPreserved": true,
+        "diagramBlocksPreserved": 8,
+        "classificationPreserved": true,
+        "reviewedAtPreserved": true,
+        "detailsBalanced": true,
+        "utf8Decode": "passed",
+        "contentSha256": "eea0222522c731c20b323987742d2327c4d4d640cb15b37cea2d42408ae126bf",
+        "runtimeValidation": "not_run"
+      }
+    },
+    {
+      "path": "docs/interview/resources.md",
+      "status": "edited",
+      "summary": "全文阅读；移除无出处价格倍数、stars/图数和商业免费保证；区分候选/一手/社区、Faiss库与数据库，补学习证据、预算和分层验证。",
+      "sources": [
+        "https://huggingface.co/learn/llm-course/chapter1/1",
+        "https://research.google.com/colaboratory/faq.html"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读Colab FAQ资源限制片段；Hugging Face课程TLS读取失败，仅链接，未重试。",
+        "其他原有链接均linked_only；课程费用/许可证、仓库维护和硬件可用性未逐条核验。",
+        "算例为构造，不是实际学习效果或商业单价。"
+      ],
+      "preservation": {
+        "headings": [
+          "# 学习资源汇总",
+          "## 必学课程（按优先级）",
+          "## 必读书籍",
+          "## 必读论文（经典 + 前沿）",
+          "## 优质博客 / 社区",
+          "## 优质开源项目（学产品设计）",
+          "## 实验平台",
+          "## 🛠️ 工具与框架速览",
+          "## 中文社区与专栏",
+          "## 同类优秀开源指南（致敬 & 延伸阅读）",
+          "## 跟踪前沿的渠道"
+        ],
+        "classification": "inferred",
+        "reviewedAt": null,
+        "diagrams": []
+      },
+      "sourceChecks": [
+        {
+          "url": "https://huggingface.co/learn/llm-course/chapter1/1",
+          "sourceReview": "linked_only",
+          "openIssue": "TLS UNEXPECTED_EOF; no retry"
+        },
+        {
+          "url": "https://research.google.com/colaboratory/faq.html",
+          "sourceReview": "verified",
+          "readEvidence": "not guaranteed/not unlimited资源限制前后片段；非全文"
+        }
+      ],
+      "remainingReferencesReview": "未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。",
+      "staticValidation": {
+        "oldHeadingIdsPreserved": true,
+        "diagramBlocksPreserved": 0,
+        "classificationPreserved": true,
+        "reviewedAtPreserved": true,
+        "detailsBalanced": true,
+        "utf8Decode": "passed",
+        "contentSha256": "3a55a445563a3bfe1cf7bc7ab924adefa0805cb4f79a06edbb8c3a398f60cb23",
+        "runtimeValidation": "not_run"
+      }
+    },
+    {
+      "path": "docs/interview/sales-crm-copilot-production-playbook.md",
+      "status": "edited",
+      "summary": "全文阅读；摘要改为治理链，项目讲法标参考；补CRM快照/审批hash/CAS、未知发送对账、折扣毛利与pipeline口径、分层负例和因果评估。",
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1",
+        "https://www.rfc-editor.org/rfc/rfc9110.txt"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "仅实读RFC9110 §13.1.1与§9.2.2各约2800字符，非全RFC。",
+        "未核特定CRM API条件写入/幂等能力；方案需资源服务实际支持。",
+        "财务数字为构造简化值，非会计或法律意见；未执行CRM/发送/对照实验。"
+      ],
+      "preservation": {
+        "headings": [
+          "# 销售 / CRM Deal Copilot 生产系统设计：从账户事实到可控的成交工作流",
+          "## 一、产品边界：建议可以自动化，商业承诺必须受控",
+          "## 二、账户事实包：CRM 不是唯一真相，也不能被模型重写",
+          "## 三、四条核心工作流",
+          "### 1. 账户研究与机会准备",
+          "### 2. 会议纪要与 CRM 回填",
+          "### 3. 商机健康与预测解释",
+          "### 4. 折扣、报价和跨团队协作",
+          "## 四、CRM 数据质量：让 Copilot 修复流程，不制造脏数据",
+          "## 五、权限、隐私与客户信任",
+          "## 六、人工审核与销售工作台体验",
+          "## 七、评测与商业指标：不要用“生成次数”冒充收入价值",
+          "## 八、系统设计题：设计企业 Deal Copilot",
+          "## 九、高频追问",
+          "### Q1：为什么 CRM 回填不能自动执行？",
+          "### Q2：如何让商机健康度可解释而不误导？",
+          "### Q3：模型如何帮助报价又不越过价格策略？",
+          "### Q4：如何处理销售邮件中的 Prompt 注入或敏感信息？",
+          "### Q5：如何证明 Deal Copilot 创造价值？",
+          "## 十、60 秒项目讲法"
+        ],
+        "classification": "inferred",
+        "reviewedAt": null,
+        "diagrams": [
+          "6ecbc7c4df65ec401f6ddda7ee70db80839f0e5605c82325c3fe7e11efa20bcc",
+          "f04be5b518f3c334989326bc9e49a828d6716b31731dbc5c880edcd6152b97ff",
+          "53ab38f73da81e51028168f7446d7a0d26c6f2a4af7c7d9eb6a22a256d616cf4",
+          "6be0681ded01cf509f8c5ceca506a587bc51a336982e027b0b8d91b1bc7ebda5"
+        ]
+      },
+      "sourceChecks": [
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1",
+          "sourceReview": "linked_only",
+          "readEvidence": "同文档txt §9.2.2/§13.1.1已实读；html入口未读"
+        },
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc9110.txt",
+          "sourceReview": "verified",
+          "readEvidence": "§9.2.2幂等、§13.1.1 If-Match各约2800字符"
+        }
+      ],
+      "remainingReferencesReview": "未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。",
+      "staticValidation": {
+        "oldHeadingIdsPreserved": true,
+        "diagramBlocksPreserved": 4,
+        "classificationPreserved": true,
+        "reviewedAtPreserved": true,
+        "detailsBalanced": true,
+        "utf8Decode": "passed",
+        "contentSha256": "aee27d88cbdc7b810a16eea09f93d39f39eb71e28c85e1e6819670b9b62efa61",
+        "runtimeValidation": "not_run"
+      }
+    },
+    {
+      "path": "docs/interview/spring-ai-production-qna.md",
+      "status": "edited",
+      "summary": "全文阅读；修截断摘要和框架自动治理保证；区分converter/native与DTO验证；补SSE不可撤回/取消计费、阻塞上下文、deadline/SLO、重试副作用与缓冲容量和零事件统计。 末轮补核执行入口、逻辑权威或成本/退款口径边界。",
+      "sources": [
+        "https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html",
+        "https://docs.spring.io/spring-ai/reference/api/chatclient.html"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读官方滚动文档best-effort/BeanOutputConverter、stream与blocking摘录；不是全API或项目固定版本验证。",
+        "未运行Java/Reactor、供应商计费或SSE负载，项目讲法和算例均为参考。",
+        "依赖/供应商schema支持、自动工具调用与上下文传播仍需真实集成验证。"
+      ],
+      "preservation": {
+        "headings": [
+          "# Spring AI / Java AI 生产化高频问答",
+          "## 怎么用这页",
+          "## 追问链一：Spring AI 相比自己封装 HTTP 有什么收益",
+          "## 追问链二：Java 服务怎么做 SSE 流式输出",
+          "### SSE 事件建议",
+          "### 关键处理",
+          "## 追问链三：慢模型如何不拖垮 Java 微服务",
+          "## 追问链四：Spring AI RAG 权限怎么做",
+          "## 追问链五：Tool Calling 如何接企业业务系统",
+          "## 追问链六：结构化输出和业务校验",
+          "## 追问链七：模型网关与 Spring AI 如何分工",
+          "## 追问链八：可观测、审计和成本怎么做",
+          "## 系统设计题：Java + Spring AI 银行客服 Agent",
+          "### 需求澄清",
+          "### 架构答法",
+          "### 主链路",
+          "### 上线门禁",
+          "## 项目讲法模板",
+          "### 模板一：政企知识库问答",
+          "### 模板二：银行客服 Agent",
+          "### 模板三：Dify PoC 迁 Java 生产",
+          "## 反面回答清单",
+          "## 面试前 5 分钟速记",
+          "## 延伸阅读"
+        ],
+        "classification": "inferred",
+        "reviewedAt": null,
+        "diagrams": [
+          "1a89322df3e050313ad3de728511d787fabe9ce045422836b173f4adecfb3777",
+          "fd8bd6dfc8db41a29510f900ff70997895f40bce5d5beb537fdb5ec39bf0e6bb"
+        ]
+      },
+      "sourceChecks": [
+        {
+          "url": "https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html",
+          "sourceReview": "verified",
+          "readEvidence": "best effort、BeanOutputConverter相关摘录"
+        },
+        {
+          "url": "https://docs.spring.io/spring-ai/reference/api/chatclient.html",
+          "sourceReview": "verified",
+          "readEvidence": "stream()与blocking/tool调用注意事项摘录"
+        }
+      ],
+      "remainingReferencesReview": "未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。",
+      "staticValidation": {
+        "oldHeadingIdsPreserved": true,
+        "diagramBlocksPreserved": 2,
+        "classificationPreserved": true,
+        "reviewedAtPreserved": true,
+        "detailsBalanced": true,
+        "utf8Decode": "passed",
+        "contentSha256": "2c1b103a5cd2bfffd787e72671bc8a322ed95e5eca1af054c542650d4a6b81bb",
+        "runtimeValidation": "not_run"
+      }
+    },
+    {
+      "path": "docs/interview/structured-output-qna.md",
+      "status": "edited",
+      "summary": "全文阅读；修schema严格保证、FSM泛化、token/字节、两阶段推理绝对论；补null/required、拒答截断、repair语义、流式提交、fallback兼容及mask概率/指标分母与分层负例。",
+      "sources": [
+        "https://raw.githubusercontent.com/mlc-ai/xgrammar/main/README.md",
+        "https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html",
+        "https://json-schema.org/understanding-json-schema/reference/object"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读XGrammar README的CFG支持片段和此前Spring converter片段，非全文/实现验证。",
+        "JSON Schema对象页面403后不重试/绕过，具体draft、format断言及供应商schema子集待核。",
+        "未调用供应商、编译grammar或运行parser；数字与案例均构造。"
+      ],
+      "preservation": {
+        "headings": [
+          "# 结构化输出与 Schema 约束高频问答",
+          "## 先给面试官的总览回答",
+          "## Q1：JSON Mode、Structured Outputs、Function Calling 有什么区别？",
+          "## Q2：约束解码的原理是什么？",
+          "## Q3：约束解码会不会影响模型能力？",
+          "## Q4：Schema 怎么设计才稳定？",
+          "## Q5：合法 JSON 为什么仍然会失败？",
+          "## Q6：解析失败后怎么处理？",
+          "## Q7：流式输出下怎么处理结构化结果？",
+          "## Q8：Function Calling 和结构化输出是什么关系？",
+          "## Q9：多模型 fallback 时 schema 怎么兼容？",
+          "## Q10：结构化输出怎么评估？",
+          "## Q11：为什么模型会编造字段值？怎么缓解？",
+          "## Q12：结构化输出系统设计怎么讲？",
+          "## Q13：项目里怎么讲结构化输出亮点？",
+          "## Q14：常见反面回答",
+          "## Q15：Spring AI / LangChain / LangGraph / Dify 里怎么落地？",
+          "### Spring AI",
+          "### LangChain",
+          "### LangGraph",
+          "### Dify",
+          "## 最后一页速记"
+        ],
+        "classification": "inferred",
+        "reviewedAt": null,
+        "diagrams": [
+          "5cece19d92205fdea5cbd2322e02891a00c34cf226f4ec7d1011e5c348bfebe0",
+          "6e1f26bf8612306831c514e16281c40ade618bde27b0648ab4d30ae4cdeba909",
+          "de83e654443ed181fdf9c0d665bc5feeb18a21846eee76ca12c6f06b26628e14",
+          "fb5a921b47b7f453fd1501a4286fbce62430cfc66fd0c02431555e10a11c6fa8",
+          "0fd02b2bb603d2d95063bf0a5507bf40b01d381c33f6258b43859b730063f8ad",
+          "7494d1b6a591e6cf28f86e9d80b8d7f4ff2797ce0c425733053f55bbd20f5d7e",
+          "1f3bbdf5f70d8c0ebef579a2b664ee22060ac1ef02b97d8d0a66e7a2c1d6c9ef"
+        ]
+      },
+      "sourceChecks": [
+        {
+          "url": "https://raw.githubusercontent.com/mlc-ai/xgrammar/main/README.md",
+          "sourceReview": "verified",
+          "readEvidence": "CFG结构支持摘录；未采用近零开销宣传"
+        },
+        {
+          "url": "https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html",
+          "sourceReview": "verified",
+          "readEvidence": "best effort、BeanOutputConverter相关摘录"
+        },
+        {
+          "url": "https://json-schema.org/understanding-json-schema/reference/object",
+          "sourceReview": "linked_only",
+          "openIssue": "HTTP 403; no retry or evasion"
+        }
+      ],
+      "remainingReferencesReview": "未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。",
+      "staticValidation": {
+        "oldHeadingIdsPreserved": true,
+        "diagramBlocksPreserved": 7,
+        "classificationPreserved": true,
+        "reviewedAtPreserved": true,
+        "detailsBalanced": true,
+        "utf8Decode": "passed",
+        "contentSha256": "addf831772a8cf1c5b12d6a734d056274f51e143e1fd1dc4358074e626b994f5",
+        "runtimeValidation": "not_run"
+      }
+    },
+    {
+      "path": "docs/interview/synthetic-data-quality-governance-playbook.md",
+      "status": "edited",
+      "summary": "全文阅读；补任务族/来源seed先split、许可证非schema检测、定向与随机抽检分母、clean边界、撤回构建阻断；补产率/成本复算与oracle/多教师相关偏差、L1-L3实验设计。",
+      "sources": [
+        "https://github.com/yizhongw/self-instruct",
+        "https://raw.githubusercontent.com/yizhongw/self-instruct/main/README.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "仅实读Self-Instruct README前4800字符的流程与质量警告，非论文/实现全文或实验复现。",
+        "没有运行训练、污染检测、抽检或参数遗忘；数字和项目模板均构造。",
+        "许可证/删除义务需独立专业核对，未知教师预训练数据不能证明无污染。"
+      ],
+      "preservation": {
+        "headings": [
+          "# 合成数据质量、污染控制与训练集治理",
+          "## 一、30 秒面试回答",
+          "## 二、先定义哪些样本值得合成",
+          "## 三、候选生成与质量漏斗",
+          "## 四、去重、泄漏与数据污染",
+          "## 五、数据血缘与不可变发布",
+          "## 六、SFT、偏好数据与评测集的边界",
+          "## 七、发布门禁与线上闭环",
+          "## 八、高频问答",
+          "## 九、污染检测不是二元判断",
+          "## 十、评测集有寿命，增益要证明泛化",
+          "## 十一、撤回、删除与模型记忆的真实边界",
+          "## 九、项目讲法模板"
+        ],
+        "classification": "inferred",
+        "reviewedAt": null,
+        "diagrams": [
+          "e85aa84bbc2db577724df752f8b35a450d8a8bc7c3eaf0fcd3c5dafcab255eed",
+          "498816e386a8560f43032e0578a674770e5b5e17e53e7fadcc860e928ecab1da"
+        ]
+      },
+      "sourceChecks": [
+        {
+          "url": "https://github.com/yizhongw/self-instruct",
+          "sourceReview": "linked_only",
+          "readEvidence": "实际读取官方raw README前4800字符；该网页本身未读"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/yizhongw/self-instruct/main/README.md",
+          "sourceReview": "verified",
+          "readEvidence": "前4800字符：seed生成/过滤与错误偏见警告"
+        }
+      ],
+      "remainingReferencesReview": "未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。",
+      "staticValidation": {
+        "oldHeadingIdsPreserved": true,
+        "diagramBlocksPreserved": 2,
+        "classificationPreserved": true,
+        "reviewedAtPreserved": true,
+        "detailsBalanced": true,
+        "utf8Decode": "passed",
+        "contentSha256": "0189b8d9296a06c8c3c240bb746e4de294273361f47fffb94a904ee09b2fb59b",
+        "runtimeValidation": "not_run"
+      }
+    },
+    {
+      "path": "docs/interview/test-time-compute-budget-routing-playbook.md",
+      "status": "edited",
+      "summary": "全文阅读；修取消即释放、规则验证即真值、投票不可反超与统计独立性混淆；补reasoning计费、原子分层预留/对账、shadow无副作用、多数票相关性与L1-L3验证。 末轮补核执行入口、逻辑权威或成本/退款口径边界。",
+      "sources": [
+        "https://research.google/pubs/self-consistency-improves-chain-of-thought-reasoning-in-language-models/"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "仅实读Google Research论文摘要约3500字符，非论文全文或实验复现。",
+        "算例、预算与项目讲法均构造；未验证供应商reasoning usage/取消计费或运行fan-out。",
+        "候选独立性与verifier可靠性是实验假设，不是实际保证。"
+      ],
+      "preservation": {
+        "headings": [
+          "# Test-time Compute：推理预算、动态路由与早停系统设计",
+          "## 一、30 秒面试回答",
+          "## 二、适用边界",
+          "## 三、预算控制面",
+          "### 3.1 预算账本与分层配额",
+          "## 四、动态路由与早停",
+          "### 4.1 增量价值路由与安全早停",
+          "## 五、评测与成本门禁",
+          "### 5.1 Verifier 与双层成本门禁",
+          "## 六、高频问答",
+          "## 七、项目讲法模板"
+        ],
+        "classification": "inferred",
+        "reviewedAt": null,
+        "diagrams": [
+          "5d923b2eb1645aba1c5147e6d8502e273a3e22a0b54dbc81f601b53178df2088"
+        ]
+      },
+      "sourceChecks": [
+        {
+          "url": "https://research.google/pubs/self-consistency-improves-chain-of-thought-reasoning-in-language-models/",
+          "sourceReview": "verified",
+          "readEvidence": "Abstract相关摘录约3500字符；未读PDF"
+        }
+      ],
+      "remainingReferencesReview": "未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。",
+      "staticValidation": {
+        "oldHeadingIdsPreserved": true,
+        "diagramBlocksPreserved": 1,
+        "classificationPreserved": true,
+        "reviewedAtPreserved": true,
+        "detailsBalanced": true,
+        "utf8Decode": "passed",
+        "contentSha256": "99c83969e0745705e5345e7d406e8f42c6e4d85ee192caefcdb2a04211da7c42",
+        "runtimeValidation": "not_run"
+      }
+    },
+    {
+      "path": "docs/interview/text2sql-chatbi-production-playbook.md",
+      "status": "edited",
+      "summary": "全文阅读；修无题频/上线故事、指标准确率断言；改半开时间IR，补标识符编译、EXPLAIN ANALYZE真执行、RLS角色绕过、权限不放宽、join/DISTINCT/环比反例与L1-L3对抗验证。 末轮补核执行入口、逻辑权威或成本/退款口径边界。",
+      "sources": [
+        "https://www.postgresql.org/docs/current/ddl-rowsecurity.html",
+        "https://www.postgresql.org/docs/current/sql-explain.html"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实读PostgreSQL滚动文档RLS绕过与EXPLAIN摘录，非全章/部署验证；其他引擎和实际角色需核。",
+        "未连接数仓或执行SQL；对抗数据、IR日期、财务数字与项目讲法均构造。",
+        "小群体保护与数据合规未作法律或正式差分隐私保证。"
+      ],
+      "preservation": {
+        "headings": [
+          "# Text-to-SQL / ChatBI 生产系统设计：语义层、安全边界与可信回答",
+          "## 一、先反驳错误前提：这不是“翻译 SQL”",
+          "## 二、先建设语义层：让业务词汇有唯一含义",
+          "### 指标治理要点",
+          "## 三、数据目录检索：只给模型任务相关的 schema",
+          "## 四、从自然语言到受限查询计划",
+          "## 五、SQL 安全不止禁止 DELETE",
+          "## 六、权限：先过滤数据域，再决定回答能否展示",
+          "## 七、纠错循环：让系统修复可诊断错误，而不是盲目重试",
+          "## 八、结果对账与可信表达",
+          "## 九、架构与状态机",
+          "## 十、评测体系：SQL 执行正确率不够",
+          "## 十一、系统设计答题框架",
+          "## 十二、高频追问与参考回答",
+          "### Q1：为什么要用 DSL，直接让模型写 SQL 不更灵活吗？",
+          "### Q2：Schema RAG 和普通 RAG 有什么不同？",
+          "### Q3：如何防止用户用自然语言绕过行级权限？",
+          "### Q4：SQL 成功但结果明显不合理时怎么办？",
+          "### Q5：怎样控制一次“帮我分析过去三年所有订单”的成本？",
+          "## 十三、60 秒项目讲法"
+        ],
+        "classification": "inferred",
+        "reviewedAt": null,
+        "diagrams": [
+          "c71bf958c8fd1675447134ae6b3b066f03d6674a899d86e55dc0d038cd637477",
+          "aef0321f486c2d23e559f3ad7bae31c4bc6d291d73d4cd0ec2535856a62b7f39",
+          "f228382208d4becdb8ff928cc4fe2829402749a9455c9e148c2489090d5e265d",
+          "a8b9aa2710a6a2b4638abec804bf950537c3439338084af90a7b67f7872bdb4e",
+          "4666b57390f1202c99a8fc03b81e289b6f100cfca119c5e744a70d3ca1e75e6a"
+        ]
+      },
+      "sourceChecks": [
+        {
+          "url": "https://www.postgresql.org/docs/current/ddl-rowsecurity.html",
+          "sourceReview": "verified",
+          "readEvidence": "BYPASSRLS/表owner/FORCE RLS及策略相关摘录"
+        },
+        {
+          "url": "https://www.postgresql.org/docs/current/sql-explain.html",
+          "sourceReview": "verified",
+          "readEvidence": "ANALYZE实际执行、cost unit与LIMIT相关摘录"
+        }
+      ],
+      "remainingReferencesReview": "未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。",
+      "staticValidation": {
+        "oldHeadingIdsPreserved": true,
+        "diagramBlocksPreserved": 5,
+        "classificationPreserved": true,
+        "reviewedAtPreserved": true,
+        "detailsBalanced": true,
+        "utf8Decode": "passed",
+        "contentSha256": "7c56e54e3823a074ffbf6d17a3d1219babf7321b1bcd319381e08ae2ab400873",
+        "runtimeValidation": "not_run"
+      }
+    },
+    {
+      "path": "docs/interview/tool-gateway-security-design.md",
+      "status": "edited",
+      "summary": "全文阅读；补全截断摘要；修jti/短JWT即时防重放撤销、不可抵赖审计与凭证故障自动只读；补payload幂等/原子提交、unknown effect、Outbox至少一次、审批消费重试、撤销窗口与分层验证。",
+      "sources": [
+        "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
+        "https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1",
+        "https://www.rfc-editor.org/rfc/rfc8693.html",
+        "https://www.rfc-editor.org/rfc/rfc7519.html",
+        "https://www.rfc-editor.org/rfc/rfc9110.txt"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实际阅读证据仅为此前RFC9110幂等/If-Match摘录，不是全RFC；JWT/Token Exchange本轮TLS失败，仅链接，未重试。",
+        "未部署Gateway/IAM或验证JWT profile/重放/撤销；所有时序、并发与预算数字为构造验证计划。",
+        "审计非法律不可抵赖认证，SaaS原子幂等和跨服务补偿需实际实现核验。"
+      ],
+      "preservation": {
+        "headings": [
+          "# 企业 Tool Gateway 安全执行系统设计面试题",
+          "## 怎么用这页",
+          "## 30 秒总答法",
+          "## 一、Tool Gateway 不是普通 API 转发层",
+          "## 二、信任边界与分层",
+          "## 三、身份传播与身份委托怎么设计",
+          "### 为什么不能让模型带 `user_id` 直接调用",
+          "## 四、工具可见性裁剪不等于执行时授权",
+          "## 五、ABAC 策略与策略义务",
+          "## 六、高危写操作：prepare、approval、commit",
+          "### prepare 阶段必须冻结什么",
+          "### 幂等与补偿",
+          "## 七、凭证隔离、密钥代理与紧急撤销",
+          "## 八、工具结果同样是不可信输入",
+          "## 九、MCP、HTTP、stdio 与本地执行器如何统一治理",
+          "## 十、可观测、审计与事故响应",
+          "### 发现越权风险后的止血顺序",
+          "## 十一、系统设计白板题：多租户金融客服 Agent 的工具平台",
+          "### 白板回答结构",
+          "### 退款申请的示例链路",
+          "## 十二、项目讲法模板",
+          "## 十三、反面回答清单",
+          "## 十四、递进追问速答",
+          "## 面试前 5 分钟速记",
+          "## 延伸阅读"
+        ],
+        "classification": "inferred",
+        "reviewedAt": null,
+        "diagrams": [
+          "c241de7a121510172a400cbf36859a89f27e338e7eb7336e48e5cfa9ffe145f6",
+          "438b6551e12d56fa67551c16e1bdd558567100b518c48477415b6b332a3d8b3d",
+          "38d379c266ad08e4bbf3456130f40b210dffdac0c45deedb949b23eab3bad332",
+          "e94499c7c2664faf1aa77104618801886f671971b2c4c5e590c2cbad1826f116"
+        ]
+      },
+      "sourceChecks": [
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2",
+          "sourceReview": "linked_only",
+          "readEvidence": "同文档txt §9.2.2/§13.1.1已实读；html入口未读"
+        },
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1",
+          "sourceReview": "linked_only",
+          "readEvidence": "同文档txt §9.2.2/§13.1.1已实读；html入口未读"
+        },
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc8693.html",
+          "sourceReview": "linked_only",
+          "openIssue": "web无正文；txt读取TLS UNEXPECTED_EOF; no retry"
+        },
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc7519.html",
+          "sourceReview": "linked_only",
+          "openIssue": "txt读取TLS UNEXPECTED_EOF; no retry"
+        },
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc9110.txt",
+          "sourceReview": "verified",
+          "readEvidence": "§9.2.2幂等、§13.1.1 If-Match各约2800字符"
+        }
+      ],
+      "remainingReferencesReview": "未列入sourceChecks的原有外部入口均linked_only；不声称整页、整论文或产品实现已核验。",
+      "staticValidation": {
+        "oldHeadingIdsPreserved": true,
+        "diagramBlocksPreserved": 4,
+        "classificationPreserved": true,
+        "reviewedAtPreserved": true,
+        "detailsBalanced": true,
+        "utf8Decode": "passed",
+        "contentSha256": "080ab14cda70f4f9116a2e0389c303062dc2c423a3744d9e51bd18dc14156b85",
+        "runtimeValidation": "not_run"
+      }
+    }
+  ],
+  "sourceReviewDefinition": "verified表示明确列出的技术摘录已实际阅读并仅支持范围内论述，不表示全文、人审、部署或实验复现；linked_only单独列明访问失败或未读入口。",
+  "validation": {
+    "scope": "only inventory-order interview-3 last10 articles and this new tail receipt were written by this worker",
+    "articleCount": 10,
+    "oldHeadingCount": 195,
+    "preservedDiagramBlockCount": 33,
+    "selfCheckCount": 30,
+    "oldUrlPolicy": "article paths unchanged; real-questions H1 historical ID explicitly preserved",
+    "gitDiffCheck": "passed; line-ending autocrlf notices only",
+    "commandsNotRun": [
+      "npm checks",
+      "npm builds",
+      "catalog generation",
+      "new tests",
+      "commit",
+      "push"
+    ],
+    "humanTechnicalReview": "not_claimed",
+    "arithmeticSpotChecks": "LoRA 65536/16777216=0.390625%; buffers31.25MiB; majority0.648; gross52.941%/drop7.059pp; yield36%; usable-data0.138889; conditional-schema96.9388%"
+  }
+}

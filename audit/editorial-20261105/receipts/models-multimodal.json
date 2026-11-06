@@ -1,0 +1,213 @@
+{
+  "group": "models-multimodal",
+  "entries": [
+    {
+      "path": "docs/models/chinese-llm-landscape.md",
+      "status": "edited",
+      "summary": "改为版本化生态导航；移除梯队、市场体量、无依据规模及通用领先结论；补领域验收、数据授权与评测协议。 已通过本组 UTF-8、元数据与旧标题锚点检查。",
+      "sources": [
+        "https://arxiv.org/html/2412.19437v1",
+        "https://arxiv.org/html/2501.12948v1",
+        "https://arxiv.org/html/2505.09388v1",
+        "https://arxiv.org/abs/2412.15115",
+        "https://arxiv.org/abs/2407.10671",
+        "https://arxiv.org/abs/2403.18058",
+        "https://arxiv.org/abs/2305.08322",
+        "https://arxiv.org/abs/2306.09212"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "核验范围为所列报告相关段落及数据/基准论文摘要；其他厂商、数据集与工具仅作导航，未逐版本核验。",
+        "社区 Awesome-Chinese-LLM 链接仅作发现入口，不作为事实审校来源。",
+        "编码恢复后再次实际读取所列 V3/R1/Qwen3 相关正文及其余五个论文摘要，来源状态重新核对；不声称人工审校。"
+      ]
+    },
+    {
+      "path": "docs/models/classic-models.md",
+      "status": "edited",
+      "summary": "按注意力、目标和推理接口重编；纠正编码器不能生成、Encoder-Decoder 无缓存及 GPT-4 MoE 传闻；限定 GPT-3/InstructGPT 实验结论。 已通过本组 UTF-8、元数据与旧标题锚点检查。",
+      "sources": [
+        "https://arxiv.org/abs/1810.04805",
+        "https://arxiv.org/abs/1910.10683",
+        "https://arxiv.org/abs/2005.14165",
+        "https://arxiv.org/abs/2203.02155",
+        "https://arxiv.org/abs/2303.08774",
+        "https://arxiv.org/abs/2302.13971",
+        "https://arxiv.org/html/2407.21783v1",
+        "https://arxiv.org/html/2505.09388v1"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "历史基础论文读取摘要；Llama/Qwen 读取相关正文，不声称全篇人工技术审阅。",
+        "Mistral/Mixtral 仅保留学习入口，未核验原报告数值和首个结论，已删这些断言。"
+      ]
+    },
+    {
+      "path": "docs/models/deepseek.md",
+      "status": "edited",
+      "summary": "以 V3/R1 v1 重编；纠正正式 R1 与 R1-Zero、路由偏置和序列均衡损失、GPU小时/美元混淆；补 MLA 账本与 GRPO 零方差边界。 已通过本组 UTF-8、元数据与旧标题锚点检查。",
+      "sources": [
+        "https://arxiv.org/html/2412.19437v1",
+        "https://arxiv.org/html/2501.12948v1"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "已读报告关键架构、成本、训练流程与蒸馏段落；未作训练或部署复现。",
+        "结论不覆盖 R1-0528 与后续 API；MTP 1.8 倍仅为报告设置结果。"
+      ]
+    },
+    {
+      "path": "docs/models/frontier-models-2025.md",
+      "status": "edited",
+      "summary": "保留 URL/标题并改为历史发布快照；明确报告、产品声明和未知架构；删除未核参数、排行榜和领先时长；修正 Qwen3-2507 模式差异。 已通过本组 UTF-8、元数据与旧标题锚点检查。",
+      "sources": [
+        "https://openai.com/index/introducing-gpt-5/",
+        "https://www.anthropic.com/news/claude-4",
+        "https://blog.google/technology/google-deepmind/gemini-model-thinking-updates-march-2025/",
+        "https://ai.meta.com/blog/llama-4-multimodal-intelligence/",
+        "https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct",
+        "https://arxiv.org/html/2505.09388v1",
+        "https://github.com/QwenLM/Qwen3",
+        "https://arxiv.org/html/2412.19437v1",
+        "https://arxiv.org/html/2501.12948v1",
+        "https://arxiv.org/abs/2404.14219"
+      ],
+      "sourceReview": "linked_only",
+      "openIssues": [
+        "混合来源：Claude 4 和 Gemini 2.5 公告相关正文、Qwen3 README 与所列报告段落已实际读取；顶层 linked_only 因含无法读取来源，非所有来源均未读。",
+        "GPT-5 官方页 HTTP 403；Meta 发布页及 Scout 模型卡 SSL 连接失败，仅保留链接待核。",
+        "不代表截至 2026-11-05 的最新完整清单；Phi-4/Gemma3/Step3/Mistral 原材料未逐项核验，已删依赖这些材料的数字与排名。",
+        "Qwen3 main README 可变；上线仍需 pin checkpoint 与模板 revision。",
+        "编码恢复阶段重新访问 Claude 4 公告返回 HTTP 403，未重试；该公告相关正文在本轮较早阶段已成功读取。"
+      ]
+    },
+    {
+      "path": "docs/models/llama-qwen.md",
+      "status": "edited",
+      "summary": "按报告边界拆系列演进；修正 RoPE base 变更归属、GQA 最优头数与全系列模式/许可推断；补词表权重可复算账本。 编码恢复后通过 UTF-8、元数据、旧标题锚点与 MathJax 单页渲染检查。",
+      "sources": [
+        "https://arxiv.org/abs/2302.13971",
+        "https://arxiv.org/abs/2307.09288",
+        "https://arxiv.org/html/2407.21783v1",
+        "https://arxiv.org/abs/2309.16609",
+        "https://arxiv.org/abs/2407.10671",
+        "https://arxiv.org/abs/2412.15115",
+        "https://arxiv.org/html/2505.09388v1",
+        "https://github.com/QwenLM/Qwen3",
+        "https://arxiv.org/abs/2303.08774"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "早期报告与 Qwen2.5 读取摘要；Llama3/Qwen3 读取相关正文；未逐 checkpoint 核许可和完整配置。",
+        "词表计算是明确假设下的构造例，不是实测内存；未进行领域微调或长上下文实验。"
+      ]
+    },
+    {
+      "path": "docs/models/slm.md",
+      "status": "edited",
+      "summary": "重编端侧资源与成功任务成本；区分规模、位宽、格式和部署位置；补权重/KV账本、持续热负载与路由失败验收。 编码恢复后通过 UTF-8、元数据、旧标题锚点与 MathJax 单页渲染检查。",
+      "sources": [
+        "https://arxiv.org/abs/2404.14219",
+        "https://arxiv.org/html/2505.09388v1",
+        "https://arxiv.org/html/2501.12948v1"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "Phi-3 读取当前摘要，未将该摘要的后续 Phi-3.5 内容当作原始手机配置；Qwen/R1 读取相关正文。",
+        "未跑真机、量化、能耗或成本实验；所有示例计算标为构造，运行时列表不是兼容性保证。"
+      ]
+    },
+    {
+      "path": "docs/multimodal/diffusion.md",
+      "status": "edited",
+      "summary": "补 DDPM 训练/采样区分与 CFG 公式；修正 Flow Matching 必为直线及一步保证；分开潜空间、DiT、SD3 证据与生成失败/成本。 编码恢复后通过 UTF-8、元数据、旧标题锚点与 MathJax 单页渲染检查。",
+      "sources": [
+        "https://arxiv.org/abs/2006.11239",
+        "https://arxiv.org/abs/2112.10752",
+        "https://arxiv.org/abs/2207.12598",
+        "https://arxiv.org/abs/2212.09748",
+        "https://arxiv.org/abs/2403.03206",
+        "https://arxiv.org/abs/2210.02747",
+        "https://arxiv.org/abs/2209.03003"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实际读取所列论文摘要；公式为教学表达，未作论文全篇审校或采样复现。",
+        "FLUX/商业产品仅作入口，不保留未读取版本的参数、许可和质量排名。"
+      ]
+    },
+    {
+      "path": "docs/multimodal/multimodal.md",
+      "status": "edited",
+      "summary": "按表示、对齐、生成与验证重编；纠正 CLIP/LLM 空间、原始 LLaVA 线性投影与原生/适配器二分；补 patch 预算、文档失败与 POPE 边界；启用数学元数据。 编码恢复后通过 UTF-8、元数据、旧标题锚点与 MathJax 单页渲染检查。",
+      "sources": [
+        "https://arxiv.org/abs/2103.00020",
+        "https://arxiv.org/abs/2010.11929",
+        "https://arxiv.org/html/2304.08485v2",
+        "https://arxiv.org/abs/2301.12597",
+        "https://arxiv.org/html/2409.12191v1",
+        "https://arxiv.org/abs/2305.10355"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "读取 CLIP/ViT/BLIP-2/POPE 摘要与 LLaVA/Qwen2-VL 相关架构和训练段落，未声称完整论文人工审校。",
+        "未进行 OCR、视觉问答或成本实验；业务对照和图文冲突验证为建议协议。"
+      ]
+    },
+    {
+      "path": "docs/multimodal/speech.md",
+      "status": "edited",
+      "summary": "区分连续/语义/声学表示与有损 codec；拆 Whisper、VALL-E、CosyVoice、F5-TTS 和 Moshi 路线；补流式首包、打断状态、RTF 与授权边界。 编码恢复后通过 UTF-8、元数据、旧标题锚点与 MathJax 单页渲染检查。",
+      "sources": [
+        "https://arxiv.org/abs/2212.04356",
+        "https://arxiv.org/abs/2301.02111",
+        "https://arxiv.org/abs/2407.05407",
+        "https://arxiv.org/abs/2410.06885",
+        "https://arxiv.org/abs/2410.00037"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "所列报告实际读取摘要，Whisper 的 680000 小时及 VALL-E 的 3 秒限定报告设置；未声称全文技术审阅。",
+        "未测流式延迟、声音克隆、全双工或实时因子；VALL-E 多码本细节未全篇核验，不补具体实现断言。",
+        "延迟账本为构造例；安全建议不构成现行法规结论。"
+      ]
+    },
+    {
+      "path": "docs/multimodal/video-generation.md",
+      "status": "edited",
+      "summary": "补时空训练/推理、构造 token 成本与统一评估协议；删除产品排行和无条件规格；区别像素逼真、动作可控与世界模型验证。 编码恢复后通过 UTF-8、元数据、旧标题锚点与 MathJax 单页渲染检查。",
+      "sources": [
+        "https://arxiv.org/abs/2311.15127",
+        "https://arxiv.org/abs/2312.14125",
+        "https://openai.com/index/video-generation-models-as-world-simulators/",
+        "https://arxiv.org/abs/2311.17982",
+        "https://arxiv.org/abs/2402.15391"
+      ],
+      "sourceReview": "linked_only",
+      "openIssues": [
+        "混合来源：SVD、VideoPoet、VBench、Genie 摘要已读；Sora 2024 官方说明 HTTP 403，仅链接待核。",
+        "产品名称仅历史导航，未核当前规格、许可、版本和价格；不作截至 2026-11-05 的产品清单。",
+        "未做生成、VBench、人评、物理挑战或 RL 迁移实验；成本数字为显式假设的构造例。"
+      ]
+    },
+    {
+      "path": "docs/multimodal/vlm-architecture.md",
+      "status": "edited",
+      "summary": "沿张量形状、连接器、位置/掩码与 prefill/decode 重编；纠正 CLIP 通用骨干、原版 LLaVA MLP、训练阶段和 Qwen2-VL 合并机制；补 66-token 报告例及模块成本/失败定位。 编码恢复后完成本组 UTF-8、元数据、旧锚点与公式渲染检查；全组保留120个旧标题锚点。",
+      "sources": [
+        "https://arxiv.org/abs/2010.11929",
+        "https://arxiv.org/abs/2103.00020",
+        "https://arxiv.org/html/2304.08485v2",
+        "https://arxiv.org/abs/2301.12597",
+        "https://arxiv.org/html/2409.12191v1"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "实际读取 ViT/CLIP/BLIP-2 摘要，以及 LLaVA/Qwen2-VL 架构、训练与分辨率段落；不是整篇论文人工审阅。",
+        "未逐 checkpoint 检查 processor、模板与框架实现；张量链路为一般说明，非可运行代码。",
+        "未做文档、抽帧或成本实验；闭源融合结构保留未知。",
+        "本组仅执行内存单页 Markdown/MathJax 渲染及静态链接、编码、diff 检查；未运行 catalog/build 或全站浏览器验收，交主控整合。"
+      ]
+    }
+  ]
+}

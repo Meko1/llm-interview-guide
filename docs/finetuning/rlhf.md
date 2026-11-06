@@ -40,6 +40,8 @@ L_RM = −log(sigmoid(r(x, y_w) − r(x, y_l)))
 
 这是一个建模选择，不是人类偏好的完整定律。相对比较可能比绝对评分更易标注，但仍受标注者、顺序、长度、领域知识和 rubric 影响，不能保证稳定一致。
 
+成对标签只识别奖励差：同一 prompt 的所有回答加同一个常数，不改变偏好概率。RM 分数不是正确率，也没有自动校准到「0.8 表示 80% 正确」。若要跨 prompt 比较绝对分数或设自动放行阈值，必须另做校准与分布验证。
+
 同一上下文必须包含比较所需的证据与条件：如果判断引用是否支持结论，就需要提供原材料。不同问题、不同权限或不同知识版本的回答，不宜直接拼成一个偏好对。
 
 ### 阶段 3：强化学习优化（通常用 PPO）
@@ -148,6 +150,12 @@ Shared log-prob shift leaves pair loss unchanged
 
 最后的共同平移仅演示代数不变性，不声称任意模型参数更新都能实现这种平移。beta 是目标中的权衡/尺度参数，不是学习率；调整它仍需评估偏好收益、漂移与回归。
 
+### 长度不是一个可随手消去的 nuisance
+
+`log π(y|x)` 是条件 token log-prob 的**和**；参考校正同样要在一致的 token 范围上求和。较长序列原始 log-prob 通常更负，但 DPO 的优势取决于策略与参考的差，不能由「token 多」推出总是偏长或总是偏短。偏好标注把长答案当优答、EOS 处理不一致、回答截断和目标归一化都可能改变长度表现。
+
+检查 chosen/rejected 的长度差与胜率相关性，再做长度匹配切片、固定预算解码和人工复核。若改为平均 log-prob，应明确这是目标变体，重新调 beta，而不是称为原始 DPO 的等价实现。TRL `sigmoid` 损失以参考校正分差计算 `-logsigmoid(beta*delta)`，IPO 的长度平均另有显式分支。
+
 ## 五、对齐方法谱系
 
 | 方法或反馈来源 | 主要机制 | 不宜混淆的点 |
@@ -176,6 +184,8 @@ GRPO 与 RLVR 经常组合，但不等价。GRPO 可以使用不同奖励；可�
 | 核心限制 | 奖励质量、探索与稳定性 | 数据覆盖、偏差与参考设定 | 组大小、奖励区分度与验证器 |
 
 GRPO 不训练独立 Critic，仍可能被长 rollout 与组内多次采样主导。若同组奖励没有区分度，组内相对优势信号可能很弱；需检查任务难度、采样与奖励，不只增加训练步数。
+
+原始 outcome-supervision GRPO 对组奖励中心化/标准化，并按每条回答长度做 token 平均；DAPO、Dr. GRPO 改变了这些处理，不能用同一个省略分母的公式覆盖全部实现。见 [前沿对齐技术](/finetuning/frontier-alignment) 的组内算例与长度比较。
 
 ## 七、工程坑：reward hacking 与对齐税
 
@@ -257,5 +267,6 @@ KL 与更好的偏好数据可以缓解风险，但不能独自证明安全。DP
 - [Shao 等：DeepSeekMath（2024）](https://arxiv.org/abs/2402.03300)：GRPO 的组内相对优化与原始实验。
 - [Bai 等：Constitutional AI（2022）](https://arxiv.org/abs/2212.08073)：监督自我修订与 AI 反馈 RL。
 - [Hugging Face TRL：DPO Trainer 文档快照](https://github.com/huggingface/trl/blob/b40abd828000255d723fd2bb2e1984266e55865f/docs/source/dpo_trainer.md)：参考概率、PEFT 与预计算的实现条件；链接固定到本轮核对的提交，实际配置仍需按使用版本验证。
+- [TRL DPO 实现](https://github.com/huggingface/trl/blob/main/trl/trainer/dpo_trainer.py)：本轮读取 sigmoid 与 IPO 分支；main 会漂移，复现应记录自己的提交。
 
 本页代码只复算构造样例的损失，不声称运行了 PPO、DPO 或 GRPO 训练，也不保证偏好优化后的业务收益。

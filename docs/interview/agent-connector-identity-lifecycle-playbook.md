@@ -1,8 +1,6 @@
 ---
 title: Agent 外部连接与 OAuth 凭证生命周期：从用户同意到断连、轮换与可审计执行
-description: >-
-  MCP 解决“工具如何连接”，OAuth 解决“谁允许访问什么”。生产系统还必须回答：哪个租户的哪个用户连了哪个外部账户，哪些 scope
-  在何时被同意，令牌由谁保管，刷新失败如何降级，用户点了断开后正在执行的写操作怎么处理。把这条链讲清楚，才是连接器而不是“在配置里填一个 token”。
+description: 从 OAuth 同意、租户绑定和凭证代理推演刷新轮换、响应丢失、断连竞态及外部效果对账。
 level: L2
 roles:
   - 应用开发
@@ -89,7 +87,7 @@ active -> revoked_by_provider -> suspended
 
 1. 发起授权前生成高熵、一次性、短 TTL 的 `state`，服务端保存其哈希，并绑定 `tenant_id`、`subject_id`、`connection_intent_id`、redirect URI、PKCE verifier 和 nonce。
 2. 使用授权码流 + PKCE；浏览器只携带 authorization code 和 state，code verifier 只能在后端或受控客户端保存。
-3. callback 必须做恒定时间的 state 校验、消费标记、TTL 校验、redirect URI 精确匹配和 issuer/nonce 校验；同一 state 第二次出现直接拒绝并审计。
+3. callback 必须校验 state、原子消费、TTL 与本次注册的 redirect URI；多 issuer 场景核对响应所属授权服务器。`nonce` 是使用 OIDC 身份流程时的校验对象，不是每个纯 OAuth 回调都有的字段；未返回身份 token 时不能伪造一次 nonce 校验。重复回调返回已有连接状态，不再次换票。
 4. 换票后从 provider 的身份端点或可信 claims 得到外部账户，要求账户/组织域符合连接策略；不能只相信前端传回的 email。
 5. 将实际 `scopes_granted` 与请求的最小集合比较。缺 scope 时进入 `suspended` 或限制功能，不要悄悄扩大权限。
 
@@ -118,10 +116,10 @@ LLM intent -> policy + approval -> credential broker -> provider/MCP
   |--- redacted result + effect reference <-------------|
 ```
 
-Broker 至少实施：
+Broker 至少实施（内部 lease 的约束不等于提供方 token 支持相同约束）：
 
 - 单飞刷新：同一 connection 同时只有一个 refresh，其余请求等待结果，避免 refresh rotation 互相作废。
-- audience、scope subset、TTL、run ID 和 idempotency key 绑定，禁止把用户 bearer token 原样透传给任意 MCP Server。
+- 内部 lease 绑定 audience、scope subset、TTL、run ID 和 effect key。若提供方不支持 token exchange/downscope，Broker 保管原 token 并代理受限调用，不能声称已经把外部 token 变成“一次性、绑定 task”的凭证；禁止把 bearer token 原样透传给任意 MCP Server。
 - 日志 redaction、secret scanner、出站 header 过滤、崩溃转储隔离；禁止把 token 放进 `.mcp.json`、Skill、聊天记录或 eval 样本。
 - 保险库取密钥、刷新、换票和删除全部产生审计证据，而不是只记录最终 tool call。
 
@@ -140,7 +138,11 @@ access token 过期是正常路径，`invalid_grant` 不是普通重试。对刷
 | 管理员禁用/域不匹配 | 进入 suspended，触发安全事件 | 通知 tenant admin |
 | 用户点击断连 | 停刷新、删引用、取消任务、对账 | 返回断连凭据和 effect 摘要 |
 
-刷新 token 轮换必须是事务语义：先在 Vault 写新版本，确认可读后更新引用，再异步废弃旧版本；失败时不得丢失仍可用的旧引用。对 provider 的撤销 webhook 要验签、去重、按 provider event ID 幂等，并接受 webhook 迟到：每次高风险 action 仍以当前 token/introspection/源系统拒绝为准。
+刷新轮换包含两个无法由本地数据库统一提交的动作：提供方换票与本地持久化。Vault 写新版本、CAS 更新引用可防并发覆盖，但不能使提供方事务回滚。实际读取的 [Auth0 轮换与复用检测说明](https://auth0.com/docs/secure/tokens/refresh-tokens/refresh-token-rotation)说明该产品会轮换 token；其 [overlap 配置](https://auth0.com/docs/secure/tokens/refresh-tokens/configure-refresh-token-rotation)是提供方特定能力，不可推成通用保证。原 RFC 9700 入口保留为标准背景，未据此声称所有 provider 都有相同宽限窗。
+
+**响应丢失怎么处理？** 提供方可能已作废旧 refresh token，而客户端没有拿到新 token。L1 要停止刷新风暴并提示连接降级；L2 按该 provider 明确的重投/宽限合约恢复，若无安全恢复路径则重新同意，不能“回滚旧引用所以继续可用”；L3 验证需故障注入到换票前、响应丢失、Vault 写入失败、引用 CAS 冲突四个窗口，并披露并发和宽限配置。
+
+对 provider 的撤销 webhook 验签、去重并接受迟到；每次高风险 action 仍检查连接本地状态和源系统权限。撤销 webhook、introspection 和拒绝码是否可用，都必须按提供方确认，不能在设计图中凭空补齐接口。
 
 ## 八、断连与在途副作用的竞态
 

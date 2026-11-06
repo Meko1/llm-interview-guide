@@ -75,6 +75,12 @@ Codex App 也以 built-in worktree 支持让多个 Agent 在同一 repo 并行�
 
 ## 五、Claim、Lease 与 Fencing
 
+[Git官方worktree说明](https://git-scm.com/docs/git-worktree) 实读描述：linked worktree有独立工作目录及相关元数据，但属于同一仓库；它不隔离对象库、共享凭证、外部服务或进程。`git worktree lock`主要防管理元数据被prune，并不是禁止其他进程编辑文件的互斥锁。本轮未核Claude/Codex产品页面，原链接是能力核查入口，不声称全表已验证。
+
+不同文件也可语义冲突：A在API删除旧字段，B在另一目录新增继续读旧字段的UI，两边各自旧基线测试通过，三方合并也无文本冲突，但集成失败。验收证据应绑定 `tested_tree_digest + command + environment_digest`，不能仅绑定分支名。合并队列head从h1变h2后，h1的绿灯不能授权h2发布。
+
+最小本地检查命令是 `git worktree list --porcelain` 与 `git diff --name-only BASE...HEAD`（BASE/HEAD须替换真实提交）；后者仅比较提交，不含未提交修改，还需 `git status --short`。这些命令只读，不是执行授权；删除工作区前先保存未跟踪文件和未提交diff，不因lease到期直接清除唯一副本。
+
 任务列表的 `claimed` 不足以应对崩溃、网络分区或被重启的 Agent。使用可过期 claim：
 
 ```text
@@ -86,10 +92,10 @@ READY --claim(fence=21, ttl)--> RUNNING --heartbeat--> RUNNING
 
 1. claim 原子分配单调递增 `fence`，环境、artifact registry 和 Merge Controller 都保存它。
 2. 写 artifact、提交状态、上传报告、申请 merge 都携带 fence；旧 fence 即使 token 尚在也被拒绝。
-3. 心跳只能续当前 owner 的 claim；协调器回收超时 worker 的 worktree、容器、端口和 token。
-4. 不可中断测试/构建标记 `CANCELLING`，最大运行时间后隔离，不能让新 worker 复用同一资源。
+3. 心跳只能续当前owner的claim。租约到期先阻断状态/上传/合并准入，并对全部存活的编辑器、shell、测试、构建与子进程标记`CANCELLING`；不能仅拒绝registry写入后就回收目录。
+4. 用OS/容器权限与进程树终止确认建立文件停止写入边界，再保存未提交/未跟踪证据、快照和回收资源。无法证明所有写者已停止时隔离旧目录；替代worker使用新的attempt专属workspace，不能复用旧路径。worktree和claim元数据不阻止已经拥有文件句柄的进程继续写。
 
-lease 只是“可以尝试工作”，fence 才能让下游拒绝旧 owner 的迟到写入。
+lease 只是工作权声明；fence 需由实际写入端校验，且最大已观察编号不等于即时撤权。普通文件系统不会自动检查任务fence。恢复演练要包含“租约到期但旧shell仍持续写文件”，验证目录隔离、停止写入确认、证据保存与新attempt路径，而不只测任务列表拒绝旧完成消息。
 
 ## 六、Artifact Contract：Handoff 不靠聊天摘要
 
@@ -149,6 +155,8 @@ candidate branch + artifact bundle
 Claude Code 的 Agent Teams 文档指出，teammate 共享 task list 和消息，但默认不以 worktree 隔离；任务触及同一文件时应先 partition ownership 或显式隔离。能协作不等于可以并发写同一目录。[Claude Code Parallel Agents](https://code.claude.com/docs/en/agents)
 
 ## 九、系统设计题：十个 Coding Agent 并行修复 monorepo
+
+一小时是题目约束，不是承诺。若测试隔离库容量4、worker数10，最多4个需要该库的任务并发，其余排队；目录隔离不会增加数据库容量。L1核自己写集合与本地未提交状态；L2核资源租约和tested-tree是否仍对应queue head；L3用同时完成、head推进、孤儿回收的故障注入验证控制器。本页manifest中的exit_code=0是构造格式例，不代表本文跑过测试。
 
 **题目**：十个 Agent 同时修复支付、鉴权、前端、文档、测试和 CI。要求一小时内出 PR，不影响开发者本地工作，不能污染测试租户、重复 migration 或错误合并。如何设计？
 

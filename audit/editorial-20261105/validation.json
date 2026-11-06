@@ -1,0 +1,274 @@
+{
+  "date": "2026-11-05",
+  "status": "editorial_complete_validation_passed",
+  "scope": 242,
+  "completed": 242,
+  "pending": 0,
+  "newlyCompletedThisContinuation": 116,
+  "partialEditsPending": 0,
+  "receiptCoverage": {
+    "groups": {
+      "alignment-research": 25,
+      "applications": 37,
+      "foundations": 26,
+      "engineering-tools": 31,
+      "training-inference": 22,
+      "interview-1": 30,
+      "interview-2": 30,
+      "interview-3": 30,
+      "models-multimodal": 11
+    },
+    "counts": {
+      "edited": 242,
+      "retained": 0,
+      "verified": 199,
+      "linked_only": 34,
+      "not_applicable": 9
+    },
+    "issues": [],
+    "meaning": "Agent editorial receipts, not human scientific review; verified means selected source excerpts actually read"
+  },
+  "metadataCheck": {
+    "exitCode": 0,
+    "pages": 254
+  },
+  "build": {
+    "exitCode": 0,
+    "sourcePages": 276,
+    "htmlPages": 277,
+    "chunkSizeWarning": true,
+    "localSearchChunkBytes": 6366306,
+    "articleSourceFreezeVerified": true
+  },
+  "builtIntegrity": {
+    "oldAnchorCount": 4281,
+    "mathContainers": 563,
+    "issues": [],
+    "classificationUnchanged": true,
+    "reviewedAtUnchanged": true
+  },
+  "code": {
+    "changedPythonBlocks": 23,
+    "astChecksPassed": true,
+    "pythonChecks": [
+      {
+        "path": "docs/basics/autoregressive-training.md",
+        "line": 64,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/basics/backpropagation-optimization.md",
+        "line": 54,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/basics/masks-padding.md",
+        "line": 35,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/basics/tokenizer.md",
+        "line": 80,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/beginner/llm-first-practice-handbook.md",
+        "line": 254,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/engineering/llm-document-generation-production.md",
+        "line": 137,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/engineering/structured-output.md",
+        "line": 83,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/inference/domestic-ai-stack.md",
+        "line": 62,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/inference/speculative-sampling-proof.md",
+        "line": 76,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/inference/test-time-scaling.md",
+        "line": 60,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/coding-problems.md",
+        "line": 36,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/coding-problems.md",
+        "line": 111,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/coding-problems.md",
+        "line": 163,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/coding-problems.md",
+        "line": 208,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/coding-problems.md",
+        "line": 309,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/coding-problems.md",
+        "line": 338,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/coding-problems.md",
+        "line": 367,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/coding-problems.md",
+        "line": 430,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/llm-output-contract-compatibility-playbook.md",
+        "line": 107,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/llm-user-memory-personalization-control-plane.md",
+        "line": 177,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/multimodal-rag-document-intelligence-playbook.md",
+        "line": 278,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/procurement-vendor-due-diligence-copilot-playbook.md",
+        "line": 101,
+        "exitCode": 0
+      },
+      {
+        "path": "docs/interview/promptops-production-governance-playbook.md",
+        "line": 54,
+        "exitCode": 0
+      }
+    ],
+    "validChangedJsonBlocks": 11,
+    "expectedIncompletePrefixes": [
+      {
+        "path": "docs/interview/structured-output-qna.md",
+        "line": 72,
+        "reason": "Explicitly introduces current generation prefix {\"age\":, not complete JSON"
+      }
+    ],
+    "constructedCalculationsChecked": 9,
+    "calculationTopics": [
+      "Decimal rounding .12/.11",
+      "traffic composition 75%/72.8%",
+      "reserve settlement 65",
+      "KV payload 31.25 GiB",
+      "SSM payload 5 MiB",
+      "voice 700ms/580ms",
+      "majority .83692",
+      "temperature/nucleus distribution",
+      "zero-event 95% upper bound .02951305"
+    ],
+    "limits": "Arithmetic and syntax only; no model/API/GPU, training, financial or production validation"
+  },
+  "browser": {
+    "cases": 485,
+    "widths": [
+      1440,
+      390,
+      320
+    ],
+    "issues": [],
+    "fullReport": "audit/editorial-20261105/browser-validation.json",
+    "initialMobileOverflowRoutes": [
+      "advanced/diffusion-llm",
+      "inference/kv-cache",
+      "models/slm",
+      "prompt/cot-reasoning"
+    ],
+    "fix": "Mobile inline MathJax containers locally scroll rather than widening the page",
+    "confirmation": "One concentrated fix and one complete confirmation",
+    "manualImageInspection": [
+      "interview/high-frequency at390",
+      "engineering/voice-agent-production at1440",
+      "prompt/cot-reasoning formula at390"
+    ],
+    "limitations": "Automated all-article checks, selected AI visual inspection; not human visual review of every article"
+  },
+  "finalSmoke": {
+    "checkedAt": "2026-11-05T10:34:50.982Z",
+    "englishSearchFound": true,
+    "chineseSearchFound": true,
+    "routeSwitch": {
+      "headingChanged": true,
+      "url": "http://127.0.0.1:4191/llm-interview-guide/finetuning/training-frameworks",
+      "metadata": "L2 工程微调与对齐阅读量估算 5 分钟适合读者：算法研究 · 应用开发分级待核 · 查看阅读说明 ↗"
+    },
+    "errors": [],
+    "scope": 242,
+    "oldAnchorCount": 4281,
+    "mathContainers": 563,
+    "integrity": [],
+    "localSearchChunk": {
+      "file": "@localSearchIndexroot.Dj1Y4QSW.js",
+      "bytes": 6366306
+    }
+  },
+  "crossReview": {
+    "reviewedArticles": 13,
+    "actionableIssuesFixed": 7,
+    "topics": [
+      "spoken approval self-invalidating",
+      "MoE GPU residency",
+      "Dify migration constraints",
+      "fence activation gap",
+      "orphan reconciliation ordering",
+      "live filesystem writer quarantine",
+      "tool-call complete boundary"
+    ],
+    "limits": "Static protocol counterexamples and design repair, not runtime reproduction"
+  },
+  "gitDiffCheck": {
+    "exitCode": 0,
+    "coreAutocrlf": true
+  },
+  "dependencyAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 2,
+    "high": 6,
+    "critical": 0,
+    "total": 8,
+    "automaticFixApplied": false
+  },
+  "sources": {
+    "inaccessiblePagesLogged": true,
+    "accessBypassUsed": false,
+    "sourceReviewIsNotQualityScore": true
+  },
+  "history": "audit/editorial-20261105/history/validation-126.json",
+  "release": {
+    "committed": false,
+    "pushed": false,
+    "deployed": false,
+    "preview": "http://127.0.0.1:4191/llm-interview-guide/"
+  }
+}

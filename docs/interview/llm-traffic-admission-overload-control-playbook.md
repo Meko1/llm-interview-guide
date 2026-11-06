@@ -2,7 +2,7 @@
 title: LLM 在线流量准入与过载保护：排队、公平与可控降级
 description: >-
   我会把在线准入看成一个 token 感知的控制面。入口先通过幂等键、用户/租户/模型多级配额和 token 预估做快速判定；随后按交互、普通、长上下文
-  Agent 和批处理进入隔离队列，用加权公平与并发上限保护小租户和 P0 的 TTFT。队列始终有界，控制器根据 TTFT、TPOT、队列等待和 K
+  Agent 和批处理进入隔离队列，用加权公平与并发上限保护小租户和 P0 的 TTFT；根据队列等待、KV余量与完成量控制过载。
 level: L2
 roles:
   - 应用开发
@@ -54,7 +54,7 @@ request_cost = input_tokens
 
 admit if quota_available
       and concurrency_slot_available
-      and predicted_queue_wait <= request_deadline
+      and predicted_queue_wait + predicted_service_time <= remaining_deadline
       and KV/admission headroom is healthy
 ```
 
@@ -63,6 +63,10 @@ admit if quota_available
 必须对异常声明设上限：用户传一个极大 `max_tokens`、Agent 递归调用或超长 RAG context，都不应绕过准入模型。高风险/长上下文请求可走单独资源池或先要求异步化。
 
 ## 四、分层配额：不要只在全局限流
+
+token预算不是GPU时长模型：prefill、decode、缓存读的成本不同，工具预留也不一定以token计。构造稳定到达8请求/秒、平均占用2秒，平均在途为16；硬上限20不能据此证明P95健康。突发额外50条，理想处理能力10条/秒，清空至少5秒，已经超出P0等待预算。应在入队前拒绝或异步化，不靠扩大队列掩盖超时。这是平均模型演算，非压测。
+
+lease防超卖需原子分配：余额1,000 token只发三个各300的lease，还剩100；分区后不得给各区域重新发1,000。过期回收必须校验epoch与结算，否则旧worker仍可消费。业务预算退款也不等于供应商TPM窗口立即退款，需分开记账。
 
 成熟系统通常按多层检查配额：
 
@@ -119,7 +123,7 @@ elif queue grows and SLO remains healthy:
 
 过载时应按能力契约从温和到强硬处理：
 
-1. 命中安全的精确缓存或 prefix cache，直接返回。
+1. 安全精确响应缓存可直接返回；prefix cache仅节省prefill，仍须准入decode/KV资源，不能当成已有答案。
 2. 允许短等待的请求进入有界队列，返回可观测的排队状态。
 3. 压缩可选上下文、降低输出上限、关闭非必要 rerank 或自一致性采样。
 4. 路由到已离线验证过的低成本/低延迟模型。
@@ -135,6 +139,8 @@ elif queue grows and SLO remains healthy:
 最危险的情况是：服务因排队变慢 -> 客户端超时重试 -> 重复请求更占资源 -> 排队更慢。用 idempotency key 把同一业务请求折叠为一个后端工作单元，并在响应中区分“已排队”“正在生成”“不可重试的业务错误”。工具写操作还要在工具层使用幂等键，避免模型重试造成重复扣款或重复发送。
 
 ## 九、一个可落地的控制面架构
+
+[RFC9110 §10.2.3](https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3) 实读说明 `Retry-After` 可为HTTP日期或非负整数秒；`Retry-After: 2` 是秒，不是毫秒，也不保证两秒后有容量。L1让同幂等键复用排队run；L2在总deadline内设置抖动和重试预算，区分额度拒绝和全局过载；L3再比较固定负载分布下的调度公平性。表中SLO是构造目标，非行业标准或项目实绩。
 
 ```text
 Client

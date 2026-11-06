@@ -50,7 +50,7 @@ publication
   -> approver / signed_at / delivery channel / access policy
 ```
 
-`document_snapshot` 不是优化项，而是可复现性的基础。用户上午发起一份报价单，下午 CRM 中的联系人或价格被修改时，审阅中的草案不能在无提示的情况下跟着变。草案必须指向发起时的事实快照；如需刷新，创建新的 revision，并把变化显式展示给审阅者。
+`document_snapshot` 是可追溯输入的基础，但不保证模型再次生成相同字节。用户上午发起一份报价单，下午 CRM 中的联系人或价格被修改时，审阅中的草案不能在无提示的情况下跟着变。草案必须指向选定的事实快照；如需刷新，创建新的 revision，并把变化显式展示给审阅者。跨 CRM/ERP 的读取也不天然构成同一时刻的事务快照：记录各源版本、读取时间和允许的时间偏差，关键记录冲突时阻断，而不是把多次查询包装成“强一致”。保留原始槽位输出和最终制品，才能重放已批准内容而不重新采样模型。
 
 每份对象都要有稳定 ID、版本号、创建者、租户、权限范围、保留期限与内容哈希。渲染后的 PDF/DOCX 也不能只保存文件路径；需要保存字节哈希与渲染器版本，以便在审计时证明“签发的是哪一份”。
 
@@ -132,6 +132,26 @@ currency / rounding / timezone follow the template policy
 
 如果展示文本与事实包不一致，系统应阻断签发并记录字段级错误；不要把“让模型再检查一次”当成唯一修复策略。
 
+下面是可用 Python 3 标准库复算的**构造例子**，不是税务规则：约定逐行含税金额四舍五入到分后求和。若改成汇总后舍入，结果可能不同，必须把算法版本纳入事实包。
+
+```python
+from decimal import Decimal, ROUND_HALF_UP
+
+unit_price = Decimal("0.05")
+tax_rate = Decimal("0.10")
+line_total = (unit_price * (1 + tax_rate)).quantize(
+    Decimal("0.01"), rounding=ROUND_HALF_UP
+)
+per_line_total = line_total * 2
+aggregate_total = (unit_price * 2 * (1 + tax_rate)).quantize(
+    Decimal("0.01"), rounding=ROUND_HALF_UP
+)
+assert per_line_total == Decimal("0.12")
+assert aggregate_total == Decimal("0.11")
+```
+
+这个一分钱差异是业务舍入口径差异，不是模型幻觉；即使 JSON 和浮点数都能解析，也不代表金额契约成立。
+
 ### 表格使用结构化中间表示
 
 先生成或组装 JSON 行列数据，再由渲染器填充 DOCX/HTML/PDF 表格。结构包括列 schema、排序、合计行、单元格格式和分页规则。纯文本表格一旦转换为 Word，往往出现列宽溢出、合计错位、分页断裂或复制后不可编辑的问题。
@@ -154,13 +174,15 @@ currency / rounding / timezone follow the template policy
 
 ```text
 created -> assembling -> generating -> validating -> in_review
-  -> approved -> rendering -> published -> archived
-                    |             |
-                    -> revision_requested
-                    -> rejected / expired / cancelled
+in_review -> revision_requested -> generating
+in_review -> content_approved -> rendering -> artifact_review
+artifact_review -> issued -> delivery_pending -> delivered -> archived
+in_review / artifact_review -> rejected / expired / cancelled
 ```
 
-并发情况下采用乐观锁：编辑请求携带 `draft_revision`，版本落后时返回冲突与差异，而不是“最后写入者获胜”。对于高风险审批，审批人在点击批准时还要二次确认所见 revision 等于当前 revision。
+并发情况下采用乐观锁：编辑请求携带 `draft_revision`，版本落后时返回冲突与差异，而不是“最后写入者获胜”。二次确认不是事务锁；服务端必须在一次条件更新中校验 revision 并写入批准记录。HTTP 可使用强 ETag 与 `If-Match`，前置条件不成立返回 412，语义见 [RFC 9110 §13.1.1](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1)。
+
+例如审阅者看见 r7，编辑者先写成 r8，随后审阅者批准 r7：服务端应拒绝这次批准，不能将它贴到 r8 上。内容批准绑定 `draft_revision + fact_digest + template_revision`；最终签发再绑定 `artifact_sha256 + render_revision + recipient_scope`。渲染字体改变或目标收件人变化都可能需要重新审核。把已签发与已送达拆开，避免邮件超时后误以为文件没有签发，又生成一份不同文档。
 
 ## 七、渲染与签发：内容正确不等于成品可用
 
@@ -180,7 +202,7 @@ created -> assembling -> generating -> validating -> in_review
 - **字段级最小权限**：模型上下文、预览、下载和外发均分别授权；脱敏字段不因导出恢复。
 - **提示注入隔离**：外部附件和检索结果是数据，不得改变模板、审批策略或工具权限。
 - **敏感信息处理**：检测身份证、账户、健康、密钥等内容；按场景遮蔽、阻断或走加签审批。
-- **外发控制**：收件人白名单、域名策略、水印、下载次数、过期链接和撤回能力。
+- **外发控制**：收件人白名单、域名策略、水印、下载次数、过期链接和受控访问撤销。链接失效不能收回已下载文件，邮件送达也不是可逆操作；需按实际渠道说明泄露处置边界。
 - **保留与删除**：草案、事实快照、日志和最终制品可能有不同保留期限；删除必须传播到索引、缓存和衍生文件。
 
 审计日志要记录“谁以什么权限访问了哪些事实、用哪个模板生成了哪个制品、谁批准和发送给谁”。日志本身也包含敏感元数据，应限制访问并避免写入完整 Prompt 或原始证件号。
@@ -209,7 +231,8 @@ created -> assembling -> generating -> validating -> in_review
 | unsupported-claim rate | 无来源或超出证据的断言比例 |
 | render pass rate | 成品通过结构与视觉校验的比例 |
 | reviewer edit distance | 人工修改字数/字段数，按风险加权 |
-| approval precision | 系统要求人工复核的案例中，真正高风险案例的覆盖情况 |
+| approval precision | 要求人工复核的案例中，经独立标注确为高风险的比例：TP / (TP + FP) |
+| high-risk recall | 全部实际高风险案例中，被要求复核的比例：TP / (TP + FN)；漏审不能被高 precision 掩盖 |
 
 线上采用影子生成或小流量灰度，把候选文档与人工基线比较。只有模板、模型、提示、渲染器和策略都版本化，出现回归时才能定位究竟是生成质量、数据、模板还是渲染导致的问题。
 
@@ -263,6 +286,8 @@ schema 中明确允许 `unknown`/`needs_confirmation`，生成前提供事实键
 
 ## 十三、60 秒项目讲法
 
-“我做的不是通用文本生成器，而是一个企业文档交付工作流。系统先根据租户和字段权限冻结 CRM、报价与知识库的事实快照，金额等派生值由规则服务计算。模板把法务条款和品牌元素设成不可变区，LLM 只在带 schema、证据要求和长度上限的槽位中生成摘要与建议。随后我们做字段一致性、引用、敏感信息和渲染回读校验；高风险文档进入带 revision diff 的人工审批。最终制品按哈希归档，并记录事实、模板、模型、审阅和渲染版本。这样系统在模型输出不稳定时仍能保证业务文档可复核、可追责、可安全分发。”
+下面是文档交付的参考设计表达，不是已签发系统或个人上线经历：
 
-这段回答同时覆盖了 LLM 应用开发岗最常被追问的四件事：模型边界、系统正确性、生产可靠性和业务风险控制。
+“这份设计将事实读取、受限槽位生成、审阅和签发分开。CRM、报价与知识库记录各源版本和读取时间，金额按已选算法计算。法务条款由渲染模板锁定，LLM 只生成允许的候选槽位；字段、引用、敏感信息和回读校验分别执行。内容审批绑定 revision，最终签发绑定制品哈希与接收范围，分发失败另行对账。目标是让责任人能复核关键事实与制品，但跨源一致性、渲染正确性和外发控制仍需独立验证。”
+
+这段是架构讲法示例，不是已完成项目证据。L1 应能复现缺失字段、金额不一致和 r7/r8 冲突的阻断；L2 应解释快照新鲜度、审批等待时间、签发与送达失败的取舍；L3 应在独立标注集上同时测量漏审与误审，并按文档风险分层，不能用文采分替代字段正确性。

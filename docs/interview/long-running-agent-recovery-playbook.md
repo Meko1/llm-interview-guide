@@ -39,6 +39,14 @@ classification: inferred
 
 **核心原则：** transcript 是线索，effect receipt 才是事实。生产系统不能因为“历史里说已部署”就跳过下游查询，也不能因为进程消失就默认部署失败。
 
+回执也需验证来源、对象和最终性：模型写出的“成功”不算下游回执；HTTP202常只表示接收，不代表业务完成。构造部署intent `dep_task842_rev7`，下游已接收但回复丢失，checkpoint停在19；新worker查得job仍运行，就记录IN_PROGRESS而非再次部署。查不到也未必是NOT_STARTED，可能查询副本延迟；仅当下游给出权威否定及幂等语义时才安全重发。若下游没有查询/幂等能力，UNKNOWN应进入人工，不用新的key碰运气。
+
+fence 须在真正持久写边界强制执行，但 `request_fence >= stored_fence` 只阻止资源**已经观察到新 fence 后**的旧写，不等于即时租约撤销。构造反例：资源仍存18，控制面已授予19但尚未传播，旧worker的18仍通过比较。
+
+若要求旧owner失效后不能继续有效写入，应在写入线性化点把当前owner、有效租约与更新放进同一受保护事务；或先冻结写准入，在保护资源安装新fence并确认后，才激活替代owner。租约时间需有可信服务端时间/续租语义。多资源安装不天然原子，未确认资源保持冻结；不能只在任务列表更新19就宣布全链路隔离。
+
+第三方API若不能校验fence，受控网关只能限制新的准入；已经提交的调用仍可能完成，须记为IN_FLIGHT/UNKNOWN并对账，不能声称立刻回滚外部效果。旧worker能直连下游时更无此保证。L1复现丢回执；L2定义切换屏障、未知状态期限与人工处置；L3用分区/传播延迟反例验证写入契约，不把编号递增当单owner证明。
+
 ## 二、检查点模型
 
 ```yaml
@@ -128,9 +136,13 @@ RECOVERY_CANDIDATE -> validate checkpoint -> acquire new lease
 
 ### Claude Code
 
+本轮未读取下列Claude/OpenClaw公开页面，原链接保留供后续核查；具体命令、存储方式和休眠语义均待版本核验，不据此作跨产品保证。
+
 [Agent View](https://code.claude.com/docs/en/agent-view) 使用独立 supervisor 托管后台 session，terminal 关闭后仍可 `attach`、`reply`、`stop` 或 `respawn`，并将 session state 留在本地磁盘。官方同时明确背景 session 不穿越机器休眠/关机，醒来后要重启；worktree 随 session 删除还可能丢失未合并改动。实践上将它当 conversation/execution 的便利层，不让它单独决定发布、付款或外发的恢复。
 
 ### Codex
+
+本轮OpenAI页面搜索未返回正文；下面功能描述是原稿待核线索，不是本轮已证实能力。实际执行位置、权限与远程授权必须按部署版本验证。
 
 [Work with Codex from anywhere](https://openai.com/index/work-with-codex-from-anywhere/) 允许从授权设备查看 active thread、输出、diff、测试与批准、改变方向；文件、凭证、权限和本地配置仍留在实际执行机，relay 不直接暴露设备。远程 steer 应写入企业控制面并经身份/权限检查，而不是把手机 UI 状态当作 effect ledger。
 
@@ -139,6 +151,8 @@ RECOVERY_CANDIDATE -> validate checkpoint -> acquire new lease
 [Restart Recovery](https://docs.openclaw.ai/gateway/restart-recovery) 将 session、job、subagent、background record、outbound queue 与 cron state 持久化，Gateway 重启后可恢复中断工作；同时不会盲目重跑不安全 transcript tail、过久中断的 child 或反复失败的 session。[Cron](https://docs.openclaw.ai/cli/cron) 的 job/run history 也保存在共享 SQLite。这是很好的 runtime 防护，但业务系统仍须幂等与对账。
 
 ### Hermes
+
+实际读取[Hermes官方仓库Sessions片段](https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/sessions.md)的存储字段与网关访问段落，支持SQLite保存历史及“客户端分离不同于网关崩溃”的区分；该片段明确崩溃中断工作可为unknown，而不是自动重放。未读取下述CLI background文档，不能将SQLite历史推成端到端执行恢复保证。所有四类runtime比较仍需固定版本验证。
 
 [Hermes Sessions](https://hermes-agent.nousresearch.com/docs/user-guide/sessions/) 在 SQLite 保存模型配置、system prompt snapshot、消息、工具结果和 lineage，可按 ID/名称恢复；[CLI](https://hermes-agent.nousresearch.com/docs/user-guide/cli) 的 `/background` 则创建独立 conversation，只继承当前配置不继承当前历史。生产工作流应使用 session ID 关联证据，却不能因为有完整消息历史就自动重发工具调用。
 

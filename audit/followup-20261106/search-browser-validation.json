@@ -1,0 +1,150 @@
+{
+  "checkedAt": "2026-11-06T03:18:12.437Z",
+  "scope": "1440/light, 390/light, 320/dark/reduced-motion; intentional 1s index-request delay for empty-state observation",
+  "cases": [
+    {
+      "width": 1440,
+      "hintShown": true,
+      "hintHiddenOnResults": true,
+      "noResultsGuidance": true,
+      "queries": [
+        {
+          "query": "LoRA",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "投机",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "KV Cache",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "工具调用",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "连续批处理",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "量化",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "RLHF",
+          "results": 16,
+          "relevantWithinFirst16": true
+        }
+      ],
+      "searchNavigationWorks": true,
+      "pageWidth": 1440,
+      "heading": "LoRA / QLoRA 详解 ​",
+      "mathErrors": 0,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "hintShown": true,
+      "hintHiddenOnResults": true,
+      "noResultsGuidance": true,
+      "queries": [
+        {
+          "query": "LoRA",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "投机",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "KV Cache",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "工具调用",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "连续批处理",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "量化",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "RLHF",
+          "results": 16,
+          "relevantWithinFirst16": true
+        }
+      ],
+      "searchNavigationWorks": true,
+      "pageWidth": 390,
+      "heading": "LoRA / QLoRA 详解 ​",
+      "mathErrors": 0,
+      "errors": []
+    },
+    {
+      "width": 320,
+      "hintShown": true,
+      "hintHiddenOnResults": true,
+      "noResultsGuidance": true,
+      "queries": [
+        {
+          "query": "LoRA",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "投机",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "KV Cache",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "工具调用",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "连续批处理",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "量化",
+          "results": 16,
+          "relevantWithinFirst16": true
+        },
+        {
+          "query": "RLHF",
+          "results": 16,
+          "relevantWithinFirst16": true
+        }
+      ],
+      "searchNavigationWorks": true,
+      "pageWidth": 320,
+      "heading": "LoRA / QLoRA 详解 ​",
+      "mathErrors": 0,
+      "errors": []
+    }
+  ]
+}

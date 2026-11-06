@@ -1,9 +1,6 @@
 ---
 title: LangGraph 与状态图 Agent
-description: >-
-  LangGraph 的核心价值不是“又一个 Agent 框架”，而是把自由循环的 Agent
-  做成显式状态图：节点、边、状态、条件、持久化、人审和回放都可控。Agent 基础见 Agent 基础，框架总览见 LangChain 与应用框架，生产级
-  State、Checkpoint、HITL 和恢复设
+description: 用 State、Node、Edge 和 interrupt 组织有状态 Agent，重点理解恢复重执行、审批前置与外部副作用的幂等边界。
 level: L2
 roles:
   - 后端转型
@@ -64,10 +61,13 @@ LangGraph 官方文档把图概括为由 Nodes 和 Edges 组成的、随状态�
   -> classify_intent
   -> plan_task
   -> need_tool?
-      -> yes: call_tool -> validate_tool_result -> continue_or_fix
+      -> yes: validate_args_and_policy -> risk_check
+          -> high_risk: interrupt_for_approval -> revalidate -> call_tool
+          -> read_only: call_tool
+          -> validate_tool_result -> continue_or_fix
       -> no: draft_answer
   -> safety_check
-      -> high_risk: interrupt_for_approval
+      -> sensitive_output: review_or_redact
       -> safe: final_answer
 ```
 
@@ -75,7 +75,7 @@ LangGraph 官方文档把图概括为由 Nodes 和 Edges 组成的、随状态�
 
 - `classify_intent`：区分闲聊、知识问答、业务查询、高危操作。
 - `plan_task`：输出结构化计划，限制最大步数和可用工具。
-- `call_tool`：只执行 schema 校验通过的工具调用。
+- `call_tool`：只执行参数、权限与必要审批均通过的调用；不能在调用之后才检查高危副作用。
 - `validate_tool_result`：检查错误码、权限、空结果、业务状态。
 - `continue_or_fix`：决定继续、修参数重试、换工具或转人工。
 - `safety_check`：检查注入、越权、敏感输出和高危动作。
@@ -87,7 +87,9 @@ LangGraph 官方文档把图概括为由 Nodes 和 Edges 组成的、随状态�
 
 1. **断点续跑**：长任务被中断后，从最近状态恢复，不必重跑全部步骤。
 2. **人工确认**：高危节点暂停，把待执行动作展示给人，确认后继续。
-3. **失败回放**：保留每步状态、输入、输出、工具结果，定位是规划错、参数错、工具错还是权限错。
+3. **失败排查**：结合 checkpoint 与 trace 定位状态变化；回放外部依赖可能产生新结果，不能等同于确定性复现。
+
+按 2026-11-05 读取的[官方 interrupts 文档](https://docs.langchain.com/oss/python/langgraph/interrupts)，恢复需要 checkpointer 和同一 `thread_id`，通过 `Command(resume=...)` 提交输入。**恢复会从包含 interrupt 的节点开头重执行，不是从那一行后继续**；因此审批前的代码必须无副作用或幂等，写动作最好独立为审批后的节点。
 
 面试里可以这样答：
 
@@ -125,7 +127,7 @@ LangGraph 面试容易从“State 是什么”追问到“State 怎么设计才�
 
 Checkpoint 恢复最怕“状态恢复了，但外部副作用已经发生”。写操作节点必须按后端事务思维设计：
 
-- 每次写操作生成 `idempotency_key`，同一 key 重试只返回第一次结果。
+- 同一业务动作持久化同一 `idempotency_key`，恢复不能重新生成；业务服务需校验 key 与参数摘要一致，并定义保留期限。
 - 工具节点先写 pending action，确认后执行真实副作用。
 - checkpoint 里记录 `tool_call_id`、参数摘要、执行状态、外部业务单号。
 - resume 时先查询外部状态，再决定继续、跳过、补偿或转人工。
@@ -158,9 +160,9 @@ Chain 是线性或 DAG 编排，表达循环和动态分支弱；LangGraph 把�
 
 ## 项目讲法
 
-投研 Agent 可以这样讲：
+以下是建议的投研流程，不是个人项目事实；实际经历应另附实现和验证证据：
 
-> 我没有让模型自由 ReAct 到底，而是用 LangGraph 把流程拆成意图识别、检索、工具调用、分析、风险校验和报告生成几个节点。每个节点只做一件事，状态里保存证券代码、时间范围、引用材料和工具结果。行情查询、公告检索、财务指标都通过工具节点执行。生成投资结论前有风险校验节点，涉及敏感建议会进入人工确认。线上失败时可以按 checkpoint 回放整条轨迹，定位是检索漏召回、工具参数错还是分析节点幻觉。
+> 将意图、检索、工具查询、分析和报告拆成节点，证券代码和时间范围显式入 State；风险校验分别放在工具执行前与结果展示前。用固定材料验证引用，用中断恢复验证审批前代码重执行时没有重复副作用。checkpoint 帮助续跑，trace 帮助排查；两者都不保证外部行情能复现。
 
 ## 系统设计追问
 

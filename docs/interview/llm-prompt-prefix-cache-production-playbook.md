@@ -2,7 +2,7 @@
 title: LLM Prompt/Prefix Cache 生产工程
 description: >-
   Prefix Cache 不是“把 system prompt 放进 Redis”。它复用的是完全相同 token 前缀的模型 KV 状态，主要减少
-  prefill 计算和 TTFT；收益取决于 prompt 布局、请求分布、引擎拓扑、版本兼容性与驱逐策略。把这件事做成生产能力，关键不是打开一个开关
+  prefill 计算和 TTFT；收益取决于 prompt 布局、请求分布、引擎拓扑、版本兼容性、权限隔离与驱逐策略，而非只打开开关。
 level: L2
 roles:
   - 应用开发
@@ -21,12 +21,12 @@ classification: inferred
 
 | 类型 | 是否要求 token 精确相同 | 复用对象 | 对最终语义的影响 | 首要指标 |
 | --- | --- | --- | --- | --- |
-| Prefix/KV Cache | 是，命中公共前缀 | 模型内部 K/V | 无，仍然生成当前回答 | saved prefill tokens、TTFT |
-| Prompt provider cache | 通常由上游按前缀规则识别 | 上游预填充状态与计费折扣 | 无 | cache read tokens、账单折扣 |
+| Prefix/KV Cache | 是，还需兼容模型状态/多模态输入 | 模型内部 K/V | 正确复用下仍生成当前回答，数值等价另验 | saved prefill tokens、TTFT |
+| Prompt provider cache | 由上游按具体缓存规则识别 | 上游预填充状态与计费折扣 | 不直接返回历史答案；规则按部署版本核验 | cache read tokens、账单折扣 |
 | 精确响应缓存 | 请求等价 | 已验证最终响应 | 直接返回历史语义 | 响应命中、E2E 延迟 |
 | 语义响应缓存 | 否，近似匹配 | 历史响应/证据 | 可能复用答案，风险较高 | safe reuse precision |
 
-因此 Prefix Cache 的安全模型更接近计算复用：只要前缀 token 确实完全相同，它不会把 A 用户的回答给 B 用户。但它仍有安全和治理问题：共享前缀不能混入用户私有内容；缓存命中日志可能暴露敏感 prompt 结构；一个策略或工具 schema 升级会造成兼容域分裂；错误的 prompt 拼接会让本应共享的前缀永远无法命中。
+因此Prefix Cache更接近计算复用，不直接复用历史答案。但安全依赖兼容模型状态、完整缓存键和授权域，而非仅token相同：公共预热不能混入用户私有内容；缓存日志与命中时间可能暴露prompt信息；策略/schema升级会分裂兼容域；拼接不稳定会破坏共享前缀。
 
 ## 三、命中契约：不是字符串相同，而是 token 前缀相同
 
@@ -52,6 +52,8 @@ prefix_domain = hash(
 它不一定等于物理 cache key，而是发布和观测的逻辑边界。不同 domain 的 K/V 不能互用；同 domain 内才讨论前缀布局、预热和容量。这样模型或 policy 升级时，团队能预计命中下降属于预期冷启动，还是某个模板变更意外破坏了共享性。
 
 ### 3.1 Canonicalization 的正确位置
+
+[vLLM 官方缓存设计](https://docs.vllm.ai/en/latest/design/prefix_caching/) 实读片段说明缓存完整 block，键包含父哈希、block token、LoRA ID、多模态输入哈希及隔离盐。相同图像占位 token 不代表同一图像；`cache_salt` 限制信任组之间复用，缓解命中时间侧信道，应由可信网关按授权域注入，不能任客户端选择别人的盐。token 相同和“不会改变输出”均以正确键及兼容模型状态为前提，不是安全证明或逐位数值保证。滚动文档支持情况仍需对照部署版本。
 
 对于 JSON 工具 schema 和固定配置，可在**生成公共前缀之前**进行 canonical serialization：固定字段顺序、稳定数字格式、明确默认值和字符编码。不能在已生成的用户消息上做激进规范化，因为那会改变语义。原则是“对受控配置做确定性构建，对用户内容保持原样”。
 
@@ -109,7 +111,9 @@ Prefix Cache 占用的仍是 KV 内存，不能无限保留。容量预算应至
 
 可以定义近似价值函数：
 
-$$value(prefix)=expected\_hits\times saved\_prefill\_ms - memory\_bytes\times eviction\_pressure$$
+$$value(prefix)=H\times S-\lambda\times M$$
+
+H 是固定窗口内预期命中次数，S 是每次节省毫秒，M 是占用字节；λ 须有毫秒/字节单位，表示相同窗口的容量机会成本。这是待标定的启发式，不能把无单位的驱逐压力与毫秒相减。
 
 实际实现可用 LRU、LFU、成本加权 LFU、TTL、按租户配额或按 domain 独立池。最忌讳的是用一个全局 LRU 让低价值的超长前缀挤掉高频公共规则，或让一个大租户独占全部共享 KV。
 
@@ -125,6 +129,8 @@ $$value(prefix)=expected\_hits\times saved\_prefill\_ms - memory\_bytes\times ev
 - `per-domain/per-tenant fairness`：避免收益被单一业务垄断。
 
 ## 七、发布治理：Prompt 变更也会造成性能回归
+
+构造两次输入 1,000 和 9,000 token，只有第一条命中 800 token：请求命中率50%，以总输入为分母的复用率仅800/10,000=8%。若只缓存完整16-token block，公共前缀810 token的理论上限为 `810 // 16 * 16 = 800`，实际还受驻留/驱逐限制。“可缓存 token”分母应另命名；token节省也不线性等于GPU毫秒节省。这不是压测或账单结果。
 
 PromptOps 常只关注输出质量，但对高流量服务来说，一行 system prompt 或工具 schema 的改动也可能导致缓存命中从 80% 降到 0%，TTFT、GPU 利用率和成本同步恶化。发布流程应把 prefix compatibility 当作非功能契约。
 
@@ -190,6 +196,8 @@ PromptOps 常只关注输出质量，但对高流量服务来说，一行 system
 **答法：**将 prompt/template/tool schema 等版本建成 prefix domain；发布前在录制流量评估最长公共前缀与冷启动容量；灰度运行新旧 domain、对稳定公共段做限速预热；若指标异常，优先检查动态字段和序列化顺序，再按 domain 回滚而非全量清缓存。
 
 ## 十一、项目讲法
+
+这是设计叙述示例，不是实绩。L1定位动态字段切断前缀；L2用token/KV字节及排队账本取舍；L3核对固定引擎版本的哈希实现和数值差异。
 
 > “我们把 Prompt 设计成稳定前缀与易变上下文两层：系统策略、工具 schema 和 few-shot 由确定性构建器生成，用户问题、会话摘要和 RAG 证据后置。路由按 prefix hash 做有限亲和，同时设置热点溢出避免排队。模型、tokenizer、模板、adapter 和 policy 组成兼容域，发布时新旧域并行灰度并预热公共段。我们用 token 加权命中、saved prefill ms、P95 TTFT、驱逐抖动和每租户公平性评估，而不是只报 hit rate；在权限或模板不确定时宁可回源，也不复用跨域 KV。”
 

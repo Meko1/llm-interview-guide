@@ -1,0 +1,483 @@
+{
+  "status": "rejected_not_shipped",
+  "scope": "Single-run local preview experiment; includes on-demand HTTP Brotli cost; not GitHub Pages/CDN latency or current release performance",
+  "reason": [
+    "Gzip payload larger than original HTTP Brotli payload",
+    "Uncached loader repeated work on reopening",
+    "No deployment-representative gain established"
+  ],
+  "baseline": {
+    "measuredAt": "2026-11-06T02:25:29.058Z",
+    "conditions": "Chromium, 390px; cold search after page load, cache disabled; throttled 2 Mbps / 80 ms / 4x CPU; single run, not production latency guarantee",
+    "cases": [
+      {
+        "throttled": false,
+        "coldMs": 8917,
+        "reopenedMs": 804,
+        "queries": [
+          {
+            "query": "LoRA",
+            "found": true,
+            "waitMs": 1228,
+            "results": [
+              {
+                "href": "/llm-interview-guide/interview/finetuning-platform-qna#sft-peft-lora-qlora",
+                "text": "#微调与模型平台高频问答SFT / PEFT / LoRA / QLoRA"
+              },
+              {
+                "href": "/llm-interview-guide/interview/foundation-requirements#_9-sft-peft-lora-qlora",
+                "text": "#大模型基础篇岗位要求总纲13 类技能高频追问9. SFT / PEFT / LoRA / QLoRA"
+              },
+              {
+                "href": "/llm-interview-guide/finetuning/lora#lora-qlora-详解",
+                "text": "#LoRA / QLoRA 详解"
+              }
+            ]
+          },
+          {
+            "query": "投机",
+            "found": true,
+            "waitMs": 1210,
+            "results": [
+              {
+                "href": "/llm-interview-guide/inference/speculative-sampling-proof#投机采样的分布保证-接受、纠错与速度账本",
+                "text": "#投机采样的分布保证：接受、纠错与速度账本"
+              },
+              {
+                "href": "/llm-interview-guide/advanced/primary-source-reading#_10-·-投机采样-概率恢复与真实加速",
+                "text": "#一手资料阅读地图：从模型机制到工程验证10 · 投机采样：概率恢复与真实加速"
+              },
+              {
+                "href": "/llm-interview-guide/inference/inference-optimization#六、投机解码-speculative-decoding",
+                "text": "#推理优化与部署六、投机解码（Speculative Decoding）"
+              }
+            ]
+          },
+          {
+            "query": "KV Cache",
+            "found": true,
+            "waitMs": 1220,
+            "results": [
+              {
+                "href": "/llm-interview-guide/inference/quantization#六、kv-cache-量化",
+                "text": "#量化实战深入（GPTQ / AWQ / SmoothQuant / KV 量化）六、KV Cache 量化"
+              },
+              {
+                "href": "/llm-interview-guide/inference/inference-optimization#_3-3-kv-cache-进一步优化",
+                "text": "#推理优化与部署三、KV Cache 与显存管理3.3 KV Cache 进一步优化"
+              },
+              {
+                "href": "/llm-interview-guide/inference/kv-cache#八、推理引擎的-kv-cache-支持对照",
+                "text": "#KV Cache 深度专题八、推理引擎的 KV Cache 支持对照"
+              }
+            ]
+          },
+          {
+            "query": "工具调用",
+            "found": true,
+            "waitMs": 1213,
+            "results": [
+              {
+                "href": "/llm-interview-guide/agent/function-calling-mcp#function-calling-与-mcp-工具调用",
+                "text": "#Function Calling 与 MCP（工具调用）"
+              },
+              {
+                "href": "/llm-interview-guide/engineering/voice-agent-production#七、工具调用、确认与语音-ux",
+                "text": "#实时语音 Agent 生产化：低延迟、可打断与可审计会话七、工具调用、确认与语音 UX"
+              },
+              {
+                "href": "/llm-interview-guide/agent/function-calling-mcp#工具调用验收-先合法-再有权-最后确认业务成功",
+                "text": "#Function Calling 与 MCP（工具调用）高频追问工具调用验收：先合法，再有权，最后确认业务成功"
+              }
+            ]
+          },
+          {
+            "query": "RLHF",
+            "found": true,
+            "waitMs": 1219,
+            "results": [
+              {
+                "href": "/llm-interview-guide/interview/foundation-requirements#_10-rlhf-dpo-偏好优化",
+                "text": "#大模型基础篇岗位要求总纲13 类技能高频追问10. RLHF / DPO / 偏好优化"
+              },
+              {
+                "href": "/llm-interview-guide/interview/finetuning-platform-qna#rlhf-dpo-偏好优化",
+                "text": "#微调与模型平台高频问答RLHF / DPO / 偏好优化"
+              },
+              {
+                "href": "/llm-interview-guide/advanced/agentic-rl#一、从-rlhf-到-agentic-rl",
+                "text": "#Agentic RL（智能体强化学习）一、从 RLHF 到 Agentic RL"
+              }
+            ]
+          }
+        ],
+        "resources": [
+          {
+            "name": "http://127.0.0.1:4191/llm-interview-guide/assets/chunks/@localSearchIndexroot.Dj1Y4QSW.js",
+            "transferSize": 1227577,
+            "encodedBodySize": 1227277,
+            "decodedBodySize": 6366306,
+            "duration": 7766
+          }
+        ],
+        "errors": []
+      },
+      {
+        "throttled": true,
+        "coldMs": 17328,
+        "reopenedMs": 2151,
+        "queries": [
+          {
+            "query": "LoRA",
+            "found": true,
+            "waitMs": 1248,
+            "results": [
+              {
+                "href": "/llm-interview-guide/interview/finetuning-platform-qna#sft-peft-lora-qlora",
+                "text": "#微调与模型平台高频问答SFT / PEFT / LoRA / QLoRA"
+              },
+              {
+                "href": "/llm-interview-guide/interview/foundation-requirements#_9-sft-peft-lora-qlora",
+                "text": "#大模型基础篇岗位要求总纲13 类技能高频追问9. SFT / PEFT / LoRA / QLoRA"
+              },
+              {
+                "href": "/llm-interview-guide/finetuning/lora#lora-qlora-详解",
+                "text": "#LoRA / QLoRA 详解"
+              }
+            ]
+          },
+          {
+            "query": "投机",
+            "found": true,
+            "waitMs": 1218,
+            "results": [
+              {
+                "href": "/llm-interview-guide/inference/speculative-sampling-proof#投机采样的分布保证-接受、纠错与速度账本",
+                "text": "#投机采样的分布保证：接受、纠错与速度账本"
+              },
+              {
+                "href": "/llm-interview-guide/advanced/primary-source-reading#_10-·-投机采样-概率恢复与真实加速",
+                "text": "#一手资料阅读地图：从模型机制到工程验证10 · 投机采样：概率恢复与真实加速"
+              },
+              {
+                "href": "/llm-interview-guide/inference/inference-optimization#六、投机解码-speculative-decoding",
+                "text": "#推理优化与部署六、投机解码（Speculative Decoding）"
+              }
+            ]
+          },
+          {
+            "query": "KV Cache",
+            "found": true,
+            "waitMs": 1219,
+            "results": [
+              {
+                "href": "/llm-interview-guide/inference/quantization#六、kv-cache-量化",
+                "text": "#量化实战深入（GPTQ / AWQ / SmoothQuant / KV 量化）六、KV Cache 量化"
+              },
+              {
+                "href": "/llm-interview-guide/inference/inference-optimization#_3-3-kv-cache-进一步优化",
+                "text": "#推理优化与部署三、KV Cache 与显存管理3.3 KV Cache 进一步优化"
+              },
+              {
+                "href": "/llm-interview-guide/inference/kv-cache#八、推理引擎的-kv-cache-支持对照",
+                "text": "#KV Cache 深度专题八、推理引擎的 KV Cache 支持对照"
+              }
+            ]
+          },
+          {
+            "query": "工具调用",
+            "found": true,
+            "waitMs": 1215,
+            "results": [
+              {
+                "href": "/llm-interview-guide/agent/function-calling-mcp#function-calling-与-mcp-工具调用",
+                "text": "#Function Calling 与 MCP（工具调用）"
+              },
+              {
+                "href": "/llm-interview-guide/engineering/voice-agent-production#七、工具调用、确认与语音-ux",
+                "text": "#实时语音 Agent 生产化：低延迟、可打断与可审计会话七、工具调用、确认与语音 UX"
+              },
+              {
+                "href": "/llm-interview-guide/agent/function-calling-mcp#工具调用验收-先合法-再有权-最后确认业务成功",
+                "text": "#Function Calling 与 MCP（工具调用）高频追问工具调用验收：先合法，再有权，最后确认业务成功"
+              }
+            ]
+          },
+          {
+            "query": "RLHF",
+            "found": true,
+            "waitMs": 1218,
+            "results": [
+              {
+                "href": "/llm-interview-guide/interview/foundation-requirements#_10-rlhf-dpo-偏好优化",
+                "text": "#大模型基础篇岗位要求总纲13 类技能高频追问10. RLHF / DPO / 偏好优化"
+              },
+              {
+                "href": "/llm-interview-guide/interview/finetuning-platform-qna#rlhf-dpo-偏好优化",
+                "text": "#微调与模型平台高频问答RLHF / DPO / 偏好优化"
+              },
+              {
+                "href": "/llm-interview-guide/advanced/agentic-rl#一、从-rlhf-到-agentic-rl",
+                "text": "#Agentic RL（智能体强化学习）一、从 RLHF 到 Agentic RL"
+              }
+            ]
+          }
+        ],
+        "resources": [
+          {
+            "name": "http://127.0.0.1:4191/llm-interview-guide/assets/chunks/@localSearchIndexroot.Dj1Y4QSW.js",
+            "transferSize": 1227577,
+            "encodedBodySize": 1227277,
+            "decodedBodySize": 6366306,
+            "duration": 13740
+          }
+        ],
+        "errors": []
+      }
+    ]
+  },
+  "gzipPrototype": {
+    "measuredAt": "2026-11-06T02:28:33.448Z",
+    "conditions": "Chromium, 390px; cold search after page load, cache disabled; throttled 2 Mbps / 80 ms / 4x CPU; single run, not production latency guarantee",
+    "cases": [
+      {
+        "throttled": false,
+        "coldMs": 878,
+        "reopenedMs": 719,
+        "queries": [
+          {
+            "query": "LoRA",
+            "found": true,
+            "waitMs": 1220,
+            "results": [
+              {
+                "href": "/llm-interview-guide/interview/finetuning-platform-qna#sft-peft-lora-qlora",
+                "text": "#微调与模型平台高频问答SFT / PEFT / LoRA / QLoRA"
+              },
+              {
+                "href": "/llm-interview-guide/interview/foundation-requirements#_9-sft-peft-lora-qlora",
+                "text": "#大模型基础篇岗位要求总纲13 类技能高频追问9. SFT / PEFT / LoRA / QLoRA"
+              },
+              {
+                "href": "/llm-interview-guide/finetuning/lora#lora-qlora-详解",
+                "text": "#LoRA / QLoRA 详解"
+              }
+            ]
+          },
+          {
+            "query": "投机",
+            "found": true,
+            "waitMs": 1221,
+            "results": [
+              {
+                "href": "/llm-interview-guide/inference/speculative-sampling-proof#投机采样的分布保证-接受、纠错与速度账本",
+                "text": "#投机采样的分布保证：接受、纠错与速度账本"
+              },
+              {
+                "href": "/llm-interview-guide/advanced/primary-source-reading#_10-·-投机采样-概率恢复与真实加速",
+                "text": "#一手资料阅读地图：从模型机制到工程验证10 · 投机采样：概率恢复与真实加速"
+              },
+              {
+                "href": "/llm-interview-guide/inference/inference-optimization#六、投机解码-speculative-decoding",
+                "text": "#推理优化与部署六、投机解码（Speculative Decoding）"
+              }
+            ]
+          },
+          {
+            "query": "KV Cache",
+            "found": true,
+            "waitMs": 1212,
+            "results": [
+              {
+                "href": "/llm-interview-guide/inference/quantization#六、kv-cache-量化",
+                "text": "#量化实战深入（GPTQ / AWQ / SmoothQuant / KV 量化）六、KV Cache 量化"
+              },
+              {
+                "href": "/llm-interview-guide/inference/inference-optimization#_3-3-kv-cache-进一步优化",
+                "text": "#推理优化与部署三、KV Cache 与显存管理3.3 KV Cache 进一步优化"
+              },
+              {
+                "href": "/llm-interview-guide/inference/kv-cache#八、推理引擎的-kv-cache-支持对照",
+                "text": "#KV Cache 深度专题八、推理引擎的 KV Cache 支持对照"
+              }
+            ]
+          },
+          {
+            "query": "工具调用",
+            "found": true,
+            "waitMs": 1221,
+            "results": [
+              {
+                "href": "/llm-interview-guide/agent/function-calling-mcp#function-calling-与-mcp-工具调用",
+                "text": "#Function Calling 与 MCP（工具调用）"
+              },
+              {
+                "href": "/llm-interview-guide/engineering/voice-agent-production#七、工具调用、确认与语音-ux",
+                "text": "#实时语音 Agent 生产化：低延迟、可打断与可审计会话七、工具调用、确认与语音 UX"
+              },
+              {
+                "href": "/llm-interview-guide/agent/function-calling-mcp#工具调用验收-先合法-再有权-最后确认业务成功",
+                "text": "#Function Calling 与 MCP（工具调用）高频追问工具调用验收：先合法，再有权，最后确认业务成功"
+              }
+            ]
+          },
+          {
+            "query": "RLHF",
+            "found": true,
+            "waitMs": 1223,
+            "results": [
+              {
+                "href": "/llm-interview-guide/interview/foundation-requirements#_10-rlhf-dpo-偏好优化",
+                "text": "#大模型基础篇岗位要求总纲13 类技能高频追问10. RLHF / DPO / 偏好优化"
+              },
+              {
+                "href": "/llm-interview-guide/interview/finetuning-platform-qna#rlhf-dpo-偏好优化",
+                "text": "#微调与模型平台高频问答RLHF / DPO / 偏好优化"
+              },
+              {
+                "href": "/llm-interview-guide/advanced/agentic-rl#一、从-rlhf-到-agentic-rl",
+                "text": "#Agentic RL（智能体强化学习）一、从 RLHF 到 Agentic RL"
+              }
+            ]
+          }
+        ],
+        "resources": [
+          {
+            "name": "http://127.0.0.1:4191/llm-interview-guide/assets/chunks/@localSearchIndexroot.v8_bvuvY.js",
+            "transferSize": 2359,
+            "encodedBodySize": 2059,
+            "decodedBodySize": 4333,
+            "duration": 6
+          },
+          {
+            "name": "http://127.0.0.1:4191/llm-interview-guide/assets/local-search-root.json.BQBpP0v5.gz",
+            "transferSize": 1785000,
+            "encodedBodySize": 1784700,
+            "decodedBodySize": 6366021,
+            "duration": 18
+          }
+        ],
+        "errors": []
+      },
+      {
+        "throttled": true,
+        "coldMs": 11086,
+        "reopenedMs": 10329,
+        "queries": [
+          {
+            "query": "LoRA",
+            "found": true,
+            "waitMs": 1274,
+            "results": [
+              {
+                "href": "/llm-interview-guide/interview/finetuning-platform-qna#sft-peft-lora-qlora",
+                "text": "#微调与模型平台高频问答SFT / PEFT / LoRA / QLoRA"
+              },
+              {
+                "href": "/llm-interview-guide/interview/foundation-requirements#_9-sft-peft-lora-qlora",
+                "text": "#大模型基础篇岗位要求总纲13 类技能高频追问9. SFT / PEFT / LoRA / QLoRA"
+              },
+              {
+                "href": "/llm-interview-guide/finetuning/lora#lora-qlora-详解",
+                "text": "#LoRA / QLoRA 详解"
+              }
+            ]
+          },
+          {
+            "query": "投机",
+            "found": true,
+            "waitMs": 1232,
+            "results": [
+              {
+                "href": "/llm-interview-guide/inference/speculative-sampling-proof#投机采样的分布保证-接受、纠错与速度账本",
+                "text": "#投机采样的分布保证：接受、纠错与速度账本"
+              },
+              {
+                "href": "/llm-interview-guide/advanced/primary-source-reading#_10-·-投机采样-概率恢复与真实加速",
+                "text": "#一手资料阅读地图：从模型机制到工程验证10 · 投机采样：概率恢复与真实加速"
+              },
+              {
+                "href": "/llm-interview-guide/inference/inference-optimization#六、投机解码-speculative-decoding",
+                "text": "#推理优化与部署六、投机解码（Speculative Decoding）"
+              }
+            ]
+          },
+          {
+            "query": "KV Cache",
+            "found": true,
+            "waitMs": 1231,
+            "results": [
+              {
+                "href": "/llm-interview-guide/inference/quantization#六、kv-cache-量化",
+                "text": "#量化实战深入（GPTQ / AWQ / SmoothQuant / KV 量化）六、KV Cache 量化"
+              },
+              {
+                "href": "/llm-interview-guide/inference/inference-optimization#_3-3-kv-cache-进一步优化",
+                "text": "#推理优化与部署三、KV Cache 与显存管理3.3 KV Cache 进一步优化"
+              },
+              {
+                "href": "/llm-interview-guide/inference/kv-cache#八、推理引擎的-kv-cache-支持对照",
+                "text": "#KV Cache 深度专题八、推理引擎的 KV Cache 支持对照"
+              }
+            ]
+          },
+          {
+            "query": "工具调用",
+            "found": true,
+            "waitMs": 1220,
+            "results": [
+              {
+                "href": "/llm-interview-guide/agent/function-calling-mcp#function-calling-与-mcp-工具调用",
+                "text": "#Function Calling 与 MCP（工具调用）"
+              },
+              {
+                "href": "/llm-interview-guide/engineering/voice-agent-production#七、工具调用、确认与语音-ux",
+                "text": "#实时语音 Agent 生产化：低延迟、可打断与可审计会话七、工具调用、确认与语音 UX"
+              },
+              {
+                "href": "/llm-interview-guide/agent/function-calling-mcp#工具调用验收-先合法-再有权-最后确认业务成功",
+                "text": "#Function Calling 与 MCP（工具调用）高频追问工具调用验收：先合法，再有权，最后确认业务成功"
+              }
+            ]
+          },
+          {
+            "query": "RLHF",
+            "found": true,
+            "waitMs": 1232,
+            "results": [
+              {
+                "href": "/llm-interview-guide/interview/foundation-requirements#_10-rlhf-dpo-偏好优化",
+                "text": "#大模型基础篇岗位要求总纲13 类技能高频追问10. RLHF / DPO / 偏好优化"
+              },
+              {
+                "href": "/llm-interview-guide/interview/finetuning-platform-qna#rlhf-dpo-偏好优化",
+                "text": "#微调与模型平台高频问答RLHF / DPO / 偏好优化"
+              },
+              {
+                "href": "/llm-interview-guide/advanced/agentic-rl#一、从-rlhf-到-agentic-rl",
+                "text": "#Agentic RL（智能体强化学习）一、从 RLHF 到 Agentic RL"
+              }
+            ]
+          }
+        ],
+        "resources": [
+          {
+            "name": "http://127.0.0.1:4191/llm-interview-guide/assets/chunks/@localSearchIndexroot.v8_bvuvY.js",
+            "transferSize": 2359,
+            "encodedBodySize": 2059,
+            "decodedBodySize": 4333,
+            "duration": 104
+          },
+          {
+            "name": "http://127.0.0.1:4191/llm-interview-guide/assets/local-search-root.json.BQBpP0v5.gz",
+            "transferSize": 1785000,
+            "encodedBodySize": 1784700,
+            "decodedBodySize": 6366021,
+            "duration": 7286
+          }
+        ],
+        "errors": []
+      }
+    ]
+  }
+}

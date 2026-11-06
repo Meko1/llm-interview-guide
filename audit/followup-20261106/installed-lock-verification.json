@@ -1,0 +1,933 @@
+{
+  "capturedAt": "2026-11-06T02:58:06.064Z",
+  "repository": "D:\\llm-projects\\llm-interview-guide",
+  "checkedPackages": 185,
+  "mismatches": [],
+  "packages": [
+    {
+      "name": "node_modules/@algolia/abtesting",
+      "locked": "1.18.1",
+      "installed": "1.18.1"
+    },
+    {
+      "name": "node_modules/@algolia/autocomplete-core",
+      "locked": "1.17.7",
+      "installed": "1.17.7"
+    },
+    {
+      "name": "node_modules/@algolia/autocomplete-plugin-algolia-insights",
+      "locked": "1.17.7",
+      "installed": "1.17.7"
+    },
+    {
+      "name": "node_modules/@algolia/autocomplete-preset-algolia",
+      "locked": "1.17.7",
+      "installed": "1.17.7"
+    },
+    {
+      "name": "node_modules/@algolia/autocomplete-shared",
+      "locked": "1.17.7",
+      "installed": "1.17.7"
+    },
+    {
+      "name": "node_modules/@algolia/client-abtesting",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/client-analytics",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/client-common",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/client-insights",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/client-personalization",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/client-query-suggestions",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/client-search",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/ingestion",
+      "locked": "1.52.1",
+      "installed": "1.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/monitoring",
+      "locked": "1.52.1",
+      "installed": "1.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/recommend",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/requester-browser-xhr",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/requester-fetch",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@algolia/requester-node-http",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/@babel/helper-string-parser",
+      "locked": "7.29.13",
+      "installed": "7.29.13"
+    },
+    {
+      "name": "node_modules/@babel/helper-validator-identifier",
+      "locked": "7.29.7",
+      "installed": "7.29.7"
+    },
+    {
+      "name": "node_modules/@babel/parser",
+      "locked": "7.29.13",
+      "installed": "7.29.13"
+    },
+    {
+      "name": "node_modules/@babel/types",
+      "locked": "7.29.11",
+      "installed": "7.29.11"
+    },
+    {
+      "name": "node_modules/@docsearch/css",
+      "locked": "3.8.2",
+      "installed": "3.8.2"
+    },
+    {
+      "name": "node_modules/@docsearch/js",
+      "locked": "3.8.2",
+      "installed": "3.8.2"
+    },
+    {
+      "name": "node_modules/@docsearch/react",
+      "locked": "3.8.2",
+      "installed": "3.8.2"
+    },
+    {
+      "name": "node_modules/@esbuild/win32-x64",
+      "locked": "0.21.5",
+      "installed": "0.21.5"
+    },
+    {
+      "name": "node_modules/@iconify-json/simple-icons",
+      "locked": "1.2.83",
+      "installed": "1.2.83"
+    },
+    {
+      "name": "node_modules/@iconify/types",
+      "locked": "2.0.0",
+      "installed": "2.0.0"
+    },
+    {
+      "name": "node_modules/@jridgewell/sourcemap-codec",
+      "locked": "1.6.0",
+      "installed": "1.6.0"
+    },
+    {
+      "name": "node_modules/@rollup/rollup-win32-x64-gnu",
+      "locked": "4.60.4",
+      "installed": "4.60.4"
+    },
+    {
+      "name": "node_modules/@rollup/rollup-win32-x64-msvc",
+      "locked": "4.60.4",
+      "installed": "4.60.4"
+    },
+    {
+      "name": "node_modules/@shikijs/core",
+      "locked": "2.5.0",
+      "installed": "2.5.0"
+    },
+    {
+      "name": "node_modules/@shikijs/engine-javascript",
+      "locked": "2.5.0",
+      "installed": "2.5.0"
+    },
+    {
+      "name": "node_modules/@shikijs/engine-oniguruma",
+      "locked": "2.5.0",
+      "installed": "2.5.0"
+    },
+    {
+      "name": "node_modules/@shikijs/langs",
+      "locked": "2.5.0",
+      "installed": "2.5.0"
+    },
+    {
+      "name": "node_modules/@shikijs/themes",
+      "locked": "2.5.0",
+      "installed": "2.5.0"
+    },
+    {
+      "name": "node_modules/@shikijs/transformers",
+      "locked": "2.5.0",
+      "installed": "2.5.0"
+    },
+    {
+      "name": "node_modules/@shikijs/types",
+      "locked": "2.5.0",
+      "installed": "2.5.0"
+    },
+    {
+      "name": "node_modules/@shikijs/vscode-textmate",
+      "locked": "10.0.2",
+      "installed": "10.0.2"
+    },
+    {
+      "name": "node_modules/@types/estree",
+      "locked": "1.0.8",
+      "installed": "1.0.8"
+    },
+    {
+      "name": "node_modules/@types/hast",
+      "locked": "3.0.4",
+      "installed": "3.0.4"
+    },
+    {
+      "name": "node_modules/@types/linkify-it",
+      "locked": "5.0.0",
+      "installed": "5.0.0"
+    },
+    {
+      "name": "node_modules/@types/markdown-it",
+      "locked": "14.1.2",
+      "installed": "14.1.2"
+    },
+    {
+      "name": "node_modules/@types/mdast",
+      "locked": "4.0.4",
+      "installed": "4.0.4"
+    },
+    {
+      "name": "node_modules/@types/mdurl",
+      "locked": "2.0.0",
+      "installed": "2.0.0"
+    },
+    {
+      "name": "node_modules/@types/unist",
+      "locked": "3.0.3",
+      "installed": "3.0.3"
+    },
+    {
+      "name": "node_modules/@types/web-bluetooth",
+      "locked": "0.0.21",
+      "installed": "0.0.21"
+    },
+    {
+      "name": "node_modules/@ungap/structured-clone",
+      "locked": "1.3.1",
+      "installed": "1.3.1"
+    },
+    {
+      "name": "node_modules/@vitejs/plugin-vue",
+      "locked": "5.2.4",
+      "installed": "5.2.4"
+    },
+    {
+      "name": "node_modules/@vue/compiler-core",
+      "locked": "3.5.45",
+      "installed": "3.5.45"
+    },
+    {
+      "name": "node_modules/@vue/compiler-dom",
+      "locked": "3.5.45",
+      "installed": "3.5.45"
+    },
+    {
+      "name": "node_modules/@vue/compiler-sfc",
+      "locked": "3.5.45",
+      "installed": "3.5.45"
+    },
+    {
+      "name": "node_modules/@vue/compiler-ssr",
+      "locked": "3.5.45",
+      "installed": "3.5.45"
+    },
+    {
+      "name": "node_modules/@vue/devtools-api",
+      "locked": "7.7.9",
+      "installed": "7.7.9"
+    },
+    {
+      "name": "node_modules/@vue/devtools-kit",
+      "locked": "7.7.9",
+      "installed": "7.7.9"
+    },
+    {
+      "name": "node_modules/@vue/devtools-shared",
+      "locked": "7.7.9",
+      "installed": "7.7.9"
+    },
+    {
+      "name": "node_modules/@vue/reactivity",
+      "locked": "3.5.45",
+      "installed": "3.5.45"
+    },
+    {
+      "name": "node_modules/@vue/runtime-core",
+      "locked": "3.5.45",
+      "installed": "3.5.45"
+    },
+    {
+      "name": "node_modules/@vue/runtime-dom",
+      "locked": "3.5.45",
+      "installed": "3.5.45"
+    },
+    {
+      "name": "node_modules/@vue/server-renderer",
+      "locked": "3.5.45",
+      "installed": "3.5.45"
+    },
+    {
+      "name": "node_modules/@vue/shared",
+      "locked": "3.5.45",
+      "installed": "3.5.45"
+    },
+    {
+      "name": "node_modules/@vueuse/core",
+      "locked": "12.8.2",
+      "installed": "12.8.2"
+    },
+    {
+      "name": "node_modules/@vueuse/integrations",
+      "locked": "12.8.2",
+      "installed": "12.8.2"
+    },
+    {
+      "name": "node_modules/@vueuse/metadata",
+      "locked": "12.8.2",
+      "installed": "12.8.2"
+    },
+    {
+      "name": "node_modules/@vueuse/shared",
+      "locked": "12.8.2",
+      "installed": "12.8.2"
+    },
+    {
+      "name": "node_modules/@xmldom/xmldom",
+      "locked": "0.9.12",
+      "installed": "0.9.12"
+    },
+    {
+      "name": "node_modules/algoliasearch",
+      "locked": "5.52.1",
+      "installed": "5.52.1"
+    },
+    {
+      "name": "node_modules/ansi-colors",
+      "locked": "4.1.3",
+      "installed": "4.1.3"
+    },
+    {
+      "name": "node_modules/argparse",
+      "locked": "1.0.10",
+      "installed": "1.0.10"
+    },
+    {
+      "name": "node_modules/birpc",
+      "locked": "2.9.0",
+      "installed": "2.9.0"
+    },
+    {
+      "name": "node_modules/boolbase",
+      "locked": "1.0.0",
+      "installed": "1.0.0"
+    },
+    {
+      "name": "node_modules/ccount",
+      "locked": "2.0.1",
+      "installed": "2.0.1"
+    },
+    {
+      "name": "node_modules/character-entities-html4",
+      "locked": "2.1.0",
+      "installed": "2.1.0"
+    },
+    {
+      "name": "node_modules/character-entities-legacy",
+      "locked": "3.0.0",
+      "installed": "3.0.0"
+    },
+    {
+      "name": "node_modules/cheerio",
+      "locked": "1.0.0-rc.10",
+      "installed": "1.0.0-rc.10"
+    },
+    {
+      "name": "node_modules/cheerio-select",
+      "locked": "1.6.0",
+      "installed": "1.6.0"
+    },
+    {
+      "name": "node_modules/comma-separated-tokens",
+      "locked": "2.0.3",
+      "installed": "2.0.3"
+    },
+    {
+      "name": "node_modules/commander",
+      "locked": "6.2.1",
+      "installed": "6.2.1"
+    },
+    {
+      "name": "node_modules/copy-anything",
+      "locked": "4.0.5",
+      "installed": "4.0.5"
+    },
+    {
+      "name": "node_modules/css-select",
+      "locked": "4.3.0",
+      "installed": "4.3.0"
+    },
+    {
+      "name": "node_modules/css-what",
+      "locked": "6.2.2",
+      "installed": "6.2.2"
+    },
+    {
+      "name": "node_modules/csstype",
+      "locked": "3.2.3",
+      "installed": "3.2.3"
+    },
+    {
+      "name": "node_modules/dequal",
+      "locked": "2.0.3",
+      "installed": "2.0.3"
+    },
+    {
+      "name": "node_modules/devlop",
+      "locked": "1.1.0",
+      "installed": "1.1.0"
+    },
+    {
+      "name": "node_modules/dom-serializer",
+      "locked": "1.4.1",
+      "installed": "1.4.1"
+    },
+    {
+      "name": "node_modules/dom-serializer/node_modules/entities",
+      "locked": "2.2.0",
+      "installed": "2.2.0"
+    },
+    {
+      "name": "node_modules/domelementtype",
+      "locked": "2.3.0",
+      "installed": "2.3.0"
+    },
+    {
+      "name": "node_modules/domhandler",
+      "locked": "4.3.1",
+      "installed": "4.3.1"
+    },
+    {
+      "name": "node_modules/domutils",
+      "locked": "2.8.0",
+      "installed": "2.8.0"
+    },
+    {
+      "name": "node_modules/emoji-regex-xs",
+      "locked": "1.0.0",
+      "installed": "1.0.0"
+    },
+    {
+      "name": "node_modules/entities",
+      "locked": "7.0.1",
+      "installed": "7.0.1"
+    },
+    {
+      "name": "node_modules/esbuild",
+      "locked": "0.21.5",
+      "installed": "0.21.5"
+    },
+    {
+      "name": "node_modules/escape-goat",
+      "locked": "3.0.0",
+      "installed": "3.0.0"
+    },
+    {
+      "name": "node_modules/esm",
+      "locked": "3.2.25",
+      "installed": "3.2.25"
+    },
+    {
+      "name": "node_modules/esprima",
+      "locked": "4.0.1",
+      "installed": "4.0.1"
+    },
+    {
+      "name": "node_modules/estree-walker",
+      "locked": "2.0.2",
+      "installed": "2.0.2"
+    },
+    {
+      "name": "node_modules/extend-shallow",
+      "locked": "2.0.1",
+      "installed": "2.0.1"
+    },
+    {
+      "name": "node_modules/focus-trap",
+      "locked": "7.8.0",
+      "installed": "7.8.0"
+    },
+    {
+      "name": "node_modules/gray-matter",
+      "locked": "4.0.3",
+      "installed": "4.0.3"
+    },
+    {
+      "name": "node_modules/hast-util-to-html",
+      "locked": "9.0.5",
+      "installed": "9.0.5"
+    },
+    {
+      "name": "node_modules/hast-util-whitespace",
+      "locked": "3.0.0",
+      "installed": "3.0.0"
+    },
+    {
+      "name": "node_modules/hookable",
+      "locked": "5.5.3",
+      "installed": "5.5.3"
+    },
+    {
+      "name": "node_modules/html-void-elements",
+      "locked": "3.0.0",
+      "installed": "3.0.0"
+    },
+    {
+      "name": "node_modules/htmlparser2",
+      "locked": "6.1.0",
+      "installed": "6.1.0"
+    },
+    {
+      "name": "node_modules/htmlparser2/node_modules/entities",
+      "locked": "2.2.0",
+      "installed": "2.2.0"
+    },
+    {
+      "name": "node_modules/is-extendable",
+      "locked": "0.1.1",
+      "installed": "0.1.1"
+    },
+    {
+      "name": "node_modules/is-what",
+      "locked": "5.5.0",
+      "installed": "5.5.0"
+    },
+    {
+      "name": "node_modules/js-yaml",
+      "locked": "3.15.2",
+      "installed": "3.15.2"
+    },
+    {
+      "name": "node_modules/juice",
+      "locked": "8.1.0",
+      "installed": "8.1.0"
+    },
+    {
+      "name": "node_modules/kind-of",
+      "locked": "6.0.3",
+      "installed": "6.0.3"
+    },
+    {
+      "name": "node_modules/linkify-it",
+      "locked": "6.1.0",
+      "installed": "6.1.0"
+    },
+    {
+      "name": "node_modules/magic-string",
+      "locked": "0.30.21",
+      "installed": "0.30.21"
+    },
+    {
+      "name": "node_modules/mark.js",
+      "locked": "8.11.1",
+      "installed": "8.11.1"
+    },
+    {
+      "name": "node_modules/markdown-it",
+      "locked": "15.0.3",
+      "installed": "15.0.3"
+    },
+    {
+      "name": "node_modules/markdown-it-mathjax3",
+      "locked": "4.3.2",
+      "installed": "4.3.2"
+    },
+    {
+      "name": "node_modules/markdown-it/node_modules/argparse",
+      "locked": "3.0.4",
+      "installed": "3.0.4"
+    },
+    {
+      "name": "node_modules/markdown-it/node_modules/entities",
+      "locked": "8.1.0",
+      "installed": "8.1.0"
+    },
+    {
+      "name": "node_modules/mathjax-full",
+      "locked": "3.2.1",
+      "installed": "3.2.1"
+    },
+    {
+      "name": "node_modules/mdast-util-to-hast",
+      "locked": "13.2.1",
+      "installed": "13.2.1"
+    },
+    {
+      "name": "node_modules/mdurl",
+      "locked": "2.1.0",
+      "installed": "2.1.0"
+    },
+    {
+      "name": "node_modules/mensch",
+      "locked": "0.3.4",
+      "installed": "0.3.4"
+    },
+    {
+      "name": "node_modules/mhchemparser",
+      "locked": "4.2.1",
+      "installed": "4.2.1"
+    },
+    {
+      "name": "node_modules/micromark-util-character",
+      "locked": "2.1.1",
+      "installed": "2.1.1"
+    },
+    {
+      "name": "node_modules/micromark-util-encode",
+      "locked": "2.0.1",
+      "installed": "2.0.1"
+    },
+    {
+      "name": "node_modules/micromark-util-sanitize-uri",
+      "locked": "2.0.1",
+      "installed": "2.0.1"
+    },
+    {
+      "name": "node_modules/micromark-util-symbol",
+      "locked": "2.0.1",
+      "installed": "2.0.1"
+    },
+    {
+      "name": "node_modules/micromark-util-types",
+      "locked": "2.0.2",
+      "installed": "2.0.2"
+    },
+    {
+      "name": "node_modules/mime",
+      "locked": "2.6.0",
+      "installed": "2.6.0"
+    },
+    {
+      "name": "node_modules/minisearch",
+      "locked": "7.2.0",
+      "installed": "7.2.0"
+    },
+    {
+      "name": "node_modules/mitt",
+      "locked": "3.0.1",
+      "installed": "3.0.1"
+    },
+    {
+      "name": "node_modules/mj-context-menu",
+      "locked": "0.6.1",
+      "installed": "0.6.1"
+    },
+    {
+      "name": "node_modules/nanoid",
+      "locked": "3.3.20",
+      "installed": "3.3.20"
+    },
+    {
+      "name": "node_modules/node-fetch",
+      "locked": "2.7.0",
+      "installed": "2.7.0"
+    },
+    {
+      "name": "node_modules/nth-check",
+      "locked": "2.1.1",
+      "installed": "2.1.1"
+    },
+    {
+      "name": "node_modules/oniguruma-to-es",
+      "locked": "3.1.1",
+      "installed": "3.1.1"
+    },
+    {
+      "name": "node_modules/parse5",
+      "locked": "6.0.1",
+      "installed": "6.0.1"
+    },
+    {
+      "name": "node_modules/parse5-htmlparser2-tree-adapter",
+      "locked": "6.0.1",
+      "installed": "6.0.1"
+    },
+    {
+      "name": "node_modules/perfect-debounce",
+      "locked": "1.0.0",
+      "installed": "1.0.0"
+    },
+    {
+      "name": "node_modules/picocolors",
+      "locked": "1.1.1",
+      "installed": "1.1.1"
+    },
+    {
+      "name": "node_modules/postcss",
+      "locked": "8.5.32",
+      "installed": "8.5.32"
+    },
+    {
+      "name": "node_modules/preact",
+      "locked": "10.29.2",
+      "installed": "10.29.2"
+    },
+    {
+      "name": "node_modules/property-information",
+      "locked": "7.1.0",
+      "installed": "7.1.0"
+    },
+    {
+      "name": "node_modules/punycode.js",
+      "locked": "2.3.1",
+      "installed": "2.3.1"
+    },
+    {
+      "name": "node_modules/regex",
+      "locked": "6.1.0",
+      "installed": "6.1.0"
+    },
+    {
+      "name": "node_modules/regex-recursion",
+      "locked": "6.0.2",
+      "installed": "6.0.2"
+    },
+    {
+      "name": "node_modules/regex-utilities",
+      "locked": "2.3.0",
+      "installed": "2.3.0"
+    },
+    {
+      "name": "node_modules/rfdc",
+      "locked": "1.4.1",
+      "installed": "1.4.1"
+    },
+    {
+      "name": "node_modules/rollup",
+      "locked": "4.60.4",
+      "installed": "4.60.4"
+    },
+    {
+      "name": "node_modules/search-insights",
+      "locked": "2.17.3",
+      "installed": "2.17.3"
+    },
+    {
+      "name": "node_modules/section-matter",
+      "locked": "1.0.0",
+      "installed": "1.0.0"
+    },
+    {
+      "name": "node_modules/shiki",
+      "locked": "2.5.0",
+      "installed": "2.5.0"
+    },
+    {
+      "name": "node_modules/slick",
+      "locked": "1.12.2",
+      "installed": "1.12.2"
+    },
+    {
+      "name": "node_modules/source-map-js",
+      "locked": "1.2.2",
+      "installed": "1.2.2"
+    },
+    {
+      "name": "node_modules/space-separated-tokens",
+      "locked": "2.0.2",
+      "installed": "2.0.2"
+    },
+    {
+      "name": "node_modules/speakingurl",
+      "locked": "14.0.1",
+      "installed": "14.0.1"
+    },
+    {
+      "name": "node_modules/speech-rule-engine",
+      "locked": "4.1.5",
+      "installed": "4.1.5"
+    },
+    {
+      "name": "node_modules/speech-rule-engine/node_modules/commander",
+      "locked": "13.1.0",
+      "installed": "13.1.0"
+    },
+    {
+      "name": "node_modules/sprintf-js",
+      "locked": "1.0.3",
+      "installed": "1.0.3"
+    },
+    {
+      "name": "node_modules/stringify-entities",
+      "locked": "4.0.4",
+      "installed": "4.0.4"
+    },
+    {
+      "name": "node_modules/strip-bom-string",
+      "locked": "1.0.0",
+      "installed": "1.0.0"
+    },
+    {
+      "name": "node_modules/superjson",
+      "locked": "2.2.6",
+      "installed": "2.2.6"
+    },
+    {
+      "name": "node_modules/tabbable",
+      "locked": "6.4.0",
+      "installed": "6.4.0"
+    },
+    {
+      "name": "node_modules/tr46",
+      "locked": "0.0.3",
+      "installed": "0.0.3"
+    },
+    {
+      "name": "node_modules/trim-lines",
+      "locked": "3.0.1",
+      "installed": "3.0.1"
+    },
+    {
+      "name": "node_modules/tslib",
+      "locked": "2.9.1",
+      "installed": "2.9.1"
+    },
+    {
+      "name": "node_modules/uc.micro",
+      "locked": "3.0.0",
+      "installed": "3.0.0"
+    },
+    {
+      "name": "node_modules/unist-util-is",
+      "locked": "6.0.1",
+      "installed": "6.0.1"
+    },
+    {
+      "name": "node_modules/unist-util-position",
+      "locked": "5.0.0",
+      "installed": "5.0.0"
+    },
+    {
+      "name": "node_modules/unist-util-stringify-position",
+      "locked": "4.0.0",
+      "installed": "4.0.0"
+    },
+    {
+      "name": "node_modules/unist-util-visit",
+      "locked": "5.1.0",
+      "installed": "5.1.0"
+    },
+    {
+      "name": "node_modules/unist-util-visit-parents",
+      "locked": "6.0.2",
+      "installed": "6.0.2"
+    },
+    {
+      "name": "node_modules/valid-data-url",
+      "locked": "3.0.1",
+      "installed": "3.0.1"
+    },
+    {
+      "name": "node_modules/vfile",
+      "locked": "6.0.3",
+      "installed": "6.0.3"
+    },
+    {
+      "name": "node_modules/vfile-message",
+      "locked": "4.0.3",
+      "installed": "4.0.3"
+    },
+    {
+      "name": "node_modules/vite",
+      "locked": "5.4.21",
+      "installed": "5.4.21"
+    },
+    {
+      "name": "node_modules/vitepress",
+      "locked": "1.6.4",
+      "installed": "1.6.4"
+    },
+    {
+      "name": "node_modules/vue",
+      "locked": "3.5.45",
+      "installed": "3.5.45"
+    },
+    {
+      "name": "node_modules/web-resource-inliner",
+      "locked": "6.0.1",
+      "installed": "6.0.1"
+    },
+    {
+      "name": "node_modules/web-resource-inliner/node_modules/domhandler",
+      "locked": "3.3.0",
+      "installed": "3.3.0"
+    },
+    {
+      "name": "node_modules/web-resource-inliner/node_modules/entities",
+      "locked": "2.2.0",
+      "installed": "2.2.0"
+    },
+    {
+      "name": "node_modules/web-resource-inliner/node_modules/htmlparser2",
+      "locked": "5.0.1",
+      "installed": "5.0.1"
+    },
+    {
+      "name": "node_modules/webidl-conversions",
+      "locked": "3.0.1",
+      "installed": "3.0.1"
+    },
+    {
+      "name": "node_modules/whatwg-url",
+      "locked": "5.0.0",
+      "installed": "5.0.0"
+    },
+    {
+      "name": "node_modules/wicked-good-xpath",
+      "locked": "1.3.0",
+      "installed": "1.3.0"
+    },
+    {
+      "name": "node_modules/zwitch",
+      "locked": "2.0.4",
+      "installed": "2.0.4"
+    }
+  ]
+}

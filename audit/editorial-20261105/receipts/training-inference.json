@@ -1,0 +1,310 @@
+{
+  "group": "training-inference",
+  "entries": [
+    {
+      "path": "docs/pretraining/ai-infra-networking.md",
+      "status": "edited",
+      "summary": "完整通读；限定 TP 布局、带宽与 MFU 断言，补 ring 字节账本、trace 排障与弹性状态恢复边界。",
+      "sources": [
+        "https://docs.nvidia.com/deeplearning/nccl/archives/nccl_2193/user-guide/docs/usage/collectives.html",
+        "https://docs.pytorch.org/docs/stable/elastic/run.html#important-notices",
+        "https://raw.githubusercontent.com/pytorch/pytorch/v2.5.1/torch/distributed/run.py"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "HCCL/NVLS 和目标集群拓扑未实测；硬件带宽需按部署型号复核。",
+        "PyTorch stable 页面 403；恢复语义改核 v2.5.1 官方源文件。"
+      ]
+    },
+    {
+      "path": "docs/pretraining/compute-budget.md",
+      "status": "edited",
+      "summary": "完整通读并保留原构造推导；补数据可行域、状态恢复预算与成本模型的 MFU/延迟假设。",
+      "sources": [
+        "https://arxiv.org/abs/2203.15556",
+        "https://arxiv.org/html/2401.00448v2"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "未执行真实训练与生命周期成本实验。"
+      ]
+    },
+    {
+      "path": "docs/pretraining/contamination-audit.md",
+      "status": "edited",
+      "summary": "完整通读并保留三层证据、候选代码与统计推导；指出作者 README 入口文件名不一致，避免声称可直接复现。",
+      "sources": [
+        "https://arxiv.org/html/2310.17623v2",
+        "https://raw.githubusercontent.com/tatsu-lab/test_set_contamination/main/README.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "未运行真实模型检验；复现需固定仓库提交并确认入口。"
+      ]
+    },
+    {
+      "path": "docs/pretraining/data-engineering.md",
+      "status": "edited",
+      "summary": "完整通读；删除跨模型因果、留存率和数据墙绝对断言，限定 LIMA/DoReMi 结论，补血缘、有效 token、合成验证与恢复账本。",
+      "sources": [
+        "https://huggingface.co/datasets/HuggingFaceFW/fineweb-edu",
+        "https://arxiv.org/abs/2305.10429",
+        "https://arxiv.org/abs/2305.11206"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "FineWeb-Edu 数据卡本次获取未完整显示；教育评分细节保留待锁定 revision 核对。"
+      ]
+    },
+    {
+      "path": "docs/pretraining/distributed-training.md",
+      "status": "edited",
+      "summary": "完整通读；修正 Adam 主副本重复计数、GB/GiB 与 ZeRO 固定倍率，补分片公式、OOM 阶段与有效 batch/恢复边界。",
+      "sources": [
+        "https://www.deepspeed.ai/tutorials/zero/"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "FSDP API 与目标精度/重分片支持须按部署版本核查。"
+      ]
+    },
+    {
+      "path": "docs/pretraining/llm-training-pipeline.md",
+      "status": "edited",
+      "summary": "完整通读；把线性流程改为条件决策，修正 SFT 知识/GRPO 奖励分工，补各阶段交接门禁与独立评测闭环。",
+      "sources": [
+        "https://arxiv.org/html/2412.19437v2",
+        "https://raw.githubusercontent.com/pytorch/pytorch/v2.5.1/torch/distributed/run.py"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "未核各后训练框架当前 API；仅给交接机制，不提供版本安装配方。"
+      ]
+    },
+    {
+      "path": "docs/pretraining/moe-training.md",
+      "status": "edited",
+      "summary": "完整通读；修正 V3 并非完全无辅助损失、偏置仅用于选择，补 Top-K 容量可复算例与 dropless/路由恢复边界。",
+      "sources": [
+        "https://arxiv.org/html/2412.19437v2#S2.SS1.SSS2"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "目标 EP kernel 与量化/框架支持未实测。"
+      ]
+    },
+    {
+      "path": "docs/pretraining/pretrain.md",
+      "status": "edited",
+      "summary": "完整通读；拆分 PrefixLM/Span Corruption，补错位目标、nats/PPL 构造计算、packing、污染与恢复账本。",
+      "sources": [
+        "https://arxiv.org/abs/1910.10683",
+        "https://raw.githubusercontent.com/huggingface/transformers/v4.45.2/src/transformers/models/llama/modeling_llama.py"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "BERT/GLM 具体遮盖配方未逐项复现；示例仅展示 CLM 损失语义。"
+      ]
+    },
+    {
+      "path": "docs/pretraining/scaling-law.md",
+      "status": "edited",
+      "summary": "完整通读并保留生命周期链接；限定经验拟合和 20:1，修正 E 标签、CoT 门槛与数据墙断言，补指标非线性折叠自测。",
+      "sources": [
+        "https://arxiv.org/abs/2001.08361",
+        "https://arxiv.org/abs/2203.15556",
+        "https://arxiv.org/abs/2304.15004"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "没有新拟合/真实能力实验；独立步骤假设仅作构造演示。"
+      ]
+    },
+    {
+      "path": "docs/inference/ai-compiler.md",
+      "status": "edited",
+      "summary": "完整通读；限定融合/手写 kernel 性能、DAG 与一行提速断言，补 guards、graph break、冷启动摊销与服务 SLO 边界。",
+      "sources": [
+        "https://raw.githubusercontent.com/pytorch/pytorch/v2.5.1/docs/source/torch.compiler_dynamo_overview.rst"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "当前后端参数和动态形状支持需按版本核验；未做 kernel benchmark。"
+      ]
+    },
+    {
+      "path": "docs/inference/domestic-ai-stack.md",
+      "status": "edited",
+      "summary": "完整通读后按迁移验收重编；移除市场排名、通用法律/硬件倍率与无缝迁移承诺，保留关键锚点，补版本矩阵、五层验收与恢复。",
+      "sources": [
+        "https://raw.githubusercontent.com/Ascend/pytorch/master/README.md",
+        "https://raw.githubusercontent.com/vllm-project/vllm-ascend/main/README.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "默认分支持续变化；采购法规、其他厂商产品支持和 MindIE 当前特性均待项目核验，未运行 NPU 实测。"
+      ]
+    },
+    {
+      "path": "docs/inference/gpu-hardware.md",
+      "status": "edited",
+      "summary": "完整通读；移除 99%、固定显存余量/硬件性能倍率，拆 GB/GiB 与 payload，限定 decode roofline、SKU 与 TP 域，补可复算带宽下界。",
+      "sources": [
+        "https://www.nvidia.com/en-us/data-center/h100/",
+        "https://www.nvidia.com/en-us/data-center/technologies/blackwell-architecture/"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "各具体 SKU 数据表、供货价格与许可需当前采购验证；未做实际 GPU 性能对照。"
+      ]
+    },
+    {
+      "path": "docs/inference/inference-benchmark.md",
+      "status": "edited",
+      "summary": "完整通读并保留已改 TTFT/TPOT 定义；修正 SLA/SLO、闭环过载偏差、Poisson/真实回放、成本单位与随机输入证据边界，补逐请求账本。",
+      "sources": [
+        "https://raw.githubusercontent.com/triton-inference-server/perf_analyzer/main/genai-perf/README.md",
+        "https://raw.githubusercontent.com/vllm-project/vllm/v0.6.3.post1/benchmarks/benchmark_serving.py"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "GenAI-Perf 默认分支与当前 CLI 需锁定版本；没有实际服务压测。"
+      ]
+    },
+    {
+      "path": "docs/inference/inference-optimization.md",
+      "status": "edited",
+      "summary": "完整通读；限定 prefill/decode、分页收益/量化/框架排名，修正精确 speculation、MLA、容量单位，补分离 KV 传输下界与可归因实验闭环。",
+      "sources": [
+        "https://arxiv.org/abs/2309.06180",
+        "https://arxiv.org/abs/2401.09670",
+        "https://arxiv.org/html/2412.19437v2",
+        "https://raw.githubusercontent.com/vllm-project/vllm/v0.6.3.post1/docs/source/automatic_prefix_caching/apc.rst"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "当前各框架全特性支持未认证；既有 2025 锚点保留，不作为当前格局。"
+      ]
+    },
+    {
+      "path": "docs/inference/kv-cache.md",
+      "status": "edited",
+      "summary": "三段完整通读；保留交互和既有 reviewed 分类，不新升审阅；统一 FAQ GiB/TB，修正 prefix/树哈希、KIVI、Scissorhands、驱逐与支持表，限定复杂度和 roofline。",
+      "sources": [
+        "https://arxiv.org/abs/2309.06180",
+        "https://arxiv.org/abs/2305.13245",
+        "https://arxiv.org/abs/2402.02750",
+        "https://arxiv.org/abs/2305.17118",
+        "https://arxiv.org/html/2412.19437v2",
+        "https://raw.githubusercontent.com/vllm-project/vllm/v0.6.3.post1/docs/source/automatic_prefix_caching/details.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "vLLM latest 前缀文档获取受限，改核归档文档；其他 KV 引擎格式/卸载、DLM/CLA/YOCO 支持待实现核对。"
+      ]
+    },
+    {
+      "path": "docs/inference/model-compression.md",
+      "status": "edited",
+      "summary": "完整通读；删除未支持蒸馏性能/显存数字，补温度 T²/KL/tokenizer 条件，修正 QLoRA/QAT、LoRA 非基座压缩、稀疏/结构化提速与 GB/GiB。",
+      "sources": [
+        "https://arxiv.org/html/1503.02531v1",
+        "https://raw.githubusercontent.com/deepseek-ai/DeepSeek-R1/main/README.md",
+        "https://arxiv.org/abs/1910.01108",
+        "https://arxiv.org/abs/2305.14314"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "原 KV 剪枝无出处数字已删除；目标稀疏 kernel 与压缩组合未实测。"
+      ]
+    },
+    {
+      "path": "docs/inference/quantization.md",
+      "status": "edited",
+      "summary": "完整通读；补 clipping/码域/零尺度、舍入与元数据构造算例，修正 FP8/INT8 和 PTQ/QAT 排名、QLoRA 分类，补误差传播/校准血缘与回滚。",
+      "sources": [
+        "https://arxiv.org/abs/2210.17323",
+        "https://arxiv.org/abs/2306.00978",
+        "https://arxiv.org/abs/2211.10438",
+        "https://arxiv.org/abs/2305.14314",
+        "https://arxiv.org/abs/2402.02750"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "Marlin/Machete/具体硬件格式支持须按部署版本核验；未做真实量化质量/速度实验。"
+      ]
+    },
+    {
+      "path": "docs/inference/serving-frameworks.md",
+      "status": "edited",
+      "summary": "完整通读；移除 10–30×/最高性能/任意热切角色断言，区分分块与复用，重编候选矩阵与真实 POC，补块尾可复算例和兼容组合门禁。",
+      "sources": [
+        "https://arxiv.org/abs/2309.06180",
+        "https://arxiv.org/abs/2312.07104",
+        "https://arxiv.org/abs/2401.09670",
+        "https://raw.githubusercontent.com/vllm-project/vllm/v0.6.3.post1/docs/source/automatic_prefix_caching/details.md",
+        "https://raw.githubusercontent.com/NVIDIA/TensorRT-LLM/main/README.md"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "各引擎当前模型/采样/并行支持不是已验证认证；TensorRT 默认分支需要固定版本，未运行实机 POC。"
+      ]
+    },
+    {
+      "path": "docs/inference/speculative-decoding.md",
+      "status": "edited",
+      "summary": "主控全文重编：去除无配置倍率与无来源年度结论，纠正EAGLE-3直接token预测、跨tokenizer接口边界、REST类别与PLD成本，补轮次复算和上线门禁并保留旧AdaSPEC锚点。",
+      "sources": [
+        "https://arxiv.org/abs/2211.17192",
+        "https://arxiv.org/abs/2310.08461",
+        "https://arxiv.org/abs/2311.08252",
+        "https://arxiv.org/abs/2401.10774",
+        "https://arxiv.org/abs/2503.01840"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "本轮实际读取上述论文摘要；正文的方法比较不是完整论文复现。框架仓库仅作入口，未逐版本验收兼容矩阵，未运行GPU benchmark。"
+      ]
+    },
+    {
+      "path": "docs/inference/test-time-scaling.md",
+      "status": "edited",
+      "summary": "主控全文重编，删除多想必胜、规则验证100%准确、一次forward及固定预算推荐，区别候选覆盖/选择正确率，补独立二元投票和多类反例、验证器误接受机会与同预算实验矩阵。",
+      "sources": [
+        "https://arxiv.org/abs/2408.03314",
+        "https://arxiv.org/abs/2501.19393",
+        "https://arxiv.org/abs/2203.11171",
+        "https://arxiv.org/abs/2305.10601"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "本轮实际读取四篇摘要，未完整复现模型实验；投票与误接受数值是构造演算，未调用商业推理API。"
+      ]
+    },
+    {
+      "path": "docs/inference/speculative-sampling-proof.md",
+      "status": "edited",
+      "summary": "主控全文阅读并保留原有分布证明、复算和状态边界，将核心等式转为数学排版，增加q为零的概率恢复代码断言。",
+      "sources": [
+        "https://docs.vllm.ai/en/stable/features/speculative_decoding/",
+        "https://arxiv.org/abs/2211.17192"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "本轮读取官方数值保证与QPS段落及第一篇论文摘要；原文2026-11-04的完整来源记录未扩大为此次全文复核。未实现推理内核。"
+      ]
+    },
+    {
+      "path": "docs/inference/slo-goodput.md",
+      "status": "edited",
+      "summary": "主控全文阅读，保留TPOT单token、失败分母、开闭环及cohort口径，补数学时间线和用户请求/物理重试成功率折叠复算。",
+      "sources": [
+        "https://docs.vllm.ai/en/v0.19.1/api/vllm/benchmarks/serve/"
+      ],
+      "sourceReview": "verified",
+      "openIssues": [
+        "本轮实际读取calculate_metrics代码摘录中TPOT、单token与goodput字段；未作硬件压测，不据构造账本承诺容量。"
+      ]
+    }
+  ]
+}

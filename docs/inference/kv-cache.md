@@ -64,7 +64,7 @@ MLA 通常缓存共享压缩 latent 与解耦的位置部分，而不是每头�
 
 ## 核心机制速查
 
-- **为什么要有 KV Cache**：自回归 Decode 每步只产生一个新 token，但 Attention 需要"新 Q 对全部历史 K、V"做点积。如果每步都重算前面所有 token 的 K、V，就有 $O(L^2)$ 的重复计算。缓存下来 → 每步只算 **1 个新 token 的 K、V**，Decode 从 $O(L^2)$ 降到 $O(L)$。
+- **为什么要有 KV Cache**：因果前缀不随新 token 改变，历史 K/V 可复用。固定层/头维度时，单步全前缀注意力重算约 $O(t^2d)$，缓存后新 query 注意力约 $O(td)$；这是注意力长度项，不是包括 FFN、通信与访存的完整延迟模型。
 - **KV Cache 显存公式（务必背下来）**：$\text{Bytes} = 2 \times B \times L \times N_{\text{layer}} \times N_{\text{kvhead}} \times d_{\text{head}} \times \text{precision}$。前面的 **2 = K 和 V**。
 - **一个具体数字**：上述 80 层 GQA 教学配置在 32K 下为 10 GiB；batch=32、128K 下为 1.25 TiB ≈ 1.374 TB。区分二进制和十进制单位，且这不代表模型原生支持这些上下文长度。
 - **四条优化路线**：① **架构层**（GQA/MQA/MLA，砍 KV head 数或维度）；② **系统层**（PagedAttention 消碎片、Prefix Caching 复用、RadixAttention 树形共享、Offload 到 CPU）；③ **量化层**（KV INT8/INT4/FP8）；④ **驱逐层**（H2O/StreamingLLM/SnapKV/PyramidKV，只保留重要 token）。
@@ -141,12 +141,12 @@ $$2 \times 64 \times 131{,}072 \times 80 \times 8 \times 128 \times 2 \text{B} \
 | 方案 | 每层 KV 数 | KV Cache 相对量 | 代表模型 |
 | --- | --- | --- | --- |
 | **MHA**（多头注意力） | $N_{\text{qhead}}$ 份 | 1× | GPT-3、LLaMA2-7B |
-| **GQA**（分组查询注意力） | $N_{\text{group}}$ 份（Q head 分组共享 K/V） | 1/4 ~ 1/8× | LLaMA3、Qwen2.5、Mixtral |
+| **GQA**（分组查询注意力） | $N_{\text{group}}$ 份（Q head 分组共享 K/V） | $N_{kvhead}/N_{qhead}$，相同 head_dim/精度 | LLaMA3、Qwen2.5、Mixtral |
 | **MQA**（多查询注意力） | 1 份（所有 Q head 共享一组 K/V） | 1/$N_{\text{qhead}}$× | Falcon、PaLM |
-| **MLA**（多头潜注意力） | 1 份低秩 latent（$d_c$） | 极小（DeepSeek 报告 <10%） | DeepSeek-V2/V3 |
-| **CLA / YOCO**（跨层共享） | 多层共用一份 KV | 减半到 1/4 | 部分研究模型 |
+| **MLA**（多头潜注意力） | 共享 latent 与位置部分 | 按两部分维度与引擎缓存表示计算 | DeepSeek-V2/V3 |
+| **CLA / YOCO**（跨层共享） | 特定层共享 KV | 依赖架构和实际缓存层，不套统一比例 | 部分研究模型 |
 
-**注意**：GQA/MQA 会略微牺牲能力（K/V 表达变粗），但因为大部分 head 的"注意力多样性"是冗余的，实际 benchmark 下降很小；MLA 更巧妙——K/V 在低秩 latent 里压缩，但在计算时通过 $W_K, W_V$ 投影恢复出等价的多头行为。详见 [Attention 与变体](/basics/attention)。
+**注意**：[GQA 论文](https://arxiv.org/abs/2305.13245)的 uptraining 实验支持其设置下质量接近 MHA，不证明所有头冗余或任何结构只会略微掉点。MLA 投影可通过权重吸收避免完整显式解压，但不等于把任意现成 MHA 无损转成 MLA；通常需要对应训练和实现，见 [Attention 与变体](/basics/attention)。
 
 ## 四、系统层优化：把 KV Cache 管起来
 
@@ -169,12 +169,12 @@ $$2 \times 64 \times 131{,}072 \times 80 \times 8 \times 128 \times 2 \text{B} \
 
 **场景**：多用户共享同一个 system prompt（几百上千 token），传统方案每个请求都重新 Prefill 一次同样的前缀。
 
-**方案**：把 system prompt 对应的 KV block 存下来，新请求命中时**跳过 Prefill 直接从"续写"开始**：
+**方案**：新请求复用完整 token 前缀与计算条件一致的已缓存 KV，跳过共享部分的 prefill；未命中的后缀仍需计算，首个输出采样也仍需正确的最后位置 logits：
 - vLLM：`enable_prefix_caching=True`
-- SGLang：**RadixAttention**——用 Radix Tree（基数树）组织所有历史前缀，任意分叉共享，命中率远高于线性哈希。适合 few-shot、多轮对话、Agent tool loop。
-- CacheBlend / ChunkAttention：允许**跨请求非前缀 KV 复用**（如 RAG 场景，不同请求引用相同文档 chunk）。
+- SGLang：**RadixAttention** 用树管理前缀与分叉；是否比哈希管理命中更多取决于缓存预算、驱逐策略和请求分布，树结构不保证更高命中率。
+- CacheBlend / ChunkAttention 等研究探索更复杂复用；不能把非前缀文档 KV 当作任意上下文下天然相同，需检查位置、跨片段依赖与重算/近似策略。
 
-**命中率对 TTFT 的影响**：Prefill 是计算密集型，命中前缀 → TTFT 直接砍 50%~90%。Agent、代码补全、RAG 是最大受益场景。
+**命中率对 TTFT 的影响**：共享前缀减少 prefill 计算，不消除排队、后缀与 decode。分别报告命中 token 数、冷/暖缓存、prefill 和客户端 TTFT；不承诺 50%~90% 的固定下降。
 
 ### 4.3 KV Cache 卸载（Offload）
 
@@ -183,7 +183,7 @@ $$2 \times 64 \times 131{,}072 \times 80 \times 8 \times 128 \times 2 \text{B} \
 - **LMCache**：跨请求的分布式 KV 缓存池（内存+SSD 分层），命中率优先，冷启动兜底；
 - **Mooncake（月之暗面）**：Prefill/Decode 分离 + 全局 KV 池，专门服务长上下文对话。
 
-代价：PCIe/CXL 带宽比 HBM 慢 10-100 倍，卸载得**尽量只搬"预计短期不用的"KV**，配合调度策略。
+代价是跨层级搬运与同步。构造 1 GiB 缓存、有效搬运速率 16 GiB/s，则单向下界 62.5 ms；回迁、并发和软件开销另算，不把标称 HBM/PCIe 带宽之比当端到端减速倍率。
 
 ### 4.4 Chunked Prefill 与 Continuous Batching
 
@@ -193,21 +193,21 @@ $$2 \times 64 \times 131{,}072 \times 80 \times 8 \times 128 \times 2 \text{B} \
 
 ## 五、量化层优化：把 KV Cache 压小
 
-KV 量化的好处比权重量化更纯粹——**只影响长上下文/高并发下的显存与带宽**，几乎不影响首 token 速度。
+KV 量化改变缓存容量、读写/反量化开销与注意力误差，既可能影响 prefill 首 token，也可能影响 decode。权重已固定而 KV 增长的负载中更值得比较；不能说只影响显存而不影响 TTFT。
 
 | 精度 | 显存/带宽 | 质量影响 | 代表 |
 | --- | --- | --- | --- |
-| **FP16 / BF16** | 1× | 无 | 基线 |
+| **FP16 / BF16** | 1× 元素 payload | 本身仍有浮点误差 | 基线，二者数值格式不同 |
 | **FP8（E4M3）** | 理论元素约 0.5× | 需验证模型、尺度与任务，非无损保证 | 支持条件取决于硬件与引擎 |
-| **INT8** | 0.5× | 长上下文微降 | vLLM 内置、SmoothQuant KV |
-| **INT4** | 0.25× | 有可感知损失，需仔细调 | KIVI、KVQuant |
-| **KIVI 2-bit** | 0.125× | 需 per-channel 校准 | 学术前沿 |
+| **INT8** | 0.5× 元素 payload | 依赖尺度、粒度与任务 | 引擎支持需按版本核验 |
+| **INT4** | 0.25× 元素 payload | 不预设统一掉点程度 | 低比特 KV 研究/实现 |
+| **KIVI 2-bit** | 0.125× 元素 payload | K per-channel、V per-token，另有高精度残留与元数据 | tuning-free 研究配方，不是全缓存压到 1/8 |
 
 **K 和 V 独立处理**是一个反直觉但重要的技巧：
-- **K** 通常有**较宽的动态范围**（尤其某些 outlier channel），量化时需要 **per-channel** scale；
-- **V** 分布相对均匀，**per-token** scale 就够。
+- **K**：KIVI 所研究模型呈通道 outlier，采用 per-channel 分组；
+- **V**：其设置下采用 per-token 分组更合适。其他模型与格式需重新核验，不能据此证明任何 V 都不需要更细处理。
 
-**混合精度策略**：热 KV 保持 FP16、冷 KV 量化到 INT4（H2O 类思路的扩展）。详见 [量化实战深入](/inference/quantization)。
+**混合精度策略**：部分实现保留近期高精度 residual，旧块低比特存储；“热/冷”是否预测未来重要性是另一假设，不自动等同于 H2O。详见 [量化实战深入](/inference/quantization) 与 [KIVI 原论文](https://arxiv.org/abs/2402.02750)。
 
 ## 六、驱逐/压缩层：只保留重要 token 的 KV
 
@@ -219,9 +219,9 @@ KV 量化的好处比权重量化更纯粹——**只影响长上下文/高并�
 | **H2O**（Heavy Hitter Oracle） | 有些 token 长期获得高注意力权重 | 用累计 attention 分数选 top-k 保留 |
 | **SnapKV** | 观察 prompt 尾部的注意力"投票" | 用 prompt 最后几 token 的 attention 决定要留哪些 |
 | **PyramidKV** | 底层保留更多 KV、高层保留更少 | 按层递减，节省更多 |
-| **Scissorhands** | 关键 token 的重要性会持续 | 训练时就学"哪些 token 会被后续持续关注" |
+| **Scissorhands** | 测试时利用重要性持续假设 | 无需微调，按历史注意力提高重要 token 保留概率 |
 
-**收益 vs 代价**：能把 KV Cache 缩到 10%~30% 而质量近似无损，但**牺牲了任意回溯能力**——如果被驱逐的 token 后面突然需要用到（"大海捞针"任务），性能会掉。所以适合聊天/流式生成，不适合精确检索。
+**收益 vs 代价**：丢 KV 是有损改变可访问历史，不存在统一 10%~30% 且无损的保证。[Scissorhands](https://arxiv.org/abs/2305.17118)明确是测试时无需微调的预算压缩。评测需包含被删早期事实、多跳依赖、位置变化和自然长对话；聊天场景也不能免除精确回溯需求。
 
 **与 [长上下文](/basics/long-context) 的关系**：驱逐 = "有损压缩到定长"，SSM/Mamba = "从架构上就是定长隐藏状态"，[扩散语言模型](/advanced/diffusion-llm) = "没有 KV Cache，每步双向重算"——三条路都在处理"L 增长时 KV 也线性增长"的根问题。
 
@@ -230,24 +230,24 @@ KV 量化的好处比权重量化更纯粹——**只影响长上下文/高并�
 | 架构 | 有没有 KV Cache | 说明 |
 | --- | --- | --- |
 | 标准 Transformer（AR） | 有 | 本文主角 |
-| **MLA**（DeepSeek） | 有，但压成低秩 latent | 显存量降到 1/10 |
+| **MLA**（DeepSeek） | 有，但缓存表示不同 | 依模型维度与缓存实现核算，不套 1/10 |
 | **Mamba / SSM** | **无** | 用固定大小隐藏状态代替，见 [SSM 页](/advanced/state-space-models) |
 | **Jamba / Hybrid**（少量注意力层） | 部分层有 | 只有注意力层需要，SSM 层不需要 |
-| **扩散语言模型（DLM）** | **无标准 KV Cache** | 双向注意力，每步 refine 都重算全序列，只有 prefix cache |
+| **扩散语言模型（DLM）** | 不能直接套标准因果 KV 复用 | refinement 会改变 token 表示；缓存优化是否精确由架构/实现决定 |
 | **Encoder-only（BERT）** | 无 | 一次性 encode，不做增量 |
 
 ## 八、推理引擎的 KV Cache 支持对照
 
 | 引擎 | PagedAttention | Prefix Cache | KV 量化 | 卸载 | 其他 |
 | --- | --- | --- | --- | --- | --- |
-| **vLLM** | ✅ 原生 | ✅ | INT8/FP8 | 部分 | 事实标准 |
-| **SGLang** | ✅ | ✅ RadixAttention | FP8 | ✅ | Agent/多轮最强 |
-| **TensorRT-LLM** | ✅ | ✅ | FP8 原生 | ✅ | Hopper/Blackwell 首选 |
-| **LMDeploy** | ✅ | ✅ | AWQ + KV INT8 | ✅ | 国内活跃 |
-| **HuggingFace TGI** | ✅ | ✅ | INT8 | 部分 | 生态好、性能次之 |
-| **llama.cpp** | 有限 | 有限 | 强（KV INT4/INT2） | ✅ CPU/GPU 混合 | 端侧首选 |
+| **vLLM** | 分块机制 | APC | dtype/scale 按版本查 | 按实现查 | 核模型、并行与缓存组合 |
+| **SGLang** | KV 管理 | RadixAttention | 按 backend 查 | 按 backend 查 | 不按结构宣称性能最强 |
+| **TensorRT-LLM** | KV 管理 | 需核配置 | 按 engine/GPU 查 | 按配置查 | 核构建与运行格式一致性 |
+| **LMDeploy** | 按 backend 查 | 按 backend 查 | 权重量化与 KV 格式分开查 | 待核 | AWQ 不是 KV 格式 |
+| **HuggingFace TGI** | 按 release 查 | 按 release 查 | 待核 | 待核 | 不作性能排名 |
+| **llama.cpp** | 连续/统一池等实现需核 | 前缀状态复用需核 | K/V 类型分别查 | CPU/GPU 布局需核 | 不默认所有低比特格式都支持 |
 
-详见 [推理框架对比（vLLM/SGLang）](/inference/serving-frameworks)。
+此表是验收检查项，不是当前特性支持认证。固定版本语义见 [vLLM APC 归档实现说明](https://github.com/vllm-project/vllm/blob/v0.6.3.post1/docs/source/automatic_prefix_caching/details.md)，当前文档链接保留但访问/版本需再次核验。详见 [推理框架对比（vLLM/SGLang）](/inference/serving-frameworks)。
 
 ## 九、面试可背的公式速记
 
@@ -257,7 +257,7 @@ KV 量化的好处比权重量化更纯粹——**只影响长上下文/高并�
 
 **Decode 阶段单步访存**：权重（几十 GB）+ KV Cache（几~几百 GB），二者都要读一遍 → 带宽是瓶颈。
 
-**吞吐上限（roofline，粗略）**：$\text{tokens/s} \approx \frac{\text{HBM 带宽}}{\text{单 token 需读字节数}}$。这解释了为什么减小 KV Cache 能直接提吞吐。
+**带宽受限上界（粗略）**：$\text{tokens/s} \lesssim \frac{\text{有效带宽（bytes/s）}}{\text{平均每输出 token 搬运字节}}$。batch 内权重复用需摊销，不能将整个权重大小重复计到每请求；计算、通信和 kernel 开销仍可能限制吞吐。
 
 ## 高频追问
 
@@ -268,7 +268,7 @@ KV 量化的好处比权重量化更纯粹——**只影响长上下文/高并�
 这是 causal mask + 自回归结构的直接推论。
 
 **Q：为什么长上下文推理显存会爆炸？**
-KV Cache 显存随**序列长度 L 线性、层数 N 线性、batch B 线性**共同放大。LLaMA3-70B 单序列 128K 就要 40 GB KV，batch=32 时 1.28 TB，远超单卡显存。所以长上下文推理有三条现实路径：① 从架构上砍（MLA）；② 从系统上省（PagedAttention + 驱逐 + Offload）；③ 从量化上压（KV INT8/INT4）。
+标准全注意力 KV 随长度、缓存层数与请求数增长。80 层 GQA 教学配置的 128K 为 40 GiB / 42.95 GB，32 条为 1.25 TiB / 1.374 TB；分页、量化、驱逐、卸载和架构改动解决不同问题，不把无损管理与有损删除混为一谈。
 
 **Q：GQA、MQA、MLA 的核心区别？为什么要减少 KV 存储？**
 - **MHA**：每个查询头有独立 KV。
@@ -284,20 +284,20 @@ KV Cache 显存随**序列长度 L 线性、层数 N 线性、batch B 线性**�
 不是同一件事，但强耦合：
 - **PagedAttention 是显存管理机制**，允许非连续块存储；
 - **Prefix Caching 是复用策略**——因为块可以非连续 + 引用计数，同一个 system prompt 的物理块可以被多个请求引用（COW）。
-没有 PagedAttention 也可以做 Prefix Caching（连续显存下按整块拷贝），但效率低、灵活性差。SGLang 的 RadixAttention 进一步用 Radix Tree 管前缀，命中率高于线性哈希。
+没有 PagedAttention 也可以实现前缀缓存；效率由分配/复制和驱逐策略决定。树和哈希都能管理同一前缀集合，不能从数据结构名称推断必然命中率。
 
 **Q：KV 量化到 INT4 会不会掉性能？**
 掉多少取决于**校准**和**量化粒度**：
 - **naive per-tensor INT4** → 掉点明显（K 有 outlier channel）；
 - **per-channel INT4 K + per-token INT4 V**（KIVI 思路）→ 分别处理 K/V 的分布差异，实际质量需按任务实测；
 - **热 KV FP16 + 冷 KV INT4** → 更保险。
-质量掉的形式通常是"长上下文任务上乱码"，需要在 needle-in-a-haystack 等任务上专门测。
+误差也可能表现为早期事实遗忘、概率偏移或推理错误，而不是乱码；需比较长短上下文、位置切片与真实任务，单一 needle 测试不充分。
 
 **Q：H2O / StreamingLLM 为什么能"扔掉"KV 而不崩？**
 观察到两个现象：
 - **Attention Sink**：Softmax 的归一化让**开头几个 token**（无论内容）持续吸收大量注意力权重——扔掉它们会让整个 attention 分布崩塌；
 - **Heavy Hitter**：只有少数 token（高信息量的 keyword、句法枢纽）长期被后续 token 关注，其他大部分历史 token 权重接近 0。
-所以"保留 sink + 保留 heavy hitter + 保留最近窗口"三件套就能把 KV 缩到 20%~30%，聊天/流式场景无感。代价是**大海捞针类任务**性能显著下降。
+这些是不同方法的保留依据，不是拼在一起就保证聊天无感。必须测预算、保留规则与任务质量；被删除的历史无法从缓存直接恢复，后续依赖可能出错。
 
 **Q：为什么 Mamba 和扩散 LLM 都不需要传统 KV Cache？**
 - **Mamba**：把历史压缩到一个**固定大小的隐藏状态** $h$，每步递推更新，天然是定长 → 无 KV，无线性增长；见 [SSM 页](/advanced/state-space-models)；
@@ -308,7 +308,7 @@ KV Cache 显存随**序列长度 L 线性、层数 N 线性、batch B 线性**�
 [投机解码](/inference/speculative-decoding)（Speculative Decoding）是"小模型出草稿 → 大模型批量验证"的一次多 token 生成方案。它**依赖 KV Cache 正确性**：
 - 草稿被接受时 → KV Cache 顺利前推 $k$ 个 token，节省 $k-1$ 次 forward；
 - 草稿被拒时 → **需要回滚 KV Cache**（丢掉被拒的 K/V 分量）。
-所以推理引擎实现投机解码时，KV 分配、写入、回滚都要和 PagedAttention 深度配合——SGLang、vLLM 都是这么做的。
+实现必须保证目标和草稿各自的已提交前缀一致；可用分页截断、池回收或其他机制，不能把 PagedAttention 当投机解码唯一前提。记录验证宽度、接受长度、KV 提交/回滚位置与额外内存。
 
 **Q：Prefill/Decode 分离（Disaggregation）为什么和 KV Cache 高度相关？**
-Prefill 是 compute-bound、Decode 是 memory-bound，混在一起会**互相拖累**：长 Prefill 卡住 Decode 队列、Decode 又浪费 Prefill 的算力。分离部署（Prefill 集群 + Decode 集群）能各自最大化利用率，但代价是**要在两个集群之间搬运 KV Cache**（几 GB 到几十 GB）。所以分离的核心工程难点就是"KV 传输"：DeepSeek/Kimi 的 Mooncake、微软 Splitwise 都在做 KV 高速网络传输 + 全局 KV 池。这是 2025-2026 大模型推理最热的方向之一。
+分离旨在减少阶段干扰并独立配置资源，但需支付 KV 传输和一致性开销。cache dtype、位置、模型/adapter、分片布局与生成状态均需对齐；只搬一个 token 缓冲区不够。收益以目标到达率下 TTFT/ITL 和 [goodput](/inference/slo-goodput)验证，不按“热门方向”认定值得上线。

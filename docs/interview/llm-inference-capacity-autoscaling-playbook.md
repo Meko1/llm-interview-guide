@@ -24,12 +24,16 @@ classification: inferred
 | QPS | 每秒请求数 | 一个请求可能是 20 token，也可能是 20k token |
 | input/output tokens/s | 真正消耗的推理工作量 | 不直接代表用户等待时间 |
 | TTFT | 首 token 时间 | 交互式体验的关键，受排队和 prefill 影响大 |
-| TPOT | token 间时间 | 影响流式生成是否“卡顿” |
+| TPOT | 每请求平均输出 token 耗时 | 与流事件间隔 ITL 不完全相同 |
 | Goodput | 满足 SLO 的有效吞吐 | 吞吐高但 P99 超时不算可用容量 |
 | KV Cache 利用率 | 会话状态占用压力 | 接近上限时最容易 OOM 或拒绝长请求 |
-| Queue wait | 请求进入引擎前的等待 | 高 GPU 利用率不一定慢，长队列才说明服务已饱和 |
+| Queue wait | 请求进入引擎前的等待 | 需区分资源饱和、配额限流和调度阻塞 |
 
 容量规划的目标不是“平均 GPU 利用率最高”，而是在指定负载和故障假设下，以可接受成本满足 SLO。
+
+**L1：指标先定计时点。** 引擎 TTFT 通常不含客户端到网关与 RAG 耗时，用户 TTFT 则要含整个路径。TPOT 常指请求平均 `(末 token 时间 − 首 token 时间)/(输出 token 数 − 1)`，不等同于每个相邻流事件的间隔 ITL；一个事件可能携带多个 token。构造输出 101 token、首 token 后 2 秒完成，TPOT=20 ms；只有 1 个输出 token 时分母为零，按工具约定记录/排除并单列，不编造时间。
+
+Goodput 要声明单位：可定义为单位时间内成功且**同时**满足 TTFT/TPOT/业务校验的逻辑请求数。各自 P95 达标不保证同一 95% 请求同时达标；以每请求联合条件计数，失败、取消与拒绝也要留在需求/成功率报告，不能只测成功返回的样本。
 
 ## 三、把业务流量拆成工作负载画像
 
@@ -60,19 +64,21 @@ model: small / main / reasoning / multimodal
 
 1. 定义服务目标，例如 P95 TTFT、P95 TPOT、失败率和最大排队时间。
 2. 以真实输入输出长度、并发和到达模式压测某个模型/精度/引擎/硬件组合。
-3. 找到仍满足 SLO 的单副本 token goodput，而不是把 batch 拉到极限后的最大 tokens/s。
-4. 用峰值 token 需求除以单副本 SLA goodput，加入故障余量、增长余量和发布余量。
+3. 找到仍满足联合 SLO 的单副本 goodput，并声明该负载的长度、缓存与任务分布，而不是把 batch 拉到极限后的最大 tokens/s。
+4. 分别看 prefill/decode 需求，最终用同画像下的请求 goodput 估副本，再验证故障余量、增长和发布余量。
 
 ```text
-peak_required_tokens_per_second
-  = peak_rps * (expected_input_tokens + expected_output_tokens)
-
-replicas
-  = ceil(peak_required_tokens_per_second / replica_slo_goodput)
-    * redundancy_factor
+prefill_demand_tokens_s = peak_rps * mean_input_tokens
+decode_demand_tokens_s  = peak_rps * mean_output_tokens
+serving_replicas = ceil(peak_rps / measured_slo_goodput_rps)
+provisioned_replicas = serving_replicas + failure_and_rollout_reserve
 ```
 
 这只是预算起点。输入 token 的 prefill 与输出 token 的 decode 代价不同，长请求会占据 KV Cache 更久，因此最终必须用分位数压测和仿真校正。不要在面试中声称“一个固定 tokens/s 就能算出所有模型的卡数”。
+
+**L2：一个副本不是一张卡。** 构造峰值 18 请求/秒，均值输入 2,000、输出 200 token，则需求分别为 36,000 prefill token/s 和 3,600 decode token/s；不能把 39,600 除以仅测 decode 的吞吐。假设同画像压测的 TP=4 副本有 3 请求/秒的 SLO goodput，需 6 个服务副本；允许损失一个完整副本且仍满足峰值时部署 7 个，即 28 张卡。若整机或可用区会一次失去多个副本，N+1 不够。不同副本共享网络、检索或网关时也不能假定线性扩展。
+
+均值 token 可描述平均工作量，但不是尾延迟保证；input P95 与 output P95 不一定出现在同一请求，不能简单相加为“请求 P95”。实测保留长度联合分布、Agent fan-out 和重试；按原始任务与物理推理 attempt 分别估到达率。
 
 ## 五、单副本资源模型：权重、KV 与临时空间
 
@@ -88,6 +94,10 @@ GPU memory budget
 ```
 
 KV Cache 随层数、hidden size、上下文长度和活动序列数增长。它是长上下文高并发服务的主要容量边界。PagedAttention、chunked prefill、KV 量化和 prefix cache 可以提高有效利用率，但不会消除“更多上下文和更多并发需要更多状态空间”的基本约束。
+
+对普通全注意力、K/V 同 head dimension 的模型，未分片逻辑 KV 字节近似为 `2 × 层数 × KV头数 × head_dim × 每元素字节 × 活动序列总token数`，不是总 query head 数。构造 32 层、8 个 KV 头、head_dim=128、BF16=2 字节，每 token 为 131,072 字节=128 KiB；单序列 8,192 token 约 1 GiB，16 条不共享的此类序列约 16 GiB。还需按 block 向上取整、预留未来 decode，并计算 TP/PP 的实际分片或复制；MLA、滑窗与量化 scale/layout 不能直接套此公式。prefix 共享减少独有块，但读写与引用计数仍需管理。
+
+KV pool 使用率高也可能只是可驱逐的缓存占满，不一定已 OOM；看可分配块、活跃不可驱逐块、抢占与分配失败。设置输入长度、最大输出、并发和每租户预算在受信网关执行，不能由用户声明“这是短请求”决定资源预留。PagedAttention 改善块管理，不等于没有容量上限。
 
 面试中要强调：遇到 OOM 先区分是权重装不下、KV 已满、碎片、异常超长请求还是并发策略失控；不同原因的修复完全不同。
 
@@ -130,6 +140,10 @@ Gateway admission
 
 扩容策略通常是“预测或队列阈值触发 + 稳定窗口 + 最小副本数”。缩容更保守：等待在途请求 drain、缓存价值下降、冷却时间结束后再释放实例。对模型加载慢的集群，应维护 warm pool、镜像预拉取、模型权重本地缓存和可快速加入的 GPU 节点。
 
+扩容分成“申请 GPU 节点”和“模型副本 Ready”，不是 desired replica 一增加就有容量。Ready 至少确认正确权重/tokenizer、KV pool、通信与一次受控请求；未加载完成的 Pod 不算可服务副本。[Kubernetes HPA 官方说明](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)实读了指标比例算法、missing/not-ready metrics 与稳定窗口，它控制 Pod 数，不能替你保证 GPU 节点配额或 LLM goodput。
+
+假设到达 20 请求/秒、现有总容量 12 请求/秒，新副本 120 秒后可用，期间积压约 `(20−12)×120=960` 件；扩后容量 24 请求/秒仍需约 `960/(24−20)=240` 秒清积压。没有截止时间的队列只把故障推后；交互式请求可能早已超时。因此先限流/拒绝或转异步，保留有限 warm headroom。缩容时先停止新分配，drain 有上限；长生成超限要明确取消与终态，不能迁移未知 KV 后声称无感续流。
+
 ## 八、过载保护：先保护正确的用户体验
 
 当需求超过可用容量，系统需要事先定义处置顺序：
@@ -167,6 +181,8 @@ Gateway admission
 | 故障注入 | 验证容灾和过载策略 | 模拟节点丢失、provider 429 |
 
 压测报告至少固定：模型版本、量化、推理框架、硬件、并行策略、prompt 模板、输入输出分布、缓存状态、到达模式、并发梯度和 SLO。否则不同报告之间没有可比性。
+
+**L3：用开放到达揭示排队，不伪造压测成绩。** 固定并发客户端在服务变慢时会自动降低发请求速度，容易隐藏过载（协调遗漏）；同时记录计划到达、实际送达、排队、拒绝及完成。冷缓存/暖缓存分别测，不能把 prompt 全重复的成绩推广到长尾业务。按模型副本报告直方图，聚合桶而非平均各 Pod 的 P95；预热期、超时处理和采样窗口预先固定。节点故障后验证实际联合 SLO、积压恢复与重试放大，而不是只看 Deployment 回到目标副本数。
 
 ## 十一、观测与告警
 
@@ -215,3 +231,5 @@ GPU utilization, replica count, cold-start duration, cost
 > 我负责模型服务的容量与弹性治理。我们不再用平均 QPS 估卡数，而是按在线聊天、RAG 长上下文和批处理拆分 token 分布与 SLO，在真实到达模式下压测各模型副本的 SLA goodput。运行时将排队、TTFT、TPOT、KV 使用率和 GPU 指标分开监控；扩容由队列和可用 KV 驱动，缩容等待在途会话 drain。高峰期通过按租户的 TPM 配额、优先级队列、上下文预算和经评测的模型降级保护核心交互，因此既降低了 OOM 和 P99 超时，也避免了长期过度预留 GPU。
 
 继续学习：[推理成本与性能优化](/interview/inference-cost-qna)、[推理优化与加速](/inference/inference-optimization)、[KV Cache 与 PagedAttention](/inference/kv-cache)、[推理框架选型](/inference/serving-frameworks)、[LLM 流式输出与会话恢复设计](/interview/llm-streaming-session-resilience-playbook)。
+
+来源范围：[vLLM metrics 设计](https://github.com/vllm-project/vllm/blob/main/docs/design/metrics.md)实读了 TPOT/ITL 区别、KV blocks 与拒绝计量；[KV cache interface 源码](https://github.com/vllm-project/vllm/blob/main/vllm/v1/kv_cache_interface.py)实读 `FullAttentionSpec` 和 AttentionSpec 的 head/dtype/page size 片段。main 内容可变，部署时核对实际版本与 exporter 单位。本页卡数、KV 与积压均为构造推算；未运行压测、扩缩容或 OOM 演练。

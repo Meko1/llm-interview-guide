@@ -1,9 +1,7 @@
 ---
 title: 归一化、激活函数与训练稳定性
 description: >-
-  「为什么大模型用 RMSNorm 而不是 LayerNorm」「Pre-Norm 和 Post-Norm 区别」「QK-Norm
-  是什么」——归一化看似小组件，实际是训练稳定性这条暗线的核心，从 2017 年的 Post-Norm 到 2025 年的
-  QK-Norm，每次演进都对应一次「模型更深更大
+  按统计维度、残差路径和注意力分数尺度理解 LayerNorm、RMSNorm、Pre/Post-Norm 与 QK-Norm，复算门控 FFN 参数预算。
 level: L1
 roles:
   - 在校生
@@ -13,7 +11,7 @@ classification: inferred
 ---
 # 归一化、激活函数与训练稳定性
 
-> 「为什么大模型用 RMSNorm 而不是 LayerNorm」「Pre-Norm 和 Post-Norm 区别」「QK-Norm 是什么」——归一化看似小组件，实际是**训练稳定性**这条暗线的核心，从 2017 年的 Post-Norm 到 2025 年的 QK-Norm，每次演进都对应一次「模型更深更大后训崩了」的实战教训。
+> 前置是向量、均值/方差和残差连接。本页围绕三个问题：在哪些维度统计、归一化放在什么路径、它控制哪一种数值尺度。QK 归一化并非 2025 年才出现，也不能把模型采用某组件解释成已证实的训练崩溃史。
 
 ## 为什么深层网络离不开归一化
 
@@ -23,7 +21,7 @@ classification: inferred
 - 让损失面更平滑，可以用更大的学习率；
 - 降低各层之间的耦合，深层堆叠成为可能。
 
-**归一化 + 残差连接**是深层 Transformer 能训起来的两大支柱：残差保证信息和梯度有「直通路径」，归一化保证每层输入数值稳定。
+归一化与残差是常用的稳定性设计，但不担保训练不崩。残差提供恒等分支，归一化约束局部尺度；学习率、初始化、低精度计算、数据与分布式同步仍会影响结果。
 
 ## LayerNorm vs BatchNorm
 
@@ -34,7 +32,7 @@ classification: inferred
 | 训练/推理行为 | 不一致（推理用滑动平均统计量） | 一致 |
 | 适合场景 | CNN / 图像 | Transformer / 变长序列 |
 
-**为什么 NLP 用 LayerNorm？** 序列变长、batch 内样本长度参差，跨样本统计噪声大；自回归推理时 batch 组成动态变化，BatchNorm 的统计量根本没法算。LayerNorm 只看单个样本自己的特征维，与 batch 和序列长度彻底解耦。
+**为什么常用 LayerNorm？** 对 `[B,T,D]` 输入，典型 LLM 逐 token 沿 D 统计，不混入其他样本或位置。这便于变长序列和动态 batch。BatchNorm 不是「根本不能推理」：默认推理可用运行统计，但其归纳偏置和训练/推理统计不如逐 token Norm 自然。LayerNorm 的实际统计轴由 `normalized_shape` 决定，不能只凭名字判断。
 
 LayerNorm 公式：
 
@@ -46,8 +44,10 @@ LayerNorm 做两件事：减均值（re-centering）+ 除标准差（re-scaling�
 
 $$\text{RMSNorm}(x) = \frac{x}{\sqrt{\frac{1}{d}\sum_i x_i^2 + \epsilon}} \cdot \gamma$$
 
-- 少一次均值计算与一组参数，速度更快；消融研究表明 LayerNorm 起作用的主要是 re-scaling，去掉 re-centering 几乎不掉点。
-- LLaMA、Qwen、DeepSeek 等现代模型标配。实现细节（混合精度下先升 float32 再算）见 [手撕代码题解集](/interview/coding-problems)。
+- 减少中心化与偏移计算。[RMSNorm 论文](https://arxiv.org/abs/1910.07467)在指定任务上得到接近 LayerNorm 的表现与运行时间收益，不能外推为任何模型都无损或更快。
+- 多个 LLaMA、Qwen、DeepSeek 配置采用 RMSNorm，仍应核对 checkpoint。统计量常升到 FP32，但不能据此把整个模型称为 FP32 计算。
+
+构造辨析：设 `x=[1,1]`、缩放为 1、偏移为 0，LayerNorm 输出 `[0,0]`；RMSNorm 输出接近 `[1,1]`。RMSNorm 不减均值，所以不具备 LayerNorm 对整体平移的同样不变性。极小输入处 epsilon 也会影响缩放，不能当作可忽略常数。
 
 ## Pre-Norm vs Post-Norm（必考）
 
@@ -59,8 +59,8 @@ x ──► Sublayer ──► (+x) ──► Norm       x ──► Norm ──
       梯度必须穿过每层的 Norm                残差路径上无 Norm，梯度可"直通"
 ```
 
-- **Post-Norm**：归一化作用在残差之后，表达能力强；但反向传播时梯度每层都要过 Norm 的缩放，深层时不稳定，必须配 warmup 小心伺候，层数一多就难训。
-- **Pre-Norm**：残差主干上没有任何变换，梯度无衰减直达底层，**深层训练稳定**，是几乎所有现代 LLM 的选择。代价：研究发现 Pre-Norm 深层的增量贡献会被主干上不断增大的激活值「稀释」，存在一定**深度浪费**（等效深度低于名义深度）。
+- **Post-Norm**：`Norm(x + F(x))`，残差输出还经过 Norm。[Pre/Post-LN 分析](https://arxiv.org/abs/2002.04745)指出特定初始化假设下 Post-LN 输出侧梯度偏大，warmup 有助稳定；不等于所有深层 Post-Norm 都不能训练。
+- **Pre-Norm**：`x + F(Norm(x))`，Jacobian 含恒等项，改善传播路径，但其他分支可放大或抵消梯度，不能保证「无衰减」。深层贡献相对主干变小是需测的现象，不应把每个 Pre-Norm 都判为深度浪费。
 
 **折中与演进**：
 
@@ -75,7 +75,7 @@ x ──► Sublayer ──► (+x) ──► Norm       x ──► Norm ──
 
 大规模训练中常见崩溃源：**注意力 logits 爆炸**——Q·K 点积数值随训练增大，softmax 饱和成 one-hot，梯度归零甚至 loss spike。
 
-**QK-Norm** 在计算注意力前对 Q、K 各做一次 RMSNorm/LayerNorm，把点积量级锁死在可控范围。Qwen3、Gemma 等新一代模型采用，取代了 Qwen 早期「QKV 加 bias」的经验性做法（关联演进见 [LLaMA 与 Qwen](/models/llama-qwen)，loss spike 全景见 [训练深入](/advanced/training-internals)）。
+**QK-Norm** 在点积前归一化 Q/K，降低范数漂移的影响。[2020 年 QKNorm](https://arxiv.org/abs/2010.04245)使用头维 L2 归一化和可学习尺度；现代配置也可采用 RMSNorm 等，不是同一个固定公式。可学习缩放仍会改变分数量级，不能说被「锁死」；采用 QK-Norm 和是否使用 QKV bias 也是两个独立选择。详见 [LLaMA 与 Qwen](/models/llama-qwen)及[训练深入](/advanced/training-internals)。
 
 ## 激活函数：从 ReLU 到 SwiGLU
 
@@ -89,32 +89,32 @@ x ──► Sublayer ──► (+x) ──► Norm       x ──► Norm ──
 
 **GLU（门控线性单元）** 的思想：两路线性变换，一路过激活当**门**，逐元素调制另一路：
 
-$$\text{GLU 家族}(x) = \text{Act}(xW_g) \otimes xW_u$$
+$$\mathrm{GLU}(x)=\mathrm{Act}(xW_g)\odot(xW_u)$$
 
-按门的激活函数不同：ReGLU（ReLU 门）、GEGLU（GELU 门）、**SwiGLU（SiLU 门，效果最佳成为标配）**。完整 FFN：
+按门的激活函数不同：ReGLU、GEGLU、SwiGLU；哪一种更好需要比较训练预算和任务。这里 $\odot$ 表示逐元素乘法，不是 Kronecker 积。完整 SwiGLU FFN：
 
-$$\text{FFN}(x) = (\text{SiLU}(xW_g) \otimes xW_u)W_d$$
+$$\mathrm{FFN}(x)=(\mathrm{SiLU}(xW_g)\odot(xW_u))W_d$$
 
-- 三个矩阵而非两个，为保持参数量不变，中间维度取 **8/3·d** 而非 4d（LLaMA、Qwen 均如此）。
-- 门控让网络能**逐元素动态控制信息通过**，表达能力强于固定非线性；SwiGLU 论文作者 Shazeer 戏称效果好得「无法解释，归功于神之眷顾」，面试可以引用这个梗，但要补上「门控+平滑」的正经解释。
+- 忽略 bias，普通 4d FFN 参数为 $8d^2$，门控 FFN 中间宽度 m 的参数为 $3dm$；等预算得到 $m=8d/3$。实际模型可能采用不同扩张倍数和硬件取整，不是所有 LLaMA/Qwen 都严格相同。
+- 门控提供输入相关的逐元素调制。[GLU 变体论文](https://arxiv.org/abs/2002.05202)报告的是特定 seq2seq 实验收益，不以作者玩笑代替因果解释。
 
 ## 一张表串起训练稳定性暗线
 
-| 年代 | 痛点 | 解法 |
+| 讨论线索（非严格年表） | 痛点 | 解法 |
 | --- | --- | --- |
 | 2017 | 深层 Post-Norm 训不动 | warmup + 小心调参 |
 | 2019-20 | 模型加深，梯度不稳 | **Pre-Norm** 普及 |
 | 2020-22 | 计算开销 + 简化 | **RMSNorm** 替代 LayerNorm |
 | 2022-23 | FFN 效果瓶颈 | **SwiGLU** 替代 GELU |
-| 2023-25 | 注意力 logits 爆炸 / loss spike | **QK-Norm**、logits 软上限等 |
+| 2020 起的相关研究 | 注意力饱和与分数尺度 | **QK-Norm**、logits 软上限等不同设计 |
 
 ## 高频追问
 
 **Q：RMSNorm 相比 LayerNorm 省在哪？为什么还能 work？**
-省掉「减均值」的计算和偏移参数 β。消融表明 LayerNorm 的收益主要来自 re-scaling（控制数值量级）而非 re-centering，所以只留缩放几乎无损，反而更快、参数更少。
+通常省掉中心化和偏移；论文在指定任务上支持其有效性，但实测速度受融合内核、形状与硬件影响，质量也需任务评测。
 
 **Q：为什么现代模型从 Post-Norm 转向 Pre-Norm？**
-深度扩展的需要。Post-Norm 下梯度每层都被 Norm 重新缩放，层数一深就不稳、必须依赖 warmup；Pre-Norm 让残差主干保持「恒等直通」，梯度无衰减回传，几十上百层也能稳定训练——稳定性换一点表达力，规模时代这笔账划算。
+Pre-Norm 提供更直接的残差路径，并在特定初始化分析与实验中有稳定性优势；但不保证无衰减，也不证明表达力必然更差。选择时同时看初始化、残差缩放、学习率和验证损失。
 
 **Q：Pre-Norm 有什么代价？**
 主干激活范数逐层增大，深层子层的输出相对主干越来越小，增量贡献被稀释（「深而不深」）。这是 Sandwich/Peri-LN 等双 Norm 方案以及各种残差缩放技巧出现的动机。
@@ -130,3 +130,12 @@ $$\text{FFN}(x) = (\text{SiLU}(xW_g) \otimes xW_u)W_d$$
 
 **Q：归一化和残差连接是什么关系？**
 互补的两大支柱：残差保证信息/梯度跨层流动（解决「传得到」），归一化保证数值范围稳定（解决「不爆炸」）。现代标准结构 `x + Sublayer(Norm(x))` 就是两者的组合。
+
+这里的「保证」应理解为设计动机，而不是数学或训练验收保证。
+
+<details>
+<summary>自测：逐 token LayerNorm 能否代替 padding mask？</summary>
+
+不能。它只归一化该 token 的特征，不决定其他位置能否读这个 token；pad 向量即使被归一化，仍需 attention/loss 的位置有效性处理。排查训练时分别记录激活范数、QK 分数、梯度范数和有效 token 数，避免把所有异常都归因于 Norm。
+
+</details>

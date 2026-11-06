@@ -1,8 +1,6 @@
 ---
 title: Agent 观测、取证与事故响应手册：Claude Code / Codex / OpenClaw / Hermes
-description: >-
-  “有日志”不等于可观测，“能重放聊天记录”不等于能解释一次副作用，“任务完成”不等于已被安全审计。生产 Agent 的观测系统必须把用户、任务、子
-  Agent、模型、上下文、工具、执行器、外部 effect 和交付结果连成一条可查询证据链，并且在采集时不把密钥、源代码和私人对话再次扩散。本页将 Cl
+description: 区分指标、trace、审计与取证工件，建立任务到副作用的证据链，讨论采样、脱敏、回放和事故止血。
 level: L2
 roles:
   - 应用开发
@@ -72,7 +70,11 @@ request_id -> task_id -> run_id -> execution_id
 
 规则是：ID 可关联，原始载荷按需隔离。`session_id` 不是身份，`trace_id` 也不是授权凭证；它们只用于定位链路。
 
+外部传入的 trace context 也不可信：入口重新绑定真实 tenant/principal，不根据 trace baggage 中的身份授权。异步任务可用 span link 关联多父任务，不能为了得到一棵漂亮树而伪造单父调用顺序。实际读取的 [OpenTelemetry 采样说明](https://opentelemetry.io/docs/concepts/sampling/)指出采样降低存储成本，并区分 head/tail sampling；采样 trace 因而不是关键写操作的完整审计账本。
+
 ## 三、四类 Runtime 的公开观测能力
+
+保留原产品导航。默认字段、导出开关、命令与诊断包脱敏行为未逐版本核验；不要用本节替代实际 effective telemetry 配置、字段检查和数据泄露实验。
 
 | Runtime | 已公开的运行面 | 应在企业侧补齐什么 |
 | --- | --- | --- |
@@ -188,6 +190,8 @@ evidence_bundle:
 
 SLO 不能只写“回答成功率 99%”。例如企业 Coding Agent 可以定义：
 
+下列 100%/零值是目标，不是已取得的指标。Audit coverage 的分母应来自网关/业务 effect 账本，不来自“已有 audit log 条数”；否则丢日志会连分母一起丢。Exporter 故障期间关键事件先写 durable spool/outbox，积压越过上限时暂停高风险新写，普通性能 trace 可以有明示采样损失。
+
 - P95 从 task admission 到第一条可读状态的时延；
 - 受控写工具的 audit coverage 100%；
 - 高风险 effect 的 reconciliation coverage 100%；
@@ -227,6 +231,8 @@ SLO 不能只写“回答成功率 99%”。例如企业 Coding Agent 可以定�
 > 排障需要可验证的计划、工具、证据和决策，不需要也不应依赖完整私有推理文本。完整 reasoning 会扩大敏感数据、误导审计者并提高保留成本。用结构化 decision summary、policy result、tool arguments summary、evidence refs 和最终 effect 组成可操作的解释链。
 
 ### Q5：如何证明 OTel/日志没有成为新的数据泄露面？
+
+构造验证：用测试 secret 分别置于 header、URL query、工具错误和附件名，检查 exporter、spool、支持包和评测回流，而不是只查最终控制台。L1 能指出哪些字段不该采；L2 能解释短保留 trace 与强完整性 audit 的分离；L3 披露注入位置与未覆盖编码/二进制路径，不能由正则扫描零命中证明没有泄露。
 
 > 从采集配置、schema allowlist、redaction 覆盖率、存储加密、访问控制、导出审计、保留/删除策略和定期 red-team 样本证明。默认只采 metadata；内容级 telemetry 必须按 task/time/tool 范围升档并有批准。还要监控 redaction 失败、异常字段长度和未经授权的 trace export。
 

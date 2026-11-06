@@ -38,6 +38,8 @@ classification: inferred
 
 Spring AI 的价值是把这些横切能力收拢成 Spring 风格的组件，让 LLM 应用像普通后端能力一样被配置、注入、观测和治理。
 
+框架抽象不是安全控制面：Spring Security、租户策略、Tool Gateway 和领域事务仍由应用接入。本文读取的是官方默认文档，不假定与你的 BOM 相同；复现先固定 JDK、Spring Boot、Spring AI BOM、模型/向量库适配器与 endpoint，确认对应版本的默认行为。不要混用不同版本的工具回调或结构化输出示例。
+
 ## 核心抽象
 
 | 抽象 | 作用 | 面试表达 |
@@ -51,6 +53,14 @@ Spring AI 的价值是把这些横切能力收拢成 Spring 风格的组件，�
 | Tool Calling | 把 Java 方法或业务工具暴露给模型调用 | 让模型查询订单、创建工单、查库存 |
 
 官方文档中，ChatClient 被定义为和 AI Model 通信的 fluent API，并支持同步和流式模型；Advisors 则用于在交互前后做增强、转换和复用生成式 AI 模式。面试无需背接口细节，但要能讲出这些抽象在生产链路里的位置。
+
+`ChatClient` 是调用编排入口，`ChatModel` 是模型适配层，`entity()`/converter 是输出映射，不是事实校验器。[Output Converter 官方说明](https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html) 明确其格式引导是 best effort，需结合 schema 校验。provider-native 约束、Java 反序列化、Bean Validation/业务一致性分别验证，不能因为得到了 DTO 就直接执行业务写入。
+
+### Advisor 顺序是数据外发边界
+
+官方 [Advisors 文档](https://docs.spring.io/spring-ai/reference/api/advisors.html) 说明较低 order 值先执行，请求经过链后调用模型，响应再返回链。应确认认证/租户上下文在 Memory/RAG 读取前可用；检索权限过滤发生在查询服务，不能只把脱敏放在最终响应 Advisor。若某个 Advisor 记录了完整上下文，后面的脱敏无法撤回已写日志。使用合成敏感字段检查每一阶段的输入/输出，不仅检查最终回答。
+
+工具也可能由框架自动循环执行。[Tool Calling 文档](https://docs.spring.io/spring-ai/reference/api/tools.html) 给出了外部审批/中间进度需要用户控制执行的场景；注册工具不等于自动获得批准。只把受控回调暴露给模型，领域服务从不可伪造的服务端上下文读取身份，而不是从模型的 `userId/tenantId` 参数读取。
 
 ## 企业 Java 接入架构
 
@@ -80,9 +90,9 @@ Web / App / 客服台
 
 | 选型 | 生态 | 适合场景 | 风险 |
 | --- | --- | --- | --- |
-| Spring AI | Spring 官方生态风格 | Java/Spring Boot 存量系统、企业后端、政企金融 | AI 生态不如 Python 丰富，复杂 Agent 需自己设计 |
-| LangChain4j | Java LLM 应用框架 | Java 团队快速做 RAG、工具调用、Agent demo | 与 Spring 体系的治理集成要自己补 |
-| LangChain | Python 生态 | 快速试验、RAG/Agent 生态丰富、LangGraph 编排 | Java 业务系统要跨语言服务化 |
+| Spring AI | Spring 组件风格 | Java/Spring Boot 存量系统 | 具体 provider 能力、工具循环与持久化语义仍需核验 |
+| LangChain4j | Java LLM 应用框架 | Java 团队候选 | 比较当前版本的 Spring 集成、工具门禁与维护成本，不预设无集成 |
+| LangChain | Python / JS 等生态 | 检索与模型链路候选 | 若采用跨语言部署，要单独设计身份传播、超时与运维 |
 | 直接封装 HTTP | 无框架 | 链路简单、极致可控 | 组件复用、观测、工具调用、向量库抽象都要自建 |
 
 面试结论可以这样讲：
@@ -95,10 +105,10 @@ Web / App / 客服台
 收益是统一抽象和工程治理：模型调用、prompt、embedding、vector store、tool calling、RAG advisor 可以在 Spring 体系里被配置、注入、监控和复用。自己封装 HTTP 初期快，但后期每个业务都重复做超时、重试、流式、日志、成本和模型切换。
 
 **Q：Java 服务如何做流式输出？**  
-常见是 SSE。后端把上游模型 token stream 转成 `text/event-stream` 推给前端。要处理四件事：客户端断开要取消上游请求；上游超时要发送错误事件并收尾；敏感内容要能中断或延迟输出；日志要记录完整响应或安全摘要。
+常见是 SSE，后端将上游文本 delta 编码成有事件边界的 `text/event-stream`，不是每个事件一定对应一个 token。客户端断开时请求取消，但供应商可能已生成/执行工具；上游失败在连接仍可写时发终态错误，否则持久化终态供查询。敏感内容需要发送前缓冲审核，事后中断不能撤回已显示文字。日志默认只保留脱敏摘要、状态与版本，不默认落完整响应。
 
 **Q：大模型接口慢，Java 线程会不会被拖死？**  
-同步 Servlet 模型下要控制线程池、超时和并发；高并发流式场景更适合 WebFlux 或异步执行。无论哪种方式，都要做限流、排队、熔断和降级，避免上游慢请求把业务线程耗尽。
+控制线程池、超时和并发。WebFlux 不会把阻塞 JDBC 或同步工具自动变为非阻塞：在 event loop 上执行会拖慢同线程其他请求。将阻塞工具放到有界调度器/隔离池，限制并发和排队；虚拟线程也不能无限增加数据库或供应商容量。异步边界须显式传播已验证的主体，不能假定 ThreadLocal 总能跟随线程切换。
 
 **Q：RAG 权限怎么做？**  
 文档入库时带 tenant_id、doc_id、role、owner、department 等元数据；查询时从用户上下文生成过滤条件，先过滤再召回，召回后做二次权限校验。不能先全局召回再靠 prompt 告诉模型“不要泄露”。
@@ -119,17 +129,27 @@ Spring AI 面试最容易从“你会用 ChatClient 吗”转向“线上出问�
 | Java 线程池被拖满 | 同步阻塞等待慢模型，缺少超时和并发隔离 | AI 调用使用独立线程池/异步/WebFlux；设置 bulkhead、timeout、熔断 |
 | RAG 偶发越权 | 只在 prompt 里写权限，检索层未过滤 | tenant/role/doc ACL 前置到 VectorStore 和 BM25；生成前二次校验引用文档 |
 | Tool Calling 调错业务 API | 工具描述模糊、参数太自由、读写工具混放 | schema 变窄；只读/写操作分开；写操作加确认；工具输出结构化错误码 |
-| JSON 输出不稳定 | 只靠自然语言约束，解析失败无恢复 | 使用结构化输出/Output Converter；失败时解析重试；关键字段服务端校验 |
+| JSON 输出不稳定 | 格式引导不等于约束；拒答/截断被当正文 | 分类终态；解析/schema/业务校验分层；无副作用的生成才有界重试，不自动修复金额/实体 ID |
 | 成本突然升高 | Top-K 过大、长上下文、循环调用、缓存失效 | token 计量按 app/tenant/prompt_version 拆账；预算熔断；模型路由和缓存 |
 | 换模型后效果漂移 | prompt、工具 schema、拒答风格不兼容 | 通过模型网关灰度；跑 golden set 和 bad case；保留旧模型回滚 |
 
 ### 面试可复述版本
+
+可重复联调的三个检查点（需自己的已固定版本服务，本文未运行 Spring 应用）：
+
+- 两个用户询问同一文档，VectorStore/BM25 请求捕获的租户过滤应不同，缓存不得跨主体泄露；模型自报 tenant 不应改变过滤。
+- 注册一个合成写工具，模型提出调用但未批准：领域状态不得变化；批准后故意让回执超时，重试前查幂等回执。
+- 慢模型持续输出时断开客户端：确认请求资源最终释放，记录 `cancel_requested` 与实际上游终态/未知费用，不能用本地订阅关闭证明供应商取消成功。
+
+L1 能定位 converter、模型适配器或工具错误；L2 能设计线程/连接隔离、授权上下文传播和取消契约；L3 用固定负载与阻塞比例比较同步/异步方案，报告排队与尾延迟，不用框架名称推断性能。
 
 > 我不会把 Spring AI 项目只讲成调用 ChatClient。生产排障会先看入口层的 SSE 和线程池，再看模型调用的超时、限流、重试和 fallback；RAG 问题拆检索、权限和上下文；Tool Calling 问题拆 schema、授权、幂等和错误码；最后用 trace 把 prompt、模型、token、工具调用和引用文档串起来。这样才能定位是模型问题、业务 API 问题，还是工程治理问题。
 
 ## 项目讲法
 
 银行客服 Agent 可以这样讲：
+
+以下是银行客服参考设计，不是本文验证过的上线经历；未实现的能力应改为计划，不能复制为履历。
 
 > 我们在 Spring Boot 服务里用 Spring AI 做统一 AI 接入层。用户问题先经过意图识别，制度类问题走 RAG，账户/账单类问题通过 Tool Calling 调用内部只读 API，高危操作只生成工单或待确认动作。RAG 检索带租户和权限过滤，模型输出通过 SSE 返回。上线时重点做了超时、重试、限流、审计日志和 token 成本统计，避免模型慢请求影响核心交易系统。
 

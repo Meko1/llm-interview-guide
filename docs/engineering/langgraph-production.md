@@ -25,11 +25,11 @@ classification: inferred
 
 ## 一、什么时候需要 LangGraph 生产化
 
-简单 RAG、固定工作流、单次工具调用，不一定要上 LangGraph。出现下面任意三类特征，就值得把 Agent 设计成状态图：
+简单 RAG、固定工作流、单次工具调用，不一定要上 LangGraph。下面是选型信号，不存在“凑够三项”或“超过固定步数”就必须用图的门槛：
 
 | 特征 | 说明 | 为什么 Graph 更合适 |
 | --- | --- | --- |
-| 多步长任务 | 任务超过 5~10 步，可能跨分钟或小时 | 需要 checkpoint 和恢复 |
+| 多步长任务 | 跨请求、等待外部事件或需要故障续跑 | 需要 checkpoint 和恢复 |
 | 动态分支 | 根据工具结果、用户补充、评估结果决定下一步 | 条件边比一串 if/else 更清晰 |
 | 高危动作 | 发邮件、建单、退款、改库、提交审批 | 需要 interrupt + 人审 |
 | 外部副作用 | 工具调用会改变业务系统状态 | 需要幂等、补偿和审计 |
@@ -94,10 +94,12 @@ Checkpoint 至少要回答四个问题：
 
 1. **存什么**：State、当前节点、上一步输入输出摘要、工具调用状态、错误码、审批状态。
 2. **存哪里**：开发环境可用内存或 SQLite，生产环境通常用 Postgres / Redis / 对象存储组合。
-3. **什么时候存**：每个节点完成后存；高危工具执行前必须先存 pending checkpoint。
+3. **什么时候存**：按当前 checkpointer 的执行边界核对；业务 pending action 在副作用前持久化，不要把业务事务边界与框架 checkpoint 混同。
 4. **怎么恢复**：恢复时不能盲目重跑写操作，要先查外部系统状态。
 
 ### Checkpoint 表设计
+
+下表是应用侧任务索引示意，不是 LangGraph 官方 saver 表结构。使用具体 saver 时不要自行拼一个 state_json 表就声称兼容 checkpoint 协议；跨 thread 的长期数据与 thread 状态也应分开，见本轮读取的[官方持久化文档](https://docs.langchain.com/oss/python/langgraph/persistence)。
 
 | 字段 | 说明 |
 | --- | --- |
@@ -150,7 +152,7 @@ detect_risk
 
 面试官如果问“用户确认后怎么继续”，可以这样答：
 
-> interrupt 时保存 checkpoint，并把 approval_id 写入审批服务。审批通过后，由后端恢复同一个 thread_id 的 checkpoint，把 approval_id 注入 State，然后从 commit 节点继续执行。拒绝或超时则走 cancel / revise 分支，不能让模型自己伪造确认。
+> 审批服务持久化 approval_id 与动作摘要，客户端恢复同一 thread_id；后端校验审批后通过 `Command(resume=...)` 提供结果。恢复会从包含 interrupt 的节点开头重执行，见[官方中断语义](https://docs.langchain.com/oss/python/langgraph/interrupts)。审批前必须无副作用或幂等，随后路由到 commit 节点，且提交前重查权限、资源版本和审批有效期。
 
 ## 五、工具副作用与幂等
 
@@ -173,13 +175,20 @@ Checkpoint 恢复最容易踩坑：图恢复了，但外部动作已经发生过
 | --- | --- |
 | 重试导致重复扣款 | 业务接口按 `idempotency_key` 去重 |
 | 恢复后不知道是否执行成功 | 用 `action_id` 查询外部状态 |
-| 外部系统不支持幂等 | 在本系统落 pending/committed 状态，串行化调用 |
+| 外部系统不支持幂等 | pending 与串行化只能减少并发重复；超时结果未知时查单、补偿或转人工，不能保证恰好一次 |
 | 已执行但后续节点失败 | 设计补偿动作或人工处理队列 |
 | 并行工具都有副作用 | 高风险写操作默认不并行，必要时拆成审批后的事务步骤 |
 
 可复述版本：
 
 > Checkpoint 只保证图状态可恢复，不保证外部世界可回滚。所以写工具要像分布式系统一样设计：幂等键、pending 状态、外部状态查询、补偿和审计缺一不可。
+
+<details>
+<summary>故障演练：外部建单成功，checkpoint 写入失败</summary>
+
+恢复仍使用原 action_id 与幂等键，先查询外部业务结果。若确认成功，补记结果再进入后续节点；若不能确认且外部接口不支持去重，标 `outcome_unknown` 并转人工，不盲重试。审批后节点也可能重执行，不能因为已经过 interrupt 就放弃幂等。
+
+</details>
 
 ## 六、失败恢复与条件边
 
@@ -213,7 +222,7 @@ LangGraph 的 trace 要能回答：这次任务为什么走到这个节点、为
 | Checkpoint | checkpoint_id、state_size、status |
 | Approval | approval_id、approver、decision、duration |
 
-上线门禁建议：
+上线门禁建议（阈值由业务定义，下面的零违规是测试集断言，不是对所有未来运行的保证）：
 
 - Golden set 任务成功率达标。
 - 禁止工具实际执行数 = 0。

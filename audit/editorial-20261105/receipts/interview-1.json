@@ -1,0 +1,390 @@
+{
+  "group": "interview-1",
+  "ownershipCount": 20,
+  "entries": [
+    {
+      "path": "docs/interview/a2a-production-interoperability-qna.md",
+      "status": "edited",
+      "summary": "延续已有改动；锁定 A2A v0.2.6 任务生命周期，区分终态、退款效果和企业扩展；纠正通知排序及超时重投假保证，补取消竞态的 L1/L2/L3 推理。",
+      "sources": [
+        "https://a2a-protocol.org/v0.2.6/topics/life-of-a-task/",
+        "https://datatracker.ietf.org/doc/html/rfc8693.html",
+        "https://a2a-protocol.org/v0.2.6/specification/"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读官方 v0.2.6 规范任务终态公开段落；生命周期独立页不可访问，RFC 8693 仅概要。",
+      "openIssues": [
+        "原移动分支链接仅作导航；其他版本、签名、推送认证及企业扩展需双方固定合约后验证。",
+        "无跨组织退款或取消实测。"
+      ],
+      "sha256": "246f27924e7563daa41f307dbe5aaf3fcbba12c0fe5fb08fd131417f1aa437c9"
+    },
+    {
+      "path": "docs/interview/agent-automation-orchestration-playbook.md",
+      "status": "edited",
+      "summary": "保留会话/租约现有修订，分离业务窗口去重和配置 revision；补时区/漏跑策略与成功率分母演示；删除 job 不默认 kill，403 不允许换源绕过。",
+      "sources": [
+        "https://developers.openai.com/codex/app/worktrees"
+      ],
+      "sourceReview": "linked_only",
+      "sourceReadScope": "本轮 worktree 来源未得到可复核正文；保留为链接，产品自动化细节不当作合约。",
+      "openIssues": [
+        "产品 session、取消、删除、投递行为未逐版本核验，须以固定安装版本实验确认。",
+        "成功率数值为构造示例，不是实践报告。"
+      ],
+      "sha256": "4cc0219c408208e80afffd9aef05af057c45aacf342af2a9d3ba1c78775a3236"
+    },
+    {
+      "path": "docs/interview/agent-code-review-delivery-playbook.md",
+      "status": "edited",
+      "summary": "延续已有 SHA/风险修订；纠正 required check 可以 neutral/skipped 的门禁误读，补扫描未执行失败案例；明确门禁 YAML 伪配置和多模型独立性证据。",
+      "sources": [
+        "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读官方 stale approval 与 required status checks 的 success/skipped/neutral 段落。",
+      "openIssues": [
+        "产品 Code Review/Hermes/Codex 的具体 UI、finding 接口和命令未逐版本验证。",
+        "未复现 CI/分支保护配置，文档不是组织配置证明。"
+      ],
+      "sha256": "dc7b19250658399c7d37939b41572e532c2c16d98cc254bbfaf5db5cb7f0fb02"
+    },
+    {
+      "path": "docs/interview/agent-connector-identity-lifecycle-playbook.md",
+      "status": "edited",
+      "summary": "纠正纯 OAuth/OIDC nonce 混用；内部 lease 不冒充提供方 downscoped token；分析轮换响应丢失与 Vault CAS 的非原子窗口，补分层恢复验证。",
+      "sources": [
+        "https://auth0.com/docs/secure/tokens/refresh-tokens/refresh-token-rotation",
+        "https://auth0.com/docs/secure/tokens/refresh-tokens/configure-refresh-token-rotation",
+        "https://www.rfc-editor.org/rfc/rfc9700.html"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读 Auth0 官方 refresh token rotation/overlap 公开段落；RFC 9700 页面不可访问。",
+      "openIssues": [
+        "四 Runtime OAuth 缓存和命令细节未逐版本验证。",
+        "提供方 rotation、重试、撤销接口各异；没有换票/丢响应实测。"
+      ],
+      "sha256": "4d50dc54e55d40f83f77e853a1cc0254ae4b64437b3fb75b123b7714fa8510f4"
+    },
+    {
+      "path": "docs/interview/agent-context-memory-governance.md",
+      "status": "edited",
+      "summary": "信任标签不冒充强制控制；召回先做授权域约束；删除伪置信概率，纠正跨分支记忆冲突替代，补 tombstone/备份恢复与更正测试。",
+      "sources": [
+        "https://code.claude.com/docs/en/debug-your-config"
+      ],
+      "sourceReview": "linked_only",
+      "sourceReadScope": "本轮 debug-config 来源仅获导航，未获可复核全文；指令与资源授权分工为参考设计。",
+      "openIssues": [
+        "产品加载顺序、固定限制及自动记忆行为未逐版本验证。",
+        "没有隐私删除或备份恢复演练；删除要求非法律意见。"
+      ],
+      "sha256": "f2d61f7603efb03bef53c4d755de4a05b49ec209faf76c20df6520d754c7642e"
+    },
+    {
+      "path": "docs/interview/agent-continuous-authorization-playbook.md",
+      "status": "edited",
+      "summary": "纠正 fence 需原子资源端执行的边界；区分 introspection 活跃与业务授权；补一次性 effect/HTTP重试、缓存和在途请求撤销限制。",
+      "sources": [
+        "https://www.rfc-editor.org/info/rfc7662/"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读 RFC Editor 官方 RFC7662 介绍的 token active/授权元信息；非协议全篇核验。",
+      "openIssues": [
+        "未做撤销传播或高并发 grant 消费实验。",
+        "四 Runtime Hook、超时、managed 配置未逐版本验证。"
+      ],
+      "sha256": "6f2e08b6d5a74f6af5c9e606311486235bbbd101621eb59d2ca4c3d0bfd3a300"
+    },
+    {
+      "path": "docs/interview/agent-effect-transaction-compensation-playbook.md",
+      "status": "edited",
+      "summary": "纠正 UNKNOWN 换 revision 造成双退款；新金额先对旧 effect 对账，增量退款示例；NOT_STARTED 不从查无结果推导；标明框架代码示意及幂等提供方边界。",
+      "sources": [
+        "https://docs.stripe.com/api/idempotent_requests",
+        "https://docs.langchain.com/oss/python/langgraph/interrupts"
+      ],
+      "sourceReview": "linked_only",
+      "openIssues": [
+        "来源页面未获可核正文；Stripe 与 LangGraph 具体版本行为待核，正文已有标记。",
+        "未进行支付/补偿演练；旧产品映射仍为导航。"
+      ],
+      "sha256": "a07672a43cd7edbeda58cf6a555301978b5a811bbd7b9e6b09980d5035b76220"
+    },
+    {
+      "path": "docs/interview/agent-evaluation-safety-qna.md",
+      "status": "edited",
+      "summary": "有限样本零失败不冒充零风险；由二项假设推导零事件上界；补轨迹副作用与最终状态差异、unknown 样本处理；项目模板不冒充实际事故。",
+      "sources": [
+        "https://arxiv.org/abs/2406.12045"
+      ],
+      "sourceReview": "linked_only",
+      "openIssues": [
+        "tau-bench 来源未获正文，不引用数值或实践结果；统计为明示假设下构造推导。",
+        "没有实施评测或法律合规审查。"
+      ],
+      "sha256": "b8bcc778260cedc0766573efcbcaeb4afa62ae090636de70f971f16f9bcb72d3"
+    },
+    {
+      "path": "docs/interview/agent-lifecycle-policy-hook-fabric.md",
+      "status": "edited",
+      "summary": "修正 require_approval 示例提前发 capability；修改输入后重新授权；只读不默认 fail-open；区分 delivery ID 与可信时间戳；补 inbox pending 恢复和 outbox 非跨服务原子边界。",
+      "sources": [
+        "https://docs.github.com/en/webhooks/using-webhooks/validating-webhook-deliveries"
+      ],
+      "sourceReview": "linked_only",
+      "openIssues": [
+        "本轮来源未获正文；提供方签名字段与各 Runtime Hook 顺序/命令需固定版本核验。",
+        "候选时延预算不是实测；未做崩溃/重投实验。"
+      ],
+      "sha256": "856f8a3a1d376fa09a85849434c98aa6971195ce65432feaddbfcb3e34ebc7cf"
+    },
+    {
+      "path": "docs/interview/agent-model-routing-capability-playbook.md",
+      "status": "edited",
+      "summary": "禁止换 key 绕授权/配额；JSON Schema 等价不代表写语义等价；补 tool loop 断流/UNKNOWN 切换例子、端到端成本与按 route 配对验证；示例模型不是规格。",
+      "sources": [
+        "https://docs.openclaw.ai/model-failover",
+        "https://hermes-agent.nousresearch.com/docs/user-guide/features/fallback-providers/"
+      ],
+      "sourceReview": "linked_only",
+      "openIssues": [
+        "产品 profile/fallback/effort 具体行为未逐版本核验；保留原导航并标明。",
+        "未做模型路由或能力 contract 实验。"
+      ],
+      "sha256": "25281dcfd689ddb2a83d6efa937281ed970462f0d6e8e39436d5ef90f15a5928"
+    },
+    {
+      "path": "docs/interview/agent-observability-incident-response.md",
+      "status": "edited",
+      "summary": "区分采样 trace 与完整审计；入口 trace context 不作身份；审计覆盖分母来自 effect 账本；补 exporter 故障和合成 secret 多出口验证，产品默认未核。",
+      "sources": [
+        "https://opentelemetry.io/docs/concepts/sampling/"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读官方公开检索段落：采样成本、head/tail 区分及稀有错误取舍；trace API 页面不可访问，不作为证据。",
+      "openIssues": [
+        "四产品默认 telemetry/导出/诊断命令未逐版本验证。",
+        "未部署 collector 或做 secret 演练。"
+      ],
+      "sha256": "f5df49bd5414523d52345ce2781a8b569774dec474229cde7540efd7b5d8444a"
+    },
+    {
+      "path": "docs/interview/agent-prompt-injection-provenance-playbook.md",
+      "status": "edited",
+      "summary": "provenance 不冒充精确模型因果；派生摘要保守继承污点；补 redirect/IP/query 出站边界、跨 Agent 摘要洗白与合成 secret 验证。",
+      "sources": [
+        "https://openai.com/index/designing-agents-to-resist-prompt-injection/",
+        "https://openai.com/index/ai-agent-link-safety/"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读 OpenAI 官方防护设计公开段落：第三方来源、敏感 sink、分层防护；link-safety 仅导航。",
+      "openIssues": [
+        "没有实施红队，当前样本不构成全面安全证明。",
+        "精确模型因果不可由来源 graph 推导。"
+      ],
+      "sha256": "ef7c7d7479aea8bc982eadbe5d6d7283d02949bd617ae8f5d2c478b5d570b3dc"
+    },
+    {
+      "path": "docs/interview/agent-reproducibility-provenance-playbook.md",
+      "status": "edited",
+      "summary": "以 SLSA v1.0 区分 digest、可信出处和签名；manifest 占位不作产品配置；hash 无原文不能重建输入；补随机性/服务漂移与配对复现边界。",
+      "sources": [
+        "https://slsa.dev/spec/v1.0/provenance"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读官方 provenance v1.0 定义和构建产物用途；应用到 Agent 是参考设计，非标准认证。",
+      "openIssues": [
+        "四产品加载细节未逐版本验证。",
+        "未做模型重复实验或恢复历史服务版本。"
+      ],
+      "sha256": "593462f06e13bf2cb3cf0967bc8cc4039c0f0dd09bbeda3259ca70cceb1bd6db"
+    },
+    {
+      "path": "docs/interview/agent-runtime-architecture-qna.md",
+      "status": "edited",
+      "summary": "纠正 post-tool 泛称可阻断；worktree 不冒充访问控制；预算/YAML 标为构造契约，补 L1 最小运行时到 L2 并发恢复与 L3 固定版本比较。",
+      "sources": [
+        "https://code.claude.com/docs/en/hooks",
+        "https://github.com/openclaw/openclaw",
+        "https://github.com/NousResearch/hermes-agent"
+      ],
+      "sourceReview": "linked_only",
+      "openIssues": [
+        "产品具体 Hook/架构表面仅保留导航，未逐版本实际核验。",
+        "无企业 runtime 部署或性能比较实测。"
+      ],
+      "sha256": "381351f91224fa57359269d87cfe7202b11c797e540fefca9447a492060a6eff"
+    },
+    {
+      "path": "docs/interview/agent-runtime-upgrade-rollback-playbook.md",
+      "status": "edited",
+      "summary": "版本/ABI 示例标占位；删除约一周渠道断言；双读迁移非通用保证，禁止共享可变状态假灰度；恢复先处理撤销/删除账本和外部效果。",
+      "sources": [
+        "https://code.claude.com/docs/en/setup",
+        "https://docs.openclaw.ai/install/updating",
+        "https://hermes-agent.nousresearch.com/docs/getting-started/updating/"
+      ],
+      "sourceReview": "linked_only",
+      "openIssues": [
+        "更新/备份/自动回退命令未逐版本核验，正文标明。",
+        "未做升级或恢复演练，安全最低版本需组织确定。"
+      ],
+      "sha256": "7a4f15c48551177f77d0ff722b2856f7f0ccb3a42c3551ca81eaea18ef4f7f7c"
+    },
+    {
+      "path": "docs/interview/agent-sandbox-execution-boundaries-playbook.md",
+      "status": "edited",
+      "summary": "容器不冒充独立内核；命令名/AST 不证明效果安全；补 npm test 脚本、符号链接/PATH/出网与残留验证；预算/产品开关标明参考设计。",
+      "sources": [
+        "https://docs.docker.com/engine/security/"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读 Docker 官方 namespace/cgroup、daemon、capability 与内核安全公开段落。",
+      "openIssues": [
+        "四 Runtime 沙箱默认/fallback/内置工具控制未逐版本验证。",
+        "未运行容器或逃逸演练；测试脚本例为构造威胁。"
+      ],
+      "sha256": "a876e27689145953f8c7374dde03cb74708cf566912de046f87e661973ad41a0"
+    },
+    {
+      "path": "docs/interview/agent-skills-production-governance.md",
+      "status": "edited",
+      "summary": "按参考设计界定产品导航；核对 SKILL.md 与实验 allowed-tools 非授权；签名字符串不冒充验签；补包解压/动态依赖边界与候选收益非劣评估。",
+      "sources": [
+        "https://agentskills.io/specification"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读 Agent Skills 官方格式/name/description/allowed-tools 实验属性；产品加载细节未核。",
+      "openIssues": [
+        "未进行供应链验签、解压或迁移实验。",
+        "各产品目录、Workshop 和动态配置仍为待固定版本导航。"
+      ],
+      "sha256": "89f36a0aceef428bf7c72261e3987faefe14f8646600c1d8a9803deca92e94d7"
+    },
+    {
+      "path": "docs/interview/agent-tool-contract-evolution-playbook.md",
+      "status": "edited",
+      "summary": "更正 Function Calling 错链；MCP2025-11-25不可访问不推默认dialect；canonical ID 与 provider name 分离；新增字段仍检查旧消费者；INTERNAL 不盲重试，补元/分单位漂移。",
+      "sources": [
+        "https://developers.openai.com/api/docs/guides/function-calling",
+        "https://modelcontextprotocol.io/specification/2025-11-25/server/tools"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读 OpenAI 官方函数 JSON Schema/strict 约束公开段落；MCP目标版本工具页不可访问，仅导航。",
+      "openIssues": [
+        "MCP输出兼容建议与 LangChain 类型/修复行为未逐版本核验。",
+        "示例配置和工具名须 adapter 实验确认；未做 API兼容测试。"
+      ],
+      "sha256": "67677c39ee0a52aaac2febb68248230ad114d85a23e2ee18a5b8b4fa9fda9f9f"
+    },
+    {
+      "path": "docs/interview/agent-workflow-platform-qna.md",
+      "status": "edited",
+      "summary": "移除年份/岗位考察断言；签名时间戳按提供方合约；区分 Temporal已完成历史replay与未完成Activity重试；补框架叠加重试和最小状态机取舍。",
+      "sources": [
+        "https://docs.temporal.io/activity-definition",
+        "https://docs.temporal.io/workflow-activity"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "web 实读 Temporal官方 Activity幂等与完成结果记录/replay 段落，不核SDK方法签名。",
+      "openIssues": [
+        "Dify/Coze/n8n/LangGraph具体导出、恢复、queue行为未逐版本验证。",
+        "未运行工作流或崩溃恢复实验。"
+      ],
+      "sha256": "18453522e1d0d19e21f91ce7649c24dce8e1bce3ccf37b3a048dbbb53c492f20"
+    },
+    {
+      "path": "docs/interview/application-practice-qna.md",
+      "status": "edited",
+      "summary": "区分主题发现与证据；拆分召回/重排指标和缓存授权边界；状态恢复不保证效果 exactly-once；QLoRA/PagedAttention 限定论文摘要结论，补可复算 KV/权重显存和成本每成功算例；纠正输出 confidence、训练集泄漏、事实权威和独立来源误判，项目叙述明确为模板。",
+      "sources": [
+        "https://arxiv.org/abs/2305.14314v1",
+        "https://arxiv.org/abs/2309.06180v1",
+        "https://docs.langchain.com/oss/python/langgraph/interrupts"
+      ],
+      "sourceReview": "verified",
+      "sourceReadScope": "本次任务前段通过 web 实读官方 arXiv 检索返回的 QLoRA/PagedAttention 摘要片段，仅支持冻结4-bit基座+adapter和分页KV管理动机；未阅读全文、未复现实验。续接阶段 arXiv open/search 未返回可读正文，不据此增加核验范围。LangGraph interrupts 仅导航。",
+      "openIssues": [
+        "没有训练、量化、推理服务、HR反事实或生产项目实测；构造算例不对应特定模型部署保证。",
+        "LangGraph/MCP/产品SDK恢复与授权行为未逐版本核验；课程、截图不作为频率或技术真实性证据。",
+        "未做论文全文审查；摘要阅读不支持通用吞吐、质量或显存收益指标。"
+      ],
+      "sha256": "6fd5d73ccfa284e671858ddf180223f06adabb1e3201ff8b61c92fd2016b1645"
+    },
+    {"path":"docs/interview/application-practice-roadmap.md","status":"edited","summary":"纠正旧课程等级与本站能力等级混用；约束输出与父块ACL、恢复边界；补50题召回/端到端分母例和真实作品分层验收。","sources":["https://json-schema.org/understanding-json-schema/reference/object","https://tour.json-schema.org/content/03-Objects/02-Additional-Properties","https://tour.json-schema.org/content/01-Getting-Started/03-Required-Properties","https://json-schema.org/understanding-json-schema/reference/null","https://aclanthology.org/2023.acl-long.99/","https://docs.langchain.com/oss/python/langgraph/durable-execution","https://arxiv.org/abs/2212.10496"],"sourceReview":"verified","sourceReadScope":"仅sourceChecks中实际web一手检索摘录verified；其他URL全为linked_only。未做全文/字幕/产品版本或性能实测认证。","sourceChecks":[{"url":"https://json-schema.org/understanding-json-schema/reference/object","status":"verified","scope":"实际web官方检索摘录：properties、required、additionalProperties约束，直读不可访问"},{"url":"https://tour.json-schema.org/content/03-Objects/02-Additional-Properties","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://tour.json-schema.org/content/01-Getting-Started/03-Required-Properties","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://json-schema.org/understanding-json-schema/reference/null","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://aclanthology.org/2023.acl-long.99/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://docs.langchain.com/oss/python/langgraph/durable-execution","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://arxiv.org/abs/2212.10496","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"}],"openIssues":["ProcessOn原脑图及15张截图本轮未读，不能作为来源证据。","HyDE、LangGraph及框架产品细节未全文核验；本文方案非实测。","所有未读来源逐URL在sourceChecks列为linked_only；不将单个可读来源扩展为全篇认证。"],"sha256":"7982a6b8a5cd69eec219bab4e1a7f9e50b9c9d4f73ecf2a431a5581bab52a078","validation":{"baselineSha256":"83863c4539c51da4de0e7818c70a3a03aaefd3a2554df1baaea1ac2bc61fbb03","oldHeadingCount":17,"headingIdsPreserved":true,"frontmatterPreserved":true,"diagramsPreserved":true,"utf8":true,"contentChanged":true,"pythonBlocksParsed":0}},
+    {"path":"docs/interview/application-practice-scenarios.md","status":"edited","summary":"27题声明构造，补退款unknown与设计幂等窗口、因果识别、拒答分母和每完成任务成本；AWS摘录支持通用重试，Stripe未读。","sources":["https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/","https://docs.stripe.com/api/idempotent_requests","https://docs.stripe.com/error-low-level"],"sourceReview":"verified","sourceReadScope":"仅sourceChecks中实际web一手检索摘录verified；其他URL全为linked_only。未做全文/字幕/产品版本或性能实测认证。","sourceChecks":[{"url":"https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/","status":"verified","scope":"实际web AWS官方摘录：幂等重试与副作用边界"},{"url":"https://docs.stripe.com/api/idempotent_requests","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://docs.stripe.com/error-low-level","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"}],"openIssues":["Dify、LoRA、量化和业务案例未实测；财务/合同方案非专业意见。","数值为构造，模型置信度不视为校准概率。","所有未读来源逐URL在sourceChecks列为linked_only；不将单个可读来源扩展为全篇认证。"],"sha256":"a8ba3f430208a3ec1a0dae6d8771007766e815bb3347973777ae6c6a51dd083e","validation":{"baselineSha256":"f1ef0402ed6586495a7238f6f1d459b6f0d0483f24b8678271534c4faac2388b","oldHeadingCount":37,"headingIdsPreserved":true,"frontmatterPreserved":true,"diagramsPreserved":true,"utf8":true,"contentChanged":true,"pythonBlocksParsed":0}},
+    {"path":"docs/interview/application-system-design.md","status":"edited","summary":"补索引generation原子发布、副作用unknown、holdout污染、记忆tombstone；增加Little定律与GQA KV GiB计算、预算原子预留和并行span关键路径。","sources":["https://arxiv.org/abs/2309.06180","https://opentelemetry.io/docs/concepts/signals/traces/"],"sourceReview":"verified","sourceReadScope":"仅sourceChecks中实际web一手检索摘录verified；其他URL全为linked_only。未做全文/字幕/产品版本或性能实测认证。","sourceChecks":[{"url":"https://arxiv.org/abs/2309.06180","status":"verified","scope":"实际web作者摘要摘录：fragmentation/redundant duplication与PagedAttention；非实验章节"},{"url":"https://opentelemetry.io/docs/concepts/signals/traces/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"}],"openIssues":["无平台部署、容量/恢复实测或当地合规审查。","构造KV估算不计权重/激活/分片复制，不外推所有模型。","所有未读来源逐URL在sourceChecks列为linked_only；不将单个可读来源扩展为全篇认证。"],"sha256":"2aee975315bce56c7c504f38b2666272d7dfdc87110928e0e6562db8f0537072","validation":{"baselineSha256":"a7facbab491e31b3db18a642f26b0797fca1eb60d32e00fefdf37783e5e7f0d0","oldHeadingCount":88,"headingIdsPreserved":true,"frontmatterPreserved":true,"diagramsPreserved":true,"utf8":true,"contentChanged":true,"pythonBlocksParsed":0}},
+    {"path":"docs/interview/application-troubleshooting-playbook.md","status":"edited","summary":"保留故障窗口而非恢复后证据；补unknown与写副作用重试、27次多层重试上界、P95聚合限制、索引代际发布及流式取消分层验收。","sources":["https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/","https://prometheus.io/docs/practices/histograms/"],"sourceReview":"verified","sourceReadScope":"仅sourceChecks中实际web一手检索摘录verified；其他URL全为linked_only。未做全文/字幕/产品版本或性能实测认证。","openIssues":["未做线上故障/撤权演练，数字为构造。","平台/Hook命令与安全通知规则未按版本/地区核验。","所有未读来源逐URL在sourceChecks列为linked_only；不将单个可读来源扩展为全篇认证。"],"sha256":"947062e288d01a38f12bcd26428431e4ee28a9fb4866677f9b0674f1d5fcb5a9","sourceChecks":[{"url":"https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/","status":"verified","scope":"实际web AWS官方摘录：重试不重复副作用；非全文"},{"url":"https://prometheus.io/docs/practices/histograms/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"}],"validation":{"baselineSha256":"445f0757844ab89e55639df1160f32fced3c5f4d4246c55e758fe0de86ca3193","oldHeadingCount":84,"headingIdsPreserved":true,"frontmatterPreserved":true,"diagramsPreserved":true,"utf8":true,"contentChanged":true,"pythonBlocksParsed":0}},
+    {"path":"docs/interview/bilibili-learning-resources.md","status":"edited","summary":"旧视频核验明确历史记录，保留BV/分P和标题；固定课程tag/commit不编版本快照；补Unicode/特殊token往返、2.5对2的token加权loss及分层作品验收。","sources":["https://www.bilibili.com/video/BV1pu411o7BE/","https://github.com/mli/paper-reading","https://arxiv.org/abs/1706.03762","https://www.bilibili.com/video/BV1opWYezEFK/","https://www.bilibili.com/video/BV1wt421h7Cx/","https://github.com/karpathy/minbpe","https://www.bilibili.com/video/BV1qWwke5E3K/","https://github.com/bbruceyuan/LLMs-Zero-to-Hero","https://www.bilibili.com/video/BV1fvhK6hExg/","https://www.bilibili.com/video/BV11LEA6eEuj/","https://cs336.stanford.edu/spring2025/","https://github.com/stanford-cs336/assignment1-basics","https://github.com/stanford-cs336/assignment1-basics/blob/main/CHANGELOG.md","https://www.bilibili.com/video/BV1EJM96BESq/","https://speech.ee.ntu.edu.tw/~hylee/ml/2025-spring.php","https://www.bilibili.com/video/BV1x2d5YPE6x/","https://www.bilibili.com/video/BV1QnSFBkEZU/","https://github.com/wdkns/modern_genai_bilibili/blob/main/agentic_rl/inference/vllm_sglang.ipynb","https://verl.readthedocs.io/en/latest/perf/perf_tuning.html#rollout-generation-tuning","https://github.com/karpathy/minbpe/tree/master","https://github.com/karpathy/minbpe/blob/master/README.md"],"sourceReview":"verified","sourceReadScope":"仅sourceChecks中实际web一手检索摘录verified；其他URL全为linked_only。未做全文/字幕/产品版本或性能实测认证。","sourceChecks":[{"url":"https://www.bilibili.com/video/BV1pu411o7BE/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/mli/paper-reading","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://arxiv.org/abs/1706.03762","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://www.bilibili.com/video/BV1opWYezEFK/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://www.bilibili.com/video/BV1wt421h7Cx/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/karpathy/minbpe","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://www.bilibili.com/video/BV1qWwke5E3K/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/bbruceyuan/LLMs-Zero-to-Hero","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://www.bilibili.com/video/BV1fvhK6hExg/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://www.bilibili.com/video/BV11LEA6eEuj/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://cs336.stanford.edu/spring2025/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/stanford-cs336/assignment1-basics","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/stanford-cs336/assignment1-basics/blob/main/CHANGELOG.md","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://www.bilibili.com/video/BV1EJM96BESq/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://speech.ee.ntu.edu.tw/~hylee/ml/2025-spring.php","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://www.bilibili.com/video/BV1x2d5YPE6x/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://www.bilibili.com/video/BV1QnSFBkEZU/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/wdkns/modern_genai_bilibili/blob/main/agentic_rl/inference/vllm_sglang.ipynb","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://verl.readthedocs.io/en/latest/perf/perf_tuning.html#rollout-generation-tuning","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/karpathy/minbpe/tree/master","status":"verified","scope":"实际web作者仓库摘录：UTF8 byte-level BPE教学实现；未执行"},{"url":"https://github.com/karpathy/minbpe/blob/master/README.md","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"}],"openIssues":["九条B站视频/时长/BV/分P本轮未读未看；旧核验记录非新证据。","李沐/袁朝发/李宏毅/verl等原链接本轮未读，仅保留导航。","未运行任何课件/作业代码，未验证授权与译文。","所有未读来源逐URL在sourceChecks列为linked_only；不将单个可读来源扩展为全篇认证。"],"sha256":"b06d1403f61dfc3bd14b74073e8be494dc41eb10baa565afca348f0d90800a60","validation":{"baselineSha256":"19db587cc0e2636cbb8bf105e476393fe844a946467ae2a12c4f24b80b67ee6d","oldHeadingCount":12,"headingIdsPreserved":true,"frontmatterPreserved":true,"diagramsPreserved":true,"utf8":true,"contentChanged":true,"pythonBlocksParsed":0}},
+    {"path":"docs/interview/coding-agent-production-playbook.md","status":"edited","summary":"产品功能矩阵降为待核索引；纠正GitHub令牌不能原生按branch/task绑定，补工作树共享Git/恶意测试执行、可信runner证据、80美元父子预算和kill switch不可撤销边界。","sources":["https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation","https://code.claude.com/docs/en/hooks","https://code.claude.com/docs/en/sub-agents","https://developers.openai.com/blog/codex-as-a-platform","https://learn.chatgpt.com/docs/codex/cli","https://docs.openclaw.ai/","https://docs.openclaw.ai/gateway/security","https://github.com/openclaw/openclaw/blob/main/docs/tools/skills.md","https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md","https://hermes-agent.nousresearch.com/docs/user-guide/security/","https://code.claude.com/docs/en/settings","https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/choosing-permissions-for-a-github-app","https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app"],"sourceReview":"verified","sourceReadScope":"仅sourceChecks中实际web一手检索摘录verified；其他URL全为linked_only。未做全文/字幕/产品版本或性能实测认证。","sourceChecks":[{"url":"https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation","status":"verified","scope":"实际web官方安装认证摘录：权限/仓库与1小时到期"},{"url":"https://code.claude.com/docs/en/hooks","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://code.claude.com/docs/en/sub-agents","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://developers.openai.com/blog/codex-as-a-platform","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://learn.chatgpt.com/docs/codex/cli","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://docs.openclaw.ai/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://docs.openclaw.ai/gateway/security","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/openclaw/openclaw/blob/main/docs/tools/skills.md","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/architecture.md","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://hermes-agent.nousresearch.com/docs/user-guide/security/","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://code.claude.com/docs/en/settings","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/choosing-permissions-for-a-github-app","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/generating-an-installation-access-token-for-a-github-app","status":"verified","scope":"实际web官方生成安装令牌摘录：仓库和权限限制"}],"openIssues":["四Runtime矩阵/Hook名/配置/旧CLI命令/Skills与Hermes架构未按固定版本核验。","未部署runner/GitHub代理或实测并行撤权；YAML为伪配置。","所有未读来源逐URL在sourceChecks列为linked_only；不将单个可读来源扩展为全篇认证。"],"sha256":"2f582282973232f81a9c3db6627a19e74bb51c6323baaccbfa1882002a901b45","validation":{"baselineSha256":"20b95a34eca72db786e028bf41c064c75f9648d08ebd480c22ed8cd1da888944","oldHeadingCount":30,"headingIdsPreserved":true,"frontmatterPreserved":true,"diagramsPreserved":true,"utf8":true,"contentChanged":true,"pythonBlocksParsed":0}},
+    {"path":"docs/interview/coding-agent-testing-verification-playbook.md","status":"edited","summary":"纠正退款验收、flaky隔离非放行、测试红灯分类；补required checks的skip/neutral与当前SHA、0.784和零事故95%上界2.95%构造计算、可信oracle分层验收。","sources":["https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks","https://code.claude.com/docs/en/how-claude-code-works","https://code.claude.com/docs/en/commands","https://developers.openai.com/codex/use-cases","https://developers.openai.com/api/docs/guides/evaluation-best-practices"],"sourceReview":"verified","openIssues":["Claude/Codex具体命令与原导航未读。","未运行CI、任务评测或生产灰度；统计依赖iid，非零风险保证。","所有未读来源逐URL在sourceChecks列为linked_only；不将单个可读来源扩展为全篇认证。"],"sourceReadScope":"仅sourceChecks中实际web一手检索摘录verified；其他URL全为linked_only。未做全文/字幕/产品版本或性能实测认证。","sourceChecks":[{"url":"https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks","status":"verified","scope":"实际web官方摘录：success/skipped/neutral、latest SHA、workflow skip可能Pending"},{"url":"https://code.claude.com/docs/en/how-claude-code-works","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://code.claude.com/docs/en/commands","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://developers.openai.com/codex/use-cases","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://developers.openai.com/api/docs/guides/evaluation-best-practices","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"}],"sha256":"b9620db0985dbe17394fc02112f0442029e0fc8f7de760918f3ddc15340c59fc","validation":{"baselineSha256":"56d7f5dde28b77109bdb401b7146b588e4aa23c912a1c3fdd7067032aad42ae4","oldHeadingCount":15,"headingIdsPreserved":true,"frontmatterPreserved":true,"diagramsPreserved":true,"utf8":true,"contentChanged":true,"pythonBlocksParsed":0}},
+    {"path":"docs/interview/coding-problems.md","status":"edited","summary":"移除11题排名与运行保证；修复mask全屏蔽、RoPE位置/偶数维、top-k精确候选和top-p边界、投票解析/平票、KV额外前向、LoRA设备/方向/首步梯度、DPO参考detach与全忽略loss。","sources":["https://docs.pytorch.org/docs/2.15/generated/torch.nn.functional.scaled_dot_product_attention.html","https://docs.pytorch.org/docs/2.14/generated/torch.nn.Transformer.html","https://huggingface.co/docs/transformers/v4.52.3/cache_explanation","https://github.com/microsoft/LoRA/blob/main/loralib/layers.py","https://arxiv.org/abs/2305.18290","https://github.com/karpathy/minbpe/tree/master","https://docs.pytorch.org/docs/2.14/generated/torch.nn.functional.scaled_dot_product_attention.html","https://github.com/karpathy/minbpe/blob/master/README.md"],"sourceReview":"verified","openIssues":["PyTorch官方读取只为检索摘录，HF Cache、LoRA源码与DPO未得正文。","教学片段非完整模型，未运行GPU/低精度/性能或模型generate实测。","所有未读来源逐URL在sourceChecks列为linked_only；不将单个可读来源扩展为全篇认证。","LoRA梯度为xAB公式直接推导，不冒称作者源码已读；投票示例纠正为第4样本提前停止3票对1票。"],"sourceReadScope":"仅sourceChecks中实际web一手检索摘录verified；其他URL全为linked_only。未做全文/字幕/产品版本或性能实测认证。","sourceChecks":[{"url":"https://docs.pytorch.org/docs/2.15/generated/torch.nn.functional.scaled_dot_product_attention.html","status":"verified","scope":"实际web官方2.15 SDPA摘录：bool True参与注意力、与MultiheadAttention相反；非运行/性能验证"},{"url":"https://docs.pytorch.org/docs/2.14/generated/torch.nn.Transformer.html","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://huggingface.co/docs/transformers/v4.52.3/cache_explanation","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/microsoft/LoRA/blob/main/loralib/layers.py","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://arxiv.org/abs/2305.18290","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/karpathy/minbpe/tree/master","status":"verified","scope":"实际web作者仓库UTF8 byte-level摘录"},{"url":"https://docs.pytorch.org/docs/2.14/generated/torch.nn.functional.scaled_dot_product_attention.html","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://github.com/karpathy/minbpe/blob/master/README.md","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"}],"sha256":"e66d144cfc19073d53fef434f6871f58578e54baa88f69af12d5fd247943a0fa","validation":{"baselineSha256":"004572a6c8f896e6fb0ef74089fccdaec2c8a1a41c49bfba0f4c321abaf958e0","oldHeadingCount":15,"headingIdsPreserved":true,"frontmatterPreserved":true,"diagramsPreserved":true,"utf8":true,"contentChanged":true,"pythonBlocksParsed":11}},
+    {"path":"docs/interview/computer-use-browser-agent-system-design.md","status":"edited","summary":"纠正allowed origin非可信、action_id非后端幂等、TOCTOU/改价审批失效、BrowserContext非OS安全边界；补上传副作用、80%自动对95%协助成功率与L1-L3验证。","sources":["https://playwright.dev/docs/api/class-browsercontext","https://playwright.dev/docs/browser-contexts","https://playwright.dev/docs/locators"],"sourceReview":"verified","openIssues":["未运行浏览器、登录/上传/支付或网络准入演练。","Locators/API等待行为本轮未读；真实站点需授权，MFA/CAPTCHA不规避。","所有未读来源逐URL在sourceChecks列为linked_only；不将单个可读来源扩展为全篇认证。"],"sourceReadScope":"仅sourceChecks中实际web一手检索摘录verified；其他URL全为linked_only。未做全文/字幕/产品版本或性能实测认证。","sourceChecks":[{"url":"https://playwright.dev/docs/api/class-browsercontext","status":"verified","scope":"实际web官方摘录：独立会话、非持久context、popup归属；非浏览器执行"},{"url":"https://playwright.dev/docs/browser-contexts","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"},{"url":"https://playwright.dev/docs/locators","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"}],"sha256":"26c8d6771c0d64088258f27a97ebfab4ed2f0e4c02278fe4a432ddfe2c54c601","validation":{"baselineSha256":"42454b681cdcca10b62f317ca85e608a30f23d9bf4f545e24b4be5fbeb74a0fa","oldHeadingCount":25,"headingIdsPreserved":true,"frontmatterPreserved":true,"diagramsPreserved":true,"utf8":true,"contentChanged":true,"pythonBlocksParsed":0}},
+    {"path":"docs/interview/context-engineering-budget-memory-playbook.md","status":"edited","summary":"补32768窗口与18944证据预算复算、工具/输出预留、pending/unknown摘要失真、active与verified区分、删除tombstone/CAS/血缘局限、位置等长消融与缓存边界；L1-L3分别验收。","sources":["https://aclanthology.org/2024.tacl-1.9/","https://platform.openai.com/docs/guides/prompt-caching"],"sourceReview":"verified","openIssues":["只有Lost in the Middle作者摘要/网页检索摘录，未全文读实验附录或复现；不外推所有模型。","Prompt Caching未取得正文，阈值/TTL/收益未写入；预算、删除、缓存、压缩均未实测。"],"sourceChecks":[{"url":"https://aclanthology.org/2024.tacl-1.9/","status":"verified","scope":"实际web ACL作者摘要摘录：多文档QA/key-value任务对相关证据位置敏感，非全模型结论"},{"url":"https://platform.openai.com/docs/guides/prompt-caching","status":"linked_only","scope":"未取得可核正文/本轮未读；仅导航或旧记录，未记录明确HTTP状态，不能作证据"}],"sourceReadScope":"仅sourceChecks中实际web一手检索摘录verified；其他URL全为linked_only。未做全文/字幕/产品版本或性能实测认证。","sha256":"4b764c8594b600de02c9ce92a352c962a01b42e730a9f80476c5d06bddf857be","validation":{"baselineSha256":"b7e034e8a682e944dd1cd45f8719ae5cd8af26bfd17502e6a1907fa3eb2aaf93","oldHeadingCount":12,"headingIdsPreserved":true,"frontmatterPreserved":true,"diagramsPreserved":true,"utf8":true,"contentChanged":true,"pythonBlocksParsed":0}}
+  ],
+  "metadataReview": {
+    "initialScopeCount": 30,
+    "currentScopeCount": 20,
+    "titleTruncationFound": false,
+    "descriptionsRewrittenBeforeReassignment": 30,
+    "classificationChanged": false,
+    "reviewedAtChanged": false,
+    "note": "尾10篇摘要在原授权范围时已改；重新分配后不再触碰。正文edited只按完整阅读与实改登记。"
+  },
+  "scopeChange": "用户重新分配为 inventory interview-1 前20篇，结束于 application-practice-qna.md；尾10篇另交新作者，仅记录此前摘要改动交接，不登记尾部文章entry。",
+  "validation": {
+    "scope": "inventory interview-1 前20篇 + 本收据；不是全仓验证或人工质量认证。",
+    "inventoryOrderExactMatch": true,
+    "entryCount": 20,
+    "tailEntryCount": 0,
+    "sourceReviewCounts": {
+      "verified": 12,
+      "linked_only": 8
+    },
+    "utf8StrictDecode": "passed; 无新BOM/替换字符",
+    "protectedMetadata": "level/roles/classification/reviewedAt 与 HEAD 相同",
+    "headingsAndExplicitIDs": "HEAD 中已有标题和显式ID均保留",
+    "existingMermaidBodies": "HEAD 中已有Mermaid正文保留",
+    "markdownFences": "逐行检查匹配闭合通过",
+    "titleAndDescription": "前20篇均有完整非空字段；逐篇检查无明显截断；非自动质量评分",
+    "scopedGitDiffCheck": "exit 0; Git提示LF将按仓库设置转CRLF，不据此改写文件",
+    "removedOrCorrectedPrimaryLinks": [
+      {
+        "path": "docs/interview/agent-tool-contract-evolution-playbook.md",
+        "oldURLs": [
+          "https://platform.openai.com/docs/api-reference/fine-tuning/event-object",
+          "https://platform.openai.com/docs/api-reference/fine-tuning/event-object"
+        ]
+      }
+    ],
+    "numericExamples": {
+      "KVBytes": 536870912,
+      "KVPerSequenceMiB": 512,
+      "eightSequencesGiB": 4,
+      "weightGiB": 13.0385160446167,
+      "baselineCostPerSuccess": 1.25,
+      "candidateCostPerSuccess": 2.4390243902439024,
+      "scope": "构造参数复算，不是模型规格或生产指标"
+    },
+    "evidenceStatementCorrections": [
+      "A2A已读入口指向v0.2.6规范；生命周期独立页仅导航。",
+      "memory治理移除debug-config实际阅读声明，与linked_only一致。",
+      "自动化摘要/导语/30秒答案限定为参考设计，不冒充四产品共同实现。"
+    ],
+    "notRun": [
+      "npm check",
+      "npm build",
+      "测试",
+      "训练/推理/安全或恢复演练"
+    ],
+    "notPerformed": [
+      "commit",
+      "push",
+      "branch",
+      "修改共享账本/样式/目录/配置"
+    ],
+    "contentHashScope": "每条sha256绑定本收据定稿时的文章字节；后续其他作者修改需重新核对。"
+  },
+  "tailPartition": {"partition":"inventory-order last10 (21-30); original author first20","date":"2026-11-05","status":"complete","ownership":["docs/interview/application-practice-roadmap.md","docs/interview/application-practice-scenarios.md","docs/interview/application-system-design.md","docs/interview/application-troubleshooting-playbook.md","docs/interview/bilibili-learning-resources.md","docs/interview/coding-agent-production-playbook.md","docs/interview/coding-agent-testing-verification-playbook.md","docs/interview/coding-problems.md","docs/interview/computer-use-browser-agent-system-design.md","docs/interview/context-engineering-budget-memory-playbook.md"],"validation":{"npmChecks":"not_run_user_instruction","builds":"not_run_user_instruction","newTestSource":"none","commitPush":"none","reviewBoundary":"agent editorial only; classification/reviewedAt unchanged","allTenFullTextReadSequentially":true,"originalHeadingCount":335,"headingIds":"all original headings byte-for-byte preserved; explicit IDs checked","frontmatter":"all original frontmatter preserved including classification/reviewedAt","diagrams":"all original image references and mermaid blocks preserved","utf8":"all ten decode strict UTF8 without BOM","pythonBlocksAstParsed":11,"inlineVoteExample":"existing pure-Python example executed: winner42,3 votes,4 samples; assertions passed","mathExamples":"Recall40/50 &32/50; GQA1GiB; context18944tokens; iid .784 and 95% one-sided zero-events upper .029513049607","torchModelGpuChecks":"not_run","gitDiffCheck":"passed for assigned tracked paths; no builds/catalog/npm checks","sourceChecks":"each URL individually verified excerpt or linked_only; not all sources read","scope":"only assigned ten articles and tail receipt patched; canonical/shared files not edited","validationEvidence":"C:/Users/Administrator/Documents/Codex/atlas-interview-1-tail-validation-20261105.json"},"baselineEvidence":"C:/Users/Administrator/Documents/Codex/atlas-interview-1-tail-baseline-20261105.json","completedCount":10}
+}

@@ -19,7 +19,7 @@ classification: inferred
 
 遇到 MCP 生产化问题，可以按这条线回答：
 
-1. **定位**：MCP 解决工具和数据源的标准化接入，把 M×N 集成变成 M+N。
+1. **定位**：MCP提供标准化接入，理想情况下减少重复适配；认证、业务语义和版本差异仍需集成，不承诺严格从M×N工作量降至M+N。
 2. **分层**：Host 管用户体验和策略，Client 管连接，Server 管能力实现和资源访问。
 3. **边界**：Server 不能信任模型输出，也不能把内部系统变成万能后门。
 4. **治理**：owner、schema 版本、权限、审计、SLA、灰度、下线、评估集。
@@ -215,6 +215,8 @@ AI Host / Agent Platform
 
 ## 追问链八：stdio 和 Streamable HTTP 怎么选
 
+[MCP 2025-06-18工具规范](https://modelcontextprotocol.io/specification/2025-06-18/server/tools) 实读Error Handling区分JSON-RPC协议错误与result中的 `isError: true` 工具执行错误。上面的 `{ok:false,...}` 是业务自定义payload，不是MCP标准外层响应；客户端须同时检查两层，HTTP200也可能业务失败。JSON-RPC请求ID用于匹配响应，不是业务幂等键：`tools/call`超时后用新ID重发写工具仍可能重复执行。下游支持幂等时保留同一业务intent key；否则先查询回执，UNKNOWN不自动重试。
+
 **面试官：stdio MCP Server 和远程 HTTP MCP Server 在生产里怎么取舍？**
 
 标准答法：
@@ -233,7 +235,7 @@ AI Host / Agent Platform
 
 - **Serverless 能不能跑远程 MCP？** 可以，但要关注冷启动、长连接/流式响应、超时和状态管理。
 - **HTTP Server 高并发怎么做反压？** 限制并发、排队、超时、返回 retryable 错误，避免 Agent 无限等待。
-- **本地 stdio 怎么防越界读文件？** Roots/workspace 限制、路径规范化、禁止跟随危险 symlink、最小环境变量。
+- **本地 stdio 怎么防越界读文件？** Roots是协作边界声明，不能替代OS权限或容器沙箱；服务端需检查真实解析路径、符号链接/重解析点和最小环境变量，处理检查到打开之间的竞态。
 
 ## 追问链九：审计和可观测怎么做
 
@@ -408,6 +410,8 @@ proposal -> security review -> sandbox trial -> canary -> production
 - 第三方 Server 沙箱和供应链审查。
 
 ## 项目讲法模板
+
+把模板当候选方案而非已上线成绩。[MCP Roots规范](https://modelcontextprotocol.io/specification/2025-06-18/client/roots) 本轮实读能力声明与roots/list片段，仅证明客户端可向Server提供目录列表，不证明Server进程无法读目录外。L1可用合法目录内链接指向外部文件的失败样例验证实际阻断；L2比较本地沙箱与远程授权域；L3再检查协议错误和执行错误的重试状态模型。越权0/审计100%是门禁目标，有限样本不是安全证明。
 
 ### 企业知识库 MCP Server
 

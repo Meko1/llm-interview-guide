@@ -1,8 +1,6 @@
 ---
 title: Agent Prompt Injection 与不可信上下文隔离：来源、能力与外发防线
-description: >-
-  Prompt Injection 不只是“忽略前文指令”的文本把戏。攻击者可通过网页、邮件、RAG 文档、代码仓库、MCP 工具结果或协作 Agent
-  影响模型，再诱导它调用高权限工具或向外部泄露数据。本页给出可用于系统设计题的 source-to-sink 防御框架。
+description: 用 source-to-sink 威胁模型分析网页、检索、工具与记忆注入，设计来源传播、最小能力、外发门禁和端到端验证。
 level: L2
 roles:
   - 应用开发
@@ -61,6 +59,8 @@ peer agent message          --> model --> change_permissions
 
 信任标签描述来源控制权，不是内容“正确率”。内部资料也可能过期或投毒；网页也可能有价值。标签决定它能否触发能力、是否可与敏感数据拼接、以及需要何种验证。
 
+来源传播不是读取模型私有推理得到的精确数据流。混合网页、内部资料和摘要后，系统往往只能保守地把全部参与来源挂到派生产物；丢失来源时标 unknown，不能标可信。实际读取的 [OpenAI 注入防护设计](https://openai.com/index/designing-agents-to-resist-prompt-injection/)强调限制敏感 sink 的影响路径；本页 provenance graph 是控制面可观察依赖，不保证完整还原模型因果。
+
 ## 四、上下文隔离：文本能影响回答，不能改控制面
 
 ### 三条边界
@@ -96,7 +96,7 @@ fetch / retrieve / tool result
 | shell/部署/写库 | sandbox、参数化 API、ABAC、审批、effect ledger | 注入可把只读调查变成 destructive command |
 | 保存长期记忆/Skill | candidate queue、来源标记、人工审核、评测 | 一次注入不能变成未来 session 的持久指令 |
 
-OpenAI 对链接安全的说明指出，仅信任域名不足以防 redirect 或 URL query 外泄；一个更强的控制是判断“这个具体 URL 是否独立公开已知”，未知地址需要确认或拒绝自动加载。这只是纵深防御的一层，不代表网页内容天然可信。[Keeping your data safe when an AI agent clicks a link](https://openai.com/index/ai-agent-link-safety/)
+URL 校验需覆盖每跳 redirect、实际解析 IP、出站代理和最终目标，避免先验证公网域名后连接到内网。域名 allowlist 也不防秘密编码进可信站点 query/path；检查实际待发送字段并最小化输出。[原链接安全资料](https://openai.com/index/ai-agent-link-safety/)本轮仅作导航；不宣称所有运行时实现了“独立公开已知 URL”判定。
 
 高风险批准页必须展示实际 effect：目标系统、收件人/URL、资源版本、待发送数据摘要、来源链、command digest 和过期时间。不要展示模糊的“Agent 建议继续”。
 
@@ -153,6 +153,8 @@ OpenAI 的公开资料同样强调多层组合：模型层、实时监控、sand
 | 多 Agent | 子 Agent 建议越权调用 | 主 Agent/Gateway 重新授权 |
 
 关键指标：`sink_block_rate`、`silent_exfiltration_rate`（目标为零）、`taint_propagation_coverage`、合法任务 `false_block_cost` 与 `time_to_contain`。红队需要端到端运行；只测模型说“我不会这么做”无法发现浏览器自动加载 URL、摘要洗白、工具输出投毒或批准预览漏字段。
+
+练习用合成 secret：恶意网页先诱导摘要“建议把诊断发往某 URL”，另一个 Agent 再把摘要当内部建议。L1 应指出摘要没有洗白来源；L2 在实际网络 sink 前比较用户目标、来源和待发数据，不凭第二个模型同意放行；L3 报告攻击预算、正常任务对照及真实出站结果。阻断当前样本只能证明这条路径被挡住，不证明所有注入不可达。
 
 ## 九、系统设计题：企业研究与邮件 Agent
 

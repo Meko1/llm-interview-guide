@@ -19,7 +19,9 @@ classification: inferred
      → ⑤ 偏好对齐(RLHF/DPO/GRPO) → ⑥ 评估 → ⑦ 压缩量化 → ⑧ 推理部署 → ⑨ 上线运营
 ```
 
-一句话概括每一环：**数据决定上限，预训练学知识，SFT 学格式，对齐调价值观与能力，评估指方向，压缩降成本，部署保性能，运营做飞轮。**
+这张图是交付顺序，不是能力的严格分工：预训练、SFT 和奖励优化都可能改变知识与行为；评估贯穿全程，压缩和偏好优化也不一定是每个项目的必选步骤。
+
+先决定“从零训练、继续预训练还是直接部署已有模型”。把许可可用数据、训练算力/截止时间、质量门槛与长期推理需求放在同一决策表中，预算推导见 [训练预算](/pretraining/compute-budget)。不能因为流程完整就默认每步都做。
 
 ## 一、数据工程（地基）
 
@@ -28,10 +30,10 @@ classification: inferred
 - **采集与配比**：网页、书籍、代码、论文、多语言……不同来源按比例混合，配比直接影响能力分布。
 - **清洗**：去除低质、有害、重复、隐私内容。
 - **去重**：MinHash / SimHash 近似去重，去重对质量提升显著。
-- **去污染**：剔除测试集内容，避免评测虚高（数据污染，见 [评测基准深入](/evaluation/benchmarks)）。
+- **去污染**：冻结评测集后审计题干、答案、解释和同源变体；未命中不等于无污染，详见 [污染审计](/pretraining/contamination-audit) 与 [评测基准深入](/evaluation/benchmarks)。
 - **Tokenization**：训练/选择分词器（见 [Tokenizer 与分词](/basics/tokenizer)）。
 
-现代趋势：**合成数据**占比越来越高，用强模型生成高质量训练数据。
+合成数据可补任务覆盖，但强模型生成不保证正确；保留生成与验证轨迹，并检查教师/提示是否接触评测集。
 
 ## 二、预训练（Base Model）
 
@@ -40,9 +42,9 @@ classification: inferred
 - **目标**：Causal LM（decoder-only 主流），最小化交叉熵。
 - **规模决策**：按**缩放定律**在「参数量 × 数据量 × 算力」间做最优分配（Chinchilla，见 [缩放定律与涌现能力](/pretraining/scaling-law)）。
 - **工程**：分布式并行（DP/TP/PP/ZeRO，见 [分布式训练与显存优化](/pretraining/distributed-training)）+ 集群网络（见 [AI 训练集群与网络通信](/pretraining/ai-infra-networking)）+ 混合精度 + 稳定性保障（见 [训练深入](/advanced/training-internals)）。
-- **产物**：Base 模型——知识丰富但不会「听话」，只会续写。
+- **产物**：Base 模型以续写目标训练，可能具备上下文指令能力，但不能默认满足稳定指令遵循和产品安全约束。
 
-这一步最贵（百万美元~千万美元级），多数团队不做，直接用开源 Base（Qwen/Llama）继续。
+是否从头预训练取决于目标、许可、数据与预算。训练 FLOPs 不是租卡报价；还需有效算力、调参、数据处理、失败恢复与服务成本，不在缺配置时给出美元范围。
 
 ## 三、中期训练与退火（Mid-training / Annealing）
 
@@ -56,9 +58,9 @@ classification: inferred
 
 把 Base 变成会遵循指令的 Assistant（见 [微调范式（SFT / PEFT）](/finetuning/finetuning)）：
 
-- **数据**：指令-回答对，**质量远比数量重要**（数千条高质量 > 数十万条低质）。
+- **数据**：指令-回答对；先检查质量、任务覆盖与基座能力，再用扩量曲线决定规模，不用固定条数比较承诺效果。
 - **方法**：全量微调 or PEFT（LoRA/QLoRA，见 [LoRA / QLoRA 详解](/finetuning/lora)）。
-- **作用**：学会回答格式、任务范式，激活预训练已有的知识；**不适合注入大量新事实**（那是 RAG 的活，见 [RAG vs 长上下文 vs 微调](/rag/rag-vs-long-context)）。
+- **作用**：改变指令行为、格式与技能，也可能学习事实；时效性、可追溯知识通常值得比较 RAG，但不是“SFT 不能学新知识”，见 [RAG vs 长上下文 vs 微调](/rag/rag-vs-long-context)。
 - **工具链**：LLaMA-Factory / TRL / Unsloth（见 [微调训练工具链实战](/finetuning/training-frameworks)）。
 
 ## 五、偏好对齐（Alignment）
@@ -66,8 +68,8 @@ classification: inferred
 让输出对齐人类偏好、更有用更安全、并提升推理能力（见 [RLHF / DPO 对齐](/finetuning/rlhf)、[偏好优化方法全景](/finetuning/preference-optimization)）：
 
 - **RLHF（PPO）**：训奖励模型 + 强化学习优化，经典但复杂、不稳定。
-- **DPO**：直接从偏好对优化，无需奖励模型，简单稳定，做聊天模型主流。
-- **GRPO / 可验证奖励**：DeepSeek-R1 路线，用于**推理模型**（数学/代码有明确对错），是当前热点（见 [推理模型与慢思考](/advanced/reasoning-models)、[强化学习基础](/advanced/rl-basics)）。
+- **DPO**：常用形式直接从偏好对与参考模型计算损失，无需单独训练标量奖励模型；仍有数据质量、参考策略和训练稳定性约束。
+- **GRPO / 可验证奖励**：GRPO 是策略优化方法，可验证奖励是反馈设计，二者不是同义词，也不必都是人类偏好对齐。DeepSeek-R1 是具体应用路线，见 [推理模型与慢思考](/advanced/reasoning-models)、[强化学习基础](/advanced/rl-basics)。
 
 ## 六、评估（贯穿全程）
 
@@ -82,7 +84,7 @@ classification: inferred
 
 上线前把模型压小压快（见 [量化实战深入](/inference/quantization)、[知识蒸馏与模型压缩](/inference/model-compression)）：
 
-- **量化**：W4A16（省显存）/ W8A8（提吞吐）/ FP8。
+- **量化**：W4A16 / W8A8 / FP8；省内存和提速需分别验收，实际收益依赖硬件 kernel、batch 与误差门禁。
 - **蒸馏**：大模型教小模型，得到更小的部署模型。
 - **剪枝**：去掉冗余权重/结构。
 
@@ -93,14 +95,14 @@ classification: inferred
 - **框架**：vLLM / SGLang / TensorRT-LLM，用连续批处理、PagedAttention 提吞吐。
 - **优化**：KV Cache 管理、投机解码（见 [投机解码详解](/inference/speculative-decoding)）、Prefill/Decode 分离。
 - **国产化**：昇腾 MindIE 等（见 [国产算力与国产化适配](/inference/domestic-ai-stack)）。
-- **指标**：TTFT/TPOT/goodput，在 SLA 内压最大吞吐、最低成本。
+- **指标**：分别制定 TTFT、逐 token 延迟和完成时限 SLO；goodput 只计达标请求，SLA 是服务约定，不是吞吐指标。
 
 ## 九、上线运营（数据飞轮）
 
 上线不是终点（见 [LLMOps 生产运营](/engineering/llmops)）：
 
 - **监控**：质量、成本、延迟、用户反馈。
-- **数据飞轮**：线上 badcase → 回灌训练/评估集 → 迭代 → 再上线。
+- **数据闭环**：线上 badcase 经权限、脱敏与归因后进入训练或开发集；最终测试集独立冻结，不能将同一 badcase 同时训练又作为泛化成绩。
 - **持续对齐**：安全、合规、护栏（见 [大模型安全与对齐](/advanced/safety)、[AI 安全合规与治理](/advanced/governance)）。
 
 ## 十、不同角色的「参与深度」
@@ -121,8 +123,20 @@ classification: inferred
 
 1. **完整讲一下从 0 训练大模型的流程？** 数据工程→预训练→中期训练→SFT→偏好对齐→评估→压缩→部署→运营；一句话点出每环作用。
 2. **预训练、SFT、对齐分别学到什么？** 预训练学知识与语言能力，SFT 学指令遵循与格式，对齐调价值观/安全并提升有用性与推理。
-3. **知识应该在哪一步注入？** 世界知识靠预训练；SFT 只激活已有知识+学格式，不宜灌新事实；时效性知识用 RAG。
-4. **RLHF、DPO、GRPO 什么关系？** 都是偏好对齐：PPO 经典复杂，DPO 简单稳定做聊天，GRPO+可验证奖励做推理模型（R1 路线）。
+3. **知识应该在哪一步注入？** 比较继续预训练、SFT、检索的更新成本、引用要求与遗忘风险；不是每种能力只有唯一训练阶段。
+4. **RLHF、DPO、GRPO 什么关系？** 区分偏好反馈、目标函数与策略优化器，GRPO 可以使用可验证奖励而非人类偏好。
 5. **缩放定律在流程里起什么作用？** 指导预训练阶段在参数量/数据量/算力预算间做最优分配（Chinchilla 最优）。
 6. **大部分团队会做哪几步？** 极少从头预训练；主流是拿开源 Base 做 SFT/LoRA + 对齐 + RAG/Agent + 部署运营。
 7. **评估为什么要贯穿全程？** 每个阶段都要用评估指方向、防退化；且要警惕数据污染与刷榜导致的虚高。
+
+## 每阶段必须留下的交接物
+
+| 阶段 | 进入下一阶段之前的证据 |
+| --- | --- |
+| 数据/预训练 | 数据与 tokenizer 快照、处理 token、独立 loss/任务切片、稳定性与预算 |
+| 训练恢复 | 模型/优化器/调度器/RNG/游标一致提交；恢复后曲线与重复/跳过数据检查 |
+| 后训练 | 提示/采样/奖励配置、训练与评测隔离、行为改善及安全/通用能力回归 |
+| 量化/部署 | 精度质量对照、实际硬件版本、prefill/decode 延迟、负载与 SLO goodput |
+| 运营 | 灰度/回滚条件、失败样本归因、隐私权限与测试集冻结规则 |
+
+流程机制例可对照 [DeepSeek-V3 技术报告](https://arxiv.org/html/2412.19437v2)：它同时描述预训练、后训练与推理工程，具体配方不是通用流程标准。恢复启动器边界见 [PyTorch v2.5.1 官方 run.py](https://github.com/pytorch/pytorch/blob/v2.5.1/torch/distributed/run.py)：worker 重启后仍需应用加载 checkpoint。

@@ -47,6 +47,28 @@ RETRIEVED EVIDENCE (untrusted data): {{evidence}}
 
 ## 四、版本与发布包
 
+### 缺失变量应失败，不把“safe”误解为安全沙箱
+
+模板缺customer字段时，默默保留占位符会把脏输入传入模型。Python 3标准库可直接运行以下构造例，无网络或模型调用：
+
+```python
+from string import Template
+
+template = Template("客户: $customer\n问题: $question")
+values = {"question": "订单多久到达？"}
+try:
+    template.substitute(values)
+except KeyError as missing:
+    assert missing.args[0] == "customer"
+else:
+    raise AssertionError("缺少必填变量却继续渲染")
+assert "$customer" in template.safe_substitute(values)
+```
+
+[CPython 3.13官方string实现](https://github.com/python/cpython/blob/3.13/Lib/string.py) 实读substitute/safe_substitute片段：前者访问缺失键会抛错，后者可保留原占位符。“safe”不表示防Prompt注入、HTML转义或拒绝敏感数据。也不能让用户上传可执行模板表达式；typed变量只解决形状，边界标签只帮助模型理解，执行权限仍须外部控制。
+
+渲染后还要按实际tokenizer预算，字符上限不能代替token。trace哈希应基于编码、角色消息、模板/变量schema及工具配置的确定性表示；记录哈希不等于能恢复内容，敏感快照须受控加密/保留，而非普通日志明文。检索结果中的“忽略规则”只能是证据内容，不获得模板管理权限。
+
 ```text
 release manifest =
 prompt version + variable schema + examples + model/params
@@ -84,6 +106,8 @@ Shadow 模式适合先收集候选输出而不展示；灰度模式才影响真�
 
 ## 七、排障与回滚
 
+一次文案修正也可能改变工具选择或切断prefix cache，minor不是免评测通行证。构造v42只改few-shot中退款条件，JSON仍100%合法，错误自动退款却上升；发布应检查字段语义与权限门禁，不只lint。旧v41模板也可能依赖已撤销工具，回滚须保留当前安全覆盖并重验能力，不将所有资产机械倒退。
+
 一次 trace 至少关联 `prompt_version`、渲染哈希、变量摘要、模型、参数、检索/工具版本、token 与最终结果。出现事故按顺序查：
 
 1. 改动是否改变了变量、示例、系统策略或渲染 token。
@@ -112,6 +136,8 @@ Shadow 模式适合先收集候选输出而不展示；灰度模式才影响真�
 指令、格式和流程先用 Prompt；缺少或变化的事实用 RAG；大量稳定、可标注且 Prompt/RAG 仍达不到的模式才评估微调。无论选择什么，都用同一评测集证明改进。
 
 ## 九、项目讲法模板
+
+L1复现缺变量和模板/工具不同步；L2绑定rendered hash、预算与发布指针，验证灰度和回滚；L3在固定模型/检索快照下检验提示改动的因果与方差。模板是表达示例，未部署Prompt平台或声称效果。shadow不展示仍可能收费和产生工具副作用，必须隔离禁写。
 
 > 我们将 Prompt 从代码中的字符串升级为可发布资产：模板、变量 schema、模型参数、工具/索引配置和评测集组成不可变 manifest。请求运行时记录渲染哈希和版本，变量有类型、权限和 token 预算校验。每次改动先跑回归门禁，再 shadow、灰度，并按场景看成功率、安全、延迟和成本；出现退化可精确回滚整个 manifest。这样业务可以迭代话术，工程侧仍保持可复现、可审计和可控发布。
 

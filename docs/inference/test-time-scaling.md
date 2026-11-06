@@ -1,9 +1,6 @@
 ---
 title: 推理时算力扩展（Test-Time Compute Scaling）
-description: >-
-  传统预训练 scaling law 靠"训练时堆参数和数据"提能力；推理时算力扩展开辟了第二条 scaling
-  曲线——同一个模型，推理时投入更多算力（更长思考、更多采样、结构化搜索），准确率就能显著提升。它和 推理模型（把 test-time scaling
-  内化到模型里）互补，而本页聚焦服务侧、
+description: 区分长链推理、多候选和结构化搜索，理解候选相关性与 verifier 错误，构造同预算、同 SLO 的推理增强实验。
 level: L2
 roles:
   - Infra
@@ -12,176 +9,164 @@ classification: inferred
 ---
 # 推理时算力扩展（Test-Time Compute Scaling）
 
-> 传统预训练 scaling law 靠"训练时堆参数和数据"提能力；推理时算力扩展开辟了**第二条 scaling 曲线**——同一个模型，推理时投入更多算力（更长思考、更多采样、结构化搜索），准确率就能显著提升。它和 [推理模型](/advanced/reasoning-models)（把 test-time scaling 内化到模型里）互补，而本页聚焦**服务侧、可加在任何模型之上的推理时增强技术**：Self-Consistency、Best-of-N、Tree of Thoughts、MCTS、PRM-guided beam、Budget Forcing、Snell 的 compute-optimal 结论。前置阅读：[推理模型与慢思考](/advanced/reasoning-models)、[CoT 全家桶](/prompt/cot-reasoning)、[KV Cache 深度专题](/inference/kv-cache)、[投机解码详解](/inference/speculative-decoding)。
+> **增加推理预算是一种可检验的策略，不是“多想就一定正确”的承诺。** 多采样能增加候选覆盖，也能放大重复错误、验证器偏差、排队和费用。L1 先区分三条路线；L2 设计预算与上线门禁；L3 核查独立性、选择偏差和论文实验边界。
+>
+> 前置：[推理模型](/advanced/reasoning-models)、[CoT 方法](/prompt/cot-reasoning)、[KV Cache](/inference/kv-cache)。本页讨论方法与构造实验，不宣称已测任何模型的提升。
 
 ## 面试先背这几句话
 
-- **两条 scaling 曲线**：训练时（更大模型 / 更多数据）、推理时（更长思考 / 更多采样 / 更结构化搜索）。**Snell et al. 2024（DeepMind）**：在给定 FLOPs 预算下，**推理时算力扩展有时比多训一倍的模型还划算**，尤其是简单-中等难度任务。
-- **三条推理时路线**：① **垂直深化**（同一条推理链变长，long CoT / s1 Budget Forcing）；② **水平并行**（采样 N 条独立推理链，Self-Consistency / Best-of-N / Weighted voting）；③ **树/图搜索**（结构化探索，ToT / GoT / MCTS / LATS / rStar-Math）。
-- **关键的一根火柴**：**有没有 verifier**。可自动验证的领域（数学、代码、部分事实性问答）能用 ORM/PRM 精准筛选 → 推理时扩展效益极高；开放域生成没有可靠 verifier → 推理时扩展只能靠 RM 打分，效益打折。
-- **代表工作**：Self-Consistency（Wang et al. 2022）、ToT（Yao et al. 2023）、GoT、LATS、Math-Shepherd（Wang et al. 2024）、rStar-Math（2024）、s1（2025）、Snell 2024 compute-optimal、DeepSeek-R1（把 test-time scaling 内建到模型）。
+- 训练时扩展改变模型参数或数据；推理时扩展改变给定模型的生成、搜索、验证预算。两者不能只比较最终答题分数而忽略总成本。
+- 三条路线是延长或修订一条轨迹、生成多条候选、显式搜索。它们可以组合，但收益需要分别归因。
+- 能生成正确候选不等于能选出正确候选。Verifier 的漏判、误判及候选之间的相关错误决定扩展能否有效。
+- 分流策略只能使用上线时可获得的特征，不能偷偷使用真实答案或评测难度标签。
 
 ## 一、为什么"多花推理时算力"能换来更强？
 
-三个不同的直觉：
+| 机制 | 希望增加的机会 | 可能失败的原因 |
+| --- | --- | --- |
+| 多样采样 | 某条候选找到正确路径 | 候选高度相关，重复同一错误 |
+| 生成后验证 | 排除违反明确约束的候选 | 验证器只检验有限测试或被漂亮文风欺骗 |
+| 修订与搜索 | 利用反馈纠正早期选择 | 自评偏差累积，搜索空间和成本失控 |
 
-1. **采样多样性 → 覆盖到正确答案**：单次贪心解码有可能落在错误的路径上；采样多条推理链，正确路径至少出现在少数样本里，投票或验证就能选出来。
-2. **explore-then-verify**：生成候选（explore）比校验候选（verify）本质上更难。给模型多次机会 explore、再让 verifier 挑选，能突破"一次生成"的能力上限。
-3. **搜索结构 = 显式的规划**：ToT / MCTS 让模型在推理空间里做"局部展开-评估-回溯"，把内在的隐式规划暴露为可控的搜索过程，比线性 CoT 更能处理组合优化、多步计划类任务。
+对于部分数学或代码任务，校验已有候选可能比从零生成便宜；这不是所有任务的复杂度定理。开放式写作、事实核查、真实环境动作需要不同证据，不能用“模型说有道理”充当验收。
 
 ## 二、三条主线全景
 
 ### 2.1 垂直深化：同一条推理链变长
 
-- **long CoT（默认）**：让模型多想几步。适合数学、逻辑、编程。
-- **Budget Forcing（s1, 2025）**：训练时用 1K 精选样本 SFT；**推理时强制"再想想"**——遇到 `</think>` 就替换成"wait"让模型继续思考；生成到目标 budget 才允许出答案。仅 1K 样本 SFT + budget forcing，就在 AIME 追上 R1-Preview。是"最省"的推理时扩展方案。
-- **自适应思考预算**：新一代推理模型通常会按题目难度调节思考深度，简单题少想、难题多想；服务侧也可以用难度分类器或置信度阈值做类似的预算控制。
+延长推理轨迹或逐次修订回答，适用于模型已经具备部分求解能力的任务。更长文本可能帮助检查，也可能只是重复、跑偏或消耗输出上限。
+
+[s1 原论文](https://arxiv.org/abs/2501.19393) 使用经过筛选的 s1K 数据进行 SFT，并通过 budget forcing 延长或截断思考。其结果绑定到特定基座、数据与数学评测，不证明任何模型只需追加“Wait”就能获得同等能力。训练配方与推理干预要分开消融。
+
+服务接口不一定开放内部停止标记，也可能单独计量推理 token。自适应预算必须在所用模型接口与版本支持范围内实现；不要把某一开源模型的 `</think>` 当所有商业 API 的统一协议。
 
 ### 2.2 水平并行：多条独立推理链
 
-| 方法 | 汇总规则 | 说明 |
+| 方法 | 选择规则 | 主要边界 |
 | --- | --- | --- |
-| **Self-Consistency**（Wang 2022） | 多数投票 | 采样 K 条 CoT，取答案众数。数学、逻辑最实用 |
-| **Best-of-N**（BoN） | Verifier / RM 选最高分 | 需要 verifier；可验证任务效益爆棚 |
-| **Weighted Voting** | RM 打分加权投票 | Self-Consistency 的加权版，抗多数错票 |
-| **Universal Self-Consistency** | LLM-as-judge 选最一致回答 | 无 verifier 时的兜底方案，适合开放域 |
-| **Rejection Sampling**（离线） | 采样 + 验证 → 训练集 | 把推理时扩展的收益**转移到训练** |
+| [Self-Consistency](https://arxiv.org/abs/2203.11171) | 归一化最终答案后投票 | 答案可比较，候选多样性足够；一致不等于事实正确 |
+| Best-of-N | 按 verifier 或奖励分选候选 | 分数要与目标质量校准，不能只选最长回答 |
+| 加权投票 | 按校准权重汇总答案 | 相关错误和权重失准可能放大偏差 |
+| 离线拒绝采样 | 验证后形成训练数据 | 数据授权、泄漏与错误标签需另外治理 |
 
-**关键公式（Self-Consistency）**：若真答案概率 $p > 0.5$，投票 K 次的正确率约 $1 - \Phi(-\sqrt{K}(2p-1)/\sqrt{4p(1-p)})$，K↑ 单调收敛到 1。**但 $p < 0.5$ 时 K 越大越糟**——这是 Self-Consistency 的边界条件。
+**覆盖率不等于选择正确率。** 若每次独立采样有概率 p 生成正确候选，K 次中至少出现一次的概率是 `1-(1-p)^K`；只有能可靠识别它的选择器，才能把覆盖转化为输出收益。
+
+严格二元、独立同分布、奇数 K 的多数票可写成：
+
+$$P(\mathrm{majority\ correct})=\sum_{j=(K+1)/2}^{K}\binom{K}{j}p^j(1-p)^{K-j}$$
+
+下面仅需 Python 3 标准库，可运行复算，未调用模型：
+
+```python
+from math import comb, isclose
+
+
+def majority_probability(correct_probability, samples):
+    if not 0 <= correct_probability <= 1:
+        raise ValueError("Probability must lie in [0, 1]")
+    if samples < 1 or samples % 2 == 0:
+        raise ValueError("Use a positive odd sample count")
+    return sum(comb(samples, votes) * correct_probability ** votes
+               * (1 - correct_probability) ** (samples - votes)
+               for votes in range(samples // 2 + 1, samples + 1))
+
+
+result = majority_probability(0.6, 5)
+print(result)
+assert isclose(result, 0.68256)
+```
+
+在上述二元假设下 p>0.5 才倾向于随 K 增大改善。但多答案的**相对多数票**不是这个公式：例如正确答案概率 0.4、两种错误各 0.35 和 0.25，正确答案仍是最常见类别。实际候选共享模型、提示和偏见，不能把独立假设当作已验证事实。
 
 ### 2.3 树/图搜索：结构化探索
 
-| 方法 | 结构 | 核心思想 |
-| --- | --- | --- |
-| **Tree of Thoughts（ToT, Yao 2023）** | 树 | 每步生成多个候选"念头"，用 LLM 自评打分选 top-k 展开，可 BFS/DFS |
-| **Graph of Thoughts（GoT）** | DAG | 允许"合并、复用中间思考"，节点可回收 |
-| **LATS（Language Agent Tree Search）** | 树 + MCTS | ToT 用 MCTS 探索，配合外部反馈（工具/环境）打分 |
-| **RAP（Reasoning as Planning）** | 树 + MCTS + World Model | 用 LLM 当 world model 模拟未来，MCTS 规划 |
-| **rStar / rStar-Math**（2024） | MCTS + PRM | MCTS 展开推理树，PRM 打分剪枝，最终蒸馏成小模型 |
-| **Math-Shepherd + Step-Beam**（2024） | Beam Search + PRM | 保留 top-k step，PRM 一步一步引导 beam |
+[Tree of Thoughts](https://arxiv.org/abs/2305.10601) 将若干文本步骤作为搜索状态，生成、评估和选择不同路径。原论文的具体任务结果不能直接外推为所有规划问题都会提高。
 
-**MCTS 的四步循环**（Selection → Expansion → Simulation → Backpropagation）在 LLM 推理里的适配：
-- **Selection**：UCT 或 PRM 分数选下一个要展开的节点；
-- **Expansion**：LLM 生成 k 个候选下一步；
-- **Simulation**：让 LLM 自完成到叶节点，或用 PRM 直接打分；
-- **Backprop**：把叶子分数回传更新父节点。
+```text
+当前状态 → 提出下一步候选 → 约束/价值评估
+              ↓                  ↓
+          可用工具反馈        保留、回溯或终止
+```
 
-代价：每步都要 LLM forward，成本可以到"单条 CoT"的 20-100×，仅适合关键场景（竞赛数学、代码 debug）。
+MCTS 常区分 Selection、Expansion、Simulation、Backpropagation；在 LLM 中，节点可能是文本、程序或环境状态。必须定义同一状态如何识别、工具副作用能否重放、价值分数如何更新，以及深度/节点/token 上限。PRM-guided beam、图搜索等只是不同探索控制方式，不能仅靠算法名称指定最优方案。
 
 ## 三、Verifier / Reward Model：所有方法的胜负手
 
-**结论先摆出**：**推理时扩展的天花板 = verifier 的准确率上限**。
-
-| Verifier 类型 | 特点 | 代表 |
+| 验证方式 | 能确认什么 | 不能保证什么 |
 | --- | --- | --- |
-| **规则 / 自动化**（数学答案、代码 exec） | 100% 准确，最理想 | GSM8K、MATH、HumanEval |
-| **ORM（Outcome Reward Model）** | 只看最终答案对不对，训练便宜 | RLHF 常见 RM |
-| **PRM（Process Reward Model）** | 给每一步打分，信号密集 | Math-Shepherd、Skywork-PRM、Qwen2.5-Math-PRM |
-| **LLM-as-Judge** | 通用但不精确，适合开放域 | GPT-4 judge、Prometheus |
-| **Generative Verifier**（GenRM） | 让模型"生成一段推理再给结论"，比二分类更强 | GenRM (Zhang 2024) |
+| 规则、计算器、单元测试 | 定义范围内的约束或测试结果 | 所有隐藏情况、规格完整性或生产安全 |
+| ORM | 最终结果的学习型评分 | 分数就是事实正确概率 |
+| PRM | 中间步骤的学习型评分 | 每步局部高分必然组合成正确结论 |
+| LLM-as-judge | 给定准则下的比较与判断 | 不受位置、风格、长度或提示注入影响 |
 
-**PRM > ORM**：在 MATH benchmark 上，同样 32 条采样，PRM-guided Beam 比 ORM-BoN 高 5-8 分。但 PRM 需要**步骤级标注**（人工或 Math-Shepherd 自动化标注），训练成本高。
+代码执行必须隔离、限制资源与网络；“测试全过”仍可能只说明测试覆盖不足。数学答案解析也可能受等价表达、单位与题目规格影响。PRM 与 ORM 的优劣需要在相同候选预算和任务下比较，不能给无来源的固定分差。
 
-**PRM 训练的自动化技巧**：Math-Shepherd 用 **rollout 概率**估计每步价值——从当前步骤 rollout k 次，rollout 通向正确答案的比例作为该步骤的软标签。这是 2024 后 PRM 训练的主流做法。
+**选择偏差反例**：构造验证器对每条错误候选有独立 2% 误通过率。10 条全错误候选至少一条被误通过的概率为 `1-0.98^10≈18.3%`，50 条时约 63.6%。这不是最终输出错误率，而是展示更多候选会暴露更多误接受机会；应按 N 分组校准选择后的错误率，不能只看验证器单条准确率。
 
 ## 四、Snell 2024：Compute-Optimal 结论
 
-**"Scaling LLM Test-Time Compute Optimally Can Be More Effective Than Scaling Model Parameters"**（Snell et al., DeepMind, 2024）系统对比了三类推理时策略在 MATH 上的效率：
+[Snell 等人的原论文](https://arxiv.org/abs/2408.03314) 研究基于过程验证器的搜索，以及按问题更新回答分布的策略。关键结论是不同问题难度下有效的预算分配不同，而不是“简单题必选 A、中等题必选 B”的通用路由表。
 
-1. Best-of-N with ORM
-2. Beam search with PRM
-3. Sequential revision（模型自己迭代改答案）
+研究中的 FLOPs 匹配比较依赖所选基座、任务、预算与统计范围。将其落到产品时应补齐：
 
-**核心结论**：
-- **简单题**：**sequential revision** 最好——一次输出候选，然后让模型逐步修正；
-- **中等题**：**Beam search + PRM** 效率最高；
-- **难题**：**Best-of-N + PRM** 更稳；
-- **compute-optimal 策略**：先判断题目难度，再动态选择策略——总体在 MATH 上给定 FLOPs 下可**比多训一倍参数的模型还强**。
-
-**面试意义**：这篇论文把"推理时扩展 vs 预训练扩展"的经济性对比讲清楚了——不是"推理时永远划算"，而是"**在给定 FLOPs 预算下，某些任务/难度区间，推理时扩展效率更高**"。
+- 分流特征在线可得，不使用答案标签；
+- 训练、推理、验证与数据成本口径一致；
+- 提升在未参与调参的留出题集上成立；
+- 不只看均值，还检查困难任务、拒答、尾延迟与预算越界。
 
 ## 五、与推理模型的关系
 
-**长 CoT 推理模型（o1 / R1 / QwQ）本质上是把 test-time scaling 内建到模型里**：
-- 传统模型 + 外挂 test-time scaling（如 Self-Consistency + BoN）→ 需要工程侧显式管理采样、验证、投票；
-- 推理模型（内建 long CoT）→ 模型自己"多想一会儿"，一次 forward 就完成同等效果，工程侧只要给足 output token 预算。
+推理模型可能经训练学会生成较长或更有用的中间轨迹；外部多候选与搜索则由服务系统编排。二者可以组合，但不代表调用一次 API 只运行一次 forward：自回归生成仍需要多轮前向或相应加速机制。
 
-哪个更好取决于场景：
-- **单请求延迟敏感**（如聊天）→ 推理模型的自适应终止更优；
-- **可离线并行**（如 batch 评估）→ 传统模型 + Self-Consistency/BoN 常更省，因为可以 batch 采样、并行验证；
-- **需要可解释、可干预**（如医疗、法律）→ 显式的 ToT/MCTS 更适合，能看到搜索树、能人工介入某一步。
+最长输出 token 是上限，不是必须使用的预算，也不保证推理可靠。选择推理模型还是外围搜索，需要测任务质量、可用反馈、响应时间与接口支持；不会因为任务属于医疗或法律，就自动获得可审计性或专业资格。
 
 ## 六、组合与前沿
 
-| 组合 | 场景 |
-| --- | --- |
-| **推理模型 + Self-Consistency** | R1 + 采样 32 条 CoT + 投票，AIME 从 79 → 85 |
-| **推理模型 + Best-of-N + PRM** | 高精度数学赛题 |
-| **s1 Budget Forcing + LLM-as-Judge** | 开放域推理，无 verifier |
-| **rStar-Math：MCTS + PRM + 蒸馏** | 用推理时扩展**生成训练数据**，蒸馏成小模型（把推理时收益转训练时） |
-| **推理时扩展 + 投机解码**（详见 [投机解码](/inference/speculative-decoding)） | 生成加速与采样质量结合，工程实现有细节 |
+| 组合 | 可以研究的收益 | 必须防止的混淆 |
+| --- | --- | --- |
+| 推理模型 + 投票 | 不同轨迹的互补 | 把相同错误的高一致性当可靠 |
+| 多候选 + PRM/ORM | 选择质量 | 把候选覆盖率当最终正确率 |
+| 搜索 + 轨迹蒸馏 | 将离线探索收益转移到训练 | 未验证轨迹污染训练与评测 |
+| 推理增强 + [投机解码](/inference/speculative-decoding) | 降低生成开销 | 将分布保持与解题正确混为一谈 |
+| 推理 + 工具/Agent | 使用真实反馈 | 忽略授权、恢复和工具副作用 |
 
-**2025-2026 的合流方向**：
-- **Reasoning + Agent**：推理模型和工具增强正在合流，模型可以边思考、边搜索、边运行代码、再把观察结果接回推理链；
-- **Long-Horizon Test-Time Compute**：跨请求维持推理状态（类似 [Agent 记忆](/agent/agent-memory)），几小时到几天的 [深度研究 Agent](/agent/deep-research) 任务；
-- **Reasoning-as-Data-Engine**：用推理时扩展（MCTS + PRM）生成合成训练数据（详见 [合成数据](/finetuning/synthetic-data)），实现"推理时算力→训练时收益"的转换。
+“前沿”在这里是实验方向，不是当前排名。对新方法至少读清模型、任务、基线、预算、消融与失败案例，再决定是否值得复现。
 
 ## 七、工程侧代价与优化
 
-**采样 K 条 = K 倍推理成本**——但可以通过工程手段摊薄：
+构造输入 1000 token、每条输出 500 token、K=8，不共享前缀时生成调用账本是输入 8000、输出 4000 token；验证器调用另外计入。缓存与 batch 可能节省部分计算，但共享 prompt 不保证一定只执行一次 prefill，也不保证供应商按同样方式计费。
 
-- **Prefix Caching**（[KV Cache](/inference/kv-cache)）：多条采样共享 prompt 的 KV，K 次采样只 Prefill 1 次；
-- **Batch 采样**：K 条采样在同一个 batch 里跑，充分利用 GPU；
-- **Speculative Decoding**：小模型出草稿、大模型验证，可与 BoN 组合；
-- **Early Stopping**：Self-Consistency 边采样边统计，答案投票已经"稳"了就提前停；
-- **动态 K**：简单题 K=1，难题 K=32，用小模型或分类器预判难度。
+| 优化项 | 核查条件 |
+| --- | --- |
+| 前缀缓存 | 精确匹配、租户隔离、缓存容量与所用运行时行为 |
+| 并行 batch | 加速单任务是否挤占在线请求 goodput |
+| 自适应 K | 分流误判、最坏预算和困难任务退化 |
+| 提前停止 | 停止准则与序贯统计；不能沿用固定 K 的置信度 |
+| 取消与隔离 | 取消后是否停止计算、验证和副作用，费用是否仍产生 |
 
-**吞吐 vs 延迟**：
-- 单请求维度：BoN K=32 会显著放大 GPU 时间、输出 token 和排队压力；如果串行采样，首字延迟也会近似放大。
-- 系统吞吐维度：K 条采样可以塞进同一个 batch，摊薄权重加载成本，但会挤占 goodput，必须和普通在线请求隔离预算。
+**最小验证矩阵**：固定模型与提示，比较 K=1 的基线、候选生成、加验证、加路由四组；匹配预算，再扫描预算。记录实际 token/调用数、最终质量、失败率、P95/P99、达标 goodput 和费用。若没有运行模型，只交付方案和构造计算，不填真实提升数字。
 
 ## 高频追问
 
-**Q：Self-Consistency 什么时候会失效？**
-两种情况：① **单次正确概率 $p < 0.5$**——投票会把"多数错误"扶正，K 越大越糟；② **答案空间连续/开放**（写作、翻译）——不同采样答案不同但没有"众数"可投。前者的解法是先用 few-shot / SFT / 推理模型把 $p$ 拉过 0.5；后者的解法是换 Best-of-N + RM 或 Universal Self-Consistency（LLM-judge）。
+<details>
+<summary>Self-Consistency 与 Best-of-N 怎么选？</summary>
 
-**Q：Best-of-N 和 Self-Consistency 的选择依据？**
-看**能不能自动验证**：
-- 数学、代码、结构化输出（能自动判对错）→ **Best-of-N + verifier** 最优；
-- 数学但 answer parser 复杂 → Self-Consistency 投票通常够用，工程简单；
-- 开放域生成 → 只能用 RM 打分的 Best-of-N，效益打折。
-BoN 的天花板是 verifier 准确率，SC 的天花板是"多数正确率 > 0.5"这个前提。
+先问答案是否可归一化、是否有可靠验证器，以及候选错误是否相关。用同预算留出集比较，不把“可验证”直接推成 BoN 永远最优。
 
-**Q：Tree of Thoughts 相比 CoT 提升在哪？什么时候值得用？**
-CoT 是"一路走到黑"，ToT 是"多条路径 + 自评 + 回溯"。ToT 提升在**需要探索多方案再决策**的任务：Game of 24、Creative Writing 需要局部展开评估的场景。代价是 LLM 调用数放大 10-100 倍。**日常问答、常规推理，CoT 就够，ToT 是过度设计**。真值得上 ToT/MCTS 的是竞赛数学、复杂代码 debug、长周期规划。
+</details>
 
-**Q：PRM 相比 ORM 到底强多少？训练 PRM 有什么难点？**
-在 MATH 上同 K=32 采样，PRM-guided 通常比 ORM-BoN 高 3-8 分。因为 PRM 在**中间步骤**就能剪掉错误分支，避免"错答案被完整生成后才被扔掉"。难点：**步骤级标注**贵。Math-Shepherd 用 rollout 概率自动化：从某步 rollout k 次，通向正确终点的比例当作该步的软标签——这是把 ORM 的 outcome 信号"回填"成 process 信号。
+<details>
+<summary>为什么推理链更长、候选更多，结果反而更差？</summary>
 
-**Q：Budget Forcing（s1）为什么用几千条数据就能追上 R1？**
-两个原因：① SFT 的 1K 精选样本已经激活了 base 模型的推理能力（LIMA 效应）；② **推理时的 budget forcing 是关键放大器**——在生成结束标记时替换为"wait"让模型继续思考，等价于强制"再检查一遍"。s1 不训练模型学"多想"，而是**推理时逼它多想**——用工程手段撬动模型已有的能力。这是 2025 年最"性价比"的 test-time scaling recipe。
+可能是共同错误被放大、验证器对长文本偏好、误接受机会增加、搜索局部评分失真或预算截断。分别看覆盖、选择、成本和最终任务结果，不能只看模型生成了多少思考文本。
 
-**Q：推理模型（R1/o1）+ Self-Consistency 有意义吗？**
-有。虽然推理模型内建了 test-time scaling，但**采样多条 R1 输出再投票**仍能显著提升——因为 R1 单次采样也不是 100% 正确（AIME 上 R1 单次约 79%，K=32 投票能到 85%+）。工程上要注意：R1 输出长（每条 5-30K token），K=32 的成本非常高，一般 K=8 就够。
+</details>
 
-**Q：Snell 2024 说"推理时扩展有时比多训一倍参数还强"，怎么理解这个结论？**
-不是"推理时扩展永远划算"，而是**在给定 FLOPs 预算下**：
-- 简单-中等难度：推理时扩展效率更高（一个小模型 + 100× 推理时算力 > 大一倍的模型）；
-- 难题：预训练大模型仍然更强（推理时扩展也救不回能力上限）。
-所以 compute-optimal 策略是"**先按难度分流**"：简单题小模型 + 推理时扩展；难题上大模型。这也是 2025 生产系统里越来越常见的**router 架构**的理论基础。
+<details>
+<summary>如何证明分流策略真的有效，而不是利用评测答案？</summary>
 
-**Q：MCTS 用在 LLM 推理里的最大工程难点？**
-① **单步展开成本高**：每个节点都要 LLM forward，一次 MCTS 少说几百次调用；② **Simulation 步的估值不准**——用 LLM 自评或 PRM 打分都是近似，噪声大；③ **搜索树可能失控**：分支因子高、深度不定，需要精细的 UCT/温度调整；④ **中间状态的表示**：不像围棋是明确棋盘，LLM 推理的"状态"是可变长文本，缓存和比较都麻烦。所以 MCTS + LLM 目前只在数学竞赛、代码 debug、Agent 规划这类高价值场景落地，不是日常方案。
+说明在线特征和训练来源，固定留出集，比较无路由基线与同预算策略；报告困难子集、错误分流、成本及置信区间。真实答案只能用于离线评估，不进入上线决策特征。
 
-**Q：为什么"离线"用推理时扩展生成训练数据这么火？（rStar-Math / R1-Distill 思路）**
-把推理时的"高精度但高成本"直接**摊到训练里**：
-- 用 MCTS + PRM 花很多推理算力，生成高质量推理轨迹；
-- 用这些轨迹 SFT 小模型；
-- 小模型上线后**单次推理就能达到接近"MCTS + PRM"的效果**，推理成本回到普通模型水平。
-本质是"**推理时算力 → 训练时收益 → 上线时省算力**"的一次性摊销。rStar-Math 用这条路径让 7B 模型追平 o1-mini，是 2024 后"推理时扩展"最有商业价值的落地范式。
+</details>
 
-**Q：Self-Consistency 采样 K 条，工程上怎么摊薄成本？**
-四个技巧：① **Prefix Caching**：K 条共享 prompt 的 KV Prefill 一次即可（[KV Cache 页](/inference/kv-cache)）；② **同 batch 并行采样**：K 条塞进同一个 batch，摊薄权重加载；③ **Early Stopping**：边采样边投票，达到置信阈值就停；④ **动态 K**：分类器/小模型预判题目难度，简单题 K=1、难题 K=32。实际成本收益强依赖模型、长度分布、prefix 命中率和 verifier 质量；面试里要说“先压测再定 K”，不要承诺固定倍数。
-
-**Q：Self-Consistency wrapper 手撕时要写哪些点？**
-最小版本要写四件事：多次采样、答案归一化、多数投票、领先答案无法被反超时提前停止。模型调用要抽象成 `sample_fn`，不要和投票逻辑耦合；开放域任务不要强行字符串投票。参考实现见 [手撕代码题解集](/interview/coding-problems)。
+继续实践：[手撕代码题](/interview/coding-problems) · [SLO goodput](/inference/slo-goodput) · [裁判校准](/evaluation/judge-calibration)。本轮读取上述四篇论文摘要以核对方法与结论范围；未完整复现其实验，未运行任何商业推理 API。

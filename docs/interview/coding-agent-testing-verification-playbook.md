@@ -1,8 +1,6 @@
 ---
 title: 编码 Agent 测试策略与验证闭环：从补丁到可信交付
-description: >-
-  这页解决一个很容易被混为一谈的问题：测试通过不等于 Agent 做对了，模型评测也不等于变更可以发布。 面试时应当把代码行为、Agent
-  能力、变更审查和线上效果拆开，再用一条可追溯的证据链把它们连接起来。
+description: 分开代码正确性、Agent 能力、独立审查与线上效果，组织复现、测试、覆盖和固定 SHA 的验证证据。
 level: L2
 roles:
   - 应用开发
@@ -46,14 +44,14 @@ change:
   id: ca-20260715-042
   repository: payments-api
   base_sha: 6f2d1be
-  objective: "修复并发退款在支付渠道超时时的重复扣款"
+  objective: "修复并发退款在支付渠道超时时的重复退款"
   acceptance:
     reproduce:
       command: "./gradlew :refund:test --tests '*TimeoutDuplicateChargeTest'"
       expected_before: fail
     invariants:
-      - "同一 idempotency_key 至多生成一笔扣款"
-      - "渠道超时后可安全重试，最终状态可解释"
+      - "同键同参数在服务端去重窗口内至多生成一笔退款"
+      - "渠道超时先查询执行状态；unknown 不直接重放写入"
     required_checks:
       - "./gradlew check"
       - "./gradlew :refund:integrationTest"
@@ -63,10 +61,10 @@ change:
     prohibited_changes: ["db/migrations", "infra/production"]
   release:
     rollout: canary
-    rollback_signal: "duplicate_charge_rate > 0"
+    rollback_signal: "发现重复退款立即暂停新增写入并对账"
 ```
 
-验收契约至少有四个价值：锁定基线、让失败先发生、限制修改面、定义发布后的观察点。对没有稳定 oracle 的任务，必须明说验证强度下降，并增加人工验收或影子流量，不要伪造精确断言。
+这是教学伪配置，不是仓库内可执行任务。验收契约锁定基线、预期失败、修改面和发布观察点；expected_before=fail 必须是目标语义断言失败，不是下载、类不存在或 fixture 损坏。没有稳定 oracle 时明说验证强度下降，增加人审或无写副作用影子流量，不伪造精确断言。
 
 ## 三、分层测试不是固定清单，而是风险模型
 
@@ -87,7 +85,7 @@ change:
 1. 从 `base_sha..head_sha` 提取文件、符号、依赖锁和配置变更；不相信 Agent 自己总结的影响面。
 2. 用构建系统、依赖图和测试映射提出候选测试；映射缺失时标记为低置信度，而不是假设“没有影响”。
 3. 对接口、鉴权、迁移、并发、支付、删除和基础设施变更强制升级风险级别，追加契约、回滚或人工门禁。
-4. 对 flaky 测试先隔离并记录，不把“重跑一次通过”写成修复成功；真正的门禁应区分产品失败、环境失败和不稳定测试。
+4. 对 flaky 记录失败轨迹与重复次数；隔离不等于删除必需检查，需要稳定替代 oracle 或有到期的风险豁免，不把重跑通过写成修复。
 5. 将最终选择、被跳过项与理由写入 manifest，供 reviewer 反问“为什么没有跑 X”。
 
 ```text
@@ -177,7 +175,7 @@ critical: high + change approval + rehearsal + explicit rollback owner
 3. **渐进放量**：shadow、canary 或按租户/地域灰度；不要把 Agent 新策略直接给全量真实写操作。
 4. **业务与技术 SLO**：错误率、延迟、资源、关键业务不变量、人工接管率和 Agent 拒绝率同时观察。
 5. **回滚是动作，不是文档**：必须有明确触发阈值、制品/配置回退路径、负责人和验证步骤。
-6. **bad case 回灌**：将线上异常脱敏、归因、复现并加入软件回归集或 Agent 评测集；只有能稳定复现的修复才算真正关闭。
+6. **bad case 回灌**：将异常脱敏、归因并加入回归集或评测集。难复现的竞态仍可经故障注入与观测缓解，但保留残余风险，不将未再发生写成已证明根除。
 
 ## 九、系统设计追问：设计一个 Coding Agent 的验证控制面
 
@@ -211,7 +209,7 @@ Task admission -> immutable contract -> isolated runner -> evidence store
 
 **Q：代码测试和 Agent 评测如何联动？**
 
-把任务的业务 oracle 复用为 Agent 评测的一部分，但保留 Agent 专属维度，例如工具越权、路径范围、成本、轮数和失败归因。软件测试失败说明 patch 有问题；Agent 评测退化说明模型/提示词/工具策略版本可能不适合继续推广。
+复用业务 oracle，但保留 Agent 的工具越权、路径、成本、轮数和失败归因。软件测试失败可能来自 patch、既有缺陷、环境或 flaky，需与同环境 base SHA 对照；评测退化也可能来自任务集、依赖与 oracle 漂移，不能仅凭红灯定位具体策略。
 
 **Q：如何应对 flaky 测试？**
 
@@ -220,6 +218,19 @@ Task admission -> immutable contract -> isolated runner -> evidence store
 **Q：Agent 能自己批准自己的 PR 吗？**
 
 低风险建议类任务可以自动生成和自动测试，但合并批准必须来自独立规则和受保护分支；高风险场景再加人审。自评可以帮助定位，不能构成独立的交付证据。
+
+门禁需要防“没跑也绿”。[GitHub required checks](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks)本轮官方检索摘录说明required checks可接受success、skipped或neutral，并要求当前SHA；条件skip的job与路径过滤skip的整个workflow还需区分，后者可能Pending阻塞。企业gate另验报告、测试数量/身份、退出码、runner和SHA，不能只看平台允许合并。作者能改CI脚本时，需可信工作流/验证者控制；签名不证明测试充分。
+
+构造统计例：单次成功率 p=0.4，三次独立同分布尝试至少一次成功为 1-(1-p)^3=0.784。复用相同上下文或故障不满足独立条件；此数不是实际 pass@3，更不是三次全成功率。报告所有尝试与总成本，不把挑最优 patch 的结果冒充 pass@1。100 次独立同分布安全测试未观测越权，一侧95%上界仍为 1-0.05^(1/100)≈2.95%，不是零风险，分布外攻击更无法由此保证。
+
+<details>
+<summary>base 红、head 绿，但只改了测试：L1–L3 应追问什么？</summary>
+
+**L1**：断言是否仍检查退款数、金额和状态，而不是改为HTTP200。**L2**：验证者从可信定义重建 oracle，检查同一测试、fixture 和依赖；影子验证屏蔽写工具，迁移回滚不假设可逆。**L3**：用 holdout 和重复试验评估政策，对测试投毒、任务泄漏及共同依赖的相关错误做消融，不以换模型自动获得独立性。
+
+</details>
+
+最小替代方案是先用已有 CI 固定 SHA、独立审批和受控环境，保存机器报告；跨仓库预算与门禁一致性有需求时再抽服务。本文未运行任务、CI或灰度，不是交付履历。
 
 ## 上线前清单
 
@@ -234,9 +245,9 @@ Task admission -> immutable contract -> isolated runner -> evidence store
 
 ## 参考与延伸
 
-- [Claude Code 如何工作](https://code.claude.com/docs/en/how-claude-code-works)：以“收集上下文、执行、验证”描述其 Agent 循环，并建议提供可验证的测试或期望输出。
-- [Claude Code Commands](https://code.claude.com/docs/en/commands)：`/verify` 强调构建并实际观察改动，不只依赖类型检查；`/autofix-pr` 可监测 CI 失败，但仍应受仓库门禁约束。
-- [OpenAI Codex use cases](https://developers.openai.com/codex/use-cases)：将测试与质量工程作为编码 Agent 的实际使用场景；企业接入仍需自行定义版本、证据和授权边界。
+- [Claude Code 如何工作](https://code.claude.com/docs/en/how-claude-code-works)：本轮未读，仅导航，不当作已验证生命周期合约。
+- [Claude Code Commands](https://code.claude.com/docs/en/commands)：本轮未读，`/verify`、`/autofix-pr` 存在与语义待固定版本核验，本文门禁不依赖这些命令。
+- [OpenAI Codex use cases](https://developers.openai.com/codex/use-cases)与 [评测最佳实践](https://developers.openai.com/api/docs/guides/evaluation-best-practices)：本轮未读，仅导航，不冒称产品接口或指南已核。
 - [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)
 - [LLM 线上评测与灰度实验](/interview/online-evaluation-rollout-operations)
 - [Agent Runtime 升级、兼容性与回滚](/interview/agent-runtime-upgrade-rollback-playbook)
