@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 微调与模型平台高频问答
 
+<p class="chapter-question">Adapter 的训练效果不错，服务平台还要验证哪些约束？</p>
+
 > 这页面向算法微调、LLM 应用工程、AI Infra / MaaS 平台岗位。目标是把 SFT、PEFT、LoRA、QLoRA、RLHF、DPO、模型网关、评测门禁这些高频词，整理成面试可直接复述的答案。基础概念见 [微调范式](/finetuning/finetuning)、[LoRA / QLoRA](/finetuning/lora)、[RLHF / DPO](/finetuning/rlhf)、[MaaS 平台](/engineering/maas-platform)。
 
 ## 怎么用这页
@@ -145,3 +147,7 @@ reward hacking 是模型钻奖励模型空子，比如回答更长、更讨好�
 - [偏好优化方法全景](/finetuning/preference-optimization)
 - [模型网关与多模型路由](/engineering/llm-gateway)
 - [模型评估与幻觉治理](/evaluation/evaluation)
+
+## 读后练习 {#zhixu-practice}
+
+核对基座版本、资源用量、并发隔离与回滚路径，准备一个不兼容用例。

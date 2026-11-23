@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 企业 Tool Gateway 安全执行系统设计面试题
 
+<p class="chapter-question">工具网关接到写操作请求后，怎样把授权决定绑定到实际动作？</p>
+
 > 这页回答一个很容易被问深的问题：模型已经选好了工具和参数，企业系统凭什么允许它触达订单、退款、邮件、工单、数据库或生产资源？核心答案是：**模型只生成调用意图，Tool Gateway 才拥有受策略约束的执行权。** Function Calling 基础见 [Function Calling 与 MCP](/agent/function-calling-mcp)，风险模型见 [Agent 工具安全与权限边界](/agent/tool-safety)，MCP Server 治理见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。
 
 ## 怎么用这页
@@ -312,3 +314,7 @@ schema不证明订单归属或审批，jti不证明未重放。可信服务核�
 
 授权版本检查、确认令牌消费、幂等payload记录与领域状态更新需要事务/CAS或服务明确支持的等价机制。跨服务故障时只能陈述各环节原子性、至少一次传输及幂等假设，不能把Saga/Outbox当exactly-once证明。保留失败时序与剩余风险，测试零事故也不是全局安全证明。
 </details>
+
+## 读后练习 {#zhixu-practice}
+
+把主体、资源、参数摘要和批准记录组成对照表，核验执行和回执是否匹配。

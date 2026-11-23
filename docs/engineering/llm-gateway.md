@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 模型网关与多模型路由
 
+<p class="chapter-question">请求路由到备用模型时，哪些约束必须继续成立？</p>
+
 > 企业里很少「一个应用直连一个模型」——通常是几十个应用调十几个模型（GPT/Claude/Qwen/DeepSeek/自部署 vLLM）。在应用和模型之间加一层**模型网关（LLM Gateway）**，统一接入、鉴权、限流、路由、计费、观测，是后端工程师最能发挥老本行的 AI 基建岗位方向。本文讲清网关解决什么、核心能力清单、多模型路由与降级策略、以及 OneAPI / LiteLLM / Higress 等选型。应用开发见 [LLM 应用开发实战](/engineering/llm-app-dev)，运营见 [LLMOps 生产运营](/engineering/llmops)。
 
 ## 面试先背这几句话
@@ -186,3 +188,7 @@ LLM 限流和普通 API 不同，要同时管两个维度：
 
 </details>
 7. **后端工程师在这个方向的优势是什么？** 网关本质是 API 网关+服务治理+计量计费的组合，全是后端成熟技能，只是治理对象从微服务变成了模型。
+
+## 读后练习 {#zhixu-practice}
+
+建立切换清单，检查工具支持、输出格式、数据地域和剩余预算。

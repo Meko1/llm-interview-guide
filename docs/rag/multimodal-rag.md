@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 多模态 RAG（图文检索与 ColPali）
 
+<p class="chapter-question">一页文档含图表与脚注时，图像检索命中是否足够？</p>
+
 > 真实文档不只有纯文本——PDF 里有表格、图表、扫描件、流程图。传统 RAG 先用 OCR 把文档转成文本再检索，会丢掉版式和视觉信息。多模态 RAG 直接在「图 + 文」上做检索，是 2024–2025 的活跃方向。基础流程见 [RAG 基础](/rag/rag-basics)，多模态模型原理见 [多模态大模型](/multimodal/multimodal)。
 
 ## 一、传统 RAG 处理富文档的痛点
@@ -108,3 +110,7 @@ query + 检索到的（图片/文档截图/图表）→ 多模态 LLM → 答案
 
 **Q：CLIP 式图文向量和 ColPali 有什么不同？**
 CLIP 把整张图压成一个向量、擅长自然图像的图文互搜，但对「文档页里的密集文字」理解弱；ColPali 用 VLM + 多向量 late interaction，专为文档检索设计，能细粒度匹配页面里的文字和版式，更适合富文本文档。
+
+## 读后练习 {#zhixu-practice}
+
+记录相关页面、具体区域和答案依据，再核对单位与脚注是否可读。

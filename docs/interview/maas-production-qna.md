@@ -11,6 +11,8 @@ classification: inferred
 ---
 # MaaS 平台生产化高频问答
 
+<p class="chapter-question">模型服务承诺可用，租户却持续被拒绝，怎样定位平台责任？</p>
+
 > MaaS 面试不是问“能不能转发模型 API”，而是问你能不能把模型能力做成企业内部可申请、可计费、可评估、可审计、可回滚的平台服务。工程总览见 [MaaS 平台与模型服务治理](/engineering/maas-platform)，请求层治理见 [模型网关与多模型路由](/engineering/llm-gateway)，推理容量与成本见 [推理部署与成本治理高频问答](/interview/inference-cost-qna)，按租户灰度、模型路由实验和线上质量运营见 [LLM 线上评测、灰度实验与质量运营面试题](/interview/online-evaluation-rollout-operations)，跨模型、跨区域的资产、策略和审计控制见 [企业 AI 安全、合规与审计控制面系统设计面试题](/interview/enterprise-ai-governance-audit-system-design)。
 
 > 若面试官追问 Coding/Operations Agent 在 session、cron、子 Agent、辅助任务中如何具体解析模型、轮换认证 profile 和处理 fallback，见 [Agent 模型路由、降级与能力契约](/interview/agent-model-routing-capability-playbook)。
@@ -425,3 +427,7 @@ Business Apps
 - [推理部署与成本治理高频问答](/interview/inference-cost-qna)
 - [微调与模型平台高频问答](/interview/finetuning-platform-qna)
 - [LLMOps 生产运营](/engineering/llmops)
+
+## 读后练习 {#zhixu-practice}
+
+把身份、配额、限流、调度和模型执行分层记录，逐步缩小故障范围。

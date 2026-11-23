@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 企业 Connector 增量同步与撤权：把外部知识安全地带进 LLM
 
+<p class="chapter-question">员工失去文档访问权后，索引里还有哪些副本需要处理？</p>
+
 企业知识助手接入 Google Drive、Confluence、Slack、Notion、SharePoint 或 CRM 后，最难的不是 OAuth 登录成功，而是后续几十万份内容如何持续同步：新建、改名、移动、编辑、权限变化、删除、API 限流和 webhook 丢失都可能让索引与源系统不一致。
 
 本页讨论 Connector 的**数据面**。用户同意、OAuth、token 刷新和 Credential Broker 见 [Agent 外部连接与 OAuth 凭证生命周期](/interview/agent-connector-identity-lifecycle-playbook)；RAG 检索隔离与索引演进见 [多租户 RAG 检索隔离与索引演进系统设计](/interview/multi-tenant-rag-index-governance-playbook)。这里回答的是：连接已建立后，如何把数据变化可靠地同步成可权限过滤、可引用、可删除的知识资产。
@@ -182,3 +184,7 @@ Connector 传播 ACL 变更并撤销索引可见性，但在线检索仍要以�
 ## 十二、60 秒收束回答
 
 > 设计重点是把获取进度、发布进度和权限时效分开。事件持久化后可重放，游标失效可重建，版本发布不能覆盖更新的撤权状态；对当前权限无法实时获知的来源，明确滞后与安全降级。以上是建议架构，不是已测生产 SLA。
+
+## 读后练习 {#zhixu-practice}
+
+沿索引、缓存和检索结果追踪一次撤权，给每处设定验证点。

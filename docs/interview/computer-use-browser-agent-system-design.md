@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Computer Use / 浏览器 Agent 生产系统设计面试题
 
+<p class="chapter-question">浏览器点击成功后，业务动作仍可能处于什么状态？</p>
+
 > Computer Use 面试的难点不在“能不能点一个按钮”，而在“如何让 Agent 在不可信网页、真实账号和有副作用的浏览器会话中做到可验证、可中断、可审计”。概念与技术路线见 [Computer Use 与浏览器 Agent](/agent/computer-use)，工具权限基础见 [Agent 工具安全与权限边界](/agent/tool-safety)，执行授权见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
 
 ## 怎么用这页
@@ -273,3 +275,7 @@ MFA、CAPTCHA、首次设备绑定与付款确认不能由 Agent 规避。暂停
 - [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)
 - [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)
 - [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)
+
+## 读后练习 {#zhixu-practice}
+
+将页面提示、服务回执和实际资源状态分开记录，明确不能盲目重试的情形。

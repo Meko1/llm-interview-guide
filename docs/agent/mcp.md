@@ -9,9 +9,11 @@ classification: inferred
 ---
 # MCP 协议深入
 
+<p class="chapter-question">MCP 客户端如何知道服务器提供哪些能力？</p>
+
 > MCP 统一的是接入协议，不会自动提供身份委托或资源授权。涉及短期凭证、确认令牌与执行边界时，见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
 
-> MCP（Model Context Protocol）是 2024 年底以来最受关注的 AI 工程标准，已被主流厂商广泛采纳，几乎成了 Agent 方向的必考题。本文系统讲清它要解决的问题、架构、三大原语、JSON-RPC 消息细节、能力协商与生命周期、传输演进、生态与实战、安全风险。基础的工具调用机制见 [Function Calling 与 MCP](/agent/function-calling-mcp)，企业治理和系统设计追问见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。
+> MCP（Model Context Protocol）约定客户端如何发现服务端提供的能力并发起调用。想判断一个工具能否接入，先看双方协商了哪些能力、调用如何返回，以及谁负责授权。本文系统讲清它要解决的问题、架构、三大原语、JSON-RPC 消息细节、能力协商与生命周期、传输演进、生态与实战、安全风险。基础的工具调用机制见 [Function Calling 与 MCP](/agent/function-calling-mcp)，企业治理和系统设计追问见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。
 
 ## 一、MCP 要解决什么问题？
 
@@ -215,3 +217,7 @@ Roots 指定项目目录后，仍需规范化路径、解析实际目标并阻�
 **Q：MCP 为什么这么快被广泛采纳？** 它击中了 Agent 工具集成的真实痛点（M×N 爆炸），由 Anthropic 开源并提供多语言 SDK 和现成 Server，主流 Host 快速接入，形成「工具方愿意做 Server、应用方愿意做 Client」的生态正循环。
 
 **Q：有了 MCP 还需要 LangChain 这类框架吗？** 需要，二者不同层次。MCP 解决「工具如何标准化接入」；LangChain/LangGraph 解决「如何编排 LLM、记忆、流程、多步逻辑」。框架可以把 MCP Server 作为工具来源接入，二者配合。
+
+## 读后练习 {#zhixu-practice}
+
+画出初始化与能力发现时序，把协议能力声明和业务访问许可分开标注。

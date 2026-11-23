@@ -10,6 +10,8 @@ classification: reviewed
 ---
 # Attention 与变体
 
+<p class="chapter-question">一次解码只有一个查询，注意力矩阵会是什么形状？</p>
+
 > 先明确张量形状，再讨论复杂度、缓存与内核。L1 读者先看 QKV 和 mask；L2 关注错误定位和成本；L3 追问等变性、缩放假设与数值误差。前置阅读：[Transformer](/basics/transformer)。
 
 <LessonLab kind="attention" />
@@ -179,3 +181,7 @@ $$\text{MultiHead}=\text{Concat}(\text{head}_1,...,\text{head}_h)W^O,\quad \text
 **Q：自注意力和交叉注意力的区别？** 自注意力的 Q、K、V 来自同一序列；交叉注意力的 Q 来自一个序列（如 Decoder）、K/V 来自另一个序列（如 Encoder 输出），用于跨序列对齐。
 
 **Q：因果掩码怎么实现？** 把注意力分数矩阵的上三角（未来位置）置为 −∞，softmax 后这些位置权重为 0，从而每个 token 只能注意到自己及之前的位置。
+
+## 读后练习 {#zhixu-practice}
+
+分别写出预填充与单步解码的查询、键和分数形状，再给出各自的掩码。

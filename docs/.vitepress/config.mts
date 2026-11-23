@@ -8,9 +8,22 @@ const BASE = '/llm-interview-guide/'
 export default defineConfig({
   base: BASE,
   lang: 'zh-CN',
-  title: 'Atlas · 大模型能力地图',
+  title: '知序 · LLM 学习手册',
   description:
     '大模型面试指南，覆盖大模型基础、Transformer、预训练、微调、RLHF、Prompt、RAG、Agent、推理优化与部署、评估与多模态',
+  transformHead({ pageData }) {
+    const site = 'https://meko1.github.io/llm-interview-guide/'
+    const path = pageData.relativePath.replace(/index\.md$/, '').replace(/\.md$/, '')
+    const title = pageData.title ? `${pageData.title} | 知序` : '知序 · LLM 学习手册'
+    const description = pageData.description || '连接大模型原理、应用实践、工程判断与面试自测。'
+    return [
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { property: 'og:description', content: description }],
+      ['meta', { property: 'og:url', content: site + path }],
+      ['meta', { name: 'twitter:title', content: title }],
+      ['meta', { name: 'twitter:description', content: description }]
+    ]
+  },
   lastUpdated: true,
   cleanUrls: true,
   ignoreDeadLinks: false,
@@ -24,27 +37,22 @@ export default defineConfig({
   },
 
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${BASE}atlas-mark.svg` }],
-    ['meta', { name: 'theme-color', content: '#101b29' }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${BASE}zhixu-mark.svg` }],
+    ['meta', { name: 'theme-color', content: '#f6f7fa' }],
     ['meta', { name: 'keywords', content: '大模型,LLM,面试,八股文,Transformer,Attention,RAG,Agent,MCP,微调,LoRA,RLHF,DeepSeek,推理优化,多模态,大模型面试题' }],
     ['meta', { name: 'author', content: 'Meko1' }],
     // Open Graph（社交分享卡片）
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: 'Atlas · 大模型能力地图' }],
-    ['meta', { property: 'og:description', content: '从一个 token 到可靠系统，连接知识学习、工程实践与面试自测。' }],
-    ['meta', { property: 'og:site_name', content: 'Atlas' }],
-    ['meta', { property: 'og:url', content: 'https://meko1.github.io/llm-interview-guide/' }],
-    ['meta', { property: 'og:image', content: 'https://meko1.github.io/llm-interview-guide/atlas-mark.svg' }],
+    ['meta', { property: 'og:site_name', content: '知序' }],
+    ['meta', { property: 'og:image', content: 'https://meko1.github.io/llm-interview-guide/zhixu-mark.svg' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
     // Twitter Card
     ['meta', { name: 'twitter:card', content: 'summary' }],
-    ['meta', { name: 'twitter:title', content: 'Atlas · 大模型能力地图' }],
-    ['meta', { name: 'twitter:description', content: '理解机制、构建系统、验证能力。以面试为入口的中文大模型能力地图。' }]
   ],
 
   themeConfig: {
-    logo: '/atlas-mark.svg',
-    siteTitle: 'Atlas · 能力地图',
+    logo: '/zhixu-mark.svg',
+    siteTitle: '知序 · LLM 学习手册',
 
 
     nav,
@@ -85,7 +93,7 @@ export default defineConfig({
 
     footer: {
       message: '基于 MIT 许可发布',
-      copyright: 'Copyright © 2026 Meko1 · Atlas 大模型能力地图'
+      copyright: 'Copyright © 2026 Meko1 · 知序 LLM 学习手册'
     }
   }
 })

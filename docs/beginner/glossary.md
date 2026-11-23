@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 大模型术语速查表
 
+<p class="chapter-question">logits、概率和词元，哪一个是模型下一步实际要选的对象？</p>
+
 > 大模型领域缩写和黑话特别多。这份速查表帮你快速扫盲，每个词配一句大白话解释。看文章遇到生词随时回来查。
 
 ## 基础概念
@@ -103,3 +105,7 @@ classification: inferred
 分词与 token 的依据：[Hugging Face 分词说明](https://huggingface.co/docs/transformers/tokenizer_summary)。这是术语入口，不是实现规范；配置细节请沿表内链接继续读。
 
 > 没找到的术语？欢迎到 [GitHub](https://github.com/Meko1/llm-interview-guide) 提 Issue 补充。
+
+## 读后练习 {#zhixu-practice}
+
+把三个术语排进一次生成过程，给每一步写一个能解释给同学听的例子。

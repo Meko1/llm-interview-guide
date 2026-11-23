@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 长任务 Agent 持续授权与紧急撤权：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">授权在长任务中途过期，哪些步骤必须停下来？</p>
+
 > 一次“允许执行”不能覆盖一个持续数小时、会暂停恢复、会调用多个工具、可能更换资源的 Agent 任务。真实生产问题是：用户批准了读日志，Agent 之后要部署怎么办？审批后 prompt、目标分支或金额变了怎么办？策略刚收紧，正在运行的 job 能否继续？紧急撤权时，已经发到下游的命令如何阻止或对账？本页将审批从一次 UI 点击提升为持续授权状态机。
 
 > 风险分级与 prepare/commit 模式见 [Agent 工具安全与权限边界](/agent/tool-safety)，服务端策略执行见 [企业 Tool Gateway 安全执行设计](/interview/tool-gateway-security-design)，多 Agent 的 owner/lease/孤儿任务见 [多 Agent 委派与 Handoff 控制平面](/interview/multi-agent-delegation-handoff-playbook)。
@@ -224,3 +226,7 @@ Break-glass 不是“打开 YOLO 模式”。它仅适用于已有故障/安全�
 - [Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/) 与 [Plugins in Codex](https://help.openai.com/en/articles/20001256-plugins-in-codex/)：审批、sandbox、网络策略、插件与源系统权限。
 - [OpenClaw Exec approvals](https://docs.openclaw.ai/tools/exec-approvals)、[Policy](https://docs.openclaw.ai/cli/policy)、[Permission modes](https://docs.openclaw.ai/tools/permission-modes)：严格策略、冻结执行计划和本机审批。
 - [Hermes Security](https://hermes-agent.nousresearch.com/docs/user-guide/security/) 与 [Event Hooks](https://hermes-agent.nousresearch.com/docs/user-guide/features/hooks/)：批准模式、不可覆盖 deny 与工具 Hook。
+
+## 读后练习 {#zhixu-practice}
+
+把任务划为读取、计算、提交三个阶段，为每阶段写明授权复查时机。

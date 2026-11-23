@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 深度研究 Agent（Deep Research）
 
+<p class="chapter-question">两篇报道引用同一来源，能算两份独立证据吗？</p>
+
 > 「Deep Research」是 2025 年走红的一类 Agent 产品：给一个研究问题，Agent 自主上网搜索几十上百个来源、交叉验证、综合成一份带引用的长报告。它把「检索 + 多步推理 + 长文写作」端到端串起来，是 Agent 落地最成功的形态之一。基础范式见 [Agent 基础](/agent/agent-basics)，检索见 [Agentic RAG](/rag/agentic-rag)，成本和搜索预算视角见 [推理时算力扩展](/inference/test-time-scaling)。
 
 ## 一、它解决什么问题？
@@ -95,3 +97,7 @@ RL 可以优化研究策略，但需要合适的训练环境、奖励与独立�
 
 **Q：Deep Research 的主要工程瓶颈？**
 上下文爆炸（海量中间材料，要靠外部笔记+压缩管理）、成本时延（几十次检索+长文生成）、来源质量（搜到差来源就系统性带偏）、幻觉在长报告里更隐蔽。这些决定了它适合「初稿/调研加速」，关键结论仍需人核。
+
+## 读后练习 {#zhixu-practice}
+
+为一个研究结论画出引用链，标出原始出处、转述和仍缺失的反证。

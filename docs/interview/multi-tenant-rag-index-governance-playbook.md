@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 多租户 RAG 检索隔离与索引演进系统设计
 
+<p class="chapter-question">切换到新版向量索引时，如何确认租户隔离仍然有效？</p>
+
 > 多租户 RAG 最危险的错误不是“回答不够聪明”，而是正确地回答了另一个租户的数据。向量检索的语义相似性天然不会理解组织边界，因此权限过滤、版本血缘、删除与重建必须在模型生成之前成为硬约束。
 
 ## 一、30 秒面试回答
@@ -208,3 +210,7 @@ tenant + authorization scope/epoch + query canonical form
 > 我负责企业知识库的多租户检索边界。我们将 tenant、文档版本、数据等级和 ACL 标签继承到每个 chunk、向量和缓存 key；查询时由身份服务注入授权上下文，向量库在召回前执行 filter，rerank 和 LLM 只处理授权证据。索引更新采用不可变版本和 alias 原子切换，权限变化通过 ACL epoch 主动失效缓存，删除工作流覆盖对象、解析、向量、倒排和视觉索引。我们用越权查询、撤权缓存、删除传播和版本一致性作为发布门禁，既保证了权限隔离，也让重建和回滚可运营。
 
 继续学习：[RAG 生产化与系统设计](/rag/rag-production)、[RAG 评估](/rag/rag-evaluation)、[富文档与多模态 RAG 系统设计](/interview/multimodal-rag-document-intelligence-playbook)、[数据分级与外发审计](/interview/data-governance-egress-audit-qna)、[LLM 数据标注与偏好数据运营](/interview/llm-data-feedback-operations-playbook)。
+
+## 读后练习 {#zhixu-practice}
+
+为迁移前后各准备授权与未授权的对照查询，验证索引版本和回退路径。

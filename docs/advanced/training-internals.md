@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 训练深入：优化器、混合精度与稳定性
 
+<p class="chapter-question">混合精度训练突然出现非有限值，从哪里开始定位？</p>
+
 训练稳定性不是一张超参数配方。应把**数据、loss 分母、数值路径、更新和恢复状态**串起来：同一个 loss spike 可以来自难样本，也可以来自溢出、恢复错误或分布式归一化。并行背景见 [分布式训练](/pretraining/distributed-training)。
 
 ## 优化器：从 SGD 到 AdamW
@@ -111,3 +113,7 @@ scale 为 1024 时，真实梯度范数 1 变为 1024，直接按阈值 2 裁剪
 </details>
 
 证据范围：已读 AdamW 原论文摘要、PyTorch AdamW 公式/解耦标志与 v2.5.1 AMP 的裁剪/累积完整段落。主分支 AMP 源文件 404、在线 stable 文档 403，均未重试或绕过；未运行训练/GPU检查，构造数值只用于理解口径。
+
+## 读后练习 {#zhixu-practice}
+
+沿前向、损失缩放、反向和优化器步骤列出检查点，指出最先出现异常的位置。

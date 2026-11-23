@@ -11,6 +11,8 @@ classification: inferred
 ---
 # RAG 进阶与优化
 
+<p class="chapter-question">新增重排模块后，如何确认改善发生在真正的瓶颈上？</p>
+
 > 朴素 RAG 在真实场景常常召回不准、答非所问。本文系统梳理「检索前-检索中-检索后」三段优化、高级 RAG 范式与评估方法，是进阶面试的高频深水区。基础流程见 [RAG 基础](/rag/rag-basics)，向量检索原理见 [Embedding 与向量库](/rag/embedding-vectordb)。
 
 ## 一、朴素 RAG 的常见问题
@@ -123,3 +125,7 @@ classification: inferred
 **Q：怎么评估 RAG 系统？** 分检索（命中率/MRR/上下文相关性）和生成（忠实度/答案相关性）两部分，用 RAGAS 等 LLM-as-a-Judge 自动评测，并建评测集做 bad case 分析和持续迭代。
 
 **Q：GraphRAG 解决什么问题？** 朴素 RAG 按片段检索，难处理「需要跨多个文档综合」或「全局总结」的问题。GraphRAG 先抽取实体和关系构建知识图谱，按图结构检索，擅长跨文档关联和宏观总结，代价是构建成本高。
+
+## 读后练习 {#zhixu-practice}
+
+固定候选集，比较重排前后的证据位置、最终答案和新增延迟。

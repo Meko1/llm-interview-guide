@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM Prompt/Prefix Cache 生产工程
 
+<p class="chapter-question">两个提示开头看似相同，哪些差异会影响前缀缓存复用？</p>
+
 > Prefix Cache 不是“把 system prompt 放进 Redis”。它复用的是**完全相同 token 前缀的模型 KV 状态**，主要减少 prefill 计算和 TTFT；收益取决于 prompt 布局、请求分布、引擎拓扑、版本兼容性与驱逐策略。把这件事做成生产能力，关键不是打开一个开关，而是把稳定前缀设计成可治理的接口契约。
 
 ## 一、30 秒面试回答
@@ -202,3 +204,7 @@ PromptOps 常只关注输出质量，但对高流量服务来说，一行 system
 > “我们把 Prompt 设计成稳定前缀与易变上下文两层：系统策略、工具 schema 和 few-shot 由确定性构建器生成，用户问题、会话摘要和 RAG 证据后置。路由按 prefix hash 做有限亲和，同时设置热点溢出避免排队。模型、tokenizer、模板、adapter 和 policy 组成兼容域，发布时新旧域并行灰度并预热公共段。我们用 token 加权命中、saved prefill ms、P95 TTFT、驱逐抖动和每租户公平性评估，而不是只报 hit rate；在权限或模板不确定时宁可回源，也不复用跨域 KV。”
 
 这段表达展示的不是“会开 prefix cache”，而是能把 prompt、推理引擎、容量、发布和安全共同设计成一条可运营链路。
+
+## 读后练习 {#zhixu-practice}
+
+对照词元序列、模型配置和租户范围，列出命中与不应共享的案例。

@@ -11,6 +11,8 @@ classification: inferred
 ---
 # Dify 与 Coze 工作流：低代码 Agent 的生产化面试指南
 
+<p class="chapter-question">低代码流程从演示走向生产，哪个节点最容易留下不可恢复的状态？</p>
+
 > Dify、Coze 都能让团队很快做出“看起来已经可用”的 AI 应用。面试的分水岭不在会不会画流程，而在你能否讲清：平台替你解决了什么、没有替你解决什么，以及复杂业务为何要保留代码控制面。
 
 ## 一、先把平台定位说准确
@@ -173,3 +175,7 @@ Coze 的实战项目往往从“Bot + 工具 + 工作流”起步。回答时先
 - [Coze Open Docs](https://www.coze.com/open/docs)
 - [AI 工作流工程化](/agent/workflow-engineering)
 - [Dify 低代码工作流生产化高频问答](/interview/dify-production-qna)
+
+## 读后练习 {#zhixu-practice}
+
+为一个审批节点补全输入契约、持久化点和超时后的接管方式。

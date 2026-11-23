@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 多 Agent 共享工作区并发控制：Worktree、租约、产物与合并队列
 
+<p class="chapter-question">两个并发任务都通过了各自测试，合并后为什么仍可能失败？</p>
+
 > 多 Agent 并行写代码的难点不在于开几个会话，而在于如何避免文件覆盖、环境污染、重复修改同一业务规则，以及把在旧基线测试通过的变更错误合入主干。本页将问题拆成文件隔离、任务所有权、共享资源、变更整合和恢复五层。
 
 > 委派与上下文契约见 [多 Agent 委派与 Handoff 控制平面](/interview/multi-agent-delegation-handoff-playbook)，工具/Hook/验收见 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)，中断恢复见 [长运行 Agent 检查点、恢复与人工 Steer](/interview/long-running-agent-recovery-playbook)。
@@ -196,3 +198,7 @@ Claude Code 的 Agent Teams 文档指出，teammate 共享 task list 和消息�
 - [Claude Code Worktrees](https://code.claude.com/docs/en/worktrees)、[Parallel Agents](https://code.claude.com/docs/en/agents)：并行 session、worktree、subagent 和团队边界。
 - [OpenAI: Introducing the Codex app](https://openai.com/index/introducing-the-codex-app/)：并行 Agent、内建 worktree 和本地 git 状态隔离。
 - [多 Agent 委派与 Handoff 控制平面](/interview/multi-agent-delegation-handoff-playbook)、[智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)：委派、工具策略、验收证据和交付流程。
+
+## 读后练习 {#zhixu-practice}
+
+分别记录基线版本、修改范围和合并顺序，在共同基线上重新验证。

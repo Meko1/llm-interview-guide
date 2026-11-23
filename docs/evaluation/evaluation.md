@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 模型评估与幻觉治理
 
+<p class="chapter-question">模型给出一个带引用的错误答案，问题出在检索还是生成？</p>
+
 评估先定义**用户需要什么、什么失败不可接受、证据从哪里来**，再选指标。最终交付是带版本、分母、失败样本与行动建议的判断，不是一个自动裁判均分。评测类型见 [基准深入](/evaluation/benchmarks)。
 
 ## 评估全景：五层金字塔
@@ -161,3 +163,7 @@ Chatbot Arena 测参与者在平台任务分布上的偏好，不是领域事实
 </details>
 
 证据范围：实际读 BERTScore、SelfCheckGPT、FActScore、Ragas 与 MT-Bench 摘要，BLEU/ROUGE 作者实现的评分段落。未运行业务评测或验证当前框架 API；构造计算不是论文结果，线上效果与法律/专业判断不在本文认证范围。
+
+## 读后练习 {#zhixu-practice}
+
+把样本拆为是否取到证据、是否使用证据和结论是否受支持。

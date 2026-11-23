@@ -1,5 +1,7 @@
 # Atlas 全站逐篇深度重编 Implementation Plan
 
+<p class="archive-caption">历史实施记录 · 2026-11-05。本页保留当时的方案与范围。</p>
+
 > **For agentic workers:** Use executing-plans where available. Each worker owns disjoint article files and its receipt. Do not overwrite other work. No commits, pushes, deployments or new branches.
 
 **Goal:** 对现有 242 篇知识文章逐篇核查并深度重编，统一阅读呈现，保留 URL 与有价值内容。

@@ -12,6 +12,8 @@ classification: inferred
 ---
 # MoE 混合专家模型
 
+<p class="chapter-question">总参数翻倍时，每个词元经过的参数也会翻倍吗？</p>
+
 > MoE 按 token 选择部分专家，扩大容量而不同比例扩大活跃计算。这里以公开的 Mixtral 与 DeepSeek 说明机制，不据传闻推断闭源模型架构。
 
 ![MoE 层结构：路由器选 Top-K 专家，稀疏激活](/diagrams/moe.svg)
@@ -94,3 +96,7 @@ Top-K 是每 token 的选择，不是整个 batch 只选 K 个专家。不同 to
 **Q：共享专家（Shared Expert）有什么用？** DeepSeekMoE 让部分专家对所有 token 都激活，用于学习通用基础知识，避免每个路由专家都重复学习公共能力，从而让路由专家更专注于专业化分工。
 
 细节依据：[DeepSeek-V3 报告 §2.1.2](https://arxiv.org/html/2412.19437v1)、[官方 Gate 实现](https://github.com/deepseek-ai/DeepSeek-V3/blob/main/inference/model.py)。后者是推理代码，可核对选择与加权差别，不是完整训练代码。
+
+## 读后练习 {#zhixu-practice}
+
+给一个带共享层的两专家例子分开计算总参数和激活参数。

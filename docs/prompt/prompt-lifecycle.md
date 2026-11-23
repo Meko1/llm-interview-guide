@@ -10,6 +10,8 @@ classification: inferred
 ---
 # Prompt 生命周期、实验与发布（PromptOps）
 
+<p class="chapter-question">提示词的发布与回滚，应绑定哪些版本化条件？</p>
+
 在线上系统里，Prompt 不是一段散落在代码中的字符串，而是一项会影响质量、成本、安全、工具行为和用户体验的**可发布资产**。改一条例子、一个变量默认值、一个模型参数，甚至一个工具 schema，都可能改变线上行为。因此 PromptOps 的目标不是“更快改提示词”，而是让每一次变更可复现、可评测、可灰度、可回滚、可审计。
 
 本页是 Prompt 主栏目中的生产化主路径。它讲资产生命周期和控制面；“如何自动找到更优 Prompt”见 [自动化优化与 Prompt Ops](/prompt/prompt-optimization)，评测方法见 [模型评估与幻觉](/evaluation/evaluation)，发布门禁和线上实验的面试深问见 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)、[LLM 线上评测与灰度实验](/interview/online-evaluation-rollout-operations) 与 [PromptOps 模板治理与实验回滚](/interview/promptops-production-governance-playbook)。
@@ -219,3 +221,7 @@ PromptOps 是 LLMOps 的一个资产维度，聚焦提示模板、实验与发�
 </details>
 
 **来源阅读边界：** 实读 MLflow Prompt Registry 的不可变 version/alias、按版本加载、FAQ、缓存与模型配置相关段落；文档不是本项目已安装版本或全系统复现保证。Langfuse 的 prompt-versioning 公共路径本轮返回404，不作为功能依据。本文 manifest、门禁、缓存/恢复设计和费用/分数为示意与复算，未安装平台、调用模型或执行发布演练。
+
+## 读后练习 {#zhixu-practice}
+
+为一个模板记录变量、模型、检索配置与评测集，演练一次回滚后的结果核对。

@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Spring AI / Java AI 生产化高频问答
 
+<p class="chapter-question">流式模型调用中途取消，Java 侧怎样确认资源已释放？</p>
+
 > Spring AI 面试的重点不是“会不会调用 ChatClient”，而是 Java/Spring 生产系统如何把 LLM 接入已有权限、审计、SSE、限流、配置、微服务和运维体系。工程总览见 [Spring AI 基础与面试题](/engineering/spring-ai)，应用全链路见 [LLM 应用开发实战](/engineering/llm-app-dev)，完整系统设计回答见 [Java / Spring AI 生产架构系统设计面试题](/interview/java-ai-production-architecture-system-design)。
 
 ## 怎么用这页
@@ -364,3 +366,7 @@ Web/App
 
 固定模型/依赖/schema，区分原生schema成功率、解析成功率、字段语义与权限正确率；拒答/截断也计入分母。1000个独立同分布样本中零事件，仅能用rule-of-three粗估95%单侧概率上界约0.3%；对相关/自适应攻击样本不能套这个结论，更不能证明无越权。
 </details>
+
+## 读后练习 {#zhixu-practice}
+
+给连接、订阅、超时与审计终态各设观察点，演练一次客户端断开。

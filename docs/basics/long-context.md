@@ -13,6 +13,8 @@ classification: inferred
 ---
 # 长上下文专题
 
+<p class="chapter-question">支持更长的输入，就能找到埋在中间的证据吗？</p>
+
 > 从 4K 到 128K 甚至 1M token，长上下文是大模型的重要竞争维度。「怎么把上下文做长、做长之后有什么坑」是综合性很强的高频考点，串联了位置编码、注意力、KV Cache 多个知识点。
 
 ## 长上下文难在哪？
@@ -91,3 +93,7 @@ classification: inferred
 </details>
 
 一手依据：[PI](https://arxiv.org/abs/2306.15595)、[YaRN](https://arxiv.org/abs/2309.00071)、[ALiBi](https://arxiv.org/abs/2108.12409)、[Lost in the Middle](https://arxiv.org/abs/2307.03172)、[StreamingLLM](https://arxiv.org/abs/2309.17453)。这些结论有各自模型和任务范围，不作为当前产品性能担保。
+
+## 读后练习 {#zhixu-practice}
+
+保持内容不变，只移动证据位置，分别记录能否引用和能否正确作答。

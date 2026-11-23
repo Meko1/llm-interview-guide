@@ -1,35 +1,151 @@
-# Atlas 视觉系统
+---
+name: 知序 · LLM 学习手册
+description: 冷白、墨色与钴蓝的中文技术出版物
+colors:
+  cobalt: "#3157bb"
+  cobalt-hover: "#25489f"
+  cobalt-soft: "#e9eefb"
+  paper: "#f6f7fa"
+  paper-alt: "#eff1f6"
+  surface: "#fcfcfe"
+  ink: "#202633"
+  ink-secondary: "#515d71"
+  ink-muted: "#606d80"
+  divider: "#dce1eb"
+  border: "#c9d1df"
+  dark-cobalt: "#a6bbff"
+  dark-cobalt-hover: "#c2d0ff"
+  dark-cobalt-soft: "#253252"
+  dark-paper: "#171b24"
+  dark-paper-alt: "#1d2330"
+  dark-surface: "#202736"
+  dark-elevated: "#242b3a"
+  dark-ink: "#e8ecf5"
+  dark-ink-secondary: "#b5bfd3"
+  dark-ink-muted: "#a2aec5"
+  dark-divider: "#333e53"
+  dark-border: "#45526a"
+  button-text: "#f8f9fc"
+typography:
+  display:
+    fontFamily: "Manrope, PingFang SC, Microsoft YaHei, sans-serif"
+    fontSize: "clamp(36px, 3.5vw, 50px)"
+    fontWeight: 700
+    lineHeight: 1.42
+    letterSpacing: "-.035em"
+  body:
+    fontFamily: "PingFang SC, Microsoft YaHei, sans-serif"
+    fontSize: "17px"
+    lineHeight: 1.95
+  article-title:
+    fontFamily: "Manrope, PingFang SC, Microsoft YaHei, sans-serif"
+    fontSize: "clamp(29px, 3vw, 38px)"
+    fontWeight: 700
+    lineHeight: 1.45
+  catalog-title:
+    fontSize: "19px"
+    fontWeight: 600
+    lineHeight: 1.65
+rounded:
+  control: "6px"
+  panel: "12px"
+spacing:
+  small: "8px"
+  medium: "16px"
+  large: "24px"
+  section-gap: "32px"
+  mobile-section: "48px"
+components:
+  button-primary:
+    backgroundColor: "{colors.cobalt}"
+    textColor: "{colors.button-text}"
+    rounded: "{rounded.control}"
+    padding: "13px 20px"
+  button-primary-hover:
+    backgroundColor: "{colors.cobalt-hover}"
+    textColor: "{colors.button-text}"
+  path-application:
+    backgroundColor: "{colors.cobalt-soft}"
+    rounded: "{rounded.panel}"
+    padding: "32px"
+  path-research:
+    backgroundColor: "{colors.paper-alt}"
+    rounded: "{rounded.panel}"
+    padding: "32px"
+---
 
-2026-11-03 用户确认：大模型能力地图；深色科技首屏＋浅色阅读内页；允许替换旧品牌与视觉风格。
+# Design System: 知序 · LLM 学习手册
 
-## 视觉世界
+## Overview
 
-科技展馆的表现力＋学习工具的清晰度。深墨蓝 #101b29、青绿 #78e5ce、暖白 #f8fafb、正文 #223043；少量琥珀用于任务与故障状态。保留已有自托管 Manrope，中文平台回退。无渐变文字、玻璃卡片、粒子装饰、滚动劫持。
+**Creative North Star: "技术出版物"**
 
-首页是可操作的知识网络，不是右侧文字盒。网络连线表达模型原理到应用、评测与部署的关系。图形用 SVG/CSS/Vue 实现；不是生成的位图，不假装模型真实数据。
+用户于 2026-11-12 确认整体替换 Atlas 品牌：以冷白、墨色和钴蓝建立清晰、克制的阅读环境。应用开发与面试、算法与训练进阶并列为主要入口；品牌标记为 `docs/public/zhixu-mark.svg`。
 
-## 页面族
+本文件为 2026-11-13 的实现核对，合并更新既有 DESIGN.md。以 `docs/.vitepress/theme/zhixu.css`、`components/HomePage.vue`、`components/ArticleCatalog.vue` 为主，结合 `index.ts` 引入的旧样式层确认继承行为。这里记录源码事实，不代替浏览器视觉验收。最新主题覆盖最后加载；旧 `atlas-*` 类名与兼容资源仍保留。
 
-- 首页：深色知识网络、清晰行动入口、岗位路径、问题驱动精选、主题索引。
-- 路线：浅色阅读，阶段节点与交付物，主动选择后显示对应能力与文章。
-- 目录：可扫描的主题导航、筛选、文章摘要、级别与阅读时间。
-- 文章：宽度受控、强标题层级、细分案例/引用/表格/代码/折叠内容；侧栏与页内目录承担导航。
-- 核心文章：交互实验位于导读后，手动逐步与播放；不影响正文复制、搜索或旧锚点。
-- 微调图解：LoRA 用冻结矩阵与低秩分支展示关系，账本明确限定单层；DPO 用正负相对增益展示参考校正，按阶段揭示损失。七篇交互文章均从首页问题精选进入。
-- 分层自测：深色图解后回到浅色阅读面板，L1/L2/L3 可同时扫描。原生展开显示思路、核对要点、易错边界与正文链接；展开时暂停图解，减少动画下保留全部内容。
+**Key Characteristics:**
 
-## 动效边界
+- 页面依靠标题、编号、细分隔线与留白建立秩序。
+- 首页封面和精选问题连接对应文章或段落。
+- 首页、导航和长文共用明暗主题变量；教学画布保留固定深色背景。
+- 不自动播放装饰动画；保留操作反馈和教学状态变化。
 
-能力定位使用既有品牌的 Operate/Read 工作区：深色目标与基础声明、浅色路线节点与证据面板。连线只表达建议次序，前置由文本按钮明确；状态不只靠颜色。桌面双栏、手机上下排布，核对点原生展开，不动画布局高度。所有能力声明明确属于用户自查，不绘制能力雷达分数或掌握进度。
+## Colors
 
-首次进入短时显现、焦点连接和轻量悬停。教学播放默认停止，可播放、暂停、逐步、复位；标签页隐藏时暂停，路由离开清理定时器；减少动画偏好下不自动播放、不位移。键盘与移动触控都能获得同样内容。
+### Primary
 
-## 长文阅读规范（2026-11-05）
+钴蓝用于链接与因果掩码图版。双路线通过文字与细线区分，明暗主题均使用语义颜色变量。
 
-知识文章以阅读为核心，不用更多卡片或持续动画替代内容层次。正文容器上限 46rem，基础字号 1rem、行高 1.95；二级标题用节奏留白分段，表格与引用使用 0.9375rem。文章元信息为 0.875rem，显示目标读者与阅读量估算；分级待核不是技术质量认证。
+### Neutral
 
-公式通过 VitePress 内置数学开关与匹配版本的 MathJax 插件在构建时渲染 SVG/辅助 MathML，不依赖第三方运行时脚本。长公式、代码与表格只在各自容器内横向滚动，手机正文不横向溢出。原生折叠自测保留键盘操作与浏览器语义；正文、代码与数学表达各用适合的排版，不堆叠装饰面板。
+冷白承载页面，次级纸色分隔阅读区块，面板表面提高筛选器的辨识度。墨色、次级墨色和弱墨色分别承担标题正文、说明及辅助信息。细分隔线与控件边框使用不同深度。深色主题保留相同语义关系。
 
-## 验收
+**教学画布的边界：** 教学实验（`labs.css`）、路线步骤（PathJourney）和能力定位上下文仍保留固定深蓝绘图画布，不随页面主题切换。控件和状态已换成钴蓝色系；教学主操作色为 `#7890e5`，焦点色为 `#98abee`，路线当前步骤为 `#b7c7fa`。它们是绘图专用色，不替代页面的语义品牌变量。浅色页面中的深色画布是保留的专业绘图区域。
 
-桌面与移动一次批量检查，集中修正后确认一次。检查 SSR、路由切换、旧链接、输入与筛选、浅深色、动画暂停与减少动画；不以截图或动画数量冒充内容准确性。
+**当前与完全统一的差异：** 教学区域仍有局部字号、圆角及固定色值；旧类名和未使用的旧样式也仍保留。新主题已覆盖首页搜索按钮、首页焦点及深色 `--guide-focus` / `--guide-surface`，不要将历史 CSS 中的定义直接当作当前最终样式。
+
+## Typography
+
+中文正文使用系统无衬线；展示标题和编号继承 Manrope 加中文系统字体。Manrope 仅自托管 700 字重，字体文件为 `docs/public/fonts/manrope-bold.ttf`，使用 `font-display: swap`。
+
+- 模型专题封面的中文标题优先取系统宋体，拉丁模型名称使用同组衬线斜体。桌面字号 44–70px，手机 32–50px。
+- 精选与主题标题沿用宋体层级，路线、图解和正文使用无衬线字体。
+- 长文正文使用 body 层级，767px 以下缩为 16px，行高不变。长文二级标题桌面 27px、手机 24px；三级标题 21px、手机 20px。
+- 目录标题使用 catalog-title 层级，手机 18px；描述 15px、行高 1.85；元信息 13px。目录描述保留两行截断。
+- 标签与辅助文字通常为 13–15px；实验和能力定位中仍存在更小的继承字号，尚不属于统一后的正文规范。
+
+## Layout
+
+专题封面宽度上限 1300px。桌面左侧是问题标题、导读和双路线，右侧是因果掩码。手机依次显示标题、两个路线入口和图解。
+
+主题索引桌面三列、959px 以下两列、767px 以下单列。L0–L4 桌面横排五列，手机改为纵向紧凑条目。目录筛选器桌面为宽关键词框加三个选择框，手机单列；板块条目按组排列，保留标题、描述和元信息。
+
+长文在带页内目录的布局中最大宽度 46rem；侧栏宽 272px。段落上下间距 20px，二级标题上方 56px、手机 40px。代码、表格及公式采用局部滚动；不要把长行内容扩展成页面级横向滚动。
+
+## Elevation & Depth
+
+首页、主路线与目录以底色和边框区分层级，没有新增面板投影。不要把此结论扩展成 VitePress 搜索弹窗等内建组件完全无阴影。阅读进度条层级为 31，默认隐藏；仅支持 CSS 滚动时间轴时显示，减少动画偏好下隐藏。
+
+## Shapes
+
+主要按钮、输入框、代码块与引用块使用 control 圆角，主路线和筛选面板使用 panel 圆角。旧组件仍有 4px、8px、10px 和圆形节点，并未全局收敛成两个圆角值。品牌标记为钴蓝圆角方块中的白色「知」字；箭头使用内联 SVG。
+
+## Components
+
+- **主次按钮：** 主按钮钴蓝实底，次按钮使用文本色和描边，最小高度 48px；桌面内边距见 frontmatter，手机主次按钮为 12px 15px。悬停改变底色，按压缩放至 0.98。目录空状态的通用按钮继承旧 `!important` 白色文字，因此与首页主按钮存在轻微颜色差异。
+- **首页导览**：主文章由具体问题引出。用 Q 行选择当前位置，实色单元代表允许访问的位置，斜线代表屏蔽位置。首屏两条路线分别进入应用与研究。
+- **问题阅读列表：** 左侧序号，中间问题与说明，右侧级别及阅读时长。手机将元信息移到标题下方。悬停仍有横移 4px 的继承反馈。
+- **目录筛选：** 关键词只匹配标题和描述，另有主阅读级别、目标岗位、知识板块三个选择框。`q`、`level`、`role`、`section` 保存到 URL，并在路由切换与浏览器历史变化时读取。结果数量使用状态播报；空结果提供清除筛选入口。首页板块入口直接链接到目录筛选结果。
+- **导航与长文：** 沿用 VitePress 导航、侧栏、页内目录和搜索；长文元信息保留分级与核查状态。保持旧文章 URL 与锚点。首页导航及搜索按钮已显式覆盖为共享主题色。
+- **教学与能力定位：** 保留现有输入、状态、计算和自测。视觉变化不得改变技术含义。固定深色绘图画布及其专用色见 Colors。
+- **焦点和动效：** 全局焦点轮廓使用 `--guide-focus`；教学画布使用固定浅钴蓝焦点色。首屏、正文与路线详情已取消入场动画。减少动画偏好关闭动画和过渡。
+
+## Do's and Don'ts
+
+- 使用语义主题变量添加新界面，同时验证浅色与深色状态。
+- 通过中文标题、说明、序号与分隔线支持阅读和定位。
+- 保留文章 URL、主要导航标签、搜索、技术内容、阅读分级和教学交互。
+- 明确区分共享明暗主题的阅读界面与保留固定深色背景的教学画布。
+- 不把初次分级、文章数量、浏览进度或查看答案写成能力掌握与质量认证。
+- 不新增持续装饰动效，不将旧薄荷色局部样式继续扩散为品牌规范。

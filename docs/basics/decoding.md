@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 解码与采样策略详解
 
+<p class="chapter-question">温度、top-k 和 top-p 分别改变了采样的哪一步？</p>
+
 > 模型每一步输出的是词表上的概率分布，「如何从分布里选出下一个 token」就是解码策略。它直接决定生成的确定性、多样性与质量，是高频但容易被低估的考点——从 temperature 的数学含义到「推理模型为什么不建议贪心」，都能问出区分度。
 
 ## 从 logits 到 token
@@ -121,3 +123,7 @@ frequency 按出现次数**累计**扣分（治高频复读），presence 出现
 </details>
 
 实现依据：[Transformers logits processors](https://github.com/huggingface/transformers/blob/main/src/transformers/generation/logits_process.py)。本页未测各后端的位级可复现性。
+
+## 读后练习 {#zhixu-practice}
+
+选四个不同的 logits，画出缩放、截断、重新归一化后的候选集合。

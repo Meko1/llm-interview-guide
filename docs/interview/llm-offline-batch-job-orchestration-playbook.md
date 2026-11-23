@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 离线批处理与异步作业编排
 
+<p class="chapter-question">一批作业有九成成功，重跑整批会带来哪些重复与费用？</p>
+
 > 在线聊天追求 TTFT、P95 和交互体验；离线大模型任务追求单位成本、总吞吐、可恢复性和结果可审计。把百万份文档摘要、历史工单结构化、质检、批量 embedding、模型评测或夜间报告生成当成“循环调 API”，很快会遇到重复扣费、部分成功、脏数据回写、供应商回调丢失和离线任务挤占在线 SLA。生产答案应把它设计为有状态、可重试、可验收的作业系统。
 
 ## 一、30 秒面试回答
@@ -236,3 +238,7 @@ events -> metrics/traces/cost ledger/DLQ/operator console
 这类项目故事能清楚展示：你不只是会调用 Batch API，而是能把 LLM 推理嵌入可靠、可审计、可控成本的数据处理系统。
 
 实读主源：[Kubernetes Job 官方说明](https://kubernetes.io/docs/concepts/workloads/controllers/job/)中单并发也可能重复启动、backoff 与 successPolicy 片段；[Google Gen AI Python SDK](https://github.com/googleapis/python-genai/blob/main/README.md)的 Batch Prediction 示例中输入 key、upload/create、按 job name 查询与 state 轮询。SDK main 示例不是完整 API 契约，且其平台支持说明需部署时再核。Gemini Batch 网页因 TLS 错误未读，仅作为待核入口；没有运行批任务、上传数据、实测吞吐或验证供应商折扣，全部数值为构造。
+
+## 读后练习 {#zhixu-practice}
+
+为每条输入记录终态和结果版本，只挑出可安全重试的子集。

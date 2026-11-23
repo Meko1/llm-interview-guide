@@ -9,6 +9,8 @@ classification: inferred
 ---
 # MCP Server 生产化与企业治理高频问答
 
+<p class="chapter-question">工具服务升级后能力清单改变，旧客户端如何安全处理？</p>
+
 > 需要把 scoped token、身份委托、确认令牌、凭证撤销和后端二次鉴权连成完整回答时，见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
 
 > 如果问题从“用户怎样把 Slack、GitHub、CRM 或 Google Workspace 连接给 Agent”开始，需要解释 OAuth 同意、刷新、断连与审计控制面，见 [Agent 外部连接与 OAuth 凭证生命周期](/interview/agent-connector-identity-lifecycle-playbook)。
@@ -454,3 +456,7 @@ proposal -> security review -> sandbox trial -> canary -> production
 - [Agent 工具安全与权限边界](/agent/tool-safety)
 - [框架与智能工作流高频问答](/interview/framework-workflow-qna)
 - [分岗位面试真题](/interview/real-questions)
+
+## 读后练习 {#zhixu-practice}
+
+对照新旧能力声明和参数样例，检验未知能力、超时和撤销许可的行为。

@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Claude Code 核心机制与扩展
 
+<p class="chapter-question">会话状态和扩展能力如何共同影响下一次工具选择？</p>
+
 > 对 Hooks、上下文压缩、子 Agent 与权限机制的运行时取舍做系统设计回答，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。
 
 > 这一页深入 Claude Code 的运行时机制：agentic loop 怎么转、上下文怎么压缩、token 预算怎么管、权限怎么把关，以及 MCP/Hooks/Skills/子 Agent 四大扩展。功能见 [功能总览](/claude-code/overview)，架构见 [代码架构](/claude-code/architecture)。
@@ -117,3 +119,7 @@ Hooks 是**确定性**机制——用代码在工具生命周期点强制拦截/
 
 **Q：Plan Mode 解决什么问题？**
 降低未审阅方案就开始修改源码的风险。进入计划模式不是验收通过，也不能证明所有工具都无副作用；执行授权应绑定路径、操作和停止条件，外部写入与部署另外审批。
+
+## 读后练习 {#zhixu-practice}
+
+比较同一任务在有无扩展时的可见输入和可用能力，记录可验证差异。

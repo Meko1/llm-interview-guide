@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 推理时算力扩展（Test-Time Compute Scaling）
 
+<p class="chapter-question">把额外计算分给更多候选还是更长推导，如何做决定？</p>
+
 > **增加推理预算是一种可检验的策略，不是“多想就一定正确”的承诺。** 多采样能增加候选覆盖，也能放大重复错误、验证器偏差、排队和费用。L1 先区分三条路线；L2 设计预算与上线门禁；L3 核查独立性、选择偏差和论文实验边界。
 >
 > 前置：[推理模型](/advanced/reasoning-models)、[CoT 方法](/prompt/cot-reasoning)、[KV Cache](/inference/kv-cache)。本页讨论方法与构造实验，不宣称已测任何模型的提升。
@@ -170,3 +172,7 @@ MCTS 常区分 Selection、Expansion、Simulation、Backpropagation；在 LLM �
 </details>
 
 继续实践：[手撕代码题](/interview/coding-problems) · [SLO goodput](/inference/slo-goodput) · [裁判校准](/evaluation/judge-calibration)。本轮读取上述四篇论文摘要以核对方法与结论范围；未完整复现其实验，未运行任何商业推理 API。
+
+## 读后练习 {#zhixu-practice}
+
+固定总生成预算，比较两种分配方式的正确率、耗时与提前停止条件。

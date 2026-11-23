@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 分布式训练与显存优化
 
+<p class="chapter-question">分片减少了单卡显存，代价转移到了哪里？</p>
+
 > 「单卡放不下千亿模型怎么办」是工程岗与算法岗都会问的硬核题。本文讲清几种并行策略、ZeRO、混合精度，以及显存到底花在哪。
 
 ## 显存都花在哪了？
@@ -96,3 +98,7 @@ OOM 报告区分初始化、前向、反向、optimizer step 与保存 checkpoin
 分片机制与配置参见 [DeepSpeed ZeRO 官方教程](https://www.deepspeed.ai/tutorials/zero/)。教程的模型/GPU 实验只支持对应配置，不能当成本页构造内存例的实测吞吐。
 
 **Q：流水线气泡怎么来的、怎么减小？** 流水线启动和收尾阶段，部分卡无事可做（在等数据流过）。把全局 batch 切成多个 micro-batch 错峰流入（如 1F1B 调度），让各卡尽量同时有活干，就能减小气泡比例。
+
+## 读后练习 {#zhixu-practice}
+
+固定模型与并行度，分别列出每卡持有的参数、梯度、优化器状态及通信。

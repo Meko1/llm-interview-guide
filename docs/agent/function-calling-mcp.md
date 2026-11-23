@@ -11,6 +11,8 @@ classification: inferred
 ---
 # Function Calling 与 MCP（工具调用）
 
+<p class="chapter-question">从模型提出调用到工具真正执行，中间谁负责校验和授权？</p>
+
 > 本页讲模型如何表达工具调用意图、如何设计 schema 与生命周期；当面试进入用户身份委托、短期凭证、策略义务、写操作确认和事故止血时，继续看 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
 
 > 工具调用是 Agent 的地基。面试不只考「流程是什么」，更考工程细节：schema 怎么设计、并行调用什么时候开、失败怎么兜底、模型为什么会用工具。本文从机制讲到最佳实践，MCP 协议的完整深挖见 [MCP 协议深入](/agent/mcp)，工具权限、HITL、幂等和审计的专门答法见 [Agent 工具安全与权限边界](/agent/tool-safety)。
@@ -311,3 +313,7 @@ Host 是 AI 应用本体；Client 在 Host 内管理连接、列能力、转发�
 
 **Q：工具调用怎么做成本和稳定性治理？**
 成本看每任务工具次数、LLM 轮数、token、超时重试；稳定性靠最大步数、超时、熔断、幂等键、降级路径、trace 观测和 bad case 回归。工具调用不是「调通就完」，而是要有生产 SLA。
+
+## 读后练习 {#zhixu-practice}
+
+用一次只读查询串起参数、校验、授权、结果与错误返回。

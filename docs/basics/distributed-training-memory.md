@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 分布式训练与显存账本
 
+<p class="chapter-question">模型权重装得下，为什么训练仍会显存不足？</p>
+
 “用了多卡”不是分布式训练的答案。高质量回答应先说模型为什么放不下，再说明数据并行、ZeRO/FSDP、张量并行和流水线并行分别消除了哪一种复制或哪一个瓶颈。
 
 ## 一、训练显存的五本账
@@ -93,3 +95,7 @@ ZeRO-3 在数据并行组内分片参数、梯度和 optimizer state，重点解
 > 我会先列显存账本：权重、梯度、Adam 状态、激活和通信缓冲。DDP 只分数据，状态仍复制；状态放不下时用 ZeRO/FSDP，激活放不下时用 checkpoint、长度治理或序列并行，单层放不下再上 TP。选型后我会用 tokens/s、通信等待和显存峰值做 profile 验证，并把 checkpoint 的模型、optimizer、scheduler 和数据状态一起保存，保证可恢复。
 
 依据：[ZeRO 论文](https://arxiv.org/abs/1910.02054)、[PyTorch DDP 设计说明](https://docs.pytorch.org/docs/stable/notes/ddp.html)。后者注明其设计叙述基于早期版本，当前 bucket、分片和通信配置应核对安装版本，不直接复制历史实现细节。
+
+## 读后练习 {#zhixu-practice}
+
+分别给权重、梯度、优化器状态和激活记账，并标出哪些能跨卡切分。

@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 大模型核心概念总览
 
+<p class="chapter-question">参数量、上下文长度和词表大小各限制了什么？</p>
+
 > 这一页是“大模型基础”章节的总入口。目标不是把每个公式都讲到最深，而是帮你把 LLM 的核心知识串成一张完整地图：文本如何变成 token，token 如何变成向量，Transformer 如何处理上下文，模型如何训练，为什么会幻觉，推理时如何生成，工程里如何部署、评估和控制风险。读完这页，你应该能回答面试里最常见的开放题：“请你系统介绍一下大语言模型。”
 
 如果你刚从 [新手入门](/beginner/getting-started) 过来，可以把本页当成进阶版地图；如果你已经会一些深度学习，可以把本页当成查漏补缺清单。真正深入每个模块时，再进入侧边栏里的 Transformer、Attention、Tokenizer、Embedding、解码、MoE、长上下文等专题。
@@ -878,3 +880,7 @@ RAG 是把外部资料检索出来放进上下文，不改模型参数；微调�
 - 最后读 [缩放规律、容量与能力边界](/basics/scaling-capacity-boundaries)，把参数、数据、推理成本、路由和风险放到一个质量-成本框架中判断。
 
 机制依据：[Transformer](https://arxiv.org/abs/1706.03762)、[Hugging Face 分词算法](https://huggingface.co/docs/transformers/tokenizer_summary)、[PyTorch CrossEntropyLoss](https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html)、[Transformers 聊天模板](https://huggingface.co/docs/transformers/chat_templating)。总览只给边界和导航，具体模型、硬件与部署配置需沿专题核查。
+
+## 读后练习 {#zhixu-practice}
+
+选一句短文本，把这三个量分别放进模型加载、分词和推理的例子里。

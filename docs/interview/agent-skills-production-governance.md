@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 跨运行时 Agent 扩展生产治理：Skills、Plugins、MCP 与 Hooks
 
+<p class="chapter-question">新插件获准安装，是否意味着所有会话都能调用它？</p>
+
 > Skill 是可发现的过程工件，可能包含指令、参考与脚本；加载 Skill 不等于授予工具权限。本页提供企业扩展生命周期的参考设计，保留四产品作待按版本验证的导航，不宣称它们都有相同治理能力。交付链见 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)，工具服务见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。
 
 ## 怎么用这页
@@ -316,3 +318,7 @@ L1 用只读候选 Skill 演示输入与输出边界；L2 检查依赖、网络�
 - [Claude Code Hooks](https://code.claude.com/docs/en/hooks)
 - [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)
 - [Agent 工具安全与权限边界](/agent/tool-safety)
+
+## 读后练习 {#zhixu-practice}
+
+区分扩展发布、租户启用、会话授权和单次执行四道检查。

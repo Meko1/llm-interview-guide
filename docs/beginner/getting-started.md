@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 大模型零基础入门
 
+<p class="chapter-question">怎样证明自己完成了第一次模型调用？</p>
+
 > 完全没接触过 AI，也想搞懂大模型、甚至转行进入这个领域？这篇就是为你准备的。我们用最少的术语，帮你建立正确的认知和清晰的起点。
 
 ## 先理清几个名词的关系
@@ -99,3 +101,7 @@ LLM 与生成式 AI 有交集，但图像生成模型不一定是 LLM。
 > 起步证据不是「读过多少术语」，而是能解释一次请求用了哪些资料、哪里可能错、怎样核查。
 
 概念依据：[Hugging Face 分词算法说明](https://huggingface.co/docs/transformers/tokenizer_summary)；历史模型的能力与风险示例：[GPT-2 model card](https://github.com/openai/gpt-2/blob/master/model_card.md)。后者不是所有当前产品的能力测评。
+
+## 读后练习 {#zhixu-practice}
+
+保存输入、输出、模型配置和一个失败例子，让别人能按记录重复尝试。

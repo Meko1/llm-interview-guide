@@ -10,6 +10,8 @@ classification: inferred
 ---
 # Tokenizer 与分词
 
+<p class="chapter-question">同一段中文经两种分词器处理，为什么计费和长度可能不同？</p>
+
 > Tokenizer 决定了模型如何把文本切成 token，是输入输出的第一道关口，也是中英文成本差异、词表大小等问题的根源。
 
 ## 什么是 Tokenizer？
@@ -100,3 +102,7 @@ for text in samples:
 实际契约检查应记录词表/merge 文件、normalizer、special token ID、chat template 和版本；修改词表后同步输入 embedding 与输出 head，并用原任务集回归，而不是只检查文件能载入。
 
 一手资料：[SentencePiece 规范化](https://github.com/google/sentencepiece/blob/master/doc/normalization.md)、[tiktoken](https://github.com/openai/tiktoken)、[Hugging Face 分词算法](https://huggingface.co/docs/transformers/tokenizer_summary)。
+
+## 读后练习 {#zhixu-practice}
+
+用含数字、空格和标点的短句记录分词结果，区分字符数、词元数和字节数。

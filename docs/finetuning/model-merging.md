@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 模型融合与合并（Model Merging）
 
+<p class="chapter-question">两个同尺寸模型的权重可以直接合并吗？</p>
+
 > **合并省的是再训练步骤，不是实验、内存和验收成本。** L2 读者需要解释兼容条件与失败模式；L3 可以继续研究权重空间和消融。前置：[微调范式](/finetuning/finetuning)、[LoRA](/finetuning/lora)。
 
 ## 一、什么是模型融合？
@@ -94,3 +96,7 @@ MergeKit 可作为实现入口，但具体支持的算法和配置应锁定版�
 - [Model Soups](https://arxiv.org/abs/2203.05482)：作为低损失连接与同任务权重平均的研究入口，本轮不声称完整复现。
 
 本文算例为参数代数，不执行真实权重合并，也不验证生产质量或硬件耗时。
+
+## 读后练习 {#zhixu-practice}
+
+列出基座、参数对齐、分词器和评测条件，再写一个合并后必须检查的退化任务。

@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 合成数据与自我改进（Synthetic Data & Self-Improvement）
 
+<p class="chapter-question">合成样本数量翻倍时，哪些错误也可能被重复放大？</p>
+
 > **流畅不是正确，筛选通过不是可信，条数不是覆盖。** L2 重点是数据与成本闭环；L3 应能设计教师、筛选器和比例的消融。前置：[数据工程](/pretraining/data-engineering)、[RLHF/DPO](/finetuning/rlhf)、[推理模型](/advanced/reasoning-models)。
 
 ## 面试先背这几句话
@@ -139,3 +141,7 @@ Shumailov 等研究递归生成训练的分布退化，包括尾部事件消失�
 - [模型崩溃](https://arxiv.org/abs/2305.17493)：递归训练风险。
 
 正文数据集和工具未逐一读版本卡，故删除未经核定的规模、机构和胜率比较；未执行生成或学生训练。
+
+## 读后练习 {#zhixu-practice}
+
+追踪一条样本的生成、筛选与去重过程，留出独立人工样本做对照。

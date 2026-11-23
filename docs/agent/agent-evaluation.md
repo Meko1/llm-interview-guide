@@ -11,6 +11,8 @@ classification: inferred
 ---
 # Agent 评估与可靠性工程
 
+<p class="chapter-question">最终回答正确，但中间越过了授权边界，这次任务该怎么记分？</p>
+
 > 浏览器/桌面 Agent 还需要评估元素定位、状态验证、误操作拦截、会话恢复和人工接管；完整题库见 [Computer Use / 浏览器 Agent 生产系统设计面试题](/interview/computer-use-browser-agent-system-design)。
 
 > 当面试题深入到 Claude Code、Codex、OpenClaw、Hermes 的遥测、审计取证、trace 回放、成本归因和事故 runbook 时，继续阅读 [Agent 观测、取证与事故响应手册](/interview/agent-observability-incident-response)。
@@ -337,3 +339,7 @@ Agent 开放任务常要用 Judge，但必须证明 Judge 可信：
 9. **LangSmith/Langfuse/Arize 这类工具在 Agent 里做什么？** 做 tracing、dataset、evaluation、monitoring 和 debugging，把 LLM 调用、工具调用、检索、记忆、成本串起来，支持失败回放和版本对比。
 10. **如何控制 Agent 成本？** 设任务预算、模型路由、小模型处理简单节点、缓存、限制最大步数和输出长度、减少无效工具调用，并把 token/工具成本纳入评估指标。
 11. **怎么判断 Agent 应该用工作流还是自由规划？** 高确定性、高风险、强合规流程用工作流；开放探索、信息收集、多路径问题再用 Agent。生产里常见是工作流包 Agent，而不是全自由 Agent。
+
+## 读后练习 {#zhixu-practice}
+
+分别记录结果、工具行为和成本，并设计一个能阻止该次运行通过的门禁。

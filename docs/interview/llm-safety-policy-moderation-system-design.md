@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 内容安全策略引擎与审核系统设计
 
+<p class="chapter-question">内容被审核系统拦下时，怎样区分真正风险与误判？</p>
+
 > 内容安全不是在 Prompt 里写一句“请遵守规范”，也不是模型返回后只跑一次关键词过滤。生产系统要将输入、检索证据、模型输出、工具参数和外发动作分别置于可解释、可审计、可灰度的策略控制之下。
 
 ## 一、30 秒面试回答
@@ -236,3 +238,7 @@ Prompt Guard 主要识别注入或越狱意图；内容审核判断输入/输出
 > 我为企业 AI 助手设计了内容安全控制面。请求在输入、检索、输出和工具执行四个边界经过 PEP，PDP 根据租户、角色、数据标签、场景和检测信号返回 allow、脱敏、审批、拒绝或转人工等结构化决策。策略包、阈值和检测器均版本化，先离线回放和 shadow，再灰度发布。对工具写操作，我们把审核结果当作风险信号，而不是授权凭证，执行器仍校验权限、业务规则和幂等。线上用漏放、误伤、人审 SLA、越权拦截和 P95 延迟共同衡量，使安全从一段 Prompt 变成可运营、可审计的工程能力。
 
 继续学习：[大模型安全与对齐](/advanced/safety)、[Agent 工具安全与权限边界](/agent/tool-safety)、[企业 AI 治理控制面设计](/interview/enterprise-ai-governance-audit-system-design)、[数据分级与外发审计](/interview/data-governance-egress-audit-qna)、[Agent 安全与评测](/interview/agent-evaluation-safety-qna)。
+
+## 读后练习 {#zhixu-practice}
+
+从匿名样本记录触发规则、人工复核和申诉结果，比较不同切片的误差。

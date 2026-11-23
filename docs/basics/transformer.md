@@ -10,6 +10,8 @@ classification: reviewed
 ---
 # Transformer 架构详解
 
+<p class="chapter-question">一个词元从输入到输出，哪些量改变形状，哪些保留残差通道？</p>
+
 > 本页负责串起 Transformer 的数据流、组件职责与资源取舍。主阅读级别为 L1；工程决策与研究追问面向 L2/L3。前置要求是矩阵乘法与基本概率，第一次阅读可先跳过长推导。
 
 <LessonLab kind="transformer" />
@@ -456,3 +458,7 @@ Teacher forcing 让模型训练时总看到真实前缀，推理时却要以自�
 **Q：Attention 的置换性质是什么？** 无位置编码与位置相关 mask 的自注意力是置换等变：打乱输入，输出相应打乱，而不是输出不变。位置编码和固定因果 mask 会引入顺序信息，见本页 L3 推导。
 
 **Q：一句话概括 Transformer 每个组件的职责？** 注意力让 token 之间「交流信息」、FFN 对每个 token「做变换/存知识」、残差让梯度「跨层流动」、归一化让训练「稳定」、位置编码补上「顺序信息」。
+
+## 读后练习 {#zhixu-practice}
+
+画一个解码器块，标出注意力、前馈和两条残差连接，并指出 logits 在哪里产生。

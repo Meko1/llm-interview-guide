@@ -13,6 +13,8 @@ classification: inferred
 ---
 # 嵌入层与表示学习
 
+<p class="chapter-question">两个词元被映射到同一维度，表示相似性来自哪里？</p>
+
 > token 经过分词后是一串整数 ID，模型怎么把「离散符号」变成「能计算的向量」？答案是嵌入层（embedding）。它是大模型的输入门户，也藏着权重绑定、表示空间、参数占比等高频细节题。分词见 [Tokenizer](/basics/tokenizer)，检索用的句向量见 [Embedding 与向量数据库](/rag/embedding-vectordb)。
 
 ## 一、嵌入层：从 ID 到向量
@@ -102,3 +104,7 @@ word2vec 是**静态**的——一个词永远一个向量，不分语境；大�
 同源但不同。这里说的是模型内部单个 token 的嵌入/表示；RAG 检索用的是把**整段文本**编码成一个句向量（通常取专门 embedding 模型的输出）。两者都基于「语义→向量、相近→距离近」的思想，但粒度和用途不同，见 [Embedding 与向量数据库](/rag/embedding-vectordb)。
 
 查表与 padding_idx 依据：[PyTorch Embedding](https://docs.pytorch.org/docs/stable/generated/torch.nn.Embedding.html)。
+
+## 读后练习 {#zhixu-practice}
+
+画出词表索引、嵌入行和后续上下文表示，区分查表前后的信息。

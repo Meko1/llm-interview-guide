@@ -1,5 +1,7 @@
 # Framework Workflow Expansion Implementation Plan
 
+<p class="archive-caption">历史实施记录 · 2026-07-06。本页保留当时的方案与范围。</p>
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Add the fourth publishable phase of the foundation interview expansion: framework selection, Spring AI, LangChain, LangGraph, Dify, workflow, and tool-calling interview playbooks.

@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 向量检索与 ANN 算法深入
 
+<p class="chapter-question">检索延迟变小而相关结果变少，可能牺牲了什么？</p>
+
 向量检索先定义“近”，再决定愿意为速度/空间牺牲多少搜索精度。ANN 误差、Embedding 语义误差和业务相关性是三层问题：精确找到最近向量也可能答错问题。选型概览见 [Embedding 与向量库](/rag/embedding-vectordb)。
 
 ## 一、问题定义
@@ -109,3 +111,7 @@ Faiss 与 hnswlib 的删除、更新、持久化能力不能互相代替。需�
 </details>
 
 证据范围：实际读取 [Faiss 官方说明](https://github.com/facebookresearch/faiss)、官方 `3-IVFPQ.py` 的训练/添加/查询流程与 hnswlib 参数全文。未运行 ANN 基准、验证具体向量库过滤/删除实现；默认分支应锁提交，算例为构造。
+
+## 读后练习 {#zhixu-practice}
+
+固定查询集，以精确检索作参照，列出不同搜索预算下的召回率和延迟。

@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 状态空间模型与 Mamba
 
+<p class="chapter-question">历史信息如何通过有限状态传到下一个位置？</p>
+
 SSM 的问题不是“线性复杂度必然胜出”，而是：**用有限状态压缩历史，怎样保留当前任务需要的信息，同时让训练和服务可高效执行？** 本文以 Mamba 原论文与 Mamba-1 官方缓存实现说明，不能直接套用所有后续 SSM 版本。
 
 ## 为什么要挑战 Transformer？
@@ -90,3 +92,7 @@ $$(4096\times16+4096\times4)\times2=163840\ \mathrm{bytes}=160\ \mathrm{KiB}.$$
 </details>
 
 证据范围：已读 Mamba v2 第 2、3.2、3.3.2 节与 [官方 Mamba-1 缓存实现](https://github.com/state-spaces/mamba/blob/main/mamba_ssm/modules/mamba_simple.py)。未运行内核、验证质量或核查所有混合模型；`main` 需锁提交，缓存数字为构造。
+
+## 读后练习 {#zhixu-practice}
+
+画出四步状态递推，与保存所有历史 KV 的做法比较读写需求。

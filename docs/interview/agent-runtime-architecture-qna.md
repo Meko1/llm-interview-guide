@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 智能体运行时架构高频问答：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">模型返回一项工具请求之后，运行时需要持有哪些状态？</p>
+
 > 面试问 Claude Code、Codex、OpenClaw 或 Hermes 时，最差的回答是复述产品功能。更有区分度的回答是：把它们视为不同取向的 **Agent Runtime**，比较任务循环、上下文、工具执行、隔离、记忆、调度和评测如何协作。编程 Agent 的通用机制见 [编程 Agent 底层架构与内部机制](/engineering/coding-agent-internals)，Claude Code 的分层见 [Claude Code 代码架构](/claude-code/architecture)，工具执行安全见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
 
 > 需要把这些架构概念落到团队选型、最小权限、Skill 供应链、远程 Gateway、记忆发布与值班运行手册时，继续阅读 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)。
@@ -250,3 +252,7 @@ worktree 不是访问控制边界：同一进程身份仍可能读写其他目�
 - [Hermes Agent 开源仓库](https://github.com/NousResearch/hermes-agent)
 - [Agent 工具安全与权限边界](/agent/tool-safety)
 - [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)
+
+## 读后练习 {#zhixu-practice}
+
+画出调度、授权、执行、观察四个交接点，写明谁能终止循环。

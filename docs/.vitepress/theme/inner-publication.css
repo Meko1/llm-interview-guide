@@ -1,0 +1,132 @@
+/* The same masthead typography carries from the cover into each chapter. */
+:root {
+  --chapter-display: Georgia, "Songti SC", "Noto Serif CJK SC", SimSun, serif;
+}
+.VPDoc .vp-doc h1, .missing-page h1 {
+  font-family: var(--chapter-display);
+  font-size: clamp(2.05rem, 3.2vw, 3.1rem);
+  line-height: 1.32;
+  font-weight: 600;
+  letter-spacing: -.035em;
+  margin-bottom: 1.3rem;
+}
+.VPDoc .vp-doc p.chapter-question {
+  max-width: 32em;
+  margin: 0 0 2rem;
+  font: 500 clamp(1.18rem, 1.6vw, 1.46rem)/1.72 var(--chapter-display);
+  color: var(--vp-c-brand-1);
+  text-wrap: pretty;
+}
+.VPDoc .vp-doc h2:not([class]) {
+  letter-spacing: -.025em;
+}
+.VPDoc .vp-doc #zhixu-practice {
+  border-top: 2px solid var(--vp-c-brand-1);
+  padding: 1.2rem 0 0;
+  font-family: var(--chapter-display);
+}
+.VPDoc .vp-doc #zhixu-practice + p {
+  font-size: 1.08em;
+  line-height: 1.95;
+  margin-bottom: 2.5rem;
+}
+.article-meta {
+  background: transparent;
+  border: 0;
+  border-top: 2px solid var(--vp-c-text-1);
+  border-bottom: 1px solid var(--vp-c-divider);
+  border-radius: 0;
+  padding: .8rem 0;
+  margin: 0 0 1.6rem;
+  align-items: center;
+  gap: .65rem 1rem;
+}
+.article-meta .level-badge {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--vp-c-brand-1);
+  font-weight: 650;
+}
+.article-meta .article-meta-readers { font-size: .78rem; margin: .2rem 0 0; }
+.article-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem .8rem;
+  color: var(--vp-c-text-2);
+  font-size: .8rem;
+}
+.article-shortcuts a { padding-block: .3rem; }
+.article-shortcuts a:first-child, .article-shortcuts a:hover { color: var(--vp-c-brand-1); }
+.VPDoc .vp-doc .archive-caption {
+  color: var(--vp-c-text-2);
+  font-size: .88rem;
+  border-block: 1px solid var(--vp-c-divider);
+  padding-block: .8rem;
+}
+.VPDoc .path-journey, .capability-planner .planner-context {
+  border: 1px solid var(--vp-c-divider);
+  border-top: 2px solid var(--vp-c-text-1);
+  border-radius: 0;
+  padding: clamp(18px, 3vw, 32px);
+  margin-block: 2rem;
+  background: var(--atlas-surface);
+  color: var(--vp-c-text-1);
+}
+.VPDoc .vp-doc .journey-header h2, .VPDoc .vp-doc .planner-context h2 {
+  color: var(--vp-c-text-1);
+  border: none;
+  margin: 0;
+  padding: 0;
+  font: 600 1.5rem/1.5 var(--chapter-display);
+}
+.path-journey .journey-stages { grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr)); gap: .65rem; margin: 1.4rem 0; }
+.path-journey .journey-stages::before { display: none; }
+.path-journey .journey-stages button {
+  color: var(--vp-c-text-2);
+  border-top: 2px solid var(--vp-c-divider);
+  padding: .7rem .12rem .4rem;
+}
+.path-journey .journey-stages button.active, .path-journey .journey-stages button:hover {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+.path-journey .journey-stages .journey-point,
+.path-journey .journey-stages button.active .journey-point {
+  display: block;
+  border: 0;
+  background: transparent;
+  color: inherit !important;
+  width: auto;
+  height: auto;
+  font: 500 1rem/1.5 Georgia, serif;
+  margin-bottom: .3rem;
+}
+.path-journey .journey-stages strong { font-size: .875rem; }
+.path-journey .journey-detail { border-color: var(--vp-c-divider); }
+.VPDoc .vp-doc .journey-detail h3 { margin: 0; font-size: 1.125rem; }
+.VPDoc .vp-doc .journey-detail p { margin: .45rem 0 0; color: var(--vp-c-text-2); font-size: .9rem; }
+.path-journey .journey-detail .guide-button {
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1) !important;
+  font-size: .87rem;
+  white-space: normal;
+}
+.VPDoc .vp-doc .planner-context p, .capability-planner .planner-fields label { color: var(--vp-c-text-2); }
+.capability-planner .planner-fields select {
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  border-color: var(--vp-c-border);
+}
+.capability-planner .planner-foundation { border-color: var(--vp-c-divider); }
+.VPDoc .vp-doc .catalog-group h2 { font-family: var(--chapter-display); }
+.missing-page { max-width: 40rem; margin: auto; padding: 12vh 1.5rem; }
+.missing-page > span { color: var(--vp-c-brand-1); font: 500 3.8rem/1.4 Georgia, serif; }
+.missing-page p { color: var(--vp-c-text-2); }
+.missing-page a { display: inline-block; margin: 1.4rem 1.2rem 0 0; color: var(--vp-c-brand-1); text-decoration: underline; }
+@media (max-width: 600px) {
+  .article-meta { align-items: flex-start; gap: .2rem; flex-direction: column; margin-bottom: 1.2rem; }
+  .path-journey .journey-stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .VPDoc .vp-doc p.chapter-question { margin-bottom: 1.4rem; }
+}

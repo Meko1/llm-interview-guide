@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 数据分级、外发治理与审计证据面试题
 
+<p class="chapter-question">同一段客户数据能否传给另一个模型供应商？</p>
+
 > 当敏感数据通过 Agent 工具读取、处理或外发时，不能只看模型调用；还要审查工具身份委托、凭证范围、结果脱敏与确认令牌。完整执行链路见 [企业 Tool Gateway 安全执行系统设计面试题](/interview/tool-gateway-security-design)。
 
 > 企业大模型项目里，最有区分度的问题常常不是“会不会脱敏”，而是：**一份数据进入 RAG、Memory、Prompt、模型、工具和日志后，是否始终带着可执行的权限与用途；能不能发到某个模型或第三方；删除后是否真的消失；出了事件是否拿得出证据。**
@@ -235,3 +237,7 @@ RAG 权限校验的正确位置是**检索之前**，不是模型生成之后。
 - [RAG 生产化与系统设计](/rag/rag-production)：索引、权限、缓存和引用链路。
 - [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)：第三方 Server、凭据与供应链治理。
 - [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)：将数据安全证据接入发布决策。
+
+## 读后练习 {#zhixu-practice}
+
+用假数据按敏感度、处理目的、接收方和留存期限画四列审查表。

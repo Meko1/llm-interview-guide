@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 国产算力与大模型国产化适配
 
+<p class="chapter-question">从一种算力平台迁移到另一种，怎样把兼容性问题与性能问题分开？</p>
+
 > 本文面向迁移交付：先确认合同与采购边界，再验证算子、数值和 SLO，不用“国产第一”“改 device 就行”替代 POC。原有实践入口 [llm-action](https://github.com/liguodongiot/llm-action) 保留；GPU 通用知识见 [GPU 与硬件基础](/inference/gpu-hardware)，服务选择见 [推理框架对比](/inference/serving-frameworks)。
 
 ## 面试先背这几句话
@@ -100,3 +102,7 @@ model = model.to(device)
 7. **最大交付风险是什么？** 只做能启动的 demo，却没有真实任务质量、负载和恢复证据。
 
 正式验收联动 [推理压测](/inference/inference-benchmark) 与 [SLO goodput](/inference/slo-goodput)。本页未运行国产硬件 benchmark，也不确认任何当前采购价格或法规适用性。
+
+## 读后练习 {#zhixu-practice}
+
+列出设备、驱动、算子和服务框架版本，先跑数值对照，再跑负载对照。

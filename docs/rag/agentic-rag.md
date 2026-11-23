@@ -10,6 +10,8 @@ classification: inferred
 ---
 # Agentic RAG（智能体检索增强）
 
+<p class="chapter-question">检索不充分时，谁决定再查一次，又由谁决定停止？</p>
+
 > 本文把「朴素 RAG」限定为单次检索后生成的基线，而不是所有非 Agent 的 RAG。固定工作流也能做查询分解、重排和多轮检索；Agentic RAG 的区别是模型参与选择下一步动作。基础概念见 [RAG 基础](/rag/rag-basics)、Agent 概念见 [Agent 基础](/agent/agent-basics)。
 
 ## 一、为什么需要 Agentic RAG？
@@ -143,3 +145,7 @@ Self-RAG 是**训练**模型输出反思 token、把按需检索和自我批判�
 
 **Q：Agentic RAG 和长上下文模型是替代关系吗？**
 不完全是。长上下文能「把更多内容塞进去」，但仍受成本、lost-in-the-middle 和知识时效限制；Agentic RAG 强在「按需精准取用 + 多跳推理 + 外部工具」。趋势是结合：长上下文承载单轮更多材料，Agentic 编排多轮与多源（见 [长上下文专题](/basics/long-context)）。
+
+## 读后练习 {#zhixu-practice}
+
+用一次多轮检索记录查询改写、新增证据、重复结果与停止原因。

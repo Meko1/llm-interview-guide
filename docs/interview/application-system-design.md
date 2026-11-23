@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 大模型应用系统设计面试题
 
+<p class="chapter-question">面试白板上只有模型与数据库，还缺哪些关键边界？</p>
+
 > 设计完成后，面试官通常会继续问“改模型、改 Prompt、改知识库如何保证不把问题带到线上”。这部分请接着使用 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates) 回答版本化、离线门禁、灰度中止和回滚闭环。
 >
 > 若岗位偏 Java/Spring 后端，还应进一步说明 AI Orchestrator、SSE/WebFlux、领域事务、Tool Gateway 与异步 Job 的边界，见 [Java / Spring AI 生产架构系统设计面试题](/interview/java-ai-production-architecture-system-design)。
@@ -712,3 +714,7 @@ fallback 不是只要能回答。高风险工具调用 fallback 后可转人工�
 - [Agent 基础与框架](/agent/agent-basics)
 - [MaaS 平台生产化高频问答](/interview/maas-production-qna)
 - [推理部署与成本治理高频问答](/interview/inference-cost-qna)
+
+## 读后练习 {#zhixu-practice}
+
+为一次用户请求标出身份、数据范围、故障分支与可观测结果。

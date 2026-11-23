@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 自动化与后台编排生产设计：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">一个定时任务逾期后被再次调度，如何判断上次运行已经结束？</p>
+
 > 设计 Agent 定时任务或多 Agent 并发时，可以沿会话继承、资源冲突、触发去重、取消和结果投递展开口述。本页提供一套企业控制面的参考设计，并保留四类产品作为待按版本验证的导航；不声称这些产品均实现了该设计，也不推测面试官的固定考察意图。
 
 > 任务在远程 Node、云端 sandbox 或本地机器执行时的网络和身份边界，见 [远程与云端 Agent 生产运行手册](/interview/remote-agent-operations-playbook)。变更如何走向 PR 与 CI，见 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)。
@@ -345,3 +347,7 @@ run reaches terminal state
 - [Codex App](https://openai.com/index/introducing-the-codex-app/) 与 [Codex Automations](https://openai.com/academy/codex-automations/)：多 Agent worktree、后台 Automation 和 review queue。
 - [OpenClaw Automation](https://docs.openclaw.ai/automation)、[Scheduled Tasks](https://docs.openclaw.ai/cron)、[Heartbeat](https://docs.openclaw.ai/gateway/heartbeat)：cron、心跳和 session 模式。
 - [Hermes Background Sessions](https://hermes-agent.nousresearch.com/docs/user-guide/cli)、[Cron](https://hermes-agent.nousresearch.com/docs/user-guide/features/cron) 与 [Jobs API](https://hermes-agent.nousresearch.com/docs/user-guide/features/api-server/)：后台运行、调度、投递和管理 API。
+
+## 读后练习 {#zhixu-practice}
+
+用运行标识、租约和终态记录复盘重复调度，写出人工接管点。

@@ -11,6 +11,8 @@ classification: inferred
 ---
 # FlashAttention 深入
 
+<p class="chapter-question">密集注意力的算术量没有下降，少搬哪些数据仍能加快计算？</p>
+
 > 「FlashAttention 为什么能又快又省显存？它是近似算法吗？」是工程/算法岗的硬核进阶题。本文讲清它的核心思想、online softmax、反向重计算，以及 v1/v2/v3 的演进。基础概念见 [Attention 与变体](/basics/attention)。
 
 ## 标准注意力的问题：不是算力，是访存
@@ -97,3 +99,7 @@ $$u'=e^{m-m'}u+e^{m_b-m'}u_b,\qquad o=u'/l'.$$
 
 - [FlashAttention Theorem 2](https://arxiv.org/html/2205.14135v2)：本轮读取 IO 定理和容量假设。
 - [FlashAttention-2](https://arxiv.org/abs/2307.08691)、[FlashAttention-3](https://arxiv.org/abs/2407.08608)：本轮读取并行/Hopper 优化描述；未做内核或 GPU benchmark。
+
+## 读后练习 {#zhixu-practice}
+
+画出分块时留在片上与写回显存的中间量，解释如何合并不同块的归一化结果。

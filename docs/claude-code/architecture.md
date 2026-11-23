@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Claude Code 代码架构
 
+<p class="chapter-question">从输入一条指令到收到工具回执，代码助手跨过了哪些组件？</p>
+
 > 这页专注 Claude Code 的分层；横向比较 Claude Code、Codex、OpenClaw、Hermes 的任务运行时与可迁移设计原则，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。
 
 > 本页的分层图是用于理解与自研的**概念模型，不是 Claude Code 私有源码结构图**。2026-11-05 读取的[官方运行原理](https://code.claude.com/docs/en/how-claude-code-works)明确解释了模型、工具、上下文和任务循环，但不据此推断内部类名、缓存实现或依赖库。功能见[总览](/claude-code/overview)，行为见[核心机制](/claude-code/mechanisms)。
@@ -114,3 +116,7 @@ classification: inferred
 
 **Q：这套架构对我自己做 Agent 有什么借鉴？**
 关键经验：① 把「单步决策的 loop」和「会话级编排（预算/压缩/持久化）」分层；② 工具用统一注册+调用协议；③ 权限/Hooks 作为横切关注点插在执行前，不污染主逻辑；④ 通信层抽象多后端。这些是任何生产级 Agent 都要面对的工程问题。
+
+## 读后练习 {#zhixu-practice}
+
+按会话、模型请求、工具执行和状态回写画时序图，区分观察与实现推断。

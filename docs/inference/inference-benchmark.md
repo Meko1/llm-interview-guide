@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 推理性能压测与服务化指标
 
+<p class="chapter-question">平均吞吐增加时，为什么交互用户仍可能觉得更慢？</p>
+
 > 「你怎么评估一个 LLM 推理服务够不够快、扛不扛得住？」这是推理/工程岗的必考题。本文参考 [llm-action](https://github.com/liguodongiot/llm-action) 的推理性能压测经验，讲清核心指标（TTFT/TPOT/吞吐/goodput）、压测方法论、性能与成本的权衡曲线，以及常见调优手段。推理原理见 [推理优化与部署](/inference/inference-optimization)，框架选型见 [推理框架对比](/inference/serving-frameworks)。
 
 ## 面试先背这几句话
@@ -157,3 +159,7 @@ classification: inferred
 5. **Prefill 和 Decode 哪个是算力瓶颈、哪个是访存瓶颈？** 前者常偏算力、后者常偏访存，但不能脱离 batch、上下文、硬件与通信直接定性；用同条件压测和 profiling 检验。
 6. **压测报告要控制哪些变量？** 输入/输出长度、并发/到达模式、模型+精度+并行、硬件；只报一个吞吐数字不可信。
 7. **有哪些手段能同时提吞吐降成本？** 连续批处理、量化、PagedAttention/KV 量化、Prefix Cache 复用、Prefill/Decode 分离、模型路由。
+
+## 读后练习 {#zhixu-practice}
+
+用同一批请求分别统计首词延迟、逐词间隔与尾延迟。

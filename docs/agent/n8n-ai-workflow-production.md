@@ -11,6 +11,8 @@ classification: inferred
 ---
 # n8n AI 工作流生产化：连接器、Agent 与企业自动化
 
+<p class="chapter-question">连接器收到重复事件时，工作流怎么避免重复办理？</p>
+
 > n8n 的优势不是“比谁更像聊天机器人”，而是把事件触发、SaaS 连接器、数据变换、等待、错误处理和 AI 节点放到同一条自动化链路中。面试中讲 n8n，核心应是事件驱动、凭证治理、执行记录、扩展架构和人机协作。
 
 ## 一、n8n 在 AI 工作流版图中的位置
@@ -191,3 +193,7 @@ Dify 更靠近 AI 应用、Prompt/RAG 与对话体验；n8n 更擅长事件、Sa
 - [AI 工作流工程化](/agent/workflow-engineering)
 - [MCP 协议深入](/agent/mcp)
 - [Agent 自动化与后台编排生产设计](/interview/agent-automation-orchestration-playbook)
+
+## 读后练习 {#zhixu-practice}
+
+用两次相同业务事件跟踪去重键、执行日志和异常恢复。

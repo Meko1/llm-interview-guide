@@ -1,5 +1,5 @@
 ---
 layout: home
-title: Atlas · 大模型能力地图
-description: 从一个 token 到可靠系统，连接大模型原理、应用实践、工程判断与面试自测。
+title: 知序 · LLM 学习手册
+description: 从一个词元的计算过程读起，沿应用开发或算法研究路线学习，用逐篇练习检验自己的判断。
 ---

@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 大模型应用线上排障手册
 
+<p class="chapter-question">用户说“答案变差”，第一份能缩小范围的证据是什么？</p>
+
 > 排障修复后的验证和重新发布，见 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)。排障解决的是“现在怎么止血和定位”，发布门禁解决的是“下次如何不带着同类问题上线”。
 
 > 本页是“线上突然出问题，你怎么排查”的参考排障流程，不是作者已处理事故的履历，也没有面试发生频率统计。它和 [系统设计面试题](/interview/application-system-design) 的关系是：系统设计回答“怎么搭”，本页回答“坏了怎么定位、止血、修复和复盘”。
@@ -776,3 +778,7 @@ LoRA/SFT 后格式更稳定，但事实正确率下降、拒答变差、通用�
 - [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)
 - [推理部署与成本治理高频问答](/interview/inference-cost-qna)
 - [RAG、Memory 与评测安全高频问答](/interview/rag-memory-eval-qna)
+
+## 读后练习 {#zhixu-practice}
+
+用同一条失败请求分别对照输入、候选、模型配置和输出解析。

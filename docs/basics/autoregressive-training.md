@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 自回归训练：Teacher Forcing 与标签构造
 
+<p class="chapter-question">预测下一个词元时，输入、标签与损失位置如何对齐？</p>
+
 大模型“预测下一个 token”是一句正确但不够工程化的话。面试中更重要的是说明：一段原始文本如何被整理成 `input_ids`、`labels`、attention mask 和 loss mask；训练为什么可以并行，推理为什么却必须逐 token 进行。
 
 本页只解决训练样本和监督信号的闭环。交叉熵细节见 [从 Logits 到损失](/basics/logits-loss)，注意力可见性见 [Mask 与 Padding](/basics/masks-padding)，模型内部计算见 [Transformer 架构详解](/basics/transformer)。
@@ -103,3 +105,7 @@ causal mask 约束前向可见性，保证位置不能使用未来 token；label
 > 自回归训练中我会把可见性和监督分开：causal/padding mask 决定 token 能看见什么，labels 与 loss mask 决定哪些位置参与交叉熵。Teacher Forcing 让完整真实前缀已知，所以训练能并行；推理则把模型输出回填，必须顺序生成，这也带来 exposure bias。排查时我会先做短样本逐 token 对齐和单 batch 过拟合，防止 shift、EOS 或模板掩码错误被误判为模型能力问题。
 
 实现参考：[Transformers 因果 LM 损失](https://github.com/huggingface/transformers/blob/main/src/transformers/loss/loss_utils.py)、[PyTorch CrossEntropyLoss](https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html)。不同版本的 shift 写法可不同，核对位置语义比复制切片更可靠。
+
+## 读后练习 {#zhixu-practice}
+
+给四个词元手工移动标签，标出 padding 与不参与损失的位置。

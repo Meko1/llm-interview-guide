@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 生命周期事件与 Policy Hook Fabric：跨运行时事件契约、同步闸门与可靠分发
 
+<p class="chapter-question">哪些生命周期事件需要同步拦截，哪些适合异步观察？</p>
+
 > 本页不讨论“怎样把一个 Hook 打包发布”，而是讨论运行中的 Agent 事件怎样进入企业控制面：哪些路径能在副作用前阻断，哪些只能异步观察，外部 webhook 怎样可靠接入，以及如何让 Claude Code、Codex、OpenClaw、Hermes 的差异不污染业务策略。
 
 ## 一、面试先给结论
@@ -326,3 +328,7 @@ Agent 会读取日志、修改文件、触发测试、生成更多工具事件�
 - [Agent 工具安全与权限边界](/agent/tool-safety)：工具 schema、Gateway、审批与最小权限。
 - [Claude Code Hooks](https://code.claude.com/docs/en/hooks)、[OpenClaw Hooks](https://docs.openclaw.ai/automation/hooks)、[Hermes Event Hooks](https://hermes-agent.nousresearch.com/docs/user-guide/features/hooks/)：各运行时的原始能力与语义。
 - [OpenAI: Unlocking the Codex harness](https://openai.com/index/unlocking-the-codex-harness/)：Codex App Server 的 thread、turn、item 与审批事件模型。
+
+## 读后练习 {#zhixu-practice}
+
+用“执行前授权”和“执行后统计”两例，标注超时策略与失败责任。

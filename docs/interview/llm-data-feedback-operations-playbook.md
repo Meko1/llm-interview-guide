@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 数据标注与偏好数据运营：把线上反馈变成可信资产
 
+<p class="chapter-question">两位标注员意见不同，怎样区分规则模糊和样本本身多解？</p>
+
 > 很多团队会说“把 bad case 回流做数据飞轮”，却没有回答最关键的问题：谁有权使用这条对话？为什么它被判为失败？标注结论是否一致？它应该修 Prompt、RAG、工具还是模型？如何避免它污染评测集，或把一次偶然偏好训练成永久行为？本页将这条链路拆成可落地、可面试的控制面。
 >
 > 宏观 LLMOps 闭环见 [LLMOps 生产运营高频问答](/interview/llmops-production-qna)，离线评测与发布门禁见 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)，微调方法见 [微调与模型平台高频问答](/interview/finetuning-platform-qna)。
@@ -233,3 +235,7 @@ Trace / feedback / incident
 - [微调与模型平台高频问答](/interview/finetuning-platform-qna)
 
 实际读取的主源：[TRL DPOTrainer 数据格式说明](https://github.com/huggingface/trl/blob/main/docs/source/dpo_trainer.md)中 preference、显式 prompt 与 conversational template 段；[Hugging Face Dataset Cards](https://github.com/huggingface/hub-docs/blob/main/docs/hub/datasets-cards.md)中用途、偏差及许可元数据说明。它们说明格式和文档机制，不认证数据授权或业务标签。上述反馈分母、撤销状态与恢复设计为教学建议，未实施标注/训练实验。
+
+## 读后练习 {#zhixu-practice}
+
+保留原始判断、理由和仲裁结果，记录规则修改后哪些旧样本需复查。

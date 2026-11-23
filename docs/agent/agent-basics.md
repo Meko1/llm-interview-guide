@@ -9,6 +9,8 @@ classification: reviewed
 ---
 # Agent 基础与框架
 
+<p class="chapter-question">工具已经执行，模型却没有收到结果，下一步该做什么？</p>
+
 > **模型可以提议下一步，但不能自行授予权限或证明动作成功。** Agent 工程的目标不是自主性最大化，而是在明确边界内完成可检查的任务。
 
 <LessonLab kind="agent" />
@@ -258,3 +260,7 @@ Function Calling 与结构化输出改善调用表示，不证明业务正确。
 - [AWS Builders' Library：Making retries safe with idempotent APIs](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/)：请求身份、重复执行与服务端幂等契约。
 
 本页案例和状态表是教学设计；没有声称执行过退款、外发或端到端 Agent 压测。
+
+## 读后练习 {#zhixu-practice}
+
+画出一次调用的操作标识、外部回执和恢复分支，说明何时暂停并交给人处理。

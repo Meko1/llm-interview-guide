@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 长运行 Agent 检查点、恢复与人工 Steer：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">在检查点之后插入人工指令，已经排队的动作还有效吗？</p>
+
 > 长运行 Agent 的难点不在于把进程留在后台，而在于进程、客户端、Gateway 或机器中断之后，系统能否分辨“聊天可以恢复”“执行可以继续”和“外部副作用已经发生”这三件事。正确的生产答案不是重新运行最后一条 prompt，而是从持久状态、租约、幂等键和下游回执做恢复决策。
 
 > 后台 job、lease 与取消传播见 [Agent 自动化与后台编排生产设计](/interview/agent-automation-orchestration-playbook)，持续授权/撤权见 [长任务 Agent 持续授权与紧急撤权](/interview/agent-continuous-authorization-playbook)，证据与 effect 对账见 [Agent 观测、取证与事故响应手册](/interview/agent-observability-incident-response)。
@@ -190,3 +192,7 @@ RECOVERY_CANDIDATE -> validate checkpoint -> acquire new lease
 - [Work with Codex from anywhere](https://openai.com/index/work-with-codex-from-anywhere/)：跨设备 thread、relay、远程审批与 steer。
 - [OpenClaw Restart Recovery](https://docs.openclaw.ai/gateway/restart-recovery) 与 [Cron](https://docs.openclaw.ai/cli/cron)：持久状态、恢复安全阀和 job history。
 - [Hermes Sessions](https://hermes-agent.nousresearch.com/docs/user-guide/sessions/) 与 [CLI Background Sessions](https://hermes-agent.nousresearch.com/docs/user-guide/cli)：SQLite session、独立后台会话与恢复语义。
+
+## 读后练习 {#zhixu-practice}
+
+区分旧计划、新指令和已提交动作，标记需要取消或重新授权的位置。

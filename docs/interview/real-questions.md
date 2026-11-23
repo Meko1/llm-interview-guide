@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 分岗位面试练习题 {#分岗位面试真题}
 
+<p class="chapter-question">同一项目讲给应用面试官和算法面试官，应该分别展示什么？</p>
+
 > 本页是编辑整理的自编练习题，未提供公司、面试时间、授权记录或题频统计，不作为“真题”证据。旧 URL 与标题锚点保留。[考点速查卡](/interview/high-frequency) 可用于查漏；先独立作答，再阅读链接。
 
 ## 怎么用这份题库？
@@ -283,3 +285,7 @@ LoRA 以 `ΔW = (α/r)BA` 参数化更新，秩至多 r，不证明所有任务�
 
 - [Microsoft LoRA 官方实现](https://github.com/microsoft/LoRA)：本轮读取 README 的低秩参数化摘录；尺寸为构造值，未跑模型。
 - [ICML 2023 精确投机解码论文](https://proceedings.mlr.press/v202/leviathan23a.html)：本轮读取论文摘要，分布推导供练习，未复现论文实验。
+
+## 读后练习 {#zhixu-practice}
+
+各写一份两分钟复述，让一份突出服务决策，另一份突出实验与对照。

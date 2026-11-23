@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 大模型能做什么、不能做什么（能力边界与误区）
 
+<p class="chapter-question">回答听起来通顺，怎样发现它可能说错了？</p>
+
 > 用好大模型的第一步，是知道它**擅长什么、不擅长什么、容易在哪翻车**。这一页帮新手建立正确预期，避开最常见的坑。工作原理见 [大模型是怎么工作的](/beginner/how-llm-works)。
 
 ## 一、它擅长的事
@@ -110,3 +112,7 @@ classification: inferred
 可能是模型安全策略、平台审核、权限限制，也可能是错误拒答。正当任务可补充范围和背景，先确认原因；不应尝试绕过安全和权限限制。详见 [大模型安全](/advanced/safety)。
 
 风险说明参考：[GPT-2 历史模型卡](https://github.com/openai/gpt-2/blob/master/model_card.md)。它展示为何要明确预期用途与禁用场景，不应外推为当前模型的统一成绩。
+
+## 读后练习 {#zhixu-practice}
+
+从一段回答中拆出三个可核实的主张，为每个主张指定独立证据。

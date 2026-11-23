@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Dify、Coze、n8n 与耐久 Agent 工作流：高频面试题库
 
+<p class="chapter-question">同一个审批任务放到低代码平台和耐久执行引擎，恢复成本有何不同？</p>
+
 > 本页练习将大模型不确定输出嵌进可靠业务流程。平台选型表是约束下的参考，不是岗位频率统计；产品导出、恢复、queue 和节点行为需固定版本验证，不从画布功能推导可靠性保证。
 
 ## 一、30 秒总答法
@@ -241,3 +243,7 @@ LangGraph 适合显式 Agent 图、工具循环、上下文状态与人机协作
 - [耐久化 Agent 工作流](/agent/durable-agent-workflows)
 - [Dify 低代码工作流生产化高频问答](/interview/dify-production-qna)
 - [LangGraph 状态图 Agent 生产化高频问答](/interview/langgraph-production-qna)
+
+## 读后练习 {#zhixu-practice}
+
+模拟重启前后各一次审批回执，画出结果保存与去重的位置。

@@ -13,6 +13,8 @@ classification: inferred
 ---
 # MaaS 平台与模型服务治理
 
+<p class="chapter-question">同一服务部署多个模型版本，平台如何识别正在消耗的配额？</p>
+
 > MaaS（Model as a Service）平台把多个模型变成企业内部可申请、可调用、可计费、可观测、可评估的公共能力。它比“模型网关”更像平台，比“推理服务”更面向业务治理。网关细节见 [模型网关与多模型路由](/engineering/llm-gateway)，生产化追问见 [MaaS 平台生产化高频问答](/interview/maas-production-qna)，生产运营见 [LLMOps](/engineering/llmops)。
 
 ## 面试先背这几句话
@@ -202,3 +204,7 @@ MaaS 平台项目可以这样讲：
 - [模型评估与幻觉](/evaluation/evaluation)
 
 实现入口：[vLLM OpenAI-compatible server](https://docs.vllm.ai/en/stable/serving/openai_compatible_server/)。本轮该页面返回 403，未读取能力细节，未绕过限制；兼容性清单是待执行验收协议，不是当前版本支持矩阵。
+
+## 读后练习 {#zhixu-practice}
+
+用一次请求串起租户、模型、版本、计量单位和限流结果。

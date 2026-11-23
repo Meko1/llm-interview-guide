@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 线性注意力与混合架构
 
+<p class="chapter-question">用线性机制替换注意力后，原有模型的哪些假设需要重新验证？</p>
+
 > 标准注意力的 $O(n^2)$ 复杂度是长序列的根本瓶颈。一条研究主线试图把它降到**线性** $O(n)$——线性注意力、RWKV、RetNet，以及把它们和 Transformer 缝在一起的**混合架构**（Jamba 等）。这是 2024–2025 长上下文与高效推理的前沿。标准注意力见 [Attention 与变体](/basics/attention)，状态空间模型见 [Mamba/SSM](/advanced/state-space-models)。
 
 ## 一、问题：注意力为什么是 O(n²)？
@@ -103,3 +105,7 @@ $$o_t=\frac{S_t^T\phi(q_t)}{z_t^T\phi(q_t)}$$
 
 **Q：滑动窗口注意力算线性注意力吗？**
 不算同一类，但目标相同（降复杂度）。滑动窗口仍是 softmax 注意力，只是限制每个 token 只看邻近 W 个，复杂度降到 $O(nW)$；线性注意力是改变数学形式去掉 softmax。两者常与全局注意力层组合用于长上下文。
+
+## 读后练习 {#zhixu-practice}
+
+固定输入长度和质量目标，比较状态大小、计算量和可表达的依赖。

@@ -9,6 +9,8 @@ classification: inferred
 ---
 # PromptOps：提示词模板治理、实验与回滚系统设计
 
+<p class="chapter-question">提示词只改一句，也需要怎样的发布证据？</p>
+
 > Prompt 在生产里不是一段散落在代码里的文案。它决定模型行为、成本、工具调用和安全边界，因此需要像配置与代码一样拥有契约、版本、评测、灰度和回滚。
 
 ## 一、30 秒面试回答
@@ -142,3 +144,7 @@ L1复现缺变量和模板/工具不同步；L2绑定rendered hash、预算与�
 > 我们将 Prompt 从代码中的字符串升级为可发布资产：模板、变量 schema、模型参数、工具/索引配置和评测集组成不可变 manifest。请求运行时记录渲染哈希和版本，变量有类型、权限和 token 预算校验。每次改动先跑回归门禁，再 shadow、灰度，并按场景看成功率、安全、延迟和成本；出现退化可精确回滚整个 manifest。这样业务可以迭代话术，工程侧仍保持可复现、可审计和可控发布。
 
 继续学习：[Prompt 工程](/prompt/prompt-engineering)、[自动化提示优化与 Prompt Ops](/prompt/prompt-optimization)、[LLM 评测与发布门禁实战](/interview/evaluation-release-gates)、[LLM 数据标注与偏好数据运营](/interview/llm-data-feedback-operations-playbook)、[LLM 多供应商故障切换与一致性设计](/interview/llm-multi-provider-failover-playbook)。
+
+## 读后练习 {#zhixu-practice}
+
+固定模型和样本，对照旧版、新版、失败切片及可用回滚版本。

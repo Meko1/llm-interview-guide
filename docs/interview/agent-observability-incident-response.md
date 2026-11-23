@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 观测、取证与事故响应手册：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">事故后如何重建一次 Agent 执行的因果顺序？</p>
+
 > “有日志”不等于可观测，“能重放聊天记录”不等于能解释一次副作用，“任务完成”不等于已被安全审计。生产 Agent 的观测系统必须把用户、任务、子 Agent、模型、上下文、工具、执行器、外部 effect 和交付结果连成一条可查询证据链，并且在采集时不把密钥、源代码和私人对话再次扩散。本页将 Claude Code、Codex、OpenClaw、Hermes 的公开运行面整理为统一的运维方法。
 
 > 通用轨迹评估见 [Agent 评估与可靠性工程](/agent/agent-evaluation)，工具审计见 [Agent 工具安全与生产治理](/agent/tool-safety)，后台任务状态机见 [Agent 自动化与后台编排生产设计](/interview/agent-automation-orchestration-playbook)。
@@ -264,3 +266,7 @@ SLO 不能只写“回答成功率 99%”。例如企业 Coding Agent 可以定�
 - [OpenAI Global Admin Console](https://help.openai.com/en/articles/12289294-global-admin-console) 与 [Compliance Platform](https://help.openai.com/en/articles/9261474)：Codex 采用率、用量与合规日志边界。
 - [OpenClaw Logging](https://docs.openclaw.ai/logging)、[Health](https://docs.openclaw.ai/gateway/health)、[Diagnostics](https://docs.openclaw.ai/gateway/diagnostics)、[OTel](https://docs.openclaw.ai/gateway/opentelemetry)：Gateway 运行、诊断、清理和遥测。
 - [Hermes Sessions](https://hermes-agent.nousresearch.com/docs/user-guide/sessions/)、[Dashboard](https://hermes-agent.nousresearch.com/docs/user-guide/features/web-dashboard)、[Debug](https://hermes-agent.nousresearch.com/docs/reference/cli-commands)：session 工件、日志、成本面板与脱敏诊断包。
+
+## 读后练习 {#zhixu-practice}
+
+从脱敏事件拼出请求、授权决定、工具回执和状态变化，标出无法证实的间隙。

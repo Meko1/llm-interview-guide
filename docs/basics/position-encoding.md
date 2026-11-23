@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 位置编码（Positional Encoding）
 
+<p class="chapter-question">相同词元出现在两个位置，模型怎样获得顺序信息？</p>
+
 > Attention 本身对顺序无感知，必须显式注入位置信息。位置编码是长上下文相关面试题的核心，RoPE 更是现代大模型的标配。本文深入各方案的原理、优劣与长上下文扩展。长上下文系统梳理见 [长上下文专题](/basics/long-context)。
 
 ## 一、为什么需要位置编码？
@@ -103,3 +105,7 @@ $$\langle R_mq,R_nk\rangle=q^TR_m^TR_nk=q^TR_{n-m}k$$
 缓存排障时把「位置 ID」与「缓存槽位」分开：左 padding、滑窗驱逐或前缀复用后，槽位编号未必就是语义位置。用相同 token 比较一次完整前向与增量缓存前向的 logits；误差超出约定容差时先查旋转次数、位置偏移和 mask，不能立即归因于模型外推失败。
 
 一手依据：[RoFormer/RoPE](https://arxiv.org/abs/2104.09864)、[ALiBi](https://arxiv.org/abs/2108.12409)、[PI](https://arxiv.org/abs/2306.15595)、[YaRN](https://arxiv.org/abs/2309.00071)。本页不以摘要中的任务成绩作为任意模型的保证。
+
+## 读后练习 {#zhixu-practice}
+
+以交换两个词的位置为例，比较绝对位置表示与旋转位置编码的作用点。

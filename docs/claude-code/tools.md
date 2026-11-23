@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Claude Code 工具系统详解
 
+<p class="chapter-question">工具报告“成功”时，如何确认文件真的按预期改变？</p>
+
 > 工具（Tools）是编程 Agent 的「手脚」——模型的能力边界由它能调用的工具决定。这一页详解 Claude Code 的工具系统：工具如何定义/注册/调用、各类核心工具的设计要点、以及任务管理的双轨架构。架构见 [代码架构](/claude-code/architecture)，机制见 [核心机制](/claude-code/mechanisms)。
 
 ## 一、工具的本质：模型输出意图，框架执行
@@ -97,3 +99,7 @@ classification: inferred
 先确定命令是否已产生副作用：文件编辑看 diff，外部提交查业务 ID，后台进程查存活状态。只读失败与“提交结果未知”必须分开。重试预算、幂等键与权限由执行层控制，不由模型的一句“再试一次”决定。
 
 </details>
+
+## 读后练习 {#zhixu-practice}
+
+比较调用前后的差异，给读取、编辑和验证分别指定独立证据。

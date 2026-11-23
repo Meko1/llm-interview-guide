@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 富文档与多模态 RAG 系统设计：让 PDF、表格和图表可检索、可引用、可追责
 
+<p class="chapter-question">一张表格里的数字被检索出来，怎样知道单位和表头仍然对应？</p>
+
 > 企业知识并不总是干净的 Markdown。年报、合同、产品手册、扫描件、投研报告里同时存在段落、跨页表格、图表、页眉页脚、印章和图片。富文档 RAG 的难点不是“接一个 OCR”，而是让每个回答都能回到正确的文档版本、页码、区域和权限边界。
 
 ## 一、30 秒面试回答
@@ -292,3 +294,7 @@ assert Decimal("125.0") * unit_multiplier != amount_yuan
 ### 15.3 多证据集合与校准式复核
 
 为跨页表格、版本对比和图文联合问题标注 `required_evidence_set`，度量 all-evidence recall、evidence-set completion 和干扰证据拒绝率。低置信回退也要校准：按文档类型报告 ECE/Brier、risk-coverage curve、selective accuracy 和转人工 precision；阈值由可接受错误风险反推，而不是只相信 OCR/VLM 自报分数。错误版本、ACL 泄露、关键数值缺单元格/图元证据、区域失配和拒答失效属于发布硬失败，风险切片需在置信区间内非劣于基线。
+
+## 读后练习 {#zhixu-practice}
+
+把数值连同页码、行列标题、单位和原图位置做成一份引用记录。

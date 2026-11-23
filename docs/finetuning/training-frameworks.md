@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 微调训练工具链实战
 
+<p class="chapter-question">训练能重新启动，是否也能复现之前的学习轨迹？</p>
+
 > **工具能启动，不等于实验正确。** L2 应能核查数据、模板、可训练参数、损失分母和部署产物。本文给出检查流程和配置示意，未执行训练；基础见 [微调范式](/finetuning/finetuning) 与 [LoRA](/finetuning/lora)。
 
 ## 工具链全景
@@ -133,3 +135,7 @@ LoRA 适配器 ──► 合并权重(merge) ──► 评估回归(评估集+�
 先对少量样本检查预处理和一小段训练，不把这当完整验收。留存环境版本、数据 hash、template、有效 token、可训练参数、训练步数与 checkpoint；再用未参与调参的任务/安全集比较底座和适配器，并测试重载、合并与回滚。日志平台不得上传未授权敏感样本。
 
 [LLaMA-Factory 官方 README](https://github.com/hiyouga/LLaMA-Factory)已读取功能和后端说明；尝试读取旧示例 YAML 路径返回 404，因此本页配置仅为示意，不能声称已验证可运行。未执行训练、显存测量或部署测试。
+
+## 读后练习 {#zhixu-practice}
+
+记录配置、种子、数据顺序、优化器和调度器状态，逐项检查恢复条件。

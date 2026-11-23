@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 企业 AI 安全、合规与审计控制面系统设计面试题
 
+<p class="chapter-question">一次模型发布要通过治理审查，如何让人重建当时的放行理由？</p>
+
 > [LLM 数据分级、外发治理与审计证据面试题](/interview/data-governance-egress-audit-qna) 解决“单份数据如何被正确使用”；本页解决“企业如何对模型、Prompt、RAG、Agent、MCP、数据和供应商建立统一的治理控制面”。
 >
 > 本页讨论的是工程治理框架，不替代组织的法务、隐私或监管评估。实际落地应以适用地域、行业和公司制度为准。
@@ -93,7 +95,7 @@ deny cross_region_fallback if data.residency == local_only
 
 策略要版本化、评审、单元测试、灰度和回滚。每次策略变化都应说明影响资产、预期 allow/deny 差异和回归集结果，不能直接修改生产规则。
 
-这里的风险标签不是 Atlas 学习等级。规则还需定义冲突优先级：`deny` 不能被后续 `allow` 或人工 approval 覆盖；分类缺失、身份过期、区域未知默认拒绝高风险操作。审批仅满足已定义的审批条件，不能创造资源权限。所有执行点应记录实际加载的策略版本，而不只是控制台“已发布”的版本。
+这里的风险标签不是 知序 学习等级。规则还需定义冲突优先级：`deny` 不能被后续 `allow` 或人工 approval 覆盖；分类缺失、身份过期、区域未知默认拒绝高风险操作。审批仅满足已定义的审批条件，不能创造资源权限。所有执行点应记录实际加载的策略版本，而不只是控制台“已发布”的版本。
 
 ## 六、身份传播、ABAC、委托与职责分离
 
@@ -236,3 +238,7 @@ Alert
 - [Agent 工具安全与权限边界](/agent/tool-safety)：ABAC、审批、幂等和工具执行安全。
 - [MaaS 平台生产化高频问答](/interview/maas-production-qna)：模型目录、租户、路由和平台治理。
 - [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)：将控制验证接入发布决策。
+
+## 读后练习 {#zhixu-practice}
+
+把数据用途、评测证据、审批人和实际部署版本串为一条记录。

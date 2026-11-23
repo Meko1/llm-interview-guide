@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 模型路由、降级与能力契约：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">备用模型价格更低，却不支持相同工具，能接管当前请求吗？</p>
+
 > 企业模型网关解决“请求该发给哪个模型服务”；Agent Runtime 还要回答“当前 session、子 Agent、计划阶段、工具循环、压缩、视觉和审批各自用谁，主模型失败时能否切换，以及切换后还是否有资格执行动作”。只把备用 URL 写进配置，会把一个可用性问题变成质量、成本和安全事故。
 
 > 通用 MaaS 路由、计费和供应商治理见 [MaaS 平台生产化高频问答](/interview/maas-production-qna)，模型变更的评测门禁见 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)，Agent 任务预算/并发见 [Agent 自动化与后台编排生产设计](/interview/agent-automation-orchestration-playbook)。
@@ -169,3 +171,7 @@ Task admission -> model policy / capability registry -> route planner
 - [OpenClaw Model failover](https://docs.openclaw.ai/model-failover)：profile rotation、strict selection、cooldown 与可观测 fallback。
 - [Hermes Fallback Providers](https://hermes-agent.nousresearch.com/docs/user-guide/features/fallback-providers/)：主模型与辅助任务的不同降级链。
 - [Hermes Provider Routing](https://hermes-agent.nousresearch.com/docs/user-guide/features/provider-routing)：底层 provider 选择、参数兼容与数据采集策略。
+
+## 读后练习 {#zhixu-practice}
+
+为一次路由切换比较工具、上下文、结构化输出和预算约束。

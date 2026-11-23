@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 大模型基础篇高频问答加厚版
 
+<p class="chapter-question">背出 Transformer 组件名之后，怎样检验自己理解了数据流？</p>
+
 > 这页是 [基础篇岗位要求总纲](./foundation-requirements) 的面试问答版。它不追求长篇解释，而是把面试官最容易连续追问的问题，整理成可直接复述的答法。临场时先用这里组织答案，再点到专题页补细节。框架选型、智能工作流和 Function Calling 追问，继续看 [框架与智能工作流高频问答](./framework-workflow-qna)；RAG、Memory、Agent 评测和安全合规追问，继续看 [RAG、Memory 与评测安全高频问答](./rag-memory-eval-qna)；推理部署、压测、量化和成本治理追问，继续看 [推理部署与成本治理高频问答](./inference-cost-qna)；微调、DPO、MaaS 和模型平台相关追问，继续看 [微调与模型平台高频问答](./finetuning-platform-qna)。
 
 ## 怎么用这页
@@ -131,3 +133,7 @@ tokens/s 可能是牺牲延迟堆出来的裸吞吐。在线服务更看 goodput
 10. 成本治理：少 token、提吞吐、模型路由、缓存和量化一起做。
 11. Agent 评估：结果、轨迹、成本、安全四类一起看。
 12. 安全合规：注入、越权、数据泄露、高危副作用都要有门禁。
+
+## 读后练习 {#zhixu-practice}
+
+选一个输入，从分词到输出依次标出张量、参数和临时状态。

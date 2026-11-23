@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 多供应商故障切换与结果一致性系统设计
 
+<p class="chapter-question">主供应商超时后切换，如何避免两边最终都返回并重复提交？</p>
+
 > “主模型超时就换备用模型”听起来简单，实际可能造成重复扣费、工具参数格式变化、结构化输出失效、数据跨区域、流式响应半截和质量突然下降。可靠的 failover 是一套能力约束下的路由与恢复系统。
 
 ## 一、30 秒面试回答
@@ -204,3 +206,7 @@ input/output/cached tokens, price version, latency, outcome
 继续学习：[大模型网关](/engineering/llm-gateway)、[Agent 模型路由与能力治理](/interview/agent-model-routing-capability-playbook)、[MaaS 平台生产实践](/interview/maas-production-qna)、[LLM 推理容量与弹性伸缩设计](/interview/llm-inference-capacity-autoscaling-playbook)、[LLM 流式输出与会话恢复设计](/interview/llm-streaming-session-resilience-playbook)。
 
 主源：[AWS Builders' Library 的 timeout/retry/backoff/jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/)实读了超时不证明副作用未发生、多层重试放大与 token bucket；[Azure Circuit Breaker](https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)实读 half-open 和异常分类注意事项。本文未测试任何具体 provider 的 API 兼容、驻留或价格，数字为构造，恢复协议是工程设计而非实测可用性报告。
+
+## 读后练习 {#zhixu-practice}
+
+为请求、尝试和最终业务结果分别设置标识，说明迟到响应如何处置。

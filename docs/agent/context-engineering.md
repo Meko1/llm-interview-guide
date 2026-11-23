@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 上下文工程（Context Engineering）
 
+<p class="chapter-question">长任务必须压缩上下文时，删掉哪条信息会改变下一步决定？</p>
+
 > Coding Agent 与长驻消息 Agent 的上下文不仅要压缩，还要管理快照、摘要版本、子 Agent 回传与可追溯性；完整运行时视角见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。
 
 > 需要将上述原理落到 Claude Code、Codex、OpenClaw 与 Hermes 的项目指令、会话压缩、跨会话检索、隐私边界与运维流程时，见 [Agent 上下文与记忆生产治理](/interview/agent-context-memory-governance)。
@@ -124,3 +126,7 @@ Compaction 用摘要和外部笔记维持连续性，但有信息损失、回读
 
 **Q：上下文组织怎么影响推理成本？**
 保持稳定前缀可能提高复用，但命中与费用依服务实现和配置；历史 append-only 也不能妨碍删除、纠错与撤权。以实际 token 和延迟账本验证，不承诺一个量级收益。
+
+## 读后练习 {#zhixu-practice}
+
+把一个对话拆成指令、事实、工具回执和待办，比较压缩前后仍能回答哪些问题。

@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 采购 / 供应商尽调 Copilot：可验证证据、审批工作流与商业风险控制
 
+<p class="chapter-question">尽调助手给供应商打出高风险提示，依据能追溯到哪份材料？</p>
+
 供应商准入、续约、比价、RFP、信息安全问卷和合同评审往往横跨采购、业务、财务、法务、安全与合规团队。资料既多又异构：报价单、资质证书、问卷、审计报告、历史履约、ERP 订单、外部公开信息和内部审批记录。LLM 很适合把这些材料整理成可读的尽调包，但它不能替代供应商主数据、成本计算、制裁/合规筛查、法律判断或最终准入决定。
 
 本文聚焦采购与供应商尽调的生产化工作流。外部资料的研究编排见 [Deep Research 生产化](/engineering/deep-research-production)，可签发报告与模板见 [LLM 文档生成与审阅生产化](/engineering/llm-document-generation-production)，高风险证据与动作控制见 [反欺诈 / 风险调查 Copilot](/interview/fraud-risk-investigation-copilot-playbook)。
@@ -211,3 +213,7 @@ Supplier / ERP / Contract / Security / External evidence
 “我们把供应商尽调 Copilot 设计成证据与审批工作流，而不是自动准入机器人。系统按类别、金额、数据访问和地域计算 checklist，从 ERP、供应商材料、合同、安全问卷和受控外部来源组装版本化 fact pack；模型提取材料、定位证据、发现缺口和冲突，并生成 RFP/续约/例外 proposal。价格和总拥有成本由确定性服务计算，模型只解释与草拟谈判问题。准入、例外、供应商创建和合同动作通过独立 policy、审批、幂等命令和 receipt 执行；工作台展示证据、到期、差异和未决项。上线时我们评测抽取、冲突发现、审批、撤权和敏感信息门禁，同时用尽调周期和返工衡量效率。”
 
 这段回答体现的是企业大模型应用最重要的落地方式：模型把信息工作变快，但事实、钱、合同和责任仍由可审计的业务控制面掌握。
+
+## 读后练习 {#zhixu-practice}
+
+使用虚构供应商，区分文档事实、模型归纳、缺失证据和审批结论。

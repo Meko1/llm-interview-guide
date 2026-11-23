@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 结构化输出与 Schema 约束高频问答
 
+<p class="chapter-question">Schema 约束能保证字段之间的业务关系吗？</p>
+
 > 如果面试官把问题从“Schema 如何约束模型”推进到“流式 partial JSON、Java DTO、业务事务和写工具怎样衔接”，可继续使用 [Java / Spring AI 生产架构系统设计面试题](/interview/java-ai-production-architecture-system-design) 的三层校验与提交边界回答。
 
 > 结构化输出不是“让模型返回 JSON”这么简单，而是把大模型输出变成后端、工作流、Agent 工具、审批系统可以稳定消费的工程合约。面试里它常和 Function Calling、MCP、RAG 抽取、表单填充、Agent 工具调用、Java/Spring AI、LangChain/LangGraph、Dify 工作流一起出现。原理细节可继续看 [结构化输出详解](/engineering/structured-output)，工具调用部分可看 [Function Calling 与 MCP](/agent/function-calling-mcp)。
@@ -518,3 +520,7 @@ Dify 工作流中结构化输出常用于变量抽取、分类、路由和工具
 
 分别验证新生产者→旧消费者、旧生产者→新消费者；必填新增、枚举扩展、null语义和additionalProperties可能破坏不同方向。用同一固定输入集比较原始/修复/最终字段指标与成本；不能仅凭JSON合法率或同seed输出判断兼容。
 </details>
+
+## 读后练习 {#zhixu-practice}
+
+写一个类型完全合法但日期顺序错误的例子，区分解析失败和业务校验失败。

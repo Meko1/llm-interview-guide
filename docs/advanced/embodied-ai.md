@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 具身智能与 VLA（视觉-语言-动作模型）
 
+<p class="chapter-question">一段正确的自然语言指令，为什么可能对应错误的机器人动作？</p>
+
 > **能理解物体名称，不等于能安全控制物体。** L3 阅读要把语义泛化、动作空间、控制闭环和实验分布分开。基础见 [Agent](/agent/agent-basics) 与 [VLM](/multimodal/vlm-architecture)。
 
 > 注：本页是前沿方向的概览，目标是帮你建立框架性认知，能在面试中讲清「具身智能在解决什么、难在哪」。
@@ -110,3 +112,7 @@ Vision-Language-Action 模型，输入视觉观测 + 语言指令，直接输出
 
 **Q：具身智能和数字 Agent 是什么关系？**
 都是「感知—决策—行动」闭环，范式相通（规划、记忆、反思都适用）。区别在行动对象：数字 Agent 操作软件/工具（见 [Agent 基础](/agent/agent-basics)、[Computer Use](/agent/computer-use)），具身智能操作物理世界，多了实时控制、安全代价、Sim2Real 等物理约束。可以把具身智能看作 Agent 长出了「物理身体」。
+
+## 读后练习 {#zhixu-practice}
+
+以抓取杯子为例，列出观测、动作坐标系、终止条件和仿真之外仍需验证的假设。

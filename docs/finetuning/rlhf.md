@@ -9,6 +9,8 @@ classification: inferred
 ---
 # RLHF / DPO 对齐
 
+<p class="chapter-question">偏好损失变小，能推出事实准确率提高吗？</p>
+
 > **优化偏好分数，不等于优化事实正确性。** 本页主阅读级别 L2；L1 先看数据与选型，L3 再读目标函数与复算，L4 追问奖励、探索和评测的外推边界。对齐全貌见 [偏好优化](/finetuning/preference-optimization)。
 
 <LessonLab kind="dpo" />
@@ -270,3 +272,7 @@ KL 与更好的偏好数据可以缓解风险，但不能独自证明安全。DP
 - [TRL DPO 实现](https://github.com/huggingface/trl/blob/main/trl/trainer/dpo_trainer.py)：本轮读取 sigmoid 与 IPO 分支；main 会漂移，复现应记录自己的提交。
 
 本页代码只复算构造样例的损失，不声称运行了 PPO、DPO 或 GRPO 训练，也不保证偏好优化后的业务收益。
+
+## 读后练习 {#zhixu-practice}
+
+对一对回答记录策略与参考模型的对数概率，再另外设计事实核验样本。

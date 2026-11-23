@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 训练预算与生命周期成本：从 6ND 到条件性最优
 
+<p class="chapter-question">两种训练方案有相同训练 FLOPs，为什么生命周期成本仍不同？</p>
+
 > **要交付的能力**：说明“训练计算最优”究竟优化什么，能列出参数、token、墙钟和长期服务需求的不同账本，而不是照搬 20:1。
 >
 > L1 读预算口径与选型边界；L2 运行构造预算；L3 再推导曲线、分析外推与成本约束。前置：[缩放定律](/pretraining/scaling-law)、[推理预算](/inference/slo-goodput)。
@@ -220,3 +222,7 @@ assert model_compute(plans["B"], 1e12) < model_compute(plans["A"], 1e12)
 2. [Beyond Chinchilla-Optimal: Accounting for Inference in Language Model Scaling Laws](https://arxiv.org/abs/2401.00448)：核对计入推理需求的研究目标、6ND/2N 近似与输入/输出成本差异段落。[v2 正文第 6 节](https://arxiv.org/html/2401.00448v2#S6)明确其成本模型仍忽略延迟约束，并假设 MFU 与每 FLOP 成本不随模型规模、配置、序列长度变化；工程选型不能沿用这些简化而不测量。
 
 本页只使用已核对的研究目标与成本段落，不使用未核对的论文拟合参数；损失系数与两份配置均为构造假设，不能当成真实训练结论。继续阅读：[一手资料阅读地图](/advanced/primary-source-reading)。
+
+## 读后练习 {#zhixu-practice}
+
+固定训练预算，分别加入推理量、硬件利用率和服务期限，比较方案。

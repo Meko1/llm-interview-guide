@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 从零到能做项目：LLM 新手实战手册
 
+<p class="chapter-question">做一个小问答项目，第一天应该留下什么基线？</p>
+
 > 这不是一份“背完术语再开始”的目录，而是一条从会用聊天产品、会验证答案，到能调用 API、做出一个可靠小应用的路径。读完并做完其中的练习，你应该能清楚回答：大模型在做什么、为什么它会出错、何时该用 Prompt/RAG/Agent、一个最小应用怎样上线前自检，以及下一步该学什么。
 >
 > 如果你只想快速知道术语，先看 [大模型零基础入门](/beginner/getting-started) 与 [术语速查表](/beginner/glossary)；如果你想理解 token、注意力和 Transformer 的内部机制，再进入 [大模型基础总览](/basics/overview)。本页的立场很简单：**先建立正确判断，再选择工具；先做可验证的小闭环，再做复杂系统。**
@@ -588,3 +590,7 @@ JSON 可能含错误事实，引用可能不支持结论，工具可能只接受
 > 最后的提醒：不要把“会用一个模型”当作终点。真正可迁移的能力是把模糊目标变成可验证任务，把模型输出接入正确的数据和工具边界，并持续用证据证明系统值得信任。
 
 基础机制与风险参考：[Hugging Face 分词说明](https://huggingface.co/docs/transformers/tokenizer_summary)、[GPT-2 历史模型卡](https://github.com/openai/gpt-2/blob/master/model_card.md)。本页账本、作业规模及校验程序是教学构造，不是供应商报价或真实上线记录。
+
+## 读后练习 {#zhixu-practice}
+
+用五个固定问题记录首次结果，改动一个环节后逐题比较。

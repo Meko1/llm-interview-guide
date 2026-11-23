@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 推理框架对比（vLLM / SGLang / TensorRT-LLM）
 
+<p class="chapter-question">选择服务框架之前，需要先固定哪种工作负载？</p>
+
 ## 为什么需要专用推理框架
 
 普通逐请求 `generate` 路径不等于生产服务调度器；Transformers 的缓存和批处理能力也随版本变化，不能断言全部固定预留或无法批处理。专用引擎关注请求队列、KV 分配、动态批与服务接口；优势必须以同质量、同负载和 SLO 对照确认，不套 10–30×。
@@ -213,3 +215,7 @@ Step 3: [Req2, Req3(完成→移除), Req4, Req5(新加入)]
 TPOT 平均值与 ITL 尾部不同；输出 chunk 含多 token 时保留 token 数。比较同质量条件下 requests/s goodput 与总费用，不能用降低 max_tokens 得来的更快结果宣称引擎更优。PD 分离、量化和 speculation 逐项消融，组合支持必须在同一版本验证。
 
 一手机制来源：[PagedAttention](https://arxiv.org/abs/2309.06180)、[SGLang](https://arxiv.org/abs/2312.07104)、[DistServe](https://arxiv.org/abs/2401.09670)、[vLLM APC 归档说明](https://github.com/vllm-project/vllm/blob/v0.6.3.post1/docs/source/automatic_prefix_caching/details.md)、[TensorRT-LLM 官方仓库](https://github.com/NVIDIA/TensorRT-LLM)。论文实验不是当前版本排行榜；默认分支/README 会变，上线前固定 tag/commit 与 engine 参数。详见 [推理性能压测](/inference/inference-benchmark) 与 [SLO goodput](/inference/slo-goodput)。
+
+## 读后练习 {#zhixu-practice}
+
+用短输入短输出和长输入短输出各设计一组实验，保持模型与硬件一致。

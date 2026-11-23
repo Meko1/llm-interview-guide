@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 大模型应用实战高频追问
 
+<p class="chapter-question">演示结果很好，面试官追问遇到过什么失败，你能给出什么证据？</p>
+
 > 本页把 Prompt、RAG、Agent、微调、模型服务与部署串成应用项目追问，练习从约束、证据和失败窗口解释方案。原课程目录/截图属于主题发现背景，不是技术出处或岗位频率统计；产品特性须按固定版本验证。L1 先说可运行链路，L2 再说成本、安全和恢复，L3 区分构造推演、受控实验与生产证据。
 
 ## 一、面试官真正想确认什么
@@ -688,3 +690,7 @@ Prompt 层明确 retrieved_evidence 只供引用；数据结构层用 typed mess
 - [Dify 低代码工作流生产化高频问答](/interview/dify-production-qna)
 - [MaaS 平台生产化高频问答](/interview/maas-production-qna)
 - [AI 项目实战案例](/engineering/projects)
+
+## 读后练习 {#zhixu-practice}
+
+挑一个真实或明确构造的失败样本，记录症状、定位证据、修改和复测。

@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 垂直领域专家模型实战
 
+<p class="chapter-question">垂直领域的收益究竟来自新知识，还是更合适的回答方式？</p>
+
 > **领域模型首先是一个可验收的系统，而不是一个行业名称。** L2 读者应能把事实缺失、任务行为、计算错误与权限问题分开，再决定哪些值得训练。本文的行业段落是设计练习，不是已复现项目，也不构成专业服务或合规保证。基础见 [微调范式（SFT / PEFT）](/finetuning/finetuning)、[LoRA / QLoRA 详解](/finetuning/lora)；选型见 [RAG vs 长上下文 vs 微调](/rag/rag-vs-long-context)。
 
 ## 面试先背这几句话
@@ -131,3 +133,7 @@ classification: inferred
 | 是否上线 | 留出集、专家风险集、权限与回滚演练 | 任一不可接受风险未被控制 |
 
 [Don't Stop Pretraining（ACL 2020）](https://arxiv.org/abs/2004.10964)在四个领域、八个分类任务中研究领域/任务适配，支持「应实验比较适配收益」，不建立生成式行业助手的通用语料量门槛。上述行业项目名称未在本轮逐一核实，不能当已验证的复现案例。
+
+## 读后练习 {#zhixu-practice}
+
+分别设检索、提示和微调基线，用留出的领域样本按错误类型比较。

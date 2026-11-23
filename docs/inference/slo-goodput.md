@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 推理 SLO 账本：TTFT、TPOT 与 goodput 的可复算口径
 
+<p class="chapter-question">两个系统生成的词元一样多，满足延迟目标的请求数也一样吗？</p>
+
 > **要交付的能力**：面对两份“更快”的压测报告，能核对计时边界、负载、失败和 SLO，而不是只比较 token/s。
 >
 > L1 读指标表和反例；L2 运行请求账本并写报告；L3 区分开放负载、样本权重与容量边界。前置：[推理性能压测](/inference/inference-benchmark)、[KV 预算](/inference/kv-cache)。
@@ -202,3 +204,7 @@ Little's Law 的 L=λW 在稳定系统、统一边界等条件下可用于交叉
 1. [vLLM v0.19.1：服务压测实现文档](https://docs.vllm.ai/en/v0.19.1/api/vllm/benchmarks/serve/)：核对 calculate_metrics 的 TPOT、单 token 处理与 request_goodput 代码摘录。选定版本用于明确口径，不代表推荐版本或最新版本。
 
 本页计时契约、请求账本、负载说明和实验建议为工程整理；未进行硬件压测，也未据此为任何部署给出容量保证。
+
+## 读后练习 {#zhixu-practice}
+
+用三条请求手算同时满足 TTFT 与 TPOT 阈值的数量，再除以观测时间。

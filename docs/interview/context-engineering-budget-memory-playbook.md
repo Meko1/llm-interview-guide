@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Context Engineering：上下文预算、压缩与记忆检索系统设计
 
+<p class="chapter-question">只剩一半上下文预算，应优先保留什么才能继续任务？</p>
+
 > Agent 的上下文不是聊天记录拼接。它是有限 token 预算内，由系统策略、当前任务、工具状态、检索证据、长期记忆和历史摘要组成的动态工作集；塞得越多不一定越聪明，反而可能更慢、更贵、更容易被污染。
 
 ## 一、30 秒面试回答
@@ -103,3 +105,7 @@ RAG 面向外部知识证据，通常按文档和权限检索；记忆面向用�
 > 我们将 Agent 上下文拆为系统策略、当前状态、授权证据、历史摘要和长期记忆，并对每层分配 token 预算。工具和审批状态外置到权威服务，摘要只保留带来源的已确认信息；记忆读写均做租户、权限、有效期和污染检查。每次运行保存 context manifest，用于回放、成本分析和 bad case 定位。这样既控制了长上下文成本，也降低了陈旧记忆与间接注入跨会话放大的风险。
 
 继续学习：[Context Engineering](/agent/context-engineering)、[Agent 记忆](/agent/agent-memory)、[RAG 生产化与系统设计](/rag/rag-production)、[LLM 推理容量与弹性伸缩设计](/interview/llm-inference-capacity-autoscaling-playbook)。
+
+## 读后练习 {#zhixu-practice}
+
+将目标、约束、证据和回执按用途分组，压缩后用同一决策问题验证。

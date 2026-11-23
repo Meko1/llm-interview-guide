@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM-as-a-Judge 校准、偏差控制与发布门禁
 
+<p class="chapter-question">裁判模型与人工评审经常一致，在哪种切片上依然可能系统性失误？</p>
+
 > 用 LLM 给 LLM 打分可以把评测规模做大，但 Judge 也会偏爱长答案、受选项顺序影响、被风格诱导，甚至随模型升级而漂移。把 Judge 分数直接当真，会把评测自动化变成自动化自欺。
 
 ## 一、30 秒面试回答
@@ -152,3 +154,7 @@ Judge 分数是质量信号之一，应与任务完成率、工具成功率、�
 继续学习：[模型评估与幻觉治理](/evaluation/evaluation)、[RAG 评估](/rag/rag-evaluation)、[Agent 评估与可靠性工程](/agent/agent-evaluation)、[LLM 评测与发布门禁实战](/interview/evaluation-release-gates)、[LLM 数据标注与偏好数据运营](/interview/llm-data-feedback-operations-playbook)。
 
 资料边界：[MT-Bench 原论文](https://arxiv.org/html/2306.05685)的摘要与引言讨论位置、冗长、自我偏好和推理局限；其人工偏好一致性结果不能外推为企业安全门禁准确率。[FastChat 官方评测说明](https://github.com/lm-sys/FastChat/blob/main/fastchat/llm_judge/README.md)提供单答评分与成对比较入口。本文实际读取的是这些片段，并未复现论文实验；以上矩阵、阈值治理与恢复协议是教学构造和工程建议。
+
+## 读后练习 {#zhixu-practice}
+
+固定评分规则，分别检查长度、位置和任务难度变化带来的偏差。

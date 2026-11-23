@@ -17,7 +17,7 @@ import CapabilityPlanner from './.vitepress/theme/components/CapabilityPlanner.v
 
 # 定位你的能力坐标
 
-不是先读完所有文章，而是先明确：要解决什么问题、哪些前置还需补齐、用什么证据检验自己的判断。
+从一个你做过的任务开始。选好目标后，试着回答一个具体情境，再对照检查项，找出需要补读的原理或需要补做的实验。
 
 <CapabilityPlanner />
 

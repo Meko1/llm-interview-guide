@@ -9,6 +9,8 @@ classification: inferred
 ---
 # FP&A / 财务经营分析 Copilot：口径一致、可追溯分析与受控计划协作
 
+<p class="chapter-question">两份经营报表数字不同，Copilot 应该先追溯哪项口径？</p>
+
 财务经营分析团队需要解释收入、成本、预算、实际、滚动预测和现金流的变化，也要协调业务部门提交计划、审核假设、准备管理层材料。大模型很擅长把复杂指标和长篇经营材料转成易读叙事、提出澄清问题、整理会议行动项；但它不能替代会计记录、受控计算、关账流程、预算审批或财务负责人判断。
 
 本文讨论 FP&A Copilot 的系统设计，不构成财务、税务或投资建议。受限的自然语言分析与 SQL 安全见 [Text-to-SQL / ChatBI 生产系统设计](/interview/text2sql-chatbi-production-playbook)，模型用量成本治理见 [LLM FinOps](/interview/llm-finops-metering-budget-control-plane)，可签发报告见 [LLM 文档生成与审阅生产化](/engineering/llm-document-generation-production)。
@@ -204,3 +206,7 @@ ERP / GL / planning / CRM metrics / operational drivers
 “我们将 FP&A Copilot 设计为口径受控的经营分析工作台。ERP、规划系统和业务指标先通过语义层与计算服务生成带版本、币种、财务日历、关账状态和血缘的 finance fact pack；模型只基于这些结果解释方差、提出待验证 driver、汇总计划评论和草拟情景说明。预算与预测有 draft 到 locked 的状态机，模型只能提交带影响说明的 change proposal，真正改数由审批和规划系统执行。UI 同时展示数字来源、已确认事实、假设、限制和数据质量 warning；对外材料由结构化数字渲染并在发布前校验。我们用数值/口径一致、无依据归因、版本/审批、权限和分析准备时间共同评测。”
 
 这段回答体现的是企业财务场景里最重要的工程判断：让模型提升解释和协作效率，但绝不让它成为账目、预算或披露的事实来源。
+
+## 读后练习 {#zhixu-practice}
+
+用虚构指标记录统计期间、币种、数据版本和计算公式，再决定能否比较。

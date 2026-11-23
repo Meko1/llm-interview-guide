@@ -11,6 +11,8 @@ classification: inferred
 ---
 # RAG、Memory 与评测安全高频问答
 
+<p class="chapter-question">检索、记忆和生成都可能引入错误，怎样识别最先出问题的环节？</p>
+
 > 本页回答 RAG 和 Memory 本身如何评；当面试官继续问“索引、Prompt、模型改动怎样通过发布审批”，可使用 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates) 中的版本、门禁和灰度闭环。
 >
 > 对索引 canary、租户切片、删除传播、知识新鲜度和线上错误预算，继续看 [LLM 线上评测、灰度实验与质量运营面试题](/interview/online-evaluation-rollout-operations)。
@@ -156,3 +158,7 @@ L1用上面的A/B/C例逐级定位证据在哪丢失；L2把撤权、迟到写�
 - [Agent 评估与可靠性工程](/agent/agent-evaluation)
 - [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)
 - [AI 安全合规与治理](/advanced/governance)
+
+## 读后练习 {#zhixu-practice}
+
+沿同一失败样本记录召回证据、记忆读写与最终引用。

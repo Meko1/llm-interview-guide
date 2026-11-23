@@ -10,6 +10,8 @@ classification: inferred
 ---
 # AI 编程工具实战
 
+<p class="chapter-question">同一修复交给两种编程工具，怎样做公平比较？</p>
+
 ## 概述
 
 AI 编程工具的核心差异不在模型本身，而在于：如何给上下文、如何拆任务、如何审 diff、如何控制风险。
@@ -270,3 +272,7 @@ git diff -- path/to/owned-file
 Claude Code 的记忆与权限部分依据本轮读取的[记忆](https://code.claude.com/docs/en/memory)和[权限](https://code.claude.com/docs/en/permissions)文档。Cursor 配置入口仅提供[官方忽略规则链接](https://docs.cursor.com/en/context/ignore-files)，本轮未取得可核对正文，不据此承诺保护范围。其他产品名称用于分类，不代表现行功能或性能排名。
 
 简历中的效率数字只能来自真实记录：固定任务样本、说明是否包含 review 和返工，再比较总交付时间。没有实测时写方法与交付物，不写“提升百分之多少”。
+
+## 读后练习 {#zhixu-practice}
+
+固定仓库起点和行为测试，记录人工干预、结果差异和耗时。

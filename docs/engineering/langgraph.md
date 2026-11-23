@@ -10,6 +10,8 @@ classification: inferred
 ---
 # LangGraph 与状态图 Agent
 
+<p class="chapter-question">在状态图里，什么时候应走条件边，什么时候应终止？</p>
+
 > LangGraph 的核心价值不是“又一个 Agent 框架”，而是把自由循环的 Agent 做成显式状态图：节点、边、状态、条件、持久化、人审和回放都可控。Agent 基础见 [Agent 基础](/agent/agent-basics)，框架总览见 [LangChain 与应用框架](/engineering/langchain)，生产级 State、Checkpoint、HITL 和恢复设计见 [LangGraph 生产化与系统设计](/engineering/langgraph-production)。
 
 ## 面试先背这几句话
@@ -179,3 +181,7 @@ Chain 是线性或 DAG 编排，表达循环和动态分支弱；LangGraph 把�
 - [Agent 基础与框架](/agent/agent-basics)
 - [多 Agent 与进阶范式](/agent/multi-agent)
 - [Agent 评估与可靠性工程](/agent/agent-evaluation)
+
+## 读后练习 {#zhixu-practice}
+
+画一个包含重试的三节点图，为每一条返回边写最大次数与退出条件。

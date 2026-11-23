@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 偏好优化方法全景（DPO 及其变体）
 
+<p class="chapter-question">两个偏好目标都提高了胜率，它们对参考策略的依赖相同吗？</p>
+
 > RLHF 之后，「怎么用偏好数据对齐模型」演化出一大家族方法：DPO、IPO、KTO、ORPO、SimPO……面试常被追问「DPO 和这些变体的区别」。本文把这条线索理清，给出选型直觉。RLHF/PPO/DPO 推导见 [RLHF / DPO 对齐](/finetuning/rlhf)，RL 基础见 [强化学习基础](/advanced/rl-basics)。
 
 ## 一、从 RLHF 到 DPO：为什么要简化？
@@ -134,3 +136,7 @@ ORPO 把偏好惩罚直接加进 SFT 损失，对齐发生在 SFT 阶段，没�
 
 **Q：迭代 DPO 是什么？为什么比普通 DPO 好？**
 普通 DPO 用一份固定偏好数据；迭代 DPO 是「用当前模型采样新回答 → 打偏好标签 → DPO 更新 → 再采样」的循环，让训练数据始终来自最新模型的分布，缓解离线 DPO 的分布偏移、补回部分探索能力，效果更接近 RLHF。
+
+## 读后练习 {#zhixu-practice}
+
+选正文中的两种方法，对照输入数据、参考模型和损失中实际出现的项。

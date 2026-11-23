@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 中文大模型生态全景
 
+<p class="chapter-question">比较中文模型时，只看参数规模会漏掉哪些部署约束？</p>
+
 认识生态不是给厂商排座次，而是能回答：**哪个具体 checkpoint 适合什么任务，依据在哪里，部署后怎么证明它够用？** 本文保留模型、垂直领域、数据与工具的导航，但不维护实时市场份额或性能榜。
 
 [Awesome-Chinese-LLM](https://github.com/HqWu-HITCS/Awesome-Chinese-LLM) 可用作发现项目的社区索引，不能替代技术报告、模型卡与许可文件。架构细节见 [LLaMA 与 Qwen](/models/llama-qwen)、[DeepSeek](/models/deepseek)；历史发布快照见 [前沿模型盘点](/models/frontier-models-2025)。
@@ -128,3 +130,7 @@ LLaMA-Factory、XTuner、Swift、vLLM、LMDeploy、SGLang、OpenCompass、FlagEv
 榜单测的是特定问题分布。领域系统还涉及证据引用、权限、单位、格式、时效和拒答。建立领域留出集与挑战集，比较提示/RAG 基线和微调增益；将版本及错误样本写入选型记录。
 
 </details>
+
+## 读后练习 {#zhixu-practice}
+
+为同一中文任务做一张选择表，记录模型版本、许可、硬件条件与自己的评测样本。

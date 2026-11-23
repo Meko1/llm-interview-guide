@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 上下文与记忆生产治理：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">会话摘要写错了事实，怎样阻止错误继续进入后续运行？</p>
+
 > 长上下文不是“把更多聊天记录塞给模型”，记忆也不是“让 Agent 永远记住一切”。生产系统真正要解决的是：哪些信息每轮必须在场，哪些只可按需检索，哪些允许跨会话保存，哪些必须隔离、过期或删除；当上下文被压缩时，如何保留可验证的任务状态而不是让模型凭摘要猜测。本页将 Claude Code、Codex、OpenClaw、Hermes 的公开机制归纳为可实施的治理模型。
 
 > 通用原理见 [上下文工程](/agent/context-engineering) 与 [Agent 记忆系统](/agent/agent-memory)。后台任务的 session 语义见 [Agent 自动化与后台编排生产设计](/interview/agent-automation-orchestration-playbook)，扩展与 Skill 的供应链边界见 [跨运行时 Agent 扩展生产治理](/interview/agent-skills-production-governance)。
@@ -419,3 +421,7 @@ observation
 - [OpenAI: Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)：Codex 的 instructions、tools、input 与 AGENTS.md 聚合路径。
 - [OpenClaw Memory Overview](https://docs.openclaw.ai/concepts/memory)、[Compaction](https://docs.openclaw.ai/concepts/compaction)、[Memory Search](https://docs.openclaw.ai/concepts/memory-search)：记忆文件、检索、压缩、可见性和索引边界。
 - [Hermes Persistent Memory](https://hermes-agent.nousresearch.com/docs/user-guide/features/memory/)、[Sessions](https://hermes-agent.nousresearch.com/docs/user-guide/sessions/)、[Context Compression](https://hermes-agent.nousresearch.com/docs/developer-guide/context-compression-and-caching/)：小型启动记忆、会话隔离、压缩与可插拔 context engine。
+
+## 读后练习 {#zhixu-practice}
+
+跟踪原始证据、派生摘要、检索结果和更正记录的关系。

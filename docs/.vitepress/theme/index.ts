@@ -17,3 +17,8 @@ export default {
     app.component('PathJourney', defineAsyncComponent(() => import('./components/PathJourney.vue')))
   }
 } satisfies Theme
+
+import "./zhixu.css"
+
+import "./home-editorial.css"
+import './inner-publication.css'

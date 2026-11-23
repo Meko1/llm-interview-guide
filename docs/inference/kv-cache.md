@@ -9,6 +9,8 @@ classification: reviewed
 ---
 # KV Cache 深度专题
 
+<p class="chapter-question">上下文长度翻倍时，每个请求的 KV 缓存怎样变化？</p>
+
 > 主阅读级别 L2，前置要求是 [Attention](/basics/attention) 与自回归生成。先解释缓存为什么有效，再建立显存账本，最后区分架构、存储、量化和驱逐的边界。公式结果不是引擎能接纳的请求数，必须计入运行时与调度。
 
 <LessonLab kind="kv" />
@@ -312,3 +314,7 @@ KV 量化改变缓存容量、读写/反量化开销与注意力误差，既可�
 
 **Q：Prefill/Decode 分离（Disaggregation）为什么和 KV Cache 高度相关？**
 分离旨在减少阶段干扰并独立配置资源，但需支付 KV 传输和一致性开销。cache dtype、位置、模型/adapter、分片布局与生成状态均需对齐；只搬一个 token 缓冲区不够。收益以目标到达率下 TTFT/ITL 和 [goodput](/inference/slo-goodput)验证，不按“热门方向”认定值得上线。
+
+## 读后练习 {#zhixu-practice}
+
+选定层数、KV 头数、头维度和精度，计算单条序列与四条并发序列的缓存。

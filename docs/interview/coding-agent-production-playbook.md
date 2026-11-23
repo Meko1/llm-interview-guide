@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 智能编码 Agent 企业操作手册：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">企业允许编码 Agent 改仓库之前，怎样界定谁对交付负责？</p>
+
 > 这是一份面向面试与真实落地的操作页。它不把 Claude Code、Codex、OpenClaw、Hermes 当成四个“哪个更强”的产品，而是把它们映射为四类运行时能力：开发任务执行、云端或本地工作区、长驻消息 Gateway、持久记忆与技能闭环。架构原理见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)，工具边界见 [企业 Tool Gateway 安全执行系统设计](/interview/tool-gateway-security-design)。
 
 > 需要深入设计跨 Claude Code、Codex、OpenClaw 与 Hermes 的 `SKILL.md` 作用域、自动触发、供应链、密钥、Plugin、MCP 与 Hook 撤销机制时，见 [跨运行时 Agent 扩展生产治理](/interview/agent-skills-production-governance)。
@@ -362,3 +364,7 @@ kill switch 只能阻止尚未发生或仍可取消的动作。已经发送的�
 - [Hermes Agent 安全](https://hermes-agent.nousresearch.com/docs/user-guide/security/)
 - [Agent 工具安全与权限边界](/agent/tool-safety)
 - [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)
+
+## 读后练习 {#zhixu-practice}
+
+为一次小补丁写出权限范围、代码所有者、验证依据和放行责任。

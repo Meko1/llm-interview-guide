@@ -9,6 +9,8 @@ classification: inferred
 ---
 # LoRA / QLoRA 详解
 
+<p class="chapter-question">给一个线性层增加秩为 r 的分支，到底多了多少参数？</p>
+
 > **LoRA 减少的是可训练参数与其训练状态，不是把整个训练过程变成小模型。** 本页主阅读级别 L2；L1 先读选型与配方，L3 再读公式、初始化和对照实验。微调全貌见 [微调范式](/finetuning/finetuning)。
 
 <LessonLab kind="lora" />
@@ -235,3 +237,7 @@ QLoRA 训练产物部署到不同精度基座时，应分别评测未合并、�
 - [Hugging Face PEFT：LoRA 实现快照](https://github.com/huggingface/peft/blob/65e7758329ace54785cd3e43dbf727f8ba879016/src/peft/tuners/lora/layer.py)：核对初始化与缩放；链接固定到本轮核对的提交，实际项目仍应记录自己的依赖版本。
 
 本页 Python 仅复算参数量和小矩阵前向，没有运行 GPU 微调、吞吐测试或效果实验。
+
+## 读后练习 {#zhixu-practice}
+
+选输入和输出维度各一个，手算两块低秩矩阵大小，再与冻结权重比较。

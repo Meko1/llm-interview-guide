@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 推理优化与部署
 
+<p class="chapter-question">模型在单请求上跑得很快，上线后瓶颈会转移到哪里？</p>
+
 > 把大模型高效、低成本地跑起来对外服务，是工程岗的核心考点。本文系统讲清推理的两阶段与性能特性、核心指标、KV Cache 与 PagedAttention、量化、批处理、投机解码、并行与缓存，以及主流推理框架对比。硬件基础见 [GPU 与硬件](/inference/gpu-hardware)。
 
 ## 一、推理的两个阶段：Prefill 与 Decode
@@ -198,3 +200,7 @@ classification: inferred
 每次只改一个可归因变量，保存基线/变体的模型与引擎 revision、精度、输入/输出长度、实际到达、缓存状态、成功与 SLO 判定。随机固定 shape 用于机制 benchmark，真实脱敏回放用于服务验收，构造容量算例只作预算。量化、驱逐和语义缓存还要过同一质量门禁；降低生成长度或复用错误答案得来的快不能称优化成功。
 
 前缀语义可核对 [vLLM v0.6.3.post1 APC 说明](https://github.com/vllm-project/vllm/blob/v0.6.3.post1/docs/source/automatic_prefix_caching/apc.rst)，MLA 表示见 [DeepSeek-V3](https://arxiv.org/html/2412.19437v2)。旧“2025”章节标题保留用于原链接，表格不是当前版本完整支持矩阵。
+
+## 读后练习 {#zhixu-practice}
+
+画出排队、预填充、解码与网络传输的耗时分解，给每段指定测量点。

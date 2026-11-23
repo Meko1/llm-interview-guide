@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Claude Code 扩展机制（Hooks / MCP / Skills / 命令）
 
+<p class="chapter-question">一个要求应该写进 Skill、Hook，还是交给 MCP 工具？</p>
+
 > Claude Code 的强大不只在内置能力，更在**可扩展性**：用 Hooks 加确定性约束、用 MCP 接外部系统、用 Skills 封装专长、用 Slash Commands 和自定义 Agent 定制工作流。这一页讲清四大扩展机制怎么用、各自解决什么问题。功能总览见 [功能总览](/claude-code/overview)。
 
 ## 一、扩展机制全景：确定性 vs 能力
@@ -89,3 +91,7 @@ Skills 主要封装“怎么做”，但其目录也可带脚本与资源，因�
 
 **Q：这套扩展体系对自研 Agent 的启发？**
 分清「约束」和「能力」两类扩展：约束用确定性钩子（代码强制，不靠模型自觉）；能力用插件化机制（工具/提示包，灵活加载）。再用「命令/角色」组织入口和职责。这套「Hooks 管纪律、MCP/Skills 管本事、命令/Agent 管编排」的分工是可复用的 Agent 工程范式。
+
+## 读后练习 {#zhixu-practice}
+
+分别给流程说明、执行拦截和外部查询选入口，并解释失败后的处理。

@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Text-to-SQL / ChatBI 生产系统设计：语义层、安全边界与可信回答
 
+<p class="chapter-question">两条 SQL 都能运行，为什么可能得到不同业务口径？</p>
+
 本页为参考/mocked系统设计，不是招聘题频统计、产品能力保证或作者上线经历。“让用户用自然语言查询数据库”很容易被简化成Demo。Demo 只要把表结构塞进 Prompt，要求模型返回 SQL，再执行即可；企业级 ChatBI 的难点则是：同一个“销售额”到底含不含退款、一个用户能看哪些行和列、生成的 SQL 会不会扫全表、结果能否解释、错误时怎样修复，以及怎样证明回答没有把口径讲错。
 
 本页只聚焦 Text-to-SQL / ChatBI 的生产控制面。通用 JSON 约束见 [结构化输出](/engineering/structured-output)，数据源增量与权限变化见 [企业 Connector 增量同步与撤权](/engineering/connector-sync-data-plane)，模型调用的流控与成本治理见 [LLM 准入与过载控制](/interview/llm-traffic-admission-overload-control-playbook)。
@@ -265,3 +267,7 @@ DSL 用受控表达能力换取可校验性：可枚举指标和维度、统一�
 
 固定语义版本和数据快照，对NULL、重复值、多对多join、时区边界、零分母、重叠退款构造对抗数据；区分集合/多重集、无序行比较、浮点容差和精确金额Decimal。报告意图、执行等价、政策与忠实解释各自分母；估算正确不替代实际资源门禁。
 </details>
+
+## 读后练习 {#zhixu-practice}
+
+用虚构订单表固定时间窗、去重键和取消状态，人工核对一个小样本结果。

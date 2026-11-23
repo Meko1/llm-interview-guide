@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 编程 Agent 底层架构与内部机制（Claude Code / Codex / Cursor）
 
+<p class="chapter-question">编程助手在哪些层保存上下文、执行工具和验证补丁？</p>
+
 > 需要从面试视角比较 Claude Code、Codex、OpenClaw 与 Hermes 的控制面、执行面、上下文隔离、持久记忆和安全边界时，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。
 
 > 本页给出可迁移的运行时设计，不是各产品私有源码的复原。Claude Code 的公开行为可参考本轮读取的[官方运行原理](https://code.claude.com/docs/en/how-claude-code-works)；其他产品的具体实现、训练配方与性能未经本页验证。通用原理见[Agent 基础](/agent/agent-basics)，使用层面见[AI 编程与 Coding Agent](/engineering/coding-agent)。
@@ -132,3 +134,7 @@ HumanEval 是「写一个独立函数」，而 SWE-bench 是「在真实 GitHub 
 
 **Q：让模型"会用工具"靠的是框架还是模型？**
 两者都要。框架提供工具定义、执行、权限、上下文管理；但模型必须在后训练阶段专门学过工具调用和 agentic 轨迹（常配合在真实软件工程任务上的 RL），才能稳定输出合法工具调用、读懂结果并纠偏。框架是骨架，被训练过的模型是灵魂，缺一不可。
+
+## 读后练习 {#zhixu-practice}
+
+画通用架构，再标记哪些是公开接口可证实的，哪些只是合理推测。

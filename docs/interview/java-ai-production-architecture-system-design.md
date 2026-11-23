@@ -11,6 +11,8 @@ classification: inferred
 ---
 # Java / Spring AI 生产架构系统设计面试题
 
+<p class="chapter-question">模型响应很慢时，Java 服务的线程和连接池会发生什么？</p>
+
 > [Spring AI / Java AI 生产化高频问答](/interview/spring-ai-production-qna) 适合回答“某个点怎么做”；本页适合回答“让你用 Java/Spring 设计一个企业 AI 服务，完整架构怎样落地”。重点不是背 `ChatClient`，而是把 LLM 接进现有 Java 的身份、事务、限流、可观测和运维体系。
 
 ## 一、30 秒总答法
@@ -237,3 +239,7 @@ Java 落地时用 OpenTelemetry 把上下文从网关传播到 WebFlux/Reactor C
 - [Spring AI / Java AI 生产化高频问答](/interview/spring-ai-production-qna)：SSE、限流、RAG、工具、成本等专项追问。
 - [大模型应用系统设计面试题](/interview/application-system-design)：通用 RAG/Agent/LLMOps 架构题。
 - [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)：版本、评测、灰度与回滚。
+
+## 读后练习 {#zhixu-practice}
+
+为一次流式请求标出资源占用与释放点，再演练客户端提前取消。

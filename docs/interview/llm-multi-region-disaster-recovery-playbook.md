@@ -9,6 +9,8 @@ classification: inferred
 ---
 # LLM 多地域灾备与状态连续性：从模型切换到可恢复运行
 
+<p class="chapter-question">区域故障后流量已经切走，哪些状态仍可能丢失或不一致？</p>
+
 多 Provider fallback 可以在一个模型接口失败时换到备用模型，但它不等于灾备。真正的地域故障可能同时影响网关、队列、向量库、对象存储、身份服务、缓存、工作流 checkpoint、模型网络出口和观察系统。此时如果只把请求导向另一个模型，用户仍会遇到会话丢失、流式任务重复执行、Agent 重放外部副作用、RAG 引用与索引不一致，或者因数据驻留要求根本无法跨区处理。
 
 本页给出 LLM 应用的多地域恢复设计框架。它与 [LLM 多供应商故障切换与一致性设计](/interview/llm-multi-provider-failover-playbook) 的模型路由互补，与 [LLM 流式输出与会话恢复设计](/interview/llm-streaming-session-resilience-playbook) 的单次会话协议互补，也依赖 [长任务 Agent 恢复](/interview/long-running-agent-recovery-playbook) 的 checkpoint 和幂等机制。
@@ -234,3 +236,7 @@ fallback 是在当前应用路径中替换模型供应商，解决调用级可�
 这套讲法能表明你理解 LLM 应用在真实故障中最难恢复的不是模型，而是状态、权限和业务后果。
 
 实读边界：[AWS DR 规划](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/plan-for-disaster-recovery-dr.html)读取了按业务定 RTO/RPO、全工作负载恢复与演练/配置漂移要求；另实读上述 etcd 分区与 DynamoDB 模式片段。未部署多地域系统或执行演练，时间均为构造。数据驻留需按实际合同/辖区复核，不提供法律认证，其他站内引用仅供继续阅读。
+
+## 读后练习 {#zhixu-practice}
+
+对会话、索引、审计和外部动作分别列出恢复点与验证方式。

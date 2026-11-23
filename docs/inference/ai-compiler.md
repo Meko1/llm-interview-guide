@@ -10,6 +10,8 @@ classification: inferred
 ---
 # AI 编译器与图优化
 
+<p class="chapter-question">同一张计算图，为什么一种输入形状能加速，换一种却未必？</p>
+
 > 「模型从 PyTorch 代码到高效跑在 GPU 上，中间发生了什么？」这是推理优化与系统岗的深水区问题。本文参考 [llm-action](https://github.com/liguodongiot/llm-action) 的 AI 编译器章节，讲清 AI 编译器要解决什么、计算图与中间表示（IR）、核心优化（算子融合/内存规划）、主流工具（XLA/TVM/TensorRT/torch.compile），以及它与 LLM 推理框架的关系。推理框架见 [推理框架对比](/inference/serving-frameworks)，FlashAttention 见 [FlashAttention 深入](/advanced/flash-attention)。
 
 ## 面试先背这几句话
@@ -125,3 +127,7 @@ classification: inferred
 排障记录 graph break/guard 失效原因、图数、首次与稳态耗时、峰值显存和逐层数值误差。融合改变运算次序可能带来浮点偏差；最后仍用真实到达流量检查 TTFT/逐 token 延迟与 [SLO goodput](/inference/slo-goodput)，不能拿孤立算子 benchmark 代替服务收益。
 
 抓图与 guards 语义依据 [PyTorch v2.5.1 Dynamo 官方说明](https://github.com/pytorch/pytorch/blob/v2.5.1/docs/source/torch.compiler_dynamo_overview.rst)。当前编译参数、后端与动态形状支持需按安装版本核验；此处不承诺一行调用必然提速。
+
+## 读后练习 {#zhixu-practice}
+
+选择一处算子融合，画出减少的中间读写，并列出动态形状下要重新测量的项。

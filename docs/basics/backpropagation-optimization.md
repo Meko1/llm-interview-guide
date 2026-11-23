@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 反向传播、自动微分与参数更新
 
+<p class="chapter-question">损失已经算出，参数在哪一步才真正变化？</p>
+
 Transformer 给出 logits，训练系统还必须把“预测错了多少”变成“每个参数该如何调整”。这一过程由计算图、链式法则、自动微分和优化器共同完成。理解它，才能解释为什么模型没学会、为什么冻结参数不更新、为什么恢复 checkpoint 不能只恢复权重。
 
 优化器和学习率策略的深入讨论见 [训练内部机制与稳定性](/advanced/training-internals)；本页先建立从 loss 到参数更新的最小闭环。
@@ -110,3 +112,7 @@ $$\frac{\partial L}{\partial\theta_i}\approx\frac{L(\theta_i+\epsilon)-L(\theta_
 > 我会把训练理解为计算图上的闭环：前向得到 logits，loss 定义误差，backward 用链式法则把误差传到可训练参数，optimizer 根据梯度和状态更新参数。排障时我不只看 loss，还检查参数是否在 optimizer 参数组、grad 是否有限、step 后权重差是否非零，并用单 batch 过拟合先验证标签和反传。恢复训练则必须恢复 optimizer、scheduler 和数据状态，而不是只加载模型权重。
 
 实现边界参考：[PyTorch AMP 梯度累积](https://docs.pytorch.org/docs/stable/notes/amp_examples.html#gradient-accumulation)。具体 API 写法随版本变化，优先核对 scale 与 step 的语义。
+
+## 读后练习 {#zhixu-practice}
+
+在含两个标量参数的小算例中写出前向值、梯度、学习率和更新后的参数。

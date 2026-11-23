@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 外部副作用事务与补偿：幂等、SAGA、对账与人工接管面试手册
 
+<p class="chapter-question">外部订单已经创建，但本地状态仍是超时，怎么恢复？</p>
+
 > Agent 最危险的失败不是答错一句话，而是网络超时后重复付款、重复建单、把错误版本部署到生产，或把“已经发生但暂时查不到”的动作当作失败重试。本页讨论如何把模型产生的工具意图收敛为可审计、可恢复的业务事务。
 
 > 本页专门解决多系统写操作的事务语义；长任务断线、检查点与 worker 恢复见 [长运行 Agent 检查点、恢复与人工 Steer](/interview/long-running-agent-recovery-playbook)，授权与撤权见 [长任务 Agent 持续授权与紧急撤权](/interview/agent-continuous-authorization-playbook)，事件入口和 outbox 见 [Agent 生命周期事件与 Policy Hook Fabric](/interview/agent-lifecycle-policy-hook-fabric)。
@@ -269,3 +271,7 @@ def approval_then_execute(state):
 - [长运行 Agent 检查点、恢复与人工 Steer](/interview/long-running-agent-recovery-playbook)：effect 状态、lease/fence 与恢复 admission。
 - [长任务 Agent 持续授权与紧急撤权](/interview/agent-continuous-authorization-playbook)：prepare/freeze/approve/commit/reconcile 与 capability。
 - [Agent 生命周期事件与 Policy Hook Fabric](/interview/agent-lifecycle-policy-hook-fabric)：outbox、DLQ、事件信封和同步策略路径。
+
+## 读后练习 {#zhixu-practice}
+
+区分操作标识、外部回执和对账记录，说明何时补偿、何时转人工。

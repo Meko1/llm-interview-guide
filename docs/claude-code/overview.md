@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Claude Code 功能总览
 
+<p class="chapter-question">阅读、修改、验证代码时，哪些能力应由用户决定是否开放？</p>
+
 > Claude Code 是 Anthropic 推出的**终端原生编程 Agent**（terminal-native agentic coding system）：直接跑在你的项目目录里，能读写文件、执行命令、跑测试、提交 Git，把「让 AI 帮我改代码」从补全升级成「让 AI 自主完成一个工程任务」。本块系统介绍它的功能、代码架构与底层机制。通用编程 Agent 原理见 [编程 Agent 底层架构与机制](/engineering/coding-agent-internals)。
 
 > 版本边界：本页依据 2026-11-05 读取的[官方总览](https://code.claude.com/docs/en/overview)与[运行原理](https://code.claude.com/docs/en/how-claude-code-works)整理，不代表已在本机验证每项能力。CLI、IDE、桌面和网页会话的环境与权限不应混为一谈；部署前记录 `claude --version`、运行形态、认证方式和生效配置。
@@ -104,3 +106,7 @@ Claude Code：
 
 **Q：为什么强调「终端原生」？**
 终端意味着直接、可组合（Unix 管道 `echo ... | claude -p`）、易集成 CI/CD、无 IDE 绑定。它把 Agent 当成「命令行里的一等公民」，而非某个编辑器的插件，从而能自动化和脚本化。
+
+## 读后练习 {#zhixu-practice}
+
+为一个本地文档修订列最小能力清单，写明每一步的可观察结果。

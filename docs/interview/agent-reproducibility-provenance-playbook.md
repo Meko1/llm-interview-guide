@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 可复现运行与配置溯源：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">两次运行用了同一段提示词，结果差异还可能来自哪里？</p>
+
 > “模型没变，为什么今天改坏了代码？”通常不是一个纯模型问题。实际一次 Agent run 同时受项目指令、路径规则、自动记忆、Skill、MCP/插件、模型/推理配置、权限、工作区、环境变量、检索索引和外部工具版本影响。只保存聊天 transcript 无法说明当时哪些配置真正生效；只保存 Git SHA 也无法证明 Agent 看到了什么。本页给出将 Agent 行为做成可追溯、可比较、可回归的运行 manifest。
 
 > 上下文组织原理见 [上下文工程](/agent/context-engineering)，扩展供应链与变更治理见 [跨运行时 Agent 扩展生产治理](/interview/agent-skills-production-governance)，观测和证据包见 [Agent 观测、取证与事故响应手册](/interview/agent-observability-incident-response)。
@@ -195,3 +197,7 @@ execute with pinned refs -> emit actual-use events -> reconcile artifacts/effect
 - [Unrolling the Codex agent loop](https://openai.com/index/unrolling-the-codex-agent-loop/) 与 [Codex App Server](https://openai.com/index/unlocking-the-codex-harness/)：AGENTS/config/工具输入，thread persistence 与 harness 配置。
 - [OpenClaw Multi-agent routing](https://docs.openclaw.ai/concepts/multi-agent) 与 [Tools](https://docs.openclaw.ai/tools)：每 Agent 状态域、工具过滤与扩展来源。
 - [Hermes Context Files](https://hermes-agent.nousresearch.com/docs/user-guide/features/context-files) 与 [Sessions](https://hermes-agent.nousresearch.com/docs/user-guide/sessions/)：context 优先级、动态发现、安全截断与 session snapshot。
+
+## 读后练习 {#zhixu-practice}
+
+记录模型、采样参数、工具版本、环境快照与外部回执，区分可回放和不可回放因素。

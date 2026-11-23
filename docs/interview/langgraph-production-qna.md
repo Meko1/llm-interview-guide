@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LangGraph 状态图 Agent 生产化高频问答
 
+<p class="chapter-question">状态图恢复后收到新输入，如何判断它属于哪一轮执行？</p>
+
 > 这页不重复讲 LangGraph 基础 API，而是模拟面试官连续追问：State 怎么拆、checkpoint 怎么恢复、人审怎么 resume、写操作怎么防重复、trace 和上线门禁怎么做。系统设计细节见 [LangGraph 生产化与系统设计](/engineering/langgraph-production)。
 
 ## 怎么用这页
@@ -283,3 +285,7 @@ expected nodes 命中只验证路径，不证明参数/授权/业务终态正确
 - [Agent 工具安全与权限边界](/agent/tool-safety)
 - [框架与智能工作流高频问答](/interview/framework-workflow-qna)
 - [分岗位面试真题](/interview/real-questions)
+
+## 读后练习 {#zhixu-practice}
+
+跟踪线程标识、检查点和输入版本，给冲突情况定义明确结果。

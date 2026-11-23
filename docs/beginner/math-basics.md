@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 大模型必备数学基础
 
+<p class="chapter-question">向量点积如何变成一组可比较的注意力权重？</p>
+
 > 学大模型到底要多少数学？做应用开发，懂这篇就够入门；做算法研究，这篇是你深入论文前的地基。我们只讲「真正用得上」的部分，并说清每个概念在大模型里干什么。
 
 ## 你需要多少数学？
@@ -120,3 +122,7 @@ $$\text{Softmax}(z_i) = \frac{e^{z_i}}{\sum_j e^{z_j}}$$
 > 别被数学吓退：**先建立直觉，公式边用边补**。理解「梯度下降在干嘛」比会手推公式更重要。
 
 实现依据：[PyTorch CrossEntropyLoss](https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html)。上面数值均为可复算的教学构造，不是模型训练结果。
+
+## 读后练习 {#zhixu-practice}
+
+用两个二维键和一个查询手算点积与 softmax，并检查权重之和。

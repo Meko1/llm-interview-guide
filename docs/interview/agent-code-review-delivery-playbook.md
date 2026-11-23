@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 代码审查与变更交付证据链：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">一份自动审查结论，凭什么能对应到将要合并的那份代码？</p>
+
 > Agent 写出 diff 不等于变更可合并；Agent 留下 review comment 也不等于系统应阻断发布。生产交付必须拆开：发现问题、验证问题、修复、验证修复、合并决策和发布对账，避免模型自评、自批、自合并。
 
 > Coding Agent 的隔离与 PR/CI 基础见 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook)，多 Agent handoff 见 [多 Agent 委派与 Handoff 控制平面](/interview/multi-agent-delegation-handoff-playbook)，证据与 effect 对账见 [Agent 观测、取证与事故响应手册](/interview/agent-observability-incident-response)。
@@ -101,3 +103,7 @@ merge_gate:
 - [Claude Code Review](https://code.claude.com/docs/en/code-review)：并行审查、severity 与 neutral check run。
 - [Codex](https://openai.com/codex/)：worktree、云环境与多 Agent 变更工作流。
 - [Hermes Webhook PR Review](https://hermes-agent.nousresearch.com/docs/guides/webhook-github-pr-review)：不可信 webhook 与真实 diff 审查。
+
+## 读后练习 {#zhixu-practice}
+
+把提交版本、补丁摘要、测试结果和批准记录连在一起，模拟基线变化后的失效。

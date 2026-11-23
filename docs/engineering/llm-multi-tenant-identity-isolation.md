@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 多租户 LLM 应用控制面：身份、隔离与授权连续性
 
+<p class="chapter-question">一次租户身份变化如何传递到已经在运行的任务？</p>
+
 > 企业 AI 应用最危险的故障往往不是回答不够聪明，而是把 A 部门的上下文、文件、缓存、工具结果或操作权限带给了 B 部门。真正的多租户不是给每条记录加一个 `tenant_id`，而是让身份和授权在入口、检索、模型、工具、缓存、Trace、反馈与异步任务的每一跳都不丢失、不被模型伪造。
 
 ## 一、先定义问题：谁在代表谁做什么
@@ -256,3 +258,7 @@ L1 负责上述负例与缓存检查；L2 选择事件传播、同步策略查�
 - [企业 Tool Gateway 安全执行设计](/interview/tool-gateway-security-design)
 - [Connector 增量同步与撤权数据面](/engineering/connector-sync-data-plane)
 - [LLM 应用版本血缘与质量归因](/engineering/llm-release-provenance-control-plane)
+
+## 读后练习 {#zhixu-practice}
+
+画出授权检查点，标记排队、恢复和提交外部结果时的租户身份。

@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 从 Logits 到损失：Softmax、交叉熵与困惑度
 
+<p class="chapter-question">模型把正确词的概率从一半降到四分之一，损失会怎样变化？</p>
+
 > 「写一下交叉熵公式」「PPL 是怎么算的」「softmax 为什么要减最大值」——这些微观数学题是大模型基础面试的照妖镜：背概念的人答不出，真理解的人几分钟讲透。本文把**模型最后一层输出（logits）→ 概率（softmax）→ 损失（交叉熵）→ 评估（困惑度）**这条链一次讲清，含数值稳定性、label smoothing、z-loss 等工程细节。采样侧（温度/top-p 怎么选词）见 [解码与采样策略](/basics/decoding)，训练全景见 [预训练目标与数据](/pretraining/pretrain)，手撕实现见 [手撕代码题解集](/interview/coding-problems)。
 
 ## 面试先背这几句话
@@ -132,3 +134,7 @@ bits-per-byte 还需要同一原始文本、相同规范化与覆盖、确定的
 </details>
 
 实现依据：[PyTorch CrossEntropyLoss](https://docs.pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html)、[Transformers 因果 LM loss](https://github.com/huggingface/transformers/blob/main/src/transformers/loss/loss_utils.py)。本页数字是教学复算，不是模型成绩。
+
+## 读后练习 {#zhixu-practice}
+
+使用同一对数底数计算两个损失，再说明为什么比较困惑度要固定分词方式。

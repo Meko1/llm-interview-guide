@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 框架与智能工作流高频问答
 
+<p class="chapter-question">框架隐藏了哪些决定，又把哪些异常留给了应用？</p>
+
 > 这页面向 Spring AI、LangChain、LangGraph、Dify、智能工作流、Function Calling 和 Agent 工程岗位。它不追求逐 API 教程，而是回答面试最常问的三件事：为什么选这个框架、生产里怎么治理、项目里怎么讲。
 
 ## 怎么用这页
@@ -167,3 +169,7 @@ Chatflow 面向多轮对话入口，Workflow 面向任务编排；预定义路�
 - [Dify 与低代码智能工作流](/engineering/dify-workflow)
 - [AI 工作流 vs Agent](/agent/workflow)
 - [Function Calling 与 MCP](/agent/function-calling-mcp)
+
+## 读后练习 {#zhixu-practice}
+
+画出一次工作流的中断与恢复，区分框架保证和业务侧补偿。

@@ -11,6 +11,8 @@ classification: inferred
 ---
 # A2A 协议与 Agent 互操作
 
+<p class="chapter-question">两个 Agent 接力时，任务状态与消息内容应怎样区分？</p>
+
 > 本页讲 Agent Card、Task、Message 和 Artifact 的协议模型；需要回答可信发现、身份委托、异步任务、回调验签、跨租户审计和事故止血时，见 [A2A 跨 Agent 互操作生产设计面试题](/interview/a2a-production-interoperability-qna)。
 
 > 当一个 Agent 需要把任务委托给「别人家」的 Agent 时，就需要一套通用语言。**A2A（Agent2Agent）** 由 Google 在 2025 年发起、后捐给 Linux 基金会，目标是成为跨厂商、跨框架的 Agent 间协作标准。本文讲清 A2A 解决什么问题、核心对象（Agent Card / Task / Message / Artifact）、通信流程，以及面试最爱问的 **A2A vs MCP** 区别与互补。MCP 见 [MCP 协议深入](/agent/mcp) 与 [Function Calling 与 MCP](/agent/function-calling-mcp)，多 Agent 协作见 [多 Agent 与进阶范式](/agent/multi-agent)。
@@ -126,3 +128,7 @@ submitted → working → input-required → completed
 5. **A2A 用什么技术底座？** 按所选协议版本与传输绑定回答。本文以 JSON-RPC/SSE 路径说明交互，不宣称它是所有版本唯一实现。
 6. **Task 的 `input-required` 状态有什么用？** 支持远端 Agent 执行中回头要补充信息，实现真正的多轮协作。
 7. **多 Agent 协作一定要用 A2A 吗？** 不一定。单应用内部用框架内调用更简单；只有跨组织/跨框架的独立 Agent 协作才需要标准协议。
+
+## 读后练习 {#zhixu-practice}
+
+画出提交、等待、补充输入和终止的状态变化，标记由哪一方保存任务标识。

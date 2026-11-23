@@ -11,6 +11,8 @@ classification: inferred
 ---
 # AI 工作流 vs Agent
 
+<p class="chapter-question">哪些步骤适合固定编排，哪一步才需要模型选择？</p>
+
 > 「什么时候用 Workflow，什么时候用 Agent？」是 Anthropic《Building Effective Agents》提出、如今被反复问到的工程判断题。本文讲清两者区别、五种编排模式的细节与组合，以及低代码平台与代码框架的选型。
 
 ## 核心区别
@@ -169,3 +171,7 @@ Orchestrator-Workers 本质是多 Agent 协作的 Supervisor 形态：中心 LLM
 
 **Q：生产中怎么给 Agent 加护栏？**
 限最大步数与 token 预算、高危操作（写库/转账/删除）人工确认、全轨迹日志可回放、工具最小权限、沙箱执行、超时与降级路径（转 Workflow 或人工）。
+
+## 读后练习 {#zhixu-practice}
+
+把一次资料整理任务拆成可预先确定和必须在运行时决定的两组步骤。

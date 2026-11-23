@@ -1,5 +1,7 @@
 # 大模型基础篇 10 万字面试内容扩展设计
 
+<p class="archive-caption">历史设计记录 · 2026-07-06。本页保留当时的方案与范围。</p>
+
 ## 背景
 
 本次扩展面向大模型岗位面试的“基础篇 + 工程落地篇”高频要求。用户希望逐步增加约 10 万字内容，覆盖 Spring AI、LangChain、LangGraph、Agent、RAG、Dify、智能工作流、Function Calling、模型微调、MaaS 平台、Agent 评测与安全合规等方向，并从 12 张 Boss 岗位截图中提取招聘要求。

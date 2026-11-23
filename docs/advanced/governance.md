@@ -9,6 +9,8 @@ classification: inferred
 ---
 # AI 安全合规与治理
 
+<p class="chapter-question">模型准备接入新数据源，谁需要看到哪些上线证据？</p>
+
 > 大模型落地不只是技术问题，还要过「合规与治理」这一关——数据合规、内容安全、监管要求、伦理责任。这是企业级 AI 项目的红线，也是越来越被问到的方向。技术性攻防见 [大模型安全](/advanced/safety)，面试中如何把数据分类、外发、删除和取证落到系统设计，见 [LLM 数据分级、外发治理与审计证据面试题](/interview/data-governance-egress-audit-qna)；需要回答企业如何用资产台账、策略和审计账本统一治理时，见 [企业 AI 安全、合规与审计控制面系统设计面试题](/interview/enterprise-ai-governance-audit-system-design)。
 
 ## 一、安全 vs 合规 vs 治理
@@ -116,3 +118,7 @@ classification: inferred
 - [NIST AI RMF 官方入口](https://www.nist.gov/itl/ai-risk-management-framework)：本轮 SSL 读取失败，**仅链接**；不能据此声称本页逐项符合该框架。
 
 正文控制建议是系统设计方案，不是认证、法律适用结论或已运行的合规检查。发布前由负责主体确认法规版本和证据门禁。
+
+## 读后练习 {#zhixu-practice}
+
+给虚构的数据源制作记录，分别写下处理目的、访问范围、保留周期和负责复核的人。

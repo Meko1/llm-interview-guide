@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 推理部署与成本治理高频问答
 
+<p class="chapter-question">每千词元价格下降了，每个完成任务的成本也会下降吗？</p>
+
 > 这页面向 AI Infra、推理部署、模型平台、Java AI 后端岗位。面试官通常不会只问「vLLM 用过吗」，而会追问：为什么慢、怎么压测、怎么估卡、怎么量化、怎么降成本、线上 SLA 被打爆时怎么止血。相关原理见 [推理优化与部署](/inference/inference-optimization)、[推理框架对比](/inference/serving-frameworks)、[推理性能压测](/inference/inference-benchmark)、[量化实战](/inference/quantization)。
 
 ## 怎么用这页
@@ -126,3 +128,7 @@ TPOT 偏 Decode，检查 batch、KV、kernel、输出长度和抢占，也排查
 8. 降成本靠少 token、提吞吐、模型路由、缓存、量化和错峰。
 9. 量化上线要验效果、性能、稳定性三类门禁。
 10. 私有化项目要讲入口、路由、推理、容量、观测、治理六层。
+
+## 读后练习 {#zhixu-practice}
+
+把重试、缓存命中、输出长度和成功率一起放进成本账本。

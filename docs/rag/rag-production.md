@@ -10,6 +10,8 @@ classification: inferred
 ---
 # RAG 生产化与系统设计
 
+<p class="chapter-question">索引正在更新时，用户能否复查昨天回答所引用的原文？</p>
+
 > 教程里的 RAG 三行代码就能跑，但要扛住企业级的数据量、并发、时效和成本，是另一回事。本文从**系统设计**视角讲清生产级 RAG 的架构分层、离线索引链路（含增量更新）、在线检索链路、多级缓存、延迟与成本优化、引用溯源与高可用，并附踩坑清单。原理见 [RAG 基础与流程](/rag/rag-basics)，检索优化见 [RAG 进阶与优化](/rag/rag-advanced)，切分见 [切分与检索策略深挖](/rag/chunking-retrieval)，向量库见 [Embedding 与向量数据库](/rag/embedding-vectordb)。涉及分类标签继承、外发通道、删除传播和审计证据时，可继续看 [LLM 数据分级、外发治理与审计证据面试题](/interview/data-governance-egress-audit-qna)。
 
 ## 2026 面试先背这几句话
@@ -319,3 +321,7 @@ query_normalized_hash
 9. **长上下文能替代 RAG 吗？** 小而可见的材料集可以直接入上下文；大库通常要选择证据。两者都需更新、权限与溯源，同任务同预算验证后再选。
 10. **企业 RAG 怎么防止数据越权？** 检索前按 tenant/user/role 做元数据过滤，向量和 BM25 两路都过滤，rerank/生成前二次校验，trace 记录命中文档和权限判断。
 11. **RAG 成本怎么优化？** 增量 embedding、缓存、batch、模型路由、控制 Top-K 和上下文 token、rerank 超时降级，并按 trace 拆账到每个环节。
+
+## 读后练习 {#zhixu-practice}
+
+为一次问答记录文档版本、权限快照、索引版本和引用位置，检查回放能力。

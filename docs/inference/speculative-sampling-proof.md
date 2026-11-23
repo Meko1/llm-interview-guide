@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 投机采样的分布保证：接受、纠错与速度账本
 
+<p class="chapter-question">草稿采样被拒绝时，下一词为什么不能随便从目标模型重抽？</p>
+
 > **要交付的能力**：不只复述“小模型猜、大模型验”，还能解释为什么拒绝后的纠错分布不可省，以及为什么接受率高也不一定更快。
 >
 > L1 读流程和失败类型；L2 复算三词分布与成本示例；L3 检查概率证明、采样变换和实现对照。前置：[投机解码概览](/inference/speculative-decoding)、[推理 SLO 账本](/inference/slo-goodput)。
@@ -216,3 +218,7 @@ vLLM 当前 stable 文档将中低 QPS、偏访存的工作负载作为重要应
 3. [vLLM 官方投机解码说明](https://docs.vllm.ai/en/stable/features/speculative_decoding/)：运行时数值、批处理与保证范围；stable 是可变文档，不代表本页已验证任意版本。
 
 构造分布、Fraction 检查与扩展成本示例是本页教学整理。继续阅读：[一手资料阅读地图](/advanced/primary-source-reading)。
+
+## 读后练习 {#zhixu-practice}
+
+选一个两词词表，手算接受质量与剩余概率质量，并检查最终分布。

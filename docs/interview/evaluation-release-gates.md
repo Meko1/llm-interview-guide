@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 评测与发布门禁实战
 
+<p class="chapter-question">总体分数上涨，但关键业务切片下跌，怎样决定是否扩大灰度？</p>
+
 > 这是一页面向面试的“从改动到生产”手册。它不重复介绍单个 RAG 或 Agent 指标，而是回答更难的问题：**换了模型、Prompt、知识库、工具或工作流以后，凭什么允许它上线；线上发现问题，又如何在不扩大损失的前提下停掉并恢复。**
 >
 > 相关基础请配合阅读：[模型评估与幻觉治理](/evaluation/evaluation)、[Agent 评估与可靠性工程](/agent/agent-evaluation)、[RAG 评估](/rag/rag-evaluation)、[Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)、[大模型应用线上排障手册](/interview/application-troubleshooting-playbook)。
@@ -354,3 +356,7 @@ LLM 应用至少要能独立回退下面几类资产：
 - 想深入工具轨迹、权限和高危动作，见 [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)。
 - 想把评测平台放进完整架构回答，见 [大模型应用系统设计面试题](/interview/application-system-design)。
 - 想知道门禁触发后如何止血和定位，见 [大模型应用线上排障手册](/interview/application-troubleshooting-playbook)。
+
+## 读后练习 {#zhixu-practice}
+
+列出总体与切片指标，指定样本不足时的处理和停止条件。

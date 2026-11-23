@@ -17,10 +17,13 @@ const readerRoles = computed(() => Array.isArray(frontmatter.value.roles) ? fron
       <div class="article-meta-main">
         <span class="level-badge">{{ frontmatter.level }} {{ levelName }}</span>
         <span>{{ record.section }}</span>
-        <span class="article-time"><AtlasIcon name="clock" :size="15" />阅读量估算 {{ record.readingMinutes }} 分钟</span>
+        <span class="article-time"><AtlasIcon name="clock" :size="15" />约 {{ record.readingMinutes }} 分钟</span>
       </div>
       <p v-if="readerRoles" class="article-meta-readers">适合读者：<span>{{ readerRoles }}</span></p>
     </div>
-    <a :href="withBase('/reading-guide')">{{ frontmatter.classification === 'reviewed' ? '已核分级 · 查看阅读说明' : '分级待核 · 查看阅读说明' }} ↗</a>
+    <div class="article-shortcuts">
+      <a v-if="record.article" href="#zhixu-practice">做读后练习 ↓</a>
+      <a :href="withBase('/reading-guide')">{{ frontmatter.classification === 'reviewed' ? '分级已核' : '分级待核' }} ↗</a>
+    </div>
   </section>
 </template>

@@ -10,6 +10,8 @@ classification: inferred
 ---
 # Deep Research 生产化：可验证来源、可控预算与可恢复研究工作流
 
+<p class="chapter-question">研究任务中断后，如何恢复已收集的来源而不重复花费？</p>
+
 Deep Research 的难点不在于让 Agent “多搜几次”。一个企业级研究系统必须把模糊问题拆成可验证子问题，从不可信网页中获取材料，维护来源与证据链，避免网页 Prompt 注入，并在时间、token、浏览和工具预算受限时产出可审计的结论。
 
 概念与基本流程见 [Deep Research](/agent/deep-research)，浏览器交互控制见 [Computer Use / 浏览器 Agent 生产系统设计](/interview/computer-use-browser-agent-system-design)，多 Agent 协作见 [多 Agent 委派与交接](/interview/multi-agent-delegation-handoff-playbook)。本页聚焦研究工作流本身的生产化控制面。
@@ -196,3 +198,7 @@ RAG 通常在预先治理的固定语料中检索；Deep Research 面对开放�
 ## 十三、60 秒收束回答
 
 > 我会把 Deep Research 设计成证据驱动的可恢复工作流，而不是一个循环搜索的 Agent。任务先生成带验收条件和预算的子问题计划，再把每个来源按权威性、时间、许可和快照登记；网页始终是不可信数据，不能影响工具权限或控制流。抽取、综合和核验通过 claim ledger 分离，报告中的每个关键结论都绑定到可定位证据，冲突和不确定性显式保留。任务可按 checkpoint 恢复，预算不足或访问受限时安全停下并报告范围。最后用引用覆盖、蕴含正确性、时效和注入抵抗能力持续评测。
+
+## 读后练习 {#zhixu-practice}
+
+给问题、来源快照、证据摘录和待验证主张分别指定持久化标识。

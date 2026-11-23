@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 合同审阅 / 法务 Copilot：条款证据、红线工作流与律师最终判断
 
+<p class="chapter-question">一条合同风险提示如何定位到原文和适用版本？</p>
+
 合同审阅看似是“上传 PDF，让模型总结风险”，实际包含版本差异、条款依赖、交易背景、批准的谈判底线、签约主体、数据处理、管辖、金额、期限和历史义务。模型能快速定位、比对与草拟红线说明，但它不是律师，也不能在没有完整交易上下文的情况下给出法律结论、接受对方条款或签署合同。
 
 本文描述的是企业法务 Copilot 的系统设计，供工程与面试准备使用，不构成法律意见。通用制品渲染、审批和不可变归档见 [LLM 文档生成与审阅生产化](/engineering/llm-document-generation-production)，供应商/采购背景见 [采购 / 供应商尽调 Copilot](/interview/procurement-vendor-due-diligence-copilot-playbook)，数据外发与审计见 [LLM 数据分级与外发审计](/interview/data-governance-egress-audit-qna)。
@@ -205,3 +207,7 @@ Contract artifacts + deal / vendor context + legal playbooks
 “我们把合同 Copilot 做成版本化审阅与协作系统，不是自动法律意见工具。合同、附件、交易事实和 playbook 被固定到同一个 fact pack；解析服务产出带页码和 hash 的 clause map，模型只在此基础上分类条款、提取义务、发现与已批准立场的偏差，并把每条建议绑定原文、playbook revision、缺失事实和状态。律师在工作台中审核可编辑红线和例外，多角色审批与签约网关控制最终外发。对方回传新版本后，系统重新做 diff 并使受影响结论失效。我们按条款定位、偏差漏检、版本一致性、审批、权限和人工改写评测，并从摘要/定位的影子模式逐步扩展。”
 
 这段回答展示的是将大模型放进高风险专业工作流的正确方式：提高阅读和协作效率，但不替代专业判断、签约权和法律责任。
+
+## 读后练习 {#zhixu-practice}
+
+用虚构条款记录页码、原句、修改建议和待专业人员确认的问题。

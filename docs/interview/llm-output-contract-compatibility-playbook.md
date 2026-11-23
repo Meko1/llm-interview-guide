@@ -9,6 +9,8 @@ classification: inferred
 ---
 # LLM 输出契约兼容与演进：从模型响应到稳定业务接口
 
+<p class="chapter-question">模型响应新增字段后，谁负责判断业务客户端仍然兼容？</p>
+
 结构化输出可约束字段与类型，不只是让JSON可解析；真正的线上系统还要解决“所有消费者能否持续按同一种业务语义使用它”。模型升级、Provider 切换、fallback、Prompt 修改、Schema 扩展或流式协议调整，都可能让请求成功却让前端错渲染、工作流走错分支、金额单位被误解，甚至在高风险操作中改变决策含义。
 
 本文讨论 **LLM Provider / Prompt / 编排层 到业务 API、UI、队列消费者和流式客户端** 的响应契约。它不同于 [结构化输出](/engineering/structured-output) 的语法约束，也不同于 [Agent Tool Contract 演进](/interview/agent-tool-contract-evolution-playbook) 的工具调用契约：前者关注“模型给业务系统的结果如何可消费、可演进、可回滚”。
@@ -255,3 +257,7 @@ fallback 进入前要验证该模型具备所需能力，如 JSON/工具调用/�
 “我们没有让业务服务直接消费不同模型厂商的响应，而是在网关后建立 versioned canonical output contract。它除了 JSON schema，还定义状态机、错误分类、置信度尺度、单位、来源、降级和审批标签。每个 Provider adapter 负责将原始响应归一化并做输出验证，fallback 不满足约束就返回安全失败而非自由文本。对于流式接口，我们用带序号、重放和 terminal 语义的领域事件，并在 run 开始时固定 contract version。发布时先让消费者支持新版本，再双写、影子回放和小流量灰度；用客户端解析失败、未知枚举、语义断言和旧版本流量监控弃用过程。这样模型切换或 Prompt 迭代不会静默破坏前端、工作流和高风险决策。”
 
 这比“我们用了 JSON mode”更能体现你理解模型系统与传统分布式接口之间的真实连接点。
+
+## 读后练习 {#zhixu-practice}
+
+用旧消费者读取新样例，分别验证字段存在性、取值含义和默认值。

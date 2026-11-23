@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 大模型应用实战场景题库
 
+<p class="chapter-question">如果把演示规模扩大十倍，原方案最先失效的假设是什么？</p>
+
 > 本页是构造的“场景设计题”和“项目追问题”，不是已验证的招聘真题或作者生产履历。题内百分比、时间和成本变化是练习条件，不是实测统计。建议和 [大模型应用实战高频追问](/interview/application-practice-qna) 一起使用：先练场景，再补追问细节。
 
 ## 一、场景题答题总模板
@@ -920,3 +922,7 @@ fallback 不能只按可用性触发，还要按任务风险分级。高风险�
 - [RAG 基础与流程](/rag/rag-basics)
 - [Agent 基础与框架](/agent/agent-basics)
 - [推理部署与成本治理高频问答](/interview/inference-cost-qna)
+
+## 读后练习 {#zhixu-practice}
+
+选一道场景题，改变一项约束，重写选型理由和验收指标。

@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 大模型是怎么工作的（直觉版）
 
+<p class="chapter-question">为什么同一个开头能接出两种不同的回答？</p>
+
 > 这一页用最少的术语、零公式，把「大模型为什么能聊天」讲清楚。如果你完全没接触过 AI，从这里开始；想看严谨原理，再去 [Transformer 架构详解](/basics/transformer)。目标是建立正确的直觉，避免被「AI 在思考/有意识」之类的误解带偏。
 
 ## 一句话本质：它在玩「文字接龙」
@@ -106,3 +108,7 @@ classification: inferred
 </details>
 
 依据：[分词算法与字节表示](https://huggingface.co/docs/transformers/tokenizer_summary)、[GPT-2 历史模型卡](https://github.com/openai/gpt-2/blob/master/model_card.md)。模型卡的风险说明限定于该模型，不是所有模型共享的测评结论。
+
+## 读后练习 {#zhixu-practice}
+
+给一句话写两个合理续句，说明上下文与采样各自可能造成的差异。

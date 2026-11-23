@@ -10,6 +10,8 @@ classification: inferred
 ---
 # LangChain 与应用开发框架
 
+<p class="chapter-question">把框架拿掉以后，最小应用仍需要哪些环节？</p>
+
 > 框架选择不靠热度排序，而靠依赖、状态、故障和团队维护成本。2026-11-05 读取的[LangChain 官方总览](https://docs.langchain.com/oss/python/langchain/overview)以 `create_agent` 作为可配置 harness，LangGraph 为底层编排；原稿中的 LCEL 和 Memory 是理解既有代码的概念，不能都当成现行 Agent 首选入口。
 
 ## 为什么需要框架？
@@ -135,3 +137,7 @@ LangChain 的强项是生态和速度，风险是抽象和变化。面试里要�
 面试可以这样说：
 
 > 我会用 LangChain 快速验证 RAG/工具编排，但生产核心链路会有边界：prompt、retriever、tool schema、output parser 都由我们自己版本化；框架外包一层 adapter；每次升级跑 golden set、bad case 和成本延迟回归。如果链路足够稳定，就把它收敛成直接 SDK 调用，降低长期维护风险。
+
+## 读后练习 {#zhixu-practice}
+
+用伪代码写出输入、模型调用、解析和异常处理，再对应到框架组件。

@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 远程与云端 Agent 生产运行手册：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">远程运行结束后，如何核对实际执行范围和留下的产物？</p>
+
 > 面试里问“怎样把 Agent 放到云端或远程机器上运行”时，不能只回答“套一层 WebSocket、加 SSH 或部署 Docker”。真正的难点是明确：谁拥有任务状态，谁能调度执行器，远端设备凭什么被信任，断网后能否安全继续，以及怎样一键停止已经拿到工具权限的运行。本页把 Claude Code、Codex、OpenClaw、Hermes 的公开能力抽象成可迁移的生产设计。
 
 > 先阅读 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna) 建立统一 Runtime 模型；工具权限见 [企业 Tool Gateway 安全执行设计](/interview/tool-gateway-security-design)，跨 Agent 调度见 [A2A 跨 Agent 互操作生产设计](/interview/a2a-production-interoperability-qna)。
@@ -379,3 +381,7 @@ claim 时需原子 CAS 任务版本并递增 epoch；历史伪代码示意不包
 
 构造并发 claim/CAS、租约过期后旧 worker 复活、审批后参数被改、epoch=7 请求晚于 epoch=8 到达的时序。断言至多一个当前 epoch 被提交；外部 API 缺少原子 fence 时明确无法证明这一不变量。复现实验固定镜像/commit/策略版，不把固定 seed 当分布式确定性。
 </details>
+
+## 读后练习 {#zhixu-practice}
+
+用一份脱敏运行记录对照授权、工作区、产物摘要与资源释放。

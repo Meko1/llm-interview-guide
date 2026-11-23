@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent Tool Contract 工程：Schema 演进、兼容性与验证面试手册
 
+<p class="chapter-question">给工具新增一个可选字段，为什么仍可能破坏旧客户端？</p>
+
 > Function Calling、MCP 和普通内部 API 的共同难题不是“能否解析 JSON”，而是模型、Agent、UI、Gateway、评测集和下游服务在不同版本并存时，是否仍对一次工具调用有相同理解。本页讨论 Tool Contract 如何像生产 API 一样演进。
 
 > 工具的权限、审批和执行网关见 [企业 Tool Gateway 安全执行系统设计](/interview/tool-gateway-security-design)，MCP Server 治理见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)，结构化输出与模型约束见 [结构化输出与 Schema 约束高频问答](/interview/structured-output-qna)。
@@ -249,3 +251,7 @@ announce -> hide from new manifests -> warn old callers -> migrate/replay
 - [OpenAI Function Calling Guide](https://developers.openai.com/api/docs/guides/function-calling)：函数参数 schema 与 strict 模式边界。
 - [LangChain Tools](https://docs.langchain.com/oss/python/langchain/tools) 和 [Structured Output](https://docs.langchain.com/oss/python/langchain/structured-output)：类型、运行时校验与格式失败处理。
 - [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)、[Function Calling 与 MCP](/agent/function-calling-mcp)：MCP / Function Calling 基础与工具治理。
+
+## 读后练习 {#zhixu-practice}
+
+分别对未知字段、默认值和旧响应构建兼容性用例。

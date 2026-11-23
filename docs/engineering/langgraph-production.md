@@ -12,6 +12,8 @@ classification: inferred
 ---
 # LangGraph 生产化与系统设计
 
+<p class="chapter-question">图节点恢复后重复执行，为什么会产生两次外部效果？</p>
+
 > 这页专门回答面试里最容易追问的生产问题：State 怎么设计、Checkpoint 怎么存、HITL 怎么恢复、工具副作用怎么幂等、线上怎么排障。基础概念先看 [LangGraph 与状态图 Agent](/engineering/langgraph)，工具权限边界见 [Agent 工具安全与权限边界](/agent/tool-safety)。
 
 ## 面试先背这几句话
@@ -313,3 +315,7 @@ checkpoint 记录 graph_version 和 state_schema_version。老任务优先用旧
 - [Agent 评估与可靠性工程](/agent/agent-evaluation)
 - [框架与智能工作流高频问答](/interview/framework-workflow-qna)
 - [LangGraph 状态图 Agent 生产化高频问答](/interview/langgraph-production-qna)
+
+## 读后练习 {#zhixu-practice}
+
+分开标记检查点和业务提交，设计一次提交成功但回执丢失的恢复演练。

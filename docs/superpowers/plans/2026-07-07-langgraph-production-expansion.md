@@ -1,5 +1,7 @@
 # LangGraph Production Expansion Implementation Plan
 
+<p class="archive-caption">历史实施记录 · 2026-07-07。本页保留当时的方案与范围。</p>
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Add a production-focused LangGraph system design page plus an interview Q&A page for high-frequency follow-up questions.

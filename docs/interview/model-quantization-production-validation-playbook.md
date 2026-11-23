@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 模型量化生产验收、精度回归与回滚系统设计
 
+<p class="chapter-question">量化版本节省显存，但某类任务准确率下降，怎样验收？</p>
+
 > INT8、INT4、AWQ、GPTQ 的目标不是“模型能跑起来”，而是在指定硬件、引擎和业务任务上用更少显存换取可接受的质量、延迟和稳定性。量化上线失败往往表现为工具 JSON 偶发失效、长上下文退化或 OOM，而不是一个平均 benchmark 分数下降。
 
 ## 一、30 秒面试回答
@@ -88,3 +90,7 @@ base model digest + quant method/config + calibration dataset hash
 > 我们将量化版作为带完整 manifest 的模型制品发布，固定算法、校准数据、权重/KV 精度、引擎和硬件。离线在真实长度与并发下对比 FP 基线的任务质量、工具 JSON、长上下文、TTFT/TPOT、显存和 SLA goodput；灰度按稳定用户分桶，监控 OOM、fallback 和每成功任务成本。达到停止规则立即回滚到稳定精度，因此量化从“跑分优化”变成可验证的生产容量优化。
 
 继续学习：[模型量化](/inference/quantization)、[推理成本与性能优化](/interview/inference-cost-qna)、[LLM 推理容量与弹性伸缩设计](/interview/llm-inference-capacity-autoscaling-playbook)、[LoRA Adapter 服务化与回滚设计](/interview/lora-adapter-serving-governance-playbook)。
+
+## 读后练习 {#zhixu-practice}
+
+把节省的资源与受影响切片并排列出，设定回滚阈值和复测样本。

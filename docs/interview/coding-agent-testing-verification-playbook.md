@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 编码 Agent 测试策略与验证闭环：从补丁到可信交付
 
+<p class="chapter-question">一个测试通过，能证明补丁修复的是原始故障吗？</p>
+
 > 这页解决一个很容易被混为一谈的问题：**测试通过不等于 Agent 做对了，模型评测也不等于变更可以发布。** 面试时应当把代码行为、Agent 能力、变更审查和线上效果拆开，再用一条可追溯的证据链把它们连接起来。
 >
 > 先看 [智能编码 Agent 企业操作手册](/interview/coding-agent-production-playbook) 理解受控任务、工作区和 Git 交付；再看 [Agent 代码审查与变更交付证据链](/interview/agent-code-review-delivery-playbook) 处理独立审查。本页聚焦补丁生成后的验证闭环。
@@ -251,3 +253,7 @@ Task admission -> immutable contract -> isolated runner -> evidence store
 - [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)
 - [LLM 线上评测与灰度实验](/interview/online-evaluation-rollout-operations)
 - [Agent Runtime 升级、兼容性与回滚](/interview/agent-runtime-upgrade-rollback-playbook)
+
+## 读后练习 {#zhixu-practice}
+
+保留修改前失败、修改后通过与一条相邻回归用例，解释三份证据各说明什么。

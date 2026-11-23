@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agentic RL（智能体强化学习）
 
+<p class="chapter-question">一条多步轨迹拿到正奖励，哪一步值得强化？</p>
+
 > **把工具放进轨迹并不困难，正确分配奖励和控制环境代价才困难。** 本页面向 L3：先建立轨迹与观测的边界，再读目标函数、失败与实验。公开产品能调用工具，不是其具体训练算法已经公开的证据。
 
 ## 一、从 RLHF 到 Agentic RL
@@ -88,3 +90,7 @@ $$\nabla_\theta E[R(\tau)]=E\left[(R(\tau)-b)\sum_t\nabla_\theta\log\pi_\theta(a
 - [RAGEN](https://arxiv.org/abs/2504.20073)：已读风格化环境、Echo Trap 与稳定化描述；不是生产可靠性证明。
 
 未运行环境 rollout 或训练；产品隐藏训练细节与扩展索引不标为已验证。
+
+## 读后练习 {#zhixu-practice}
+
+为三步工具调用写一份奖励记录，区分最终结果、过程信号和环境反馈。

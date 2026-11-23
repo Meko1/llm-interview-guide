@@ -36,7 +36,7 @@ const walk = folder => readdirSync(folder, { withFileTypes: true }).flatMap(entr
 })
 const gitDates = new Map()
 try {
-  const history = execFileSync('git', ['-c', 'core.quotepath=false', 'log', '--format=DATE:%cs', '--name-only', '--', 'docs'], { cwd: root, encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 })
+  const history = execFileSync('git', ['-c', 'core.quotepath=false', 'log', '--format=DATE:%cd', '--date=short', '--name-only', '--', 'docs'], { cwd: root, encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 })
   let date = ''
   for (const line of history.split('\n')) {
     if (line.startsWith('DATE:')) date = line.slice(5)

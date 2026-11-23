@@ -36,7 +36,7 @@ onMounted(() => {
 <template>
   <section class="capability-planner" aria-label="岗位能力定位">
     <div class="planner-context">
-      <div class="planner-context-title"><span class="planner-kicker">YOUR NEXT STEP</span><h2>从你的目标，找到下一步。</h2><p>先声明，再验证。这里没有自动评分与掌握进度条。</p></div>
+      <div class="planner-context-title"><h2>选择目标与起点</h2><p>按你的经历选择基础，再用下方情境题核对。</p></div>
       <div class="planner-fields">
         <label>目标方向<select v-model="goalId" @change="changeGoal"><option v-for="item in goals" :key="item.id" :value="item.id">{{ item.title }}</option></select></label>
         <label>当前基础<select v-model="foundationId"><option v-for="item in foundations" :key="item.id" :value="item.id">{{ item.title }}</option></select></label>

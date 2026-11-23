@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 量化实战深入（GPTQ / AWQ / SmoothQuant / KV 量化）
 
+<p class="chapter-question">权重量化与缓存量化，分别会在哪些输入上暴露误差？</p>
+
 > 量化是让大模型「跑得起、跑得省」的第一手段，也是推理岗的高频深挖点。本文参考 [llm-action](https://github.com/liguodongiot/llm-action) 的量化实战体系，系统讲清量化的数学本质、离群值难题、主流算法（GPTQ/AWQ/SmoothQuant）、W#A# 命名法、KV Cache 量化与 QAT。压缩总览（含蒸馏/剪枝）见 [知识蒸馏与模型压缩](/inference/model-compression)，推理全景见 [推理优化与部署](/inference/inference-optimization)。
 
 ## 面试先背这几句话
@@ -166,3 +168,7 @@ PTQ 与 QAT 是工程选项，不用“几乎都用”作选型理由。QLoRA �
 校准集覆盖语言、长度、代码/工具和 outlier 切片，并与最终质量测试分离，避免用反复调参的集合报告泛化。保存校准 hash、group/axis、scale/zero、舍入、格式、kernel 与回退日志；低比特文件变小但 fallback 到慢路径时，应回滚或更换 kernel，而非继续降低位宽。
 
 一手机制：[GPTQ](https://arxiv.org/abs/2210.17323)、[AWQ](https://arxiv.org/abs/2306.00978)、[SmoothQuant](https://arxiv.org/abs/2211.10438)、[KIVI](https://arxiv.org/abs/2402.02750)。论文结果只支持对应实验；W#A# 没有说明 accumulator、KV、未量化层与硬件实现，不能充当完整部署配置。
+
+## 读后练习 {#zhixu-practice}
+
+把权重位宽和 KV 位宽拆成两个变量，在相同请求集上独立比较。

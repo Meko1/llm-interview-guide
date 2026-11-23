@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 多 Agent 与进阶范式
 
+<p class="chapter-question">把一个任务交给多个 Agent，在什么情况下反而更慢？</p>
+
 > 当多个 Agent 跨团队、跨框架或跨组织协作时，框架内编排需要升级为可发现、可授权、可追踪的协议边界；生产化回答见 [A2A 跨 Agent 互操作生产设计面试题](/interview/a2a-production-interoperability-qna)。
 
 > 单 Agent 解决不了的复杂任务，常用多 Agent 协作或更结构化的工作流。本文梳理进阶规划范式、多 Agent 架构与主流框架，是 Agent 方向的深水区考点。
@@ -91,3 +93,7 @@ classification: inferred
 **Q：多 Agent 之间怎么传递信息？** 常见方式：共享状态/黑板（shared state）、消息传递（message passing）、把上一个 Agent 的结构化输出作为下一个的输入。关键是约定清晰的接口格式，避免自然语言传递造成的歧义和信息丢失。
 
 **Q：Agent 调用工具出错了怎么办？** 工具返回结构化错误信息让模型理解失败原因；加入重试与回退策略；关键写操作前做校验或人工确认；对工具输入做 Schema 约束，减少调用格式错误。
+
+## 读后练习 {#zhixu-practice}
+
+比较串行、并行和人工复核三种拆分方式，列出冗余工作和协调成本。

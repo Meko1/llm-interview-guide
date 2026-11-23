@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 在线流量准入与过载保护：排队、公平与可控降级
 
+<p class="chapter-question">一批长请求挤满队列时，如何保护其他租户的交互体验？</p>
+
 当 GPU、上游配额或 KV Cache 已接近上限时，系统最危险的做法是让所有请求一起“再试一次”。这会把排队时间、超时、重试和成本放大成雪崩。在线准入控制的目标不是让所有请求都进入模型，而是在有限容量内优先交付满足 SLO 的请求，并为未准入请求给出一致、可解释、可恢复的结果。
 
 本页聚焦**请求进入推理系统之前**的控制面。容量建模与弹性伸缩见 [LLM 推理容量与弹性伸缩设计](/interview/llm-inference-capacity-autoscaling-playbook)，模型网关的 RPM/TPM 配额见 [模型网关与多模型路由](/engineering/llm-gateway)，已准入流连接的取消、断线与背压见 [LLM 流式应用生产化](/engineering/llm-streaming-production)。
@@ -206,3 +208,7 @@ GPU 利用率是滞后且不完整的信号。TTFT、TPOT、队列等待、KV he
 ## 十二、60 秒系统设计回答
 
 > 我会把在线准入看成一个 token 感知的控制面。入口先通过幂等键、用户/租户/模型多级配额和 token 预估做快速判定；随后按交互、普通、长上下文 Agent 和批处理进入隔离队列，用加权公平与并发上限保护小租户和 P0 的 TTFT。队列始终有界，控制器根据 TTFT、TPOT、队列等待和 KV headroom 动态收紧或放宽准入。过载时按缓存、短等待、压缩上下文、已验证模型降级、异步化、快速拒绝的阶梯处理，并给每次重试设 deadline 和预算。最后按租户、优先级和长度桶监控准入结果、token debt、公平份额与 SLO burn rate，定期演练上游降额、OOM 和重试风暴。
+
+## 读后练习 {#zhixu-practice}
+
+对照先来先服务和按租户配额两种策略，记录等待时间与拒绝原因。

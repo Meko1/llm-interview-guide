@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 多 Agent 委派与 Handoff 控制平面：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">两个 Agent 都认为自己在负责下一步，如何确定唯一执行者？</p>
+
 > 多 Agent 不是“多开几个聊天窗口”。它是一个有身份、能力、预算、资源租约、副作用和最终责任的分布式任务系统。面试中最容易失分的回答是：把任务分给几个 Agent，最后汇总。真正需要讲清的是谁仍然拥有控制权，交接何时生效，子任务失联后谁停止副作用，多份结论冲突时谁裁决，以及如何证明最终交付确实发生。
 
 > 后台 job、定时触发和执行器生命周期见 [Agent 自动化与后台编排生产设计](/interview/agent-automation-orchestration-playbook)，跨组织/跨运行时协议见 [A2A 跨 Agent 互操作生产设计](/interview/a2a-production-interoperability-qna)，可观测、回放与事故证据见 [Agent 观测、取证与事故响应手册](/interview/agent-observability-incident-response)。
@@ -266,3 +268,7 @@ Claude Code 的 [Run agents in parallel](https://code.claude.com/docs/en/agents)
 - [Codex](https://openai.com/codex/) 与 [Introducing the Codex app](https://openai.com/index/introducing-the-codex-app/)：worktrees、云环境、多 Agent 管理与 sandbox 边界。
 - [OpenClaw Sub-agents](https://docs.openclaw.ai/tools/subagents)：session 隔离、深度/工具策略、active-child 上限、归档和级联停止。
 - [Hermes Subagent Delegation](https://hermes-agent.nousresearch.com/docs/user-guide/features/delegation) 与 [Delegation patterns](https://hermes-agent.nousresearch.com/docs/guides/delegation-patterns/)：fresh child context、toolset、并行批次及中断语义。
+
+## 读后练习 {#zhixu-practice}
+
+写清交接前后责任、授权范围与接收确认，再推演确认丢失。

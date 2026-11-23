@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 大模型训练全流程（从 0 到 1）
 
+<p class="chapter-question">从预训练到上线评测，哪个阶段的产物必须能被下游复现？</p>
+
 > 「讲一下从零训练一个大模型的完整流程」是综合面试的经典开放题——它考的不是某个点，而是你脑子里有没有一张**端到端的地图**。本文把大模型从数据到上线的全流程串起来，每个阶段标注本站对应的深入章节，帮你建立全局认知后再逐点深挖。
 
 ## 面试先背这张流程图
@@ -140,3 +142,7 @@ classification: inferred
 | 运营 | 灰度/回滚条件、失败样本归因、隐私权限与测试集冻结规则 |
 
 流程机制例可对照 [DeepSeek-V3 技术报告](https://arxiv.org/html/2412.19437v2)：它同时描述预训练、后训练与推理工程，具体配方不是通用流程标准。恢复启动器边界见 [PyTorch v2.5.1 官方 run.py](https://github.com/pytorch/pytorch/blob/v2.5.1/torch/distributed/run.py)：worker 重启后仍需应用加载 checkpoint。
+
+## 读后练习 {#zhixu-practice}
+
+为数据快照、分词器、检查点与评测配置各记录版本和接收条件。

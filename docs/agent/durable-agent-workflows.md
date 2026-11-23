@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 耐久化 Agent 工作流：LangGraph、Temporal 与长任务恢复
 
+<p class="chapter-question">长任务在外部写入后中断，恢复时应从哪一步继续？</p>
+
 > 工作流一旦跨越分钟、小时甚至人工审批周期，问题就从“模型回答得怎样”变成“进程重启、网络超时、重复消息、审批延迟后还能不能正确继续”。这类系统的核心不是记忆，而是耐久执行（durable execution）。
 
 ## 一、什么叫耐久执行
@@ -187,3 +189,7 @@ Case Workflow (Temporal/耐久协调)
 - [Temporal Workflow Execution](https://docs.temporal.io/workflow-execution)
 - [LangGraph 生产化与系统设计](/engineering/langgraph-production)
 - [长运行 Agent 检查点、恢复与人工 Steer](/interview/long-running-agent-recovery-playbook)
+
+## 读后练习 {#zhixu-practice}
+
+区分已持久化状态与外部实际结果，为两者不一致的情形设计对账。

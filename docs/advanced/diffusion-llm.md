@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 扩散语言模型（Diffusion LLM）
 
+<p class="chapter-question">同样生成一句话，逐词预测和多轮去噪分别能修改哪些位置？</p>
+
 扩散语言模型把“决定下一个 token”改为“根据部分可见文本，逐轮恢复未知位置”。它改变的是**生成分布和采样路径**，不是把自回归推理引擎换个调度器。前置：[扩散模型](/multimodal/diffusion)、[解码策略](/basics/decoding)。本文以 LLaDA 的掩码生成和 SEDD 的离散得分为具体参照；不把产品宣传速度当可复现结果。
 
 ## 面试先背这几句话
@@ -144,3 +146,7 @@ $1/t$ 是目标中的时间权重，不是“越接近真值就主观更重要�
 </details>
 
 来源阅读范围：实际读 LLaDA、SEDD 摘要及 [LLaDA 官方生成实现](https://github.com/ML-GSAI/LLaDA/blob/main/generate.py) 的提交/置信度分支。论文全文训练账本及其他模型版本未逐一核对；以上算例为构造，未运行模型或 GPU 基准。`main` 会漂移，复现时应固定提交。
+
+## 读后练习 {#zhixu-practice}
+
+用四个位置画出两种生成顺序，标记每一轮能够并行更新的位置。

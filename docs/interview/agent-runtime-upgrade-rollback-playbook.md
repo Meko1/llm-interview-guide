@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent Runtime 升级、兼容性与回滚：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">正在运行的旧任务遇到运行时升级，如何验证它仍能恢复？</p>
+
 > Agent Runtime 的升级绝不只是 `npm update` 或拉一个新镜像。它可能改变模型行为、指令加载、工具 schema、sandbox、网络、OAuth、Plugin ABI、memory/session 格式和审批默认值。生产面试要能解释：怎样在不丢身份、不放宽权限、不污染状态的前提下升级，以及出事后怎样回到一个已验证的运行闭包。
 
 > 单次运行需要记录什么见 [Agent 可复现运行与配置溯源](/interview/agent-reproducibility-provenance-playbook)，扩展包供应链见 [跨运行时 Agent 扩展生产治理](/interview/agent-skills-production-governance)，任务中的授权变化与紧急撤权见 [长任务 Agent 持续授权与紧急撤权](/interview/agent-continuous-authorization-playbook)。
@@ -165,3 +167,7 @@ Release registry -> compatibility analyzer -> backup service -> migration planne
 - [OpenClaw Updating](https://docs.openclaw.ai/install/updating)：Doctor、health、pin version 与 rollback。
 - [OpenClaw Migration guide](https://docs.openclaw.ai/install/migrating)：完整状态目录、认证和迁移验证。
 - [Hermes Updating](https://hermes-agent.nousresearch.com/docs/getting-started/updating/)：check、snapshot、config migration 与 pre-pull 回退。
+
+## 读后练习 {#zhixu-practice}
+
+设计旧检查点读入、兼容性验证和回滚演练，明确无法迁移时的处理。

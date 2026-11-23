@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 线上评测、灰度实验与质量运营面试题
 
+<p class="chapter-question">新版线上点击率上升，怎样区分模型提升与流量差异？</p>
+
 > [LLM 评测与发布门禁实战](/interview/evaluation-release-gates) 回答“候选版本是否有资格试运行”；本页回答“进入真实流量后，凭什么继续扩量，何时必须停下”。高分回答不是“先放 10% 流量”，而是说明一套有稳定分桶、证据、停止规则和回滚演练的控制面。
 >
 > 建议与 [LLMOps 生产运营高频问答](/interview/llmops-production-qna)、[Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)、[RAG、Memory 与评测安全高频问答](/interview/rag-memory-eval-qna)、[大模型应用线上排障手册](/interview/application-troubleshooting-playbook) 连起来学习。
@@ -243,3 +245,7 @@ L1核分桶键和失败样本是否被漏记；L2用上界、护栏与错误预�
 - [LLMOps 生产运营高频问答](/interview/llmops-production-qna)：版本、监控、成本与 bad case 飞轮。
 - [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)：工具轨迹、沙箱和高危动作。
 - [RAG、Memory 与评测安全高频问答](/interview/rag-memory-eval-qna)：检索、权限、引用和知识版本。
+
+## 读后练习 {#zhixu-practice}
+
+记录分组方式、曝光分母与关键切片，写出实验需要暂停的条件。

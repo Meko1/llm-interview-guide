@@ -1,5 +1,7 @@
 # Foundation Q&A Thickening Implementation Plan
 
+<p class="archive-caption">历史实施记录 · 2026-07-06。本页保留当时的方案与范围。</p>
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Add the second publishable phase of the LLM foundation expansion: high-frequency interview Q&A and troubleshooting playbooks.

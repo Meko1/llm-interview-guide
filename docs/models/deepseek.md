@@ -10,6 +10,8 @@ math: true
 ---
 # DeepSeek 专题（MLA / GRPO / R1）
 
+<p class="chapter-question">MLA 的缓存收益与强化学习带来的行为变化，怎样分别验证？</p>
+
 读 DeepSeek 的价值在于理解**算法、训练系统与推理系统怎样协同**，而不是记住“便宜又强”。本文限定 [DeepSeek-V3 报告 v1（2024）](https://arxiv.org/html/2412.19437v1) 与 [DeepSeek-R1 报告 v1（2025）](https://arxiv.org/html/2501.12948v1)；不把结论自动迁移到 R1-0528 或后续 API。
 
 ## 为什么 DeepSeek 值得单独讲？
@@ -132,3 +134,7 @@ $$
 权重兼容不代表高效算子兼容。要查 latent 缓存是否被展开、矩阵吸收是否生效、精度与 batch、专家通信和框架版本。KV 元素数更少只是一个成本分项。
 
 </details>
+
+## 读后练习 {#zhixu-practice}
+
+把架构变化与训练方法分开列项，各指定一份能支持结论的测量或实验。

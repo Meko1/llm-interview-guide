@@ -1,5 +1,7 @@
 # MCP Production Interview Expansion Implementation Plan
 
+<p class="archive-caption">历史实施记录 · 2026-07-08。本页保留当时的方案与范围。</p>
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Add and connect an MCP Server productionization interview page focused on enterprise governance, Registry/Gateway/Policy architecture, trust boundaries, lifecycle, deployment trade-offs, audit, incident response, and launch gates.

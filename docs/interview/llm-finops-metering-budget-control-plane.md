@@ -12,6 +12,8 @@ classification: inferred
 ---
 # LLM FinOps：计量、归因与预算控制面
 
+<p class="chapter-question">共享模型集群的费用，应按请求数还是实际资源占用分摊？</p>
+
 > “按 token 乘单价”只能得到一个估算，不能构成生产级成本系统。真实 LLM 调用会流式中断、重试、fallback、工具循环、异步批处理和多供应商计费；自建推理还要分摊 GPU、显存、空闲容量和共享网关成本。FinOps 的目标是让每一笔费用从 usage event 进入可对账账本，并在成本真正失控前以确定性的配额、预扣、审批和熔断动作介入。
 
 ## 一、30 秒面试回答
@@ -214,3 +216,7 @@ Gateway / Agent Runtime / Batch Workers
 这套叙述把“成本优化”从几个零散技巧，提升为可审计、可执行、可对账的企业级能力。
 
 主源：[AWS Transactional outbox](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html)实际读取了双写失败、重复消息、顺序与事务回滚注意事项；它支持本地可靠投递模式，不证明外部调用 exactly-once。本文未实读供应商流式计费文档（访问返回 403，未重试），所以缓存 token 公式明确采用本页契约而不是某家 API 的计费承诺；没有连接账单、运行预算系统或做财务认证。
+
+## 读后练习 {#zhixu-practice}
+
+比较长短请求，用两种分摊口径算账并指出可能的激励偏差。

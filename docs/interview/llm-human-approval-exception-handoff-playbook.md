@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 人工审批与异常接管设计：把模型建议变成可控业务动作
 
+<p class="chapter-question">人工批准后，外部条件已经变化，旧批准还能用吗？</p>
+
 企业里的 LLM 常常不是“回答一段文字”这么简单：它会拟写客服补偿方案、生成授信材料摘要、给出工单处置建议、规划采购动作，甚至准备调用写操作工具。高风险场景中，模型输出必须先经过策略与人工审批，才能成为真正的业务动作。
 
 这不是在流程末尾加一个“确认按钮”。一个可上线的人机协作系统需要定义什么必须审批、审批人看到什么上下文、模型/人工/工具并发时如何保持一致、超时如何升级、人工改写如何回流评测。本页聚焦业务审批和异常接管；工具权限与沙箱见 [Agent 沙箱、执行准入与逃逸处置](/interview/agent-sandbox-execution-boundaries-playbook)，数据出境与审计见 [企业 AI 治理与审计系统设计](/interview/enterprise-ai-governance-audit-system-design)。
@@ -193,3 +195,7 @@ draft -> policy_checked -> pending_approval -> approved -> executing -> succeede
 > 我会把模型输出和真实业务动作分成两层：模型只能生成带证据的结构化计划，独立策略引擎根据动作类型、金额、数据等级和权限决定自动化或审批。审批对象是带参数 hash、版本、证据和有效期的不可变快照，状态机控制 pending、approved、executing、expired 等迁移；人工可批准、拒绝、改写或转派，改写后形成新 revision 重新校验。执行服务只消费已批准 revision，并用幂等键、预检、补偿和对账处理副作用。最后以审批率、改写率、SLA、执行结果和 append-only 审计构成运营与评测闭环。
 
 证据限制：本文仅实际读取上述 LangGraph 恢复语义与 AWS saga 注意事项，不承诺某一版本工作流引擎原生具备企业审批权限、fencing 或支付幂等。金额和队列数字为教学构造，未部署审批服务、执行支付或做恢复演练。
+
+## 读后练习 {#zhixu-practice}
+
+将批准绑定到操作、对象和版本，模拟等待期间对象变化后的重新核验。

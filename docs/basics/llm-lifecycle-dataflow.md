@@ -12,6 +12,8 @@ classification: inferred
 ---
 # 从数据到回答：LLM 全链路
 
+<p class="chapter-question">一段原始文本怎样变成一次可读的模型回答？</p>
+
 > 一个 LLM 产品不是“调用一次模型 API”。它是一条从数据治理、训练、对齐、发布、请求编排到反馈闭环的链路。面试系统设计题最容易失分的地方，是把模型当成没有版本、没有成本、没有风险的黑盒。本页用一条可追踪的数据流把每一层串起来。
 
 ## 一、先看全景：两个闭环而不是一条直线
@@ -209,3 +211,7 @@ $$T_{\mathrm{input}}+T_{\mathrm{reserved\ output}}\leq T_{\mathrm{context\ windo
 本页的重点不是让每个人去训练底座模型，而是建立系统感：每个答案、每一次工具调用、每一次发布都应有数据来源、版本和可验证的边界。
 
 输入契约依据：[Transformers chat templates](https://huggingface.co/docs/transformers/chat_templating)；监督位置依据：[因果 LM loss 实现](https://github.com/huggingface/transformers/blob/main/src/transformers/loss/loss_utils.py)。流水线和 trace 为教学设计，不代表真实上线案例。
+
+## 读后练习 {#zhixu-practice}
+
+画出数据处理、训练、推理与解码的交接点，在每处注明传递的对象。

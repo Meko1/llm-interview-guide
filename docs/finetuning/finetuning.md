@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 微调范式（SFT / PEFT）
 
+<p class="chapter-question">为什么更新更少的参数仍可能需要很大的训练显存？</p>
+
 > 微调让通用基座模型适配具体任务、风格或领域。本文系统梳理全参微调、SFT、参数高效微调（PEFT）的全貌、数据构造、灾难性遗忘与选型。LoRA 细节见 [LoRA / QLoRA 详解](/finetuning/lora)，对齐见 [RLHF / DPO](/finetuning/rlhf)。
 
 ## 一、微调在大模型生命周期中的位置
@@ -149,3 +151,7 @@ prompt、padding 不计入这个分母；多轮对话是否训练全部 assistan
 - [Transformers Chat templates](https://huggingface.co/docs/transformers/chat_templating)：序列化模板与模型角色标记。
 
 本页为目标推导和训练前检查流程，未执行 GPU 训练；分母算例是构造值。
+
+## 读后练习 {#zhixu-practice}
+
+为全参和参数高效微调分别列权重、优化器状态与激活，注明冻结部分。

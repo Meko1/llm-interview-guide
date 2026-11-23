@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent Prompt Injection 与不可信上下文隔离：来源、能力与外发防线
 
+<p class="chapter-question">检索材料里出现操作要求时，系统如何保留来源与权限边界？</p>
+
 > Prompt Injection 不只是“忽略前文指令”的文本把戏。攻击者可通过网页、邮件、RAG 文档、代码仓库、MCP 工具结果或协作 Agent 影响模型，再诱导它调用高权限工具或向外部泄露数据。本页给出可用于系统设计题的 source-to-sink 防御框架。
 
 > RAG 的权限与数据治理见 [RAG、Memory 与评测生产化问答](/interview/rag-memory-eval-qna)，工具权限和 Gateway 见 [企业 Tool Gateway 安全执行系统设计](/interview/tool-gateway-security-design)，Hook/webhook/事件总线见 [Agent 生命周期事件与 Policy Hook Fabric](/interview/agent-lifecycle-policy-hook-fabric)。
@@ -192,3 +194,7 @@ OpenAI 的公开资料同样强调多层组合：模型层、实时监控、sand
 - [OpenAI: Understanding Prompt Injections](https://openai.com/safety/prompt-injections)、[Designing agents to resist prompt injection](https://openai.com/index/designing-agents-to-resist-prompt-injection)、[Link safety](https://openai.com/index/ai-agent-link-safety/)。
 - [Agent 评测与安全合规高频问答](/interview/agent-evaluation-safety-qna)、[Agent 工具安全与权限边界](/agent/tool-safety)：攻击样本、权限、工具执行与审计。
 - [RAG、Memory 与评测生产化问答](/interview/rag-memory-eval-qna)、[Agent 上下文与记忆治理](/interview/agent-context-memory-governance)：检索、长期记忆与来源治理。
+
+## 读后练习 {#zhixu-practice}
+
+制作数据来源和允许用途对照表，检验只读材料能否改变写操作权限。

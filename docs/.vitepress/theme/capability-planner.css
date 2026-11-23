@@ -2,13 +2,13 @@
 .finder-result .finder-capability-link { display: block; margin-top: 10px; font-size: 12px; }
 .planner-context { padding: 28px; border-radius: 12px; background: #142737; color: #edf5fb; }
 .planner-kicker { display: block; color: var(--vp-c-brand-1); font-size: 10px; font-weight: 700; letter-spacing: .06em; line-height: 1.8; }
-.planner-context .planner-kicker { color: #a6edda; }
+.planner-context .planner-kicker { color: #a6b6ed; }
 .vp-doc .planner-context h2 { margin: 10px 0; padding: 0; border: 0; color: #edf5fb; font-size: 25px; line-height: 1.5; }
 .vp-doc .planner-context p { color: #c0d2df; font-size: 12px; line-height: 1.9; margin: 10px 0 0; }
 .planner-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
 .planner-fields label { display: flex; flex-direction: column; gap: 9px; font-size: 12px; color: #c0d2df; }
 .planner-fields select { width: 100%; padding: 12px; min-height: 44px; font-size: 13px; color: #edf5fb; background: #243b4b; border: 1px solid #5b7587; border-radius: 6px; }
-.planner-fields select:focus-visible { outline: 2px solid #98eedb; outline-offset: 3px; }
+.planner-fields select:focus-visible { outline: 2px solid #98abee; outline-offset: 3px; }
 .vp-doc .planner-foundation { padding-top: 16px; border-top: 1px solid #496577; margin-top: 20px; }
 .planner-recommendation { display: flex; gap: 20px; align-items: center; justify-content: space-between; padding: 24px 0; margin-bottom: 4px; }
 .vp-doc .planner-recommendation p { font-size: 12px; line-height: 1.9; margin: 7px 0 0; color: var(--vp-c-text-2); }

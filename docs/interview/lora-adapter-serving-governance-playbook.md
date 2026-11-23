@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LoRA / QLoRA Adapter 服务化、多租户路由与回滚
 
+<p class="chapter-question">两个租户共享基座但使用不同 Adapter，如何证明请求没有串用？</p>
+
 > 训练出一个 LoRA adapter 只是起点。上线后真正的问题是：它与哪个 base model 兼容、如何不撑爆显存地挂载多个 adapter、谁能调用、如何灰度、如何发现退化并回滚。
 
 ## 一、30 秒面试回答
@@ -124,3 +126,7 @@ tenant + isolation domain + base model + adapter digest
 > 我们将 LoRA 制品纳入模型注册表，校验其 base model、tokenizer、量化与评测报告，并以 manifest 绑定线上 Prompt、参数和路由策略。推理服务在同一基础模型上受控热加载 adapter，按租户与任务路由，同时用显存预算和缓存上限保护 KV Cache。新版本先通过领域、通用、安全和延迟门禁，再灰度；trace 记录实际 adapter，出现退化可一键回到稳定 manifest。这让低成本微调真正变成可运营能力。
 
 继续学习：[LoRA 微调](/finetuning/lora)、[量化与部署](/inference/quantization)、[微调平台面试题](/interview/finetuning-platform-qna)、[LLM 推理容量与弹性伸缩设计](/interview/llm-inference-capacity-autoscaling-playbook)、[LLM 评测与发布门禁实战](/interview/evaluation-release-gates)。
+
+## 读后练习 {#zhixu-practice}
+
+记录租户、基座、适配器版本和输出校验，演练一次适配器回滚。

@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 预训练目标与数据
 
+<p class="chapter-question">给定一段语料，预训练目标具体要求模型预测哪个位置？</p>
+
 > 预训练是大模型一切能力的根基，「烧钱最多、决定上限」的一步。本文深入预训练目标、数据流水线、训练范式与并行、以及继续预训练等高频考点。算力与并行细节见 [分布式训练](/pretraining/distributed-training)，规模规律见 [缩放定律](/pretraining/scaling-law)。
 
 ## 一、什么是预训练？
@@ -117,3 +119,7 @@ packing 要声明文档间是否允许注意力跨界、是否重置位置、EOS
 **Q：teacher forcing 是什么？有什么问题？** 训练时使用真实前文、并行计算错位目标；生成使用模型自身输出，误差可能累积，不能只凭训练 loss 证明长生成稳定。
 
 目标比较见 [T5 原论文](https://arxiv.org/abs/1910.10683)；错位实现可核对 [Transformers v4.45.2 LlamaForCausalLM](https://github.com/huggingface/transformers/blob/v4.45.2/src/transformers/models/llama/modeling_llama.py)。此处固定版本用于解释语义，不代表当前 API 调用配方。
+
+## 读后练习 {#zhixu-practice}
+
+用一个短序列手写训练样本、可见上下文和目标，再说明数据切分方式。

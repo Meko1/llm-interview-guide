@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 评测与安全合规高频问答
 
+<p class="chapter-question">任务完成率提高了，权限错误也增多了，能发布吗？</p>
+
 > 当问题从“怎么评 Agent”继续追问到“改了模型、工具或策略后怎么安全发布”，可衔接到 [LLM 评测与发布门禁实战](/interview/evaluation-release-gates)，其中给出了 release manifest、硬红线、sandbox、灰度和回滚的完整答题框架。
 >
 > 若继续追问“灰度怎么稳定分桶、写工具何时停止扩量、线上证据如何进入回归集”，见 [LLM 线上评测、灰度实验与质量运营面试题](/interview/online-evaluation-rollout-operations)。
@@ -498,3 +500,7 @@ Agent Change
 - [RAG、Memory 与评测安全高频问答](/interview/rag-memory-eval-qna)
 - [AI 安全合规与治理](/advanced/governance)
 - [大模型安全与对齐](/advanced/safety)
+
+## 读后练习 {#zhixu-practice}
+
+为结果质量和授权边界分别设指标，写出一条有独立否决权的门禁。

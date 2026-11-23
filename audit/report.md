@@ -31,26 +31,26 @@
 
 ## 优先精读候选（短文粗筛，不是深度评分）
 
-- evaluation/evaluation.md：机械字符数 583，是否扩写需人工判断。
-- advanced/vector-search.md：机械字符数 975，是否扩写需人工判断。
-- advanced/training-internals.md：机械字符数 1372，是否扩写需人工判断。
-- finetuning/model-merging.md：机械字符数 1475，是否扩写需人工判断。
-- inference/speculative-sampling-proof.md：机械字符数 2253，是否扩写需人工判断。
-- engineering/coding-agent.md：机械字符数 2302，是否扩写需人工判断。
-- basics/model-architecture-landscape.md：机械字符数 2399，是否扩写需人工判断。
-- models/slm.md：机械字符数 2424，是否扩写需人工判断。
-- beginner/getting-started.md：机械字符数 2425，是否扩写需人工判断。
-- claude-code/architecture.md：机械字符数 2434，是否扩写需人工判断。
-- basics/logits-loss.md：机械字符数 2466，是否扩写需人工判断。
-- beginner/llm-capabilities.md：机械字符数 2515，是否扩写需人工判断。
-- rag/multimodal-rag.md：机械字符数 2613，是否扩写需人工判断。
-- claude-code/overview.md：机械字符数 2635，是否扩写需人工判断。
-- multimodal/multimodal.md：机械字符数 2643，是否扩写需人工判断。
-- multimodal/speech.md：机械字符数 2648，是否扩写需人工判断。
-- engineering/llmops.md：机械字符数 2665，是否扩写需人工判断。
-- basics/llm-lifecycle-dataflow.md：机械字符数 2692，是否扩写需人工判断。
-- basics/moe.md：机械字符数 2700，是否扩写需人工判断。
-- claude-code/extensibility.md：机械字符数 2712，是否扩写需人工判断。
+- evaluation/evaluation.md：机械字符数 659，是否扩写需人工判断。
+- advanced/vector-search.md：机械字符数 1052，是否扩写需人工判断。
+- advanced/training-internals.md：机械字符数 1453，是否扩写需人工判断。
+- finetuning/model-merging.md：机械字符数 1552，是否扩写需人工判断。
+- inference/speculative-sampling-proof.md：机械字符数 2333，是否扩写需人工判断。
+- engineering/coding-agent.md：机械字符数 2379，是否扩写需人工判断。
+- basics/model-architecture-landscape.md：机械字符数 2479，是否扩写需人工判断。
+- beginner/getting-started.md：机械字符数 2497，是否扩写需人工判断。
+- models/slm.md：机械字符数 2498，是否扩写需人工判断。
+- claude-code/architecture.md：机械字符数 2517，是否扩写需人工判断。
+- basics/logits-loss.md：机械字符数 2550，是否扩写需人工判断。
+- beginner/llm-capabilities.md：机械字符数 2586，是否扩写需人工判断。
+- rag/multimodal-rag.md：机械字符数 2689，是否扩写需人工判断。
+- claude-code/overview.md：机械字符数 2714，是否扩写需人工判断。
+- multimodal/multimodal.md：机械字符数 2720，是否扩写需人工判断。
+- multimodal/speech.md：机械字符数 2726，是否扩写需人工判断。
+- engineering/llmops.md：机械字符数 2739，是否扩写需人工判断。
+- basics/llm-lifecycle-dataflow.md：机械字符数 2766，是否扩写需人工判断。
+- basics/moe.md：机械字符数 2771，是否扩写需人工判断。
+- claude-code/extensibility.md：机械字符数 2795，是否扩写需人工判断。
 
 ## 同构标题组
 

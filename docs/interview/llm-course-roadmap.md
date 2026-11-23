@@ -10,6 +10,8 @@ classification: inferred
 ---
 # LLM Course 中文版路线图（Maxime Labonne）
 
+<p class="chapter-question">怎样把一份外部课程目录转成自己的实验顺序？</p>
+
 > 本页是对 Maxime Labonne 开源项目 [**mlabonne/llm-course**](https://github.com/mlabonne/llm-course)的**中文整理与带注释改编**，保留原课程的三条路线和资源入口。Stars、免费算力配额与第三方链接会变化，不作为质量或可运行性证明。
 >
 > 📌 **来源与改编声明**：原课程由 Maxime Labonne 创作，仓库提供 [Apache License 2.0 全文](https://github.com/mlabonne/llm-course/blob/main/LICENSE)。本页保留作者署名；本站在 2026-11-05 对中文整理作了技术纠偏，并加入标为“本站补充”的能力检查与工程边界，不代表原作者逐条认可。再分发仍须核对许可证全文与适用通知，不能把一条署名理解为已完成全部许可义务。原文请访问 [mlabonne/llm-course](https://github.com/mlabonne/llm-course)。
@@ -467,3 +469,7 @@ LLM Agent 能基于对环境的推理采取行动，自主完成任务，通常�
 ::: tip 关于本页
 本页为 [mlabonne/llm-course](https://github.com/mlabonne/llm-course)（Apache-2.0）的中文整理与带注释改编，由 LLMGuide 整理；本站补充不作为原作者译文。实读范围为原 README 的部分片段、LICENSE 第 4 条、FlashAttention/DPO/TIES 摘要及 DPO Eq. (7)；其余课程、模型、Notebook 和论文链接仅作继续阅读，未运行、未完成许可审计或全量链接验证。如发现问题，欢迎在 [本站仓库](https://github.com/Meko1/llm-interview-guide) 提 Issue / PR。
 :::
+
+## 读后练习 {#zhixu-practice}
+
+挑一个主题，列出先修材料、一项最小实验和结束学习的判断标准。

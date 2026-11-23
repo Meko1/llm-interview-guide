@@ -11,6 +11,8 @@ classification: inferred
 ---
 # Mask 与 Padding：因果掩码、填充与序列打包
 
+<p class="chapter-question">两个短样本打包在一起以后，谁可以看到谁？</p>
+
 > 「因果掩码和 padding 掩码有什么区别？」「decoder-only 推理为什么要左 padding？」「训练时 packing 是什么、会不会串味？」——这些是简历上写过微调/推理的人必被追问的实现级细节，也是手撕 Attention 时最容易写错的部分。本文把**两种 mask 的本质、padding 方向、序列打包（packing）、以及它们与 KV Cache/损失计算的联动**讲透。Attention 原理见 [Attention 与变体](/basics/attention)，损失屏蔽见 [从 Logits 到损失](/basics/logits-loss)，KV Cache 见 [KV Cache 原理](/inference/kv-cache)。
 
 ## 面试先背这几句话
@@ -143,3 +145,7 @@ vLLM/SGLang 等框架不做 batch padding：它们把请求的 token **摊平成
 </details>
 
 接口依据：[Transformers 生成实现](https://github.com/huggingface/transformers/blob/main/src/transformers/generation/utils.py)、[PyTorch SDPA](https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html)。迁移 mask 时核对 True 的含义，不能直接把 MHA 的 key_padding_mask 传给 SDPA。
+
+## 读后练习 {#zhixu-practice}
+
+画出打包后的可见性矩阵，检查未来位置、样本边界和 padding。

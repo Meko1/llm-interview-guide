@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 大模型应用实战知识体系
 
+<p class="chapter-question">选技术栈之前，哪些问题决定应用应该先解决什么？</p>
+
 > 本页沿用此前按 ProcessOn 脑图《MoPaaS·智泊AI企业大模型应用实战知识体系 V6.0.0》及截图整理的主题索引。本轮未重新取得这些材料，不把它们作为技术结论或岗位频率的证据。以下是建议学习路线，不是课程完成或生产经验认证。
 
 ![大模型应用实战面试路线图](/diagrams/application-practice-roadmap.svg)
@@ -193,3 +195,7 @@ A：准备固定评测集，对比基座模型、Prompt/RAG 方案和微调模�
 - [Agent 基础与框架](/agent/agent-basics)
 - [Dify 与低代码智能工作流](/engineering/dify-workflow)
 - [推理性能压测与服务化指标](/inference/inference-benchmark)
+
+## 读后练习 {#zhixu-practice}
+
+从一个用户任务反推出输入、允许的错误、成本边界和最低可用基线。

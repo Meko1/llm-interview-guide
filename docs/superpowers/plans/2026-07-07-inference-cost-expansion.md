@@ -1,5 +1,7 @@
 # Inference Cost Expansion Implementation Plan
 
+<p class="archive-caption">历史实施记录 · 2026-07-07。本页保留当时的方案与范围。</p>
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Add the next publishable phase of the LLM interview guide: AI Infra inference deployment, benchmarking, quantization, and cost-governance interview playbooks.

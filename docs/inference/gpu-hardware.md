@@ -11,6 +11,8 @@ classification: inferred
 ---
 # GPU 与硬件基础
 
+<p class="chapter-question">为什么高峰值算力不一定带来更快的逐词解码？</p>
+
 > 「7B 模型推理要多大显存？」「为什么大模型训练/推理都得用 GPU？」「A100 和 H100 怎么选？」——硬件是大模型工程岗的硬通货考点。本文把显存、算力、通信讲清楚。
 
 ## 为什么是 GPU？
@@ -87,3 +89,7 @@ $$\text{权重显存} \approx \text{参数量} \times \text{每参数字节数}$
 选卡交付物应包含权重/KV/工作区峰值账本、prefill/decode 分开压测、硬件 SKU 与驱动版本、同质量量化回归和 [SLO 达标吞吐](/inference/slo-goodput)。
 
 **Q：NVLink 和 InfiniBand 有什么用？** NVLink 是**机内卡间**高速互联，InfiniBand/RoCE 是**机间**高速网络。多卡并行（尤其张量并行）需频繁同步，通信带宽直接决定并行效率，所以通信密集的并行要放在 NVLink 机内，跨机用高速网络。
+
+## 读后练习 {#zhixu-practice}
+
+分别估算一次矩阵计算的运算量与读写字节数，判断哪项资源先吃紧。

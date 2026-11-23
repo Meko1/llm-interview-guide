@@ -11,6 +11,8 @@ classification: inferred
 ---
 # Agent 工作流工程化：从画布到可恢复系统
 
+<p class="chapter-question">一条工作流分支失败，怎样区分重试、跳过与人工接管？</p>
+
 > 这篇不教你“拖几个节点”，而是把 AI 工作流当作一个会调用模型、工具、人工与业务系统的分布式程序来设计。面试官真正想听到的是：你如何把不确定的模型输出约束在可观测、可回放、可审批、可恢复的业务边界内。
 
 ## 一、先建立正确的工作流心智模型
@@ -206,3 +208,7 @@ Alert API -> 去重/鉴权 -> Run 创建器 -> 解析与分类(LLM)
 - [Temporal Workflow Execution 概览](https://docs.temporal.io/workflow-execution)
 - [AI 工作流 vs Agent](/agent/workflow)
 - [Function Calling 与 MCP](/agent/function-calling-mcp)
+
+## 读后练习 {#zhixu-practice}
+
+画出分支汇合时的三种状态，给每种状态指定恢复责任人。

@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 外部连接与 OAuth 凭证生命周期：从用户同意到断连、轮换与可审计执行
 
+<p class="chapter-question">用户撤回同意后，后台队列里尚未执行的请求怎么办？</p>
+
 > MCP 解决“工具如何连接”，OAuth 解决“谁允许访问什么”。生产系统还必须回答：哪个租户的哪个用户连了哪个外部账户，哪些 scope 在何时被同意，令牌由谁保管，刷新失败如何降级，用户点了断开后正在执行的写操作怎么处理。把这条链讲清楚，才是连接器而不是“在配置里填一个 token”。
 
 > 本页聚焦外部连接控制面；工具调用时的短期授权、二次鉴权和效果对账见 [企业 Tool Gateway 安全执行系统设计](/interview/tool-gateway-security-design)，长任务内权限持续变化见 [长任务 Agent 持续授权与紧急撤权](/interview/agent-continuous-authorization-playbook)，MCP Server 资产治理见 [MCP Server 生产化与企业治理高频问答](/interview/mcp-production-qna)。
@@ -224,3 +226,7 @@ Policy + Approval + tenant ACL -> lease -> worker -> effect ledger / audit
 - [Plugins in Codex](https://help.openai.com/en/articles/20001256-plugins-in-codex/)：角色分配、App 动作控制和源系统权限边界。
 - [OpenClaw OAuth](https://docs.openclaw.ai/oauth)：per-agent auth profile、刷新与多账户隔离。
 - [Hermes MCP](https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp)：OAuth 2.1、PKCE、动态注册、token 缓存和工具选择。
+
+## 读后练习 {#zhixu-practice}
+
+标出令牌轮换、撤销和任务执行时的检查点，只用虚构标识记录审计事件。

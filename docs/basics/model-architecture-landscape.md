@@ -11,6 +11,8 @@ classification: inferred
 ---
 # 模型架构谱系与选型
 
+<p class="chapter-question">同样是生成文本，为什么不同架构需要不同的训练与推理接口？</p>
+
 > 面试里问“Transformer 有哪些架构”时，不要只报出 BERT、GPT、T5 三个名字。更完整的回答是：先按**信息可见性和训练目标**划分 Encoder-only、Decoder-only、Encoder-Decoder；再解释它们分别擅长表示、生成和条件生成；最后落到今天为什么通用 LLM 几乎都选择 Decoder-only，以及何时不应该盲从这一选择。
 
 ## 一、先建立一张架构地图
@@ -178,3 +180,7 @@ Transformer 的全注意力对长度为 `n` 的序列会构造或等价处理 `n
 下一篇建议阅读 [从数据到回答：LLM 全链路](/basics/llm-lifecycle-dataflow)，把架构放回训练、对齐、推理和应用系统中理解。
 
 一手入口：[BERT](https://arxiv.org/abs/1810.04805)、[T5](https://arxiv.org/abs/1910.10683)、[FIM](https://arxiv.org/abs/2207.14255)、[Jamba](https://arxiv.org/abs/2403.19887)、[聊天模板](https://huggingface.co/docs/transformers/chat_templating)。论文任务范围与配置不能直接外推为架构优劣。
+
+## 读后练习 {#zhixu-practice}
+
+为续写、翻译和文本分类各选一种架构，说明数据流与选择理由。

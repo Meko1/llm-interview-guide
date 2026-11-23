@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 机制可解释性（Mechanistic Interpretability）
 
+<p class="chapter-question">一个神经元随某个词激活，怎样检验它是否影响预测？</p>
+
 机制可解释性尝试给模型内部计算提出**能被干预实验推翻的机制解释**。它不是读取意识、证明模型没有隐藏目标，或给整模型签发安全证书。前置：[Transformer](/basics/transformer)、[表示学习](/basics/embeddings)、[Logits 与损失](/basics/logits-loss)。
 
 ## 面试先背这几句话
@@ -130,3 +132,7 @@ $$\mathcal L=\|x-\hat x\|_2^2+\lambda\|f\|_1.$$
 </details>
 
 来源范围：已实际读取两篇 Anthropic 原始研究的玩具设置、SAE 方法/重建统计与 steering 段落；未复现实验，未逐一核查 IOI、变体和跨层工作的全文。示例数值均为构造，不是论文成绩。
+
+## 读后练习 {#zhixu-practice}
+
+为同一个观察设计激活替换和对照输入，写下哪种结果会削弱你的解释。

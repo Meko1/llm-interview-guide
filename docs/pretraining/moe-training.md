@@ -10,6 +10,8 @@ classification: inferred
 ---
 # MoE 训练与专家并行
 
+<p class="chapter-question">不同专家收到的词元数不均时，为什么空闲算力不能自动互补？</p>
+
 > DeepSeek-V3、Qwen-MoE、Mixtral 把 MoE 推成了主流架构，「MoE 怎么训、怎么并行、怎么保证专家负载均衡」成了训练岗的高频深挖点。本文承接 [MoE 混合专家模型](/basics/moe) 的架构介绍，聚焦**工程侧**：路由与负载均衡、辅助损失、容量因子与 token 丢弃、专家并行（EP）与 AllToAll 通信、DeepSeekMoE 的细粒度+共享专家设计。并行通信基础见 [AI 训练集群与网络通信](/pretraining/ai-infra-networking)。
 
 ## 面试先背这几句话
@@ -114,3 +116,7 @@ DeepSeekMoE 的两个设计方向（见 [DeepSeek 专题](/models/deepseek)）�
 恢复不仅保存专家和优化器，还要保存 router、动态均衡偏置与更新计数、RNG、数据游标。更改 EP/DP 布局后核对专家 ID 映射与分片加载，否则“权重能加载”仍可能把专家装错位置。
 
 事实边界依据 [DeepSeek-V3 v2 第 2.1.2 节](https://arxiv.org/html/2412.19437v2#S2.SS1.SSS2)：偏置、序列辅助项、节点限制和不丢 token 都是该报告配方；其他框架支持需按实际版本核对。
+
+## 读后练习 {#zhixu-practice}
+
+画出路由、派发、专家计算与汇合，标记最忙专家和通信等待。

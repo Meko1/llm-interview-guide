@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Agent 沙箱、执行准入与逃逸处置：Claude Code / Codex / OpenClaw / Hermes
 
+<p class="chapter-question">隔离任务异常后，如何阻止残留资源被下一个任务继承？</p>
+
 > “在 Docker 里跑”不是沙箱设计的完整答案。生产面试真正要讲清：谁能请求执行、代码实际在哪台机器运行、能读写哪些路径、能访问哪些域名、携带什么身份、何时需要批准、无法被隔离时是否 fail-closed，以及越过边界后如何留下可追溯证据。
 
 > 本页关注进程和工具执行边界；外部 App 的 OAuth 连接生命周期见 [Agent 外部连接与 OAuth 凭证生命周期](/interview/agent-connector-identity-lifecycle-playbook)，每次业务 action 的短期 capability 与撤权见 [长任务 Agent 持续授权与紧急撤权](/interview/agent-continuous-authorization-playbook)，远程节点和云端运行池见 [远程与云端 Agent 生产运行手册](/interview/remote-agent-operations-playbook)。
@@ -171,3 +173,7 @@ Request -> Identity / Task admission -> Execution contract / Policy
 - [Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/)：sandbox、approval、managed network、keyring 与 telemetry。
 - [OpenClaw Exec approvals](https://docs.openclaw.ai/tools/exec-approvals)：全局/host-local 策略叠加与 canonical plan。
 - [Hermes Security](https://hermes-agent.nousresearch.com/docs/user-guide/security/)：命令审批、容器加固与环境变量过滤。
+
+## 读后练习 {#zhixu-practice}
+
+列出文件、进程、网络许可与临时凭据的清理验收证据。

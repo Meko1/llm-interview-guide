@@ -9,6 +9,8 @@ classification: inferred
 ---
 # Claude Code 子 Agent 与多 Agent 编排
 
+<p class="chapter-question">把仓库调查交给子 Agent，主任务需要收到什么才能继续？</p>
+
 > 若要把子 Agent 放进企业级控制面，系统回答上下文隔离、worktree、任务所有权、验证门禁和合并仲裁，见 [智能体运行时架构高频问答](/interview/agent-runtime-architecture-qna)。
 
 > 2026-11-05 读取的[官方子 Agent 文档](https://code.claude.com/docs/en/sub-agents)说明：子 Agent 在独立上下文工作，也独立发起请求并计入用量。主 Agent 本身也可并行调用独立工具；子 Agent 的优势是职责和上下文分离，不是从“单线程”变成“多线程”的保证。
@@ -97,3 +99,7 @@ classification: inferred
 
 **Q：什么时候不该用多 Agent？**
 简单线性任务（单 Agent 足够，多 Agent 是过度设计）、子任务强耦合需频繁交互（协调开销大于并行收益）、对成本敏感（多 Agent 的 token 消耗显著更高）。先用最简单的单 Agent，确实遇到「上下文塞爆」或「明显可并行」才上多 Agent。
+
+## 读后练习 {#zhixu-practice}
+
+写一份委派说明和返回格式，包括证据路径、未决问题和停止条件。

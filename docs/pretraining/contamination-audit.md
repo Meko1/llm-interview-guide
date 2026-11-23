@@ -10,6 +10,8 @@ classification: inferred
 ---
 # 数据污染审计：重叠、泄漏与黑盒检验的证据边界
 
+<p class="chapter-question">测试集中发现字符串重叠，能直接证明模型记住答案吗？</p>
+
 > **要交付的能力**：面对“检测到重复”或“模型分数很高”，能说明证据支持到哪一层，而不是直接宣判模型背题或完全没有污染。
 >
 > L1 读三层证据与失败类型；L2 跑通候选检测账本；L3 检查黑盒统计检验、假设与多重比较。前置：[数据工程](/pretraining/data-engineering)、[评测基准](/evaluation/benchmarks)。
@@ -183,3 +185,7 @@ assert monte_carlo_upper_tail(-5, [-5] * 9) == 1.0
 2. [tatsu-lab 作者实现](https://github.com/tatsu-lab/test_set_contamination)：提供分片比较检验和实验入口；默认分支会变，正式复现需固定提交并核查入口文件。README 的入口说明与示例命令文件名存在不一致，不能直接把示例当作已跑通命令；先核对仓库文件与参数，再记录实际运行版本。
 
 本页 n-gram 账本与置换计数为教学整理，不是原论文实验。继续阅读：[一手资料阅读地图](/advanced/primary-source-reading)。
+
+## 读后练习 {#zhixu-practice}
+
+区分重叠、泄漏与行为证据，为每条判断保留一项替代解释。

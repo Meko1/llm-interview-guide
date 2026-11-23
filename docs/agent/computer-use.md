@@ -11,6 +11,8 @@ classification: inferred
 ---
 # Computer Use 与浏览器 Agent（GUI 智能体）
 
+<p class="chapter-question">点击后页面变化了，GUI Agent 如何知道任务真正完成？</p>
+
 > 本页讲视觉-动作循环与 DOM/截图混合路线；面试如果进入浏览器会话隔离、网页注入、页面状态验证、高危动作确认、可恢复任务和评测，应转到 [Computer Use / 浏览器 Agent 生产系统设计面试题](/interview/computer-use-browser-agent-system-design)。
 
 > 让 Agent 不再局限于「调 API」，而是像人一样**看屏幕、点鼠标、敲键盘**操作电脑和浏览器——这是 2024 年底以来最受关注的 Agent 方向。Anthropic 的 Computer Use、各类浏览器 Agent 把「数字世界的体力活」自动化。基础概念见 [Agent 基础](/agent/agent-basics)、工具调用见 [Function Calling 与 MCP](/agent/function-calling-mcp)。
@@ -109,3 +111,7 @@ RPA 靠预先录制的固定脚本（坐标/选择器），界面一变就失效
 
 **Q：为什么视觉定位（点坐标）这么难？**
 模型要把「语义目标（登录按钮）」精确映射到「屏幕像素坐标」，这要求强视觉 grounding 能力；界面元素密集、相似、动态变化时极易点偏。这也是 DOM 路线在网页上更受青睐的原因——直接拿到元素，不用模型猜坐标。
+
+## 读后练习 {#zhixu-practice}
+
+给一项无副作用的界面操作定义前置状态、可观察结果和停止条件。

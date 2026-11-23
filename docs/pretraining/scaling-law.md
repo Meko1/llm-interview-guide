@@ -9,6 +9,8 @@ classification: inferred
 ---
 # 缩放定律与涌现能力
 
+<p class="chapter-question">评测曲线突然跃升，能否直接推断模型内部出现新机制？</p>
+
 > 缩放定律解释了「为什么要把模型做大」，涌现能力解释了「大了之后会发生什么」。这是理解大模型发展逻辑的核心，也是高频考点。
 
 ## 一、缩放定律（Scaling Law）
@@ -81,3 +83,7 @@ $$L(N, D) = \underbrace{E}_{\text{拟合渐近项}} + \frac{A}{N^{\alpha}} + \fr
 
 指标机制依据 [Are Emergent Abilities a Mirage?](https://arxiv.org/abs/2304.15004)，构造数值不是论文实验结果。真实步骤误差通常相关，不能直接套独立假设估算任务成功率。
 </details>
+
+## 读后练习 {#zhixu-practice}
+
+比较连续分数与阈值计分，写出要区分这两种解释还需什么观察。

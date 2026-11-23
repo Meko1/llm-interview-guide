@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 流式输出、取消与会话恢复系统设计
 
+<p class="chapter-question">用户按下停止后，上游计算、账单和会话历史分别如何收尾？</p>
+
 > 流式输出不是把模型 token 原样转发给浏览器。生产系统要同时处理首字延迟、客户端断连、上游取消、工具调用中间态、内容安全、幂等记账和可审计的最终答案。面试官问“怎么做流式对话”，真正想听的是你是否理解这些边界。
 
 ## 一、30 秒面试回答
@@ -266,3 +268,7 @@ disconnect_count, resume_count, cancel_source, finish_reason
 > 我负责 LLM 对话服务的流式交互链路。我们把模型厂商的流规范成内部事件，所有事件带 run_id 和序号，浏览器通过 SSE 消费、断连后按序号补发。每个 run 绑定模型、Prompt、检索和工具版本；取消令牌贯穿网关、编排器、模型请求和工具执行器。针对慢客户端做有界缓冲与 delta 合并，针对高风险动作先流式展示状态、后做审批执行。线上重点看 TTFT、流中断率、恢复成功率、取消生效率和每成功会话成本，因此既改善了首字体验，也避免了断连后的重复调用和不可审计账单。
 
 继续学习：[推理成本与性能优化](/interview/inference-cost-qna)、[大模型网关](/engineering/llm-gateway)、[结构化输出与 JSON Schema](/interview/structured-output-qna)、[LLM 线上评测与灰度实验](/interview/online-evaluation-rollout-operations)、[Agent 观测与事故响应](/interview/agent-observability-incident-response)。
+
+## 读后练习 {#zhixu-practice}
+
+追踪取消信号、最后确认的片段和终态回执，给重复取消定义结果。

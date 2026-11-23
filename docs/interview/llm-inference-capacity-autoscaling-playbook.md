@@ -11,6 +11,8 @@ classification: inferred
 ---
 # LLM 推理容量规划与弹性伸缩系统设计
 
+<p class="chapter-question">新增推理实例可以缓解排队，但什么时候仍赶不上突发流量？</p>
+
 > “多加几张 GPU 卡”不是容量规划。LLM 服务的上限由请求到达模式、输入输出 token 分布、KV Cache、调度器、模型并行、队列和 SLA 共同决定。面试官真正关心的是：流量突增时你如何保护首字、避免 OOM，并在峰谷之间控制成本。
 
 ## 一、30 秒面试回答
@@ -233,3 +235,7 @@ GPU utilization, replica count, cold-start duration, cost
 继续学习：[推理成本与性能优化](/interview/inference-cost-qna)、[推理优化与加速](/inference/inference-optimization)、[KV Cache 与 PagedAttention](/inference/kv-cache)、[推理框架选型](/inference/serving-frameworks)、[LLM 流式输出与会话恢复设计](/interview/llm-streaming-session-resilience-playbook)。
 
 来源范围：[vLLM metrics 设计](https://github.com/vllm-project/vllm/blob/main/docs/design/metrics.md)实读了 TPOT/ITL 区别、KV blocks 与拒绝计量；[KV cache interface 源码](https://github.com/vllm-project/vllm/blob/main/vllm/v1/kv_cache_interface.py)实读 `FullAttentionSpec` 和 AttentionSpec 的 head/dtype/page size 片段。main 内容可变，部署时核对实际版本与 exporter 单位。本页卡数、KV 与积压均为构造推算；未运行压测、扩缩容或 OOM 演练。
+
+## 读后练习 {#zhixu-practice}
+
+在到达率、启动耗时和可用容量三条时间线上画出排队峰值。
